@@ -7,14 +7,16 @@ INCLUDEPATH += \
 #    $$REPORT_PATH/items \
 
 SOURCES += \
-#    $$REPORT_PATH/items/lrtextitem.cpp \
+    $$PWD/Dispositivos/nqcamaras.cpp \
+    $$PWD/nqtglobal.cpp
 
 contains(CONFIG, zint){
 #    SOURCES += $$REPORT_PATH/items/lrbarcodeitem.cpp
 }
 
 HEADERS += \
-#    $$REPORT_PATH/base/lrsingleton.h \
+    $$PWD/Dispositivos/nqcamaras.h \
+    $$PWD/nqtglobal.h
 
 contains(CONFIG,zint){
 #    HEADERS += $$REPORT_PATH/items/lrbarcodeitem.h
