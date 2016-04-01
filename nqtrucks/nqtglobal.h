@@ -27,18 +27,18 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
-#ifndef GLOBAL_H
-#define GLOBAL_H
-#include "qglobal.h"
+#ifndef NQTRUCKS_H
+#define NQTRUCKS_H
+#include <QtCore/qglobal.h>
 #include <stdexcept>
 #include <QString>
 
-#if defined(NQTRUCKS_EXPORTS)
-#  define NQTRUCKS_EXPORT Q_DECL_EXPORT
-#elif defined (NQTRUCKS_IMPORTS)
-#  define NQTRUCKS_EXPORT Q_DECL_IMPORT
+
+
+#if defined(NQTRUCKS_LIBRARY)
+#  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_EXPORT
 #else
-#  define NQTRUCKS_EXPORT   /**/
+#  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
 namespace nQTrucks {
@@ -50,10 +50,11 @@ namespace Const{
     //enum RenderPass {FirstPass, SecondPass};
     //enum ArrangeType {AsNeeded, Force};
     class nQTrucksError : public std::runtime_error{
-    public:
-        nQTrucksError(const QString& message):std::runtime_error(message.toStdString()){}
+        public:
+            nQTrucksError(const QString& message):std::runtime_error(message.toStdString()){}
     };
+
 
 } // namespace nQTrucks
 
-#endif // GLOBAL_H
+#endif // NQTRUCKS_H

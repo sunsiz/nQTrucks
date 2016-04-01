@@ -1,7 +1,7 @@
 /***************************************************************************
- *   This file is part of the nQTrucks project                             *
- *   Copyright (C) 2015 by Efraím Pérez                                    *
- *   newsages2014@gmail.com                                                *
+ *   This file is part of the Lime Report project                          *
+ *   Copyright (C) 2015 by Alexander Arin                                  *
+ *   arin_a@bk.ru                                                          *
  *                                                                         *
  **                   GNU General Public License Usage                    **
  *                                                                         *
@@ -27,23 +27,16 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
+#include "mainwindow.h"
+#include <QApplication>
 
-#include "nqcamaras.h"
-namespace nQTrucks{
 
-nqcamaras::nqcamaras(QObject *parent) : QObject(parent)
+int main(int argc, char *argv[])
 {
+    QApplication a(argc, argv);
+    MainWindow w;
+    //w.setWindowIcon(QIcon(":/images/main_ico"));
+    w.show();
 
-
-}
-
-nqcamaras::CameraType nqcamaras::TipoCamara() const {return m_TipoCamara;}
-
-void nqcamaras::setTipoCamara(const CameraType &_TipoCamara){
-    if (_TipoCamara != m_TipoCamara) {
-        m_TipoCamara = _TipoCamara;
-        emit TipoCamaraChanged();
-    }}
-
-
+    return a.exec();
 }

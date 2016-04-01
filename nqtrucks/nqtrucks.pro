@@ -1,4 +1,4 @@
-TARGET = nqtrucks
+TARGET = nQTrucks
 TEMPLATE = lib
 
 CONFIG += lib
@@ -12,16 +12,13 @@ macx{
     CONFIG  += plugin
 }
 
-DEFINES += NQTRUCKS_EXPORTS
+DEFINES += NQTRUCKS_LIBRARY
+RC_FILE = nQTrucks.rc
 
-##EXTRA_FILES += \
-##    $$PWD/lrglobal.cpp \
-##    $$PWD/lrglobal.h \
-##    $$PWD/lrdatasourcemanagerintf.h \
-##    $$PWD/lrreportengine.h \
-##    $$PWD/lrscriptenginemanagerintf.h \
-##    $$PWD/lrcallbackdatasourceintf.h \
-##    $$PWD/lrpreviewreportwidget.h
+EXTRA_FILES += \
+    $$PWD/nqtglobal.cpp \
+    $$PWD/nqtglobal.h \
+    $$PWD/nQTrucksEngine.h
 
 include(nqtrucks.pri)
 
@@ -97,5 +94,7 @@ contains(CONFIG,build_translations){
 }
 
 #### EN AUTOMATIC TRANSLATIONS
+
+
 
 

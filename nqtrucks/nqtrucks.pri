@@ -8,7 +8,8 @@ INCLUDEPATH += \
 
 SOURCES += \
     $$PWD/Dispositivos/nqcamaras.cpp \
-    $$PWD/nqtglobal.cpp
+    $$PWD/nqtglobal.cpp \
+    $$PWD/nQTrucksEngine.cpp
 
 contains(CONFIG, zint){
 #    SOURCES += $$REPORT_PATH/items/lrbarcodeitem.cpp
@@ -16,7 +17,9 @@ contains(CONFIG, zint){
 
 HEADERS += \
     $$PWD/Dispositivos/nqcamaras.h \
-    $$PWD/nqtglobal.h
+    $$PWD/nqtglobal.h \
+    $$PWD/nQTrucksEngine_p.h \
+    $$PWD/nQTrucksEngine.h
 
 contains(CONFIG,zint){
 #    HEADERS += $$REPORT_PATH/items/lrbarcodeitem.h

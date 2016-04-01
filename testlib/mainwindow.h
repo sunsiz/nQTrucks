@@ -1,7 +1,7 @@
 /***************************************************************************
- *   This file is part of the nQTrucks project                             *
- *   Copyright (C) 2015 by Efraím Pérez                                    *
- *   newsages2014@gmail.com                                                *
+ *   This file is part of the Lime Report project                          *
+ *   Copyright (C) 2015 by Alexander Arin                                  *
+ *   arin_a@bk.ru                                                          *
  *                                                                         *
  **                   GNU General Public License Usage                    **
  *                                                                         *
@@ -27,23 +27,47 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-#include "nqcamaras.h"
-namespace nQTrucks{
+#include <QMainWindow>
+#include <QProgressDialog>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQueryModel>
 
-nqcamaras::nqcamaras(QObject *parent) : QObject(parent)
+#include "nQTrucksEngine.h"
+#include "nqtglobal.h"
+
+namespace Ui {
+class MainWindow;
+}
+
+class MainWindow : public QMainWindow
 {
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+private slots:
+
+    void on_testPushButton_clicked();
+
+private:
+
+private:
+    Ui::MainWindow *ui;
+
+    nQTrucks::nQTrucksEngine *engine;
 
 
-}
+    QSqlDatabase m_db;
+    QSqlQuery* m_customers;
+    QSqlQuery* m_orders;
 
-nqcamaras::CameraType nqcamaras::TipoCamara() const {return m_TipoCamara;}
-
-void nqcamaras::setTipoCamara(const CameraType &_TipoCamara){
-    if (_TipoCamara != m_TipoCamara) {
-        m_TipoCamara = _TipoCamara;
-        emit TipoCamaraChanged();
-    }}
+};
 
 
-}
+
+#endif // MAINWINDOW_H

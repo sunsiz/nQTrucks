@@ -8,3 +8,6 @@ SUBDIRS += \
         nqtrucks
 
 CONFIG   += ordered
+
+SUBDIRS += \
+        testlib

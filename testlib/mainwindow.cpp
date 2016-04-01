@@ -1,7 +1,7 @@
 /***************************************************************************
- *   This file is part of the nQTrucks project                             *
- *   Copyright (C) 2015 by Efraím Pérez                                    *
- *   newsages2014@gmail.com                                                *
+ *   This file is part of the Lime Report project                          *
+ *   Copyright (C) 2015 by Alexander Arin                                  *
+ *   arin_a@bk.ru                                                          *
  *                                                                         *
  **                   GNU General Public License Usage                    **
  *                                                                         *
@@ -27,23 +27,34 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include <QtSql/QSqlQuery>
+#include <QtSql/QSqlRecord>
+#include <QDebug>
+#include <QStringListModel>
 
-#include "nqcamaras.h"
-namespace nQTrucks{
+#include "nQTrucksEngine.h"
 
-nqcamaras::nqcamaras(QObject *parent) : QObject(parent)
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
-
+    ui->setupUi(this);
+    engine  = new nQTrucks::nQTrucksEngine(this);
+    QStringList lcamaras = engine->getTiposCamaras();
+    qDebug() << engine->getTiposCamaras();
+    ui->comboBox->addItems(lcamaras);
 
 }
 
-nqcamaras::CameraType nqcamaras::TipoCamara() const {return m_TipoCamara;}
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
 
-void nqcamaras::setTipoCamara(const CameraType &_TipoCamara){
-    if (_TipoCamara != m_TipoCamara) {
-        m_TipoCamara = _TipoCamara;
-        emit TipoCamaraChanged();
-    }}
 
+void MainWindow::on_testPushButton_clicked()
+{
 
 }

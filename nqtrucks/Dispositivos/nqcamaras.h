@@ -32,16 +32,36 @@
 #define NQCAMARAS_H
 
 #include <QObject>
+#include <nqtglobal.h>
+
+namespace nQTrucks {
 
 class nqcamaras : public QObject
 {
     Q_OBJECT
+    Q_ENUMS(CameraType)
+    Q_PROPERTY(CameraType TipoCamara  READ TipoCamara WRITE setTipoCamara NOTIFY TipoCamaraChanged)
+
 public:
     explicit nqcamaras(QObject *parent = 0);
+    enum CameraType
+    {
+        HIKVISION,
+        CAMTRONIC
+    };
+
+    CameraType TipoCamara() const;
+    void setTipoCamara(const CameraType &_TipoCamara);
 
 signals:
+    void TipoCamaraChanged();
+
+private:
+    CameraType m_TipoCamara=CameraType::HIKVISION;
 
 public slots:
+
 };
 
+}
 #endif // NQCAMARAS_H
