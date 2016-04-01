@@ -204,7 +204,7 @@ nQTrucksEnginePrivate::~nQTrucksEnginePrivate()
 
 QStringList nQTrucksEnginePrivate::getCameraTypes()
 {
-    QMetaObject MetaObject = nqcamaras::staticMetaObject;
+    QMetaObject MetaObject = Devices::CamaraIP::staticMetaObject;
     QMetaEnum MetaEnum = MetaObject.enumerator(MetaObject.indexOfEnumerator("CameraType"));
     QStringList listCameraTypes;
     for (int i = 0; i < MetaEnum.keyCount(); i++)

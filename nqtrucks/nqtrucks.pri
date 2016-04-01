@@ -7,19 +7,19 @@ INCLUDEPATH += \
 #    $$REPORT_PATH/items \
 
 SOURCES += \
-    $$PWD/Dispositivos/nqcamaras.cpp \
     $$PWD/nqtglobal.cpp \
-    $$PWD/nQTrucksEngine.cpp
+    $$PWD/nQTrucksEngine.cpp \
+    $$PWD/Dispositivos/CamaraIP.cpp
 
 contains(CONFIG, zint){
 #    SOURCES += $$REPORT_PATH/items/lrbarcodeitem.cpp
 }
 
 HEADERS += \
-    $$PWD/Dispositivos/nqcamaras.h \
     $$PWD/nqtglobal.h \
     $$PWD/nQTrucksEngine_p.h \
-    $$PWD/nQTrucksEngine.h
+    $$PWD/nQTrucksEngine.h \
+    $$PWD/Dispositivos/CamaraIP.h
 
 contains(CONFIG,zint){
 #    HEADERS += $$REPORT_PATH/items/lrbarcodeitem.h

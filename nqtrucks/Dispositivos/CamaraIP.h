@@ -28,22 +28,40 @@
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
 
-#include "nqcamaras.h"
-namespace nQTrucks{
+#ifndef CAMARASIP_H
+#define CAMARASIP_H
 
-nqcamaras::nqcamaras(QObject *parent) : QObject(parent)
+#include <QObject>
+#include <nqtglobal.h>
+
+namespace nQTrucks {
+namespace Devices {
+
+class CamaraIP : public QObject
 {
+    Q_OBJECT
+    Q_ENUMS(CameraType)
+    Q_PROPERTY(CameraType TipoCamara  READ TipoCamara WRITE setTipoCamara NOTIFY TipoCamaraChanged)
 
+public:
+    explicit CamaraIP(QObject *parent = 0);
+    enum CameraType
+    {
+        HIKVISION,
+        CAMTRONIC
+    };    CameraType TipoCamara() const;
+    void setTipoCamara(const CameraType &_TipoCamara);
+
+signals:
+    void TipoCamaraChanged();
+
+private:
+    CameraType m_TipoCamara=CameraType::HIKVISION;
+
+public slots:
+
+};
 
 }
-
-nqcamaras::CameraType nqcamaras::TipoCamara() const {return m_TipoCamara;}
-
-void nqcamaras::setTipoCamara(const CameraType &_TipoCamara){
-    if (_TipoCamara != m_TipoCamara) {
-        m_TipoCamara = _TipoCamara;
-        emit TipoCamaraChanged();
-    }}
-
-
 }
+#endif // NQCAMARAS_H

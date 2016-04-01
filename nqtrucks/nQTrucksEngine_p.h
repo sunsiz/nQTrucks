@@ -185,7 +185,7 @@ Library.
 #include <QSharedPointer>
 #include <QMetaEnum>
 
-#include <Dispositivos/nqcamaras.h>
+#include <Dispositivos/CamaraIP.h>
 
 #include "nqtglobal.h"
 #include "nQTrucksEngine.h"

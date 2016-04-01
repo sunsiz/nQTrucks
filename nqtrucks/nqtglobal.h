@@ -42,7 +42,6 @@
 #endif
 
 namespace nQTrucks {
-
 namespace Const{
 
 }
