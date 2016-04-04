@@ -1,7 +1,7 @@
 /***************************************************************************
- *   This file is part of the Lime Report project                          *
- *   Copyright (C) 2015 by Alexander Arin                                  *
- *   arin_a@bk.ru                                                          *
+ *   This file is part of the nQTrucks project                             *
+ *   Copyright (C) 2015 by Efraím Pérez                                    *
+ *   newsages2014@gmail.com                                                *
  *                                                                         *
  **                   GNU General Public License Usage                    **
  *                                                                         *
@@ -31,9 +31,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+/*
 #include <QProgressDialog>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQueryModel>
+#include <QtWebKitWidgets/QWebView>
+*/
 
 #include "nQTrucksEngine.h"
 #include "nqtglobal.h"
@@ -50,24 +53,28 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
-
-    void on_testPushButton_clicked();
 
 private:
-
-private:
+    nQTrucks::nQTrucksEngine *engine;
     Ui::MainWindow *ui;
 
-    nQTrucks::nQTrucksEngine *engine;
+    /** CAMARAS **/
+private slots:
+    void on_guardarPushButton1_clicked();
+    void on_guardarPushButton2_clicked();
+    void onGetFoto1(QImage foto);
+    void onGetFoto2(QImage foto);
+    /** END CAMARAS **/
 
+    /** CONFIG **/
+private:
+    QSettings *m_config;
+    void loadconfig();
+    /** END CONFIG **/
 
-    QSqlDatabase m_db;
-    QSqlQuery* m_customers;
-    QSqlQuery* m_orders;
-
+    //QSqlDatabase m_db;
+    //QSqlQuery* m_customers;
+    //QSqlQuery* m_orders;
 };
-
-
 
 #endif // MAINWINDOW_H

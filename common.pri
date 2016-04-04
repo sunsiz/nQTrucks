@@ -1,4 +1,5 @@
-QT += script xml sql
+QT += network sql core
+QT += webkitwidgets
 greaterThan(QT_MAJOR_VERSION, 4) {
     DEFINES+=HAVE_QT5
     QT+= printsupport widgets
@@ -25,9 +26,13 @@ DEFINES += NQTRUCKS_VERSION=$${NQTRUCKS_VERSION}
 
 
 CONFIG += build_translations
+CONFIG += c++11
+
+#*** ZINT ***#
 CONFIG += zint
 ZINT_PATH = $$PWD/3rdparty/zint-2.4.4
 
+#***  VARIABLES FOR MULTI_OS_ARCH ***#
 CONFIG(release, debug|release){
     message(Release)
     BUILD_TYPE = release
@@ -37,29 +42,46 @@ CONFIG(release, debug|release){
 }
 
 BUILD_DIR = $$PWD/build/$${QT_VERSION}
-DEST_INCLUDE_DIR = $$PWD/include
 
-CONFIG += c++11
 unix{
     macx{
-        ARCH_DIR       = $${OUT_PWD}/macx
+        ARCH_TYPE       = macx
     }
     linux{
         !contains(QT_ARCH, x86_64){
-            ARCH_DIR       =  linux32
+            ARCH_TYPE       =  linux32
             message("Compiling for 32bit system")
         }else{
-            ARCH_DIR       =  linux64
+            ARCH_TYPE       =  linux64
             message("Compiling for 64bit system")
         }
     }
 }
+win32{
+        !contains(QT_ARCH, x86_64){
+            ARCH_TYPE       =  win32
+            message("Compiling for 32bit system")
+        }else{
+            ARCH_TYPE       =  win64
+            message("Compiling for 64bit system")
+        }
+}
+
+ARCH_DIR = $${OUT_PWD}/$${ARCH_TYPE}
+DEST_LIBS = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/lib
+DEST_BINS = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/$${TARGET}
+
+
 MOC_DIR        = $${ARCH_DIR}/$${BUILD_TYPE}/moc
 UI_DIR         = $${ARCH_DIR}/$${BUILD_TYPE}/ui
 UI_HEADERS_DIR = $${ARCH_DIR}/$${BUILD_TYPE}/ui
 UI_SOURCES_DIR = $${ARCH_DIR}/$${BUILD_TYPE}/ui
 OBJECTS_DIR    = $${ARCH_DIR}/$${BUILD_TYPE}/obj
 RCC_DIR        = $${ARCH_DIR}/$${BUILD_TYPE}/rcc
+
+
+#*** INCLUDE IMPL ***#
+DEST_INCLUDE_DIR = $$PWD/include
 
 
 #REPORT_PATH = $$PWD/limereport

@@ -33,7 +33,8 @@
 #include <stdexcept>
 #include <QString>
 
-
+#include <QObject>
+#include <QSettings>
 
 #if defined(NQTRUCKS_LIBRARY)
 #  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_EXPORT
@@ -41,18 +42,33 @@
 #  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
-namespace nQTrucks {
-namespace Const{
+namespace nQTrucks
+{
 
-}
+    #define CAMARA1 "Camara1"
+    #define CAMARA2 "Camara2"
+
     QString extractClassName(QString className);
-    //enum RenderPass {FirstPass, SecondPass};
-    //enum ArrangeType {AsNeeded, Force};
     class nQTrucksError : public std::runtime_error{
-        public:
-            nQTrucksError(const QString& message):std::runtime_error(message.toStdString()){}
+    public:
+        nQTrucksError(const QString& message):std::runtime_error(message.toStdString()){}
     };
 
+
+    /** CONFIG **/
+    class nQTrucksConfig {
+    public:
+        explicit nQTrucksConfig();
+        static void setSettings(QSettings *value){m_settings=value;}
+        QSettings*  settings(){return m_settings;}
+    private:
+        static QSettings* m_settings;
+        QString m_ficheroconfig;
+    };
+   /** END CONFIG **/
+
+    namespace Const{
+    }
 
 } // namespace nQTrucks
 

@@ -23,18 +23,19 @@ FORMS    += mainwindow.ui
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH  += $$PWD/../include
 
-DEST_DIR       = $${BUILD_DIR}/$${BUILD_TYPE}/$${ARCH_DIR}/$${TARGET}
+#DEST_DIR       = $${DEST_BINS}
+LIBS += -L$${DEST_LIBS}
 
 unix:{
-    LIBS += -L$${BUILD_DIR}/$${BUILD_TYPE}/$${ARCH_DIR}/lib -lnQTrucks
-    DESTDIR = $$DEST_DIR
+    LIBS += -lnQTrucks
+    DESTDIR = $$DEST_BINS
     #QMAKE_POST_LINK += mkdir -p $$quote($$REPORTS_DIR) | $$QMAKE_COPY $$quote($$EXTRA_DIR)/* $$quote($$REPORTS_DIR) $$escape_expand(\n\t)
 
-    target.path = $${DEST_DIR}
+    target.path = $${DEST_BINS}
     INSTALLS = target
 
     contains(CONFIG,zint){
-        LIBS += -L$${BUILD_DIR}/$${BUILD_TYPE}/$${ARCH_DIR}/lib -lQtZint
+        LIBS += -lQtZint
     }
 
     linux{

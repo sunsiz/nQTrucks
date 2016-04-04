@@ -1,7 +1,7 @@
 /***************************************************************************
- *   This file is part of the Lime Report project                          *
- *   Copyright (C) 2015 by Alexander Arin                                  *
- *   arin_a@bk.ru                                                          *
+ *   This file is part of the nQTrucks project                             *
+ *   Copyright (C) 2015 by Efraím Pérez                                    *
+ *   newsages2014@gmail.com                                                *
  *                                                                         *
  **                   GNU General Public License Usage                    **
  *                                                                         *
