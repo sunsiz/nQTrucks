@@ -1,3 +1,4 @@
+QT += network sql core serialport
 TARGET = nQTrucks
 TEMPLATE = lib
 

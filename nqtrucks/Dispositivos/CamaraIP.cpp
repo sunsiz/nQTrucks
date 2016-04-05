@@ -47,8 +47,14 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
     fotoCamaraError.fill(Qt::red);
     fotoCamaraError.text("ERROR DE CONEXION");
 
-    m_settings = _appsettings;
-    switch (nDevice) {
+    loadconfig();
+
+    connect(m_netmanager, SIGNAL(finished(QNetworkReply*)), this , SLOT(camaraNetworkReplyFinished(QNetworkReply*)));
+}
+
+void CamaraIP::loadconfig()
+{
+    switch (m_nDevice) {
     case 1:
         m_configroot = (QString(CAMARA1));
         break;
@@ -56,31 +62,27 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
         m_configroot = (QString(CAMARA2));
         break;
     default:
-        m_configroot = (QString(CAMARA1));
+        //m_configroot = (QString(CAMARA1));
         break;
     }
 
-    loadconfig();
-    connect(m_netmanager, SIGNAL(finished(QNetworkReply*)), this , SLOT(camaraNetworkReplyFinished(QNetworkReply*)));
-}
-
-void CamaraIP::loadconfig()
-{
-
     m_settings->beginGroup(m_configroot);
-    setTipoCamara(static_cast<CameraType>(m_settings->value("tipo",0).toInt()));
     setCamaraHost(m_settings->value("host","10.42.0.251").toString());
     setCamaraPort(m_settings->value("port","80").toString());
     setCamaraUser(m_settings->value("user","nqtrucks").toString());
     setCamaraPass(m_settings->value("pass","nqtrucks2016").toString());
+    setTipoCamara(m_settings->value("tipo","0").toString());
     m_settings->endGroup();
+    m_settings->sync();
 }
 
-void CamaraIP::setTipoCamara(const CameraType &_TipoCamara)
+void CamaraIP::setTipoCamara(const QString &_TipoCamara)
 {
-    if (m_TipoCamara != static_cast<CameraType>(_TipoCamara)) {
-        m_TipoCamara  = static_cast<CameraType>(_TipoCamara);
-        m_settings->setValue("tipo",QString::number(_TipoCamara));
+    int tipo = _TipoCamara.toInt();
+    if (m_TipoCamara != static_cast<CameraType>(tipo)) {
+        m_TipoCamara  = static_cast<CameraType>(tipo);
+        m_settings->setValue("tipo",_TipoCamara);
+        m_settings->sync();
         emit TipoCamaraChanged();
     }
 }
@@ -90,6 +92,7 @@ void CamaraIP::setCamaraHost(const QString &_CamaraHost)
     if (m_CamaraHost != _CamaraHost) {
         m_CamaraHost = _CamaraHost;
         m_settings->setValue("host",_CamaraHost);
+        m_settings->sync();
         emit CamaraHostChanged();
     }
 }
@@ -100,6 +103,7 @@ void CamaraIP::setCamaraPort(const QString &_CamaraPort)
     {
         m_CamaraPort = _CamaraPort;
         m_settings->setValue("port",_CamaraPort);
+        m_settings->sync();
         emit CamaraPortChanged();
     }
 }
@@ -110,6 +114,7 @@ void CamaraIP::setCamaraUser(const QString &_CamaraUser)
     {
         m_CamaraUser = _CamaraUser;
         m_settings->setValue("user",_CamaraUser);
+        m_settings->sync();
         emit CamaraUserChanged();
     }
 }
@@ -120,6 +125,7 @@ void CamaraIP::setCamaraPass(const QString &_CamaraPass)
     {
         m_CamaraPass = _CamaraPass;
         m_settings->setValue("pass",_CamaraPass);
+        m_settings->sync();
         emit CamaraPassChanged();
     }
 }

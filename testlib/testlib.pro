@@ -1,3 +1,4 @@
+QT += webkitwidgets
 include(../common.pri)
 TARGET = testlib
 TEMPLATE = app
@@ -22,6 +23,8 @@ FORMS    += mainwindow.ui
 
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH  += $$PWD/../include
+##INCLUDEPATH += $$PWD/../nqtrucks
+##DEPENDPATH  += $$PWD/../nqtrucks
 
 #DEST_DIR       = $${DEST_BINS}
 LIBS += -L$${DEST_LIBS}

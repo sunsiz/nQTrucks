@@ -27,53 +27,22 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
-#ifndef NQTRUCKSENGINE_H
-#define NQTRUCKSENGINE_H
+
+#ifndef NQSERIALPORT_H
+#define NQSERIALPORT_H
 
 #include <QObject>
-#include <QSettings>
-#include <nqtglobal.h>
 
-namespace nQTrucks {
-class nQTrucksEnginePrivate;
-
-class NQTRUCKSLIBSHARED_EXPORT nQTrucksEngine : public QObject
+class nQSerialPort : public QObject
 {
     Q_OBJECT
 public:
-    explicit nQTrucksEngine(QObject *parent=0);
-    ~nQTrucksEngine();
+    explicit nQSerialPort(QObject *parent = 0);
 
-    /** CONFIG **/
-public:
-    static void setSettings(QSettings *value){m_settings=value;}
-    void setAppConfig(QSettings *value);
-    QSettings *appConfig();
-private:
-    //QSettings *m_config;
-    /** END CONFIG **/
-
-    /** Camaras **/
-public:
-    QStringList getTiposCamaras();
-    void setCamaraIP(int nCamara, QString type,QString host, QString port, QString user, QString passwd);
-    void getCamaraFoto(int _ncamara);
 signals:
-    void CamaraIPFoto1(const QImage &foto);
-    void CamaraIPWeb1(const QString &url);
-    void CamaraIPFoto2(const QImage &foto);
-    void CamaraIPWeb2(const QString &url);
-    /** END Camaras **/
 
-    /** nQTrucksEnginePrivate **/
-protected:
-    nQTrucksEnginePrivate * const d_ptr;
-    nQTrucksEngine(nQTrucksEnginePrivate &dd, QObject * parent=0);
-private:
-    Q_DECLARE_PRIVATE(nQTrucksEngine)
-    static QSettings* m_settings;
-    /** FIN nQTrucksEnginePrivate **/
+public slots:
+
 };
 
-}
-#endif // NQTRUCKSENGINE_H
+#endif // NQSERIALPORT_H

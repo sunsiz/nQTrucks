@@ -68,7 +68,7 @@ private slots:
 
     /** CONFIG **/
 private:
-    QSettings *m_config;
+    //QSettings *m_config;
     void loadconfig();
     /** END CONFIG **/
 

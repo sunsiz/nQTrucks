@@ -42,9 +42,13 @@
 
 namespace nQTrucks{
 
+//nQTrucksConfig *nQTrucksEngine::m_config =0;
+QSettings* nQTrucksEngine::m_settings = 0;
+
     /** Private Share Pointer Impl **/
 nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
     : QObject(parent)
+    , m_settings(0)
 {
 }
 
@@ -66,18 +70,18 @@ QStringList nQTrucksEnginePrivate::getCameraTypes()
 }
 
 
-void nQTrucksEnginePrivate::setCamaraIP(int nDevice,  int type, QString host, QString port, QString user, QString passwd)
+void nQTrucksEnginePrivate::setCamaraIP(int nDevice,  QString type, QString host, QString port, QString user, QString passwd)
 {
     switch (nDevice) {
     case 1:
-        m_camara1->setTipoCamara(static_cast<Devices::CamaraIP::CameraType>(type));
+        m_camara1->setTipoCamara(type);
         m_camara1->setCamaraHost(host);
         m_camara1->setCamaraPort(port);
         m_camara1->setCamaraUser(user);
         m_camara1->setCamaraPass(passwd);
         break;
     case 2:
-        m_camara2->setTipoCamara(static_cast<Devices::CamaraIP::CameraType>(type));
+        m_camara2->setTipoCamara(type);
         m_camara2->setCamaraHost(host);
         m_camara2->setCamaraPort(port);
         m_camara2->setCamaraUser(user);
@@ -87,13 +91,31 @@ void nQTrucksEnginePrivate::setCamaraIP(int nDevice,  int type, QString host, QS
         break;
     }
 }
+void nQTrucksEnginePrivate::setSettings(QSettings* value)
+{
+    if (value){
+        m_settings = value;
+    }
+}
+
+QSettings*nQTrucksEnginePrivate::settings()
+{
+    if (m_settings){
+        return m_settings;
+    }else{
+        m_settings = new QSettings(
+                    QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("nQTrucks"),
+                    QSettings::IniFormat);
+        return m_settings;
+    }
+}
 
 /** Public Impl **/
 /** **************************************************************************************** **/
 
 nQTrucksEngine::nQTrucksEngine(QObject *parent)
     : QObject(parent)
-    , m_config(new nQTrucksConfig)
+    //, m_config(0)
     , d_ptr(new nQTrucksEnginePrivate())
 
 {
@@ -109,6 +131,22 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 nQTrucksEngine::~nQTrucksEngine()
 {
     delete d_ptr;
+}
+
+void nQTrucksEngine::setAppConfig(QSettings *value)
+{
+    Q_D(nQTrucksEngine);
+    d->q_ptr=this;
+    if (value){
+        m_settings = value;
+    }
+}
+
+QSettings *nQTrucksEngine::appConfig()
+{
+    Q_D(nQTrucksEngine);
+    d->q_ptr=this;
+    return d->settings();
 }
 
 
@@ -133,7 +171,7 @@ void nQTrucksEngine::getCamaraFoto(int _ncamara)
     }
 }
 
-void nQTrucksEngine::setCamaraIP(int nCamara, QString host, QString port, QString user, QString passwd,int type)
+void nQTrucksEngine::setCamaraIP(int nCamara, QString type, QString host, QString port, QString user, QString passwd)
 {
     Q_D(nQTrucksEngine);
     d->setCamaraIP(nCamara,type,host,port,user,passwd);

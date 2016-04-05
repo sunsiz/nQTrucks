@@ -33,11 +33,14 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QMetaEnum>
+#include <QCoreApplication>
+#include <QDir>
 
 #include "nqtglobal.h"
 #include "nQTrucksEngine.h"
 
 #include "Dispositivos/CamaraIP.h"
+#include "Dispositivos/NewsagesIO.h"
 
 namespace nQTrucks {
 
@@ -52,12 +55,24 @@ public:
     virtual ~nQTrucksEnginePrivate();
     nQTrucksEngine * q_ptr;
 
+    /** SETTINGS **/
+    void    setSettings(QSettings* value);
+    QSettings*  settings();
+private:
+    QSettings* m_settings;
+    /** FIN SETTINGS **/
+
     /** CAMARAS **/
+public:
     QStringList getCameraTypes();
-    void setCamaraIP(int nDevice, int type, QString host, QString port, QString user, QString passwd);
-    Devices::CamaraIP *m_camara1 = new Devices::CamaraIP(1,q_ptr->appConfig(), this);
-    Devices::CamaraIP *m_camara2 = new Devices::CamaraIP(2,q_ptr->appConfig(), this);
+    void setCamaraIP(int nDevice, QString type, QString host, QString port, QString user, QString passwd);
+    Devices::CamaraIP *m_camara1 = new Devices::CamaraIP(1,settings(), this);
+    Devices::CamaraIP *m_camara2 = new Devices::CamaraIP(2,settings(), this);
     /** FIN CAMARAS **/
+
+    /**  I/O **/
+    Devices::NewsagesIO *m_nio= new Devices::NewsagesIO(settings(),this);
+    /** FIN I/O **/
 
 };
 

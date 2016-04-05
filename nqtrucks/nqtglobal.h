@@ -59,8 +59,8 @@ namespace nQTrucks
     class nQTrucksConfig {
     public:
         explicit nQTrucksConfig();
-        static void setSettings(QSettings *value){m_settings=value;}
-        QSettings*  settings(){return m_settings;}
+        void setSettings(QSettings *value){m_settings=value;}
+        static QSettings*  settings(){return m_settings;}
     private:
         static QSettings* m_settings;
         QString m_ficheroconfig;

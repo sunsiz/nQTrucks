@@ -24,8 +24,13 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="camarasTabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Page</string>
+       </attribute>
+      </widget>
       <widget class="QWidget" name="Camara1">
        <attribute name="title">
         <string>Camara1</string>

@@ -1,5 +1,3 @@
-QT += network sql core
-QT += webkitwidgets
 greaterThan(QT_MAJOR_VERSION, 4) {
     DEFINES+=HAVE_QT5
     QT+= printsupport widgets

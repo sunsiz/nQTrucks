@@ -46,11 +46,11 @@ class CamaraIP : public QObject
 {
     Q_OBJECT
     Q_ENUMS(CameraType)
-    Q_PROPERTY(CameraType TipoCamara READ TipoCamara WRITE setTipoCamara NOTIFY TipoCamaraChanged)
-    Q_PROPERTY(QString    CamaraHost READ CamaraHost WRITE setCamaraHost NOTIFY CamaraHostChanged)
-    Q_PROPERTY(QString    CamaraPort READ CamaraPort WRITE setCamaraPort NOTIFY CamaraPortChanged)
-    Q_PROPERTY(QString    CamaraUser READ CamaraUser WRITE setCamaraUser NOTIFY CamaraUserChanged)
-    Q_PROPERTY(QString    CamaraPass READ CamaraPass WRITE setCamaraPass NOTIFY CamaraPassChanged)
+    Q_PROPERTY(QString TipoCamara READ TipoCamara WRITE setTipoCamara NOTIFY TipoCamaraChanged)
+    Q_PROPERTY(QString CamaraHost READ CamaraHost WRITE setCamaraHost NOTIFY CamaraHostChanged)
+    Q_PROPERTY(QString CamaraPort READ CamaraPort WRITE setCamaraPort NOTIFY CamaraPortChanged)
+    Q_PROPERTY(QString CamaraUser READ CamaraUser WRITE setCamaraUser NOTIFY CamaraUserChanged)
+    Q_PROPERTY(QString CamaraPass READ CamaraPass WRITE setCamaraPass NOTIFY CamaraPassChanged)
 
 
 public:
@@ -61,18 +61,18 @@ public:
         HIKVISION=0,
         CAMTRONIC
     };
-    CameraType TipoCamara() const{return m_TipoCamara;}
-    QString    CamaraHost() const{return m_CamaraHost;}
-    QString    CamaraPort() const{return m_CamaraPort;}
-    QString    CamaraUser() const{return m_CamaraUser;}
-    QString    CamaraPass() const{return m_CamaraPass;}
+    QString TipoCamara() const{return QString(m_TipoCamara);}
+    QString CamaraHost() const{return m_CamaraHost;}
+    QString CamaraPort() const{return m_CamaraPort;}
+    QString CamaraUser() const{return m_CamaraUser;}
+    QString CamaraPass() const{return m_CamaraPass;}
 
 public slots:
-    void setTipoCamara(const CameraType &_TipoCamara);
-    void setCamaraHost(const QString    &_CamaraHost);
-    void setCamaraPort(const QString    &_CamaraPort);
-    void setCamaraUser(const QString    &_CamaraUser);
-    void setCamaraPass(const QString    &_CamaraPass);
+    void setTipoCamara(const QString &_TipoCamara);
+    void setCamaraHost(const QString &_CamaraHost);
+    void setCamaraPort(const QString &_CamaraPort);
+    void setCamaraUser(const QString &_CamaraUser);
+    void setCamaraPass(const QString &_CamaraPass);
 
 signals:
     void TipoCamaraChanged();
@@ -115,6 +115,8 @@ signals:
     /** END REDES **/
 };
 
-}
-}
+} /** END NAMESPACE Devices  **/
+
+} /** END NAMESPACE nQTrucks **/
+
 #endif // NQCAMARAS_H
