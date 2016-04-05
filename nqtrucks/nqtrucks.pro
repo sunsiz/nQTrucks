@@ -31,7 +31,7 @@ unix:{
         }
 
     }
-    QMAKE_POST_LINK += $(COPY_DIR) $$quote($${DEST_INCLUDE_DIR}*) $$quote($${DESTDIR}/include)  #inside of libs make /include/files
+    QMAKE_POST_LINK += $(COPY_DIR) $$quote($${DEST_INCLUDE_DIR}) $$quote($${DESTDIR})  #inside of libs make /include/files
 }
 
 
