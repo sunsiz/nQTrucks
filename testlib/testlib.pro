@@ -1,4 +1,4 @@
-QT += webkitwidgets
+#QT += webkitwidgets
 include(../common.pri)
 TARGET = testlib
 TEMPLATE = app
