@@ -14,7 +14,7 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  - if [ "$QT_BASE" = "56" ]; then sudo apt-get install -qq qt56base qt56script qt56tools ; source /opt/qt56/bin/qt56-env.sh; fi
+  - if [ "$QT_BASE" = "56" ]; then sudo apt-get install -qq libqt5webkit5-dev qt56base qt56script qt56tools qt56serialport qt56translations qt56webengine   ; source /opt/qt56/bin/qt56-env.sh; fi
   
 
 script:
