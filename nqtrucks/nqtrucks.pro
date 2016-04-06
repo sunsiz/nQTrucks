@@ -68,7 +68,7 @@ contains(CONFIG,build_translations){
         TRANSLATIONS_FILES += $$qmfile
     }
     qm.depends = ts
-    OTHER_FILES += $$TRANSLATIONS
+    OTHER_FILES += $${TRANSLATIONS}
     QMAKE_EXTRA_TARGETS += qm ts
     POST_TARGETDEPS +=  qm
 }
