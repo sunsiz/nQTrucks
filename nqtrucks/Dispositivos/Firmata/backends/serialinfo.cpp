@@ -54,8 +54,8 @@ QVariant SerialPortList::data(const QModelIndex &index, int role) const
                 return p.vendorIdentifier();
             case ManufacturerRole:
                 return p.manufacturer();
-            //case SerialNumberRole:
-            //	return p.serialNumber();
+            case SerialNumberRole:
+                return p.serialNumber();
         }
     }
 

@@ -59,7 +59,7 @@ NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
       }
 
     /** DISPOSITIVO FTDI **/
-    m_ioFtdi->setDevice("/dev/ttyUSB1");
+    m_ioFtdi->setDevice("/dev/ttyUSB0");
 
 
     /** FIRMATA **/
