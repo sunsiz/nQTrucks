@@ -55,7 +55,7 @@ namespace nQTrucks
     };
 
 
-    /** CONFIG **/
+    /** CONFIG
     class nQTrucksConfig {
     public:
         explicit nQTrucksConfig();
@@ -65,6 +65,7 @@ namespace nQTrucks
         static QSettings* m_settings;
         QString m_ficheroconfig;
     };
+    **/
    /** END CONFIG **/
 
     namespace Const{

@@ -70,9 +70,16 @@ public:
     Devices::CamaraIP *m_camara2 = new Devices::CamaraIP(2,settings(), this);
     /** FIN CAMARAS **/
 
-    /**  I/O **/
+    /** NEWSAGES I/O **/
+public:
     Devices::NewsagesIO *m_nio= new Devices::NewsagesIO(settings(),this);
-    /** FIN I/O **/
+    //void getIOPorts(){
+     //   m_nio->m_ioPortList->refresh();
+     //   emit ioPortsChanged((QAbstractListModel)m_nio->m_ioPortList);
+     //   ;}
+signals:
+    //void ioPortsChanged(const QAbstractListModel &m_ioportlist);
+    /** END NEWSAGES I/O **/
 
 };
 

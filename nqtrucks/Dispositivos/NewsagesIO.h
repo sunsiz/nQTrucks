@@ -34,39 +34,47 @@
 #include <QObject>
 #include <nqtglobal.h>
 
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
+//#include <QtSerialPort/QSerialPort>
+//#include <QtSerialPort/QSerialPortInfo>
+
+#include "Firmata/firmata.h"
+#include "Firmata/backends/serialinfo.h"
+#include "Firmata/backends/serialport.h"
+
+#include "Firmata/pins/digitalpin.h"
 
 namespace nQTrucks {
 namespace Devices {
 
 
-class NewsagesIO : public QObject
+class NewsagesIO : public Firmata
 {
     Q_OBJECT
 public:
     explicit NewsagesIO(QSettings *_appsettings=0,QObject *parent = 0);
-    ~NewsagesIO();
-signals:
-
-public slots:
 
     /** FTDI **/
-private slots:
-    void sendCommand(QString command);
 private:
     /* FTDI Arduino MiniPro
-     * Has vendor ID:  true
+     *  Has vendor ID:  true
         Vendor ID:  1027
         Has Product ID:  true
         Product ID:  24577
      */
-    QSerialPort *ftdi;
-    static const quint16 ftdi_vendor_id = 1027;
-    static const quint16 ftdi_product_id = 24577;
-    QString ftdi_port_name;
-    bool ftdi_is_available;
-    /** FTDI **/
+    SerialPortList *m_ioPortList;
+    SerialFirmata  *m_ioFtdi;
+    /** END FTDI **/
+
+    /** PINS **/
+public:
+    DigitalPin *m_ioPin10;
+private:
+    bool m_ioPin10Value; //Guardar el valor del para controlar reset y ultimo estado
+public slots:
+    void getIO10(bool value);
+    void conectado();
+    void disponible(int r, int v);
+    /** END PINS **/
 
 
 };

@@ -30,20 +30,103 @@
 
 #include "NewsagesIO.h"
 #include <QDebug>
+#include <QtTest/QTest>
 
 namespace nQTrucks {
 namespace Devices {
 
-
+//bool NewsagesIO::m_ioPin10Value=true;
 
 NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
-    : QObject(parent)
+    : Firmata(parent)
+    , m_ioPortList(new SerialPortList(this))
+    , m_ioFtdi(new SerialFirmata)
+    , m_ioPin10(new DigitalPin)
+    , m_ioPin10Value(true)
 {
+    /** LISTADO DE PUERTOS **/
+    /** DEBUG **/
+    if (m_ioPortList->rowCount() > 0)
+      {
+         for (int row = 0; row < m_ioPortList->rowCount(); row++)
+         {
+           QModelIndex idx = (m_ioPortList->index(row, 0));
+           //qDebug() << m_ioPortList->data(idx,SerialPortList::SerialPortRoles::NameRole).toString();
+           //qDebug() << m_ioPortList->data(idx,SerialPortList::SerialPortRoles::SystemLocationRole).toString();
+           //qDebug() << m_ioPortList->data(idx,SerialPortList::SerialPortRoles::DescriptionRole).toString();
+
+         }
+      }
+
+    /** DISPOSITIVO FTDI **/
+    m_ioFtdi->setDevice("/dev/ttyUSB1");
+
+
+    /** FIRMATA **/
+    this->setBackend(m_ioFtdi);
+    this->setInitPins(false);
+
+    /** PINS **/
+    m_ioPin10->setPin(10);
+    m_ioPin10->setOutput(true);
+    m_ioPin10->setFirmata(this);
+
+
+    connect(m_ioPin10,SIGNAL(valueChanged(bool)),this,SLOT(getIO10(bool)));
+    connect(this->m_ioFtdi, &FirmataBackend::protocolVersion ,this, &NewsagesIO::disponible);
+
+}
+
+void NewsagesIO::disponible(int v, int r)
+{
+    qDebug() << "ESTATUS: " << r << v;
+    conectado();
+
+}
+
+void NewsagesIO::conectado()
+{
+    /** PINS **/
+    m_ioPin10->initialize();
+    m_ioPin10->setValue(m_ioPin10Value);
+}
+
+void NewsagesIO::getIO10(bool value)
+{
+    qDebug() << "valor: " << value;
+    m_ioPin10Value=value;
+}
+
+} /** END NAMESPACE Devices  **/
+} /** END NAMESPACE nQTrucks **/
+
+
+/*
+void NewsagesIO::getIOPorts(){
+    m_ioPortList->refresh();
+    //emit ioPortsChanged(m_portlist);
+    QStringList _ioPortList;
+
+    if (m_ioPortList->rowCount() > 0)
+      {
+         for (int row = 0; row < m_ioPortList->rowCount(); row++)
+         {
+           QModelIndex idx = (m_ioPortList->index(row, 0));
+           qDebug() << m_ioPortList->data(idx,SerialPortList::SerialPortRoles::NameRole).toString();
+         }
+      }
+
+
+
+    //emit ioPortsChanged((QAbstractListModel)m_ioPortList);
+}
+*/
+/*
+
     ftdi_is_available = false;
     ftdi_port_name = "";
     ftdi = new QSerialPort;
 
-/*
     qDebug() << "Number of available ports: " << QSerialPortInfo::availablePorts().length();
     foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
         qDebug() << "Has vendor ID: " << serialPortInfo.hasVendorIdentifier();
@@ -56,7 +139,6 @@ NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
         }
     }
 
-*/
   foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
         if(serialPortInfo.hasVendorIdentifier() && serialPortInfo.hasProductIdentifier()){
             if(serialPortInfo.vendorIdentifier() == ftdi_vendor_id){
@@ -103,9 +185,8 @@ void NewsagesIO::sendCommand(QString command)
     }else{
         qDebug() << "error: Puerto serie solo lectura?";
     }
-}
+    */
 
 
-} /** END NAMESPACE Devices  **/
 
-} /** END NAMESPACE nQTrucks **/
+

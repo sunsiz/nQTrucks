@@ -1,4 +1,4 @@
-QT += network sql core serialport
+QT += network sql core serialport qml testlib
 TARGET = nQTrucks
 TEMPLATE = lib
 

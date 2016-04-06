@@ -35,7 +35,7 @@
 
 #include "nqtglobal.h"
 
-QSettings * nQTrucks::nQTrucksConfig::m_settings = 0;
+//QSettings * nQTrucks::nQTrucksConfig::m_settings = 0;
 
 QString nQTrucks::extractClassName(QString className)
 {
@@ -45,12 +45,12 @@ QString nQTrucks::extractClassName(QString className)
     return className.right(className.length()-startPos);
 }
 
-/** SETTINGS **/
+/** SETTINGS
 nQTrucks::nQTrucksConfig::nQTrucksConfig()
     : m_ficheroconfig(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("nQTrucks"))
 
 {
     m_settings = new QSettings(m_ficheroconfig,QSettings::IniFormat);
 }
-
+**/
 /** END SETTINGS **/
