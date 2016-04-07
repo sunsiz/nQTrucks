@@ -1,5 +1,4 @@
 language: cpp
-
 sudo: required
 dist: trusty
   
@@ -39,7 +38,7 @@ install:
 
 script:
   - qmake -r
-  - make
+  - make CXX=$COMPILER
 
 notifications:
   email: false
