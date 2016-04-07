@@ -8,8 +8,7 @@ INCLUDEPATH += \
 
 SOURCES += \
     $$PWD/nqtglobal.cpp \
-    $$PWD/nQTrucksEngine.cpp \
-    $$PWD/Dispositivos/Basculas/nQSerialPortReader.cpp
+    $$PWD/nQTrucksEngine.cpp
 
 
 contains(CONFIG, zint){
@@ -19,8 +18,7 @@ contains(CONFIG, zint){
 HEADERS += \
     $$PWD/nqtglobal.h \
     $$PWD/nQTrucksEngine_p.h \
-    $$PWD/nQTrucksEngine.h \
-    $$PWD/Dispositivos/Basculas/nQSerialPortReader.h
+    $$PWD/nQTrucksEngine.h
 
 
 contains(CONFIG,zint){
@@ -47,13 +45,20 @@ SOURCES += \
 HEADERS += \
     $$PWD/Dispositivos/NewsagesIO.h
 
+OTHER_FILES += \
+        $$PWD/Dispositivos/StandardFirmata/StandardFirmata.ino \
+        $$PWD/Dispositivos/Firmata/promini.png
 
 #** BASCULAS **#
-SOURCES +=
-HEADERS +=
+SOURCES += \
+    $$PWD/Dispositivos/Basculas/nQSerialPortReader.cpp
+
+HEADERS += \
+    $$PWD/Dispositivos/Basculas/nQSerialPortReader.h
 
 OTHER_FILES += \
-    $$PWD/Dispositivos/Basculas/bascula_puerto.hex
+    $$PWD/Dispositivos/Basculas/bascula_puerto.hex \
+    $$PWD/Dispositivos/Basculas/emulador_bascula_puerto/emulador_bascula_puerto.ino
 
 
 
@@ -89,7 +94,5 @@ SOURCES += \
         $$PWD/Dispositivos/Firmata/pins/encoder.cpp \
         $$PWD/Dispositivos/Firmata/pins/i2c.cpp
 
-OTHER_FILES += \
-        $$PWD/Dispositivos/StandardFirmata/StandardFirmata.ino \
-        $$PWD/Dispositivos/Firmata/promini.png
+
 
