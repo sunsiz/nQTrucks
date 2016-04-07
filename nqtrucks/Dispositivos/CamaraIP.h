@@ -61,6 +61,8 @@ public:
         HIKVISION=0,
         CAMTRONIC
     };
+
+    /** PROPIEDADES **/
     QString TipoCamara() const{return QString(m_TipoCamara);}
     QString CamaraHost() const{return m_CamaraHost;}
     QString CamaraPort() const{return m_CamaraPort;}
@@ -87,6 +89,9 @@ private:
     QString     m_CamaraPort;
     QString     m_CamaraUser;
     QString     m_CamaraPass;
+    /** FIN PROPIEDADES **/
+
+
 
     /** SETTINGS **/
 private:
@@ -111,7 +116,6 @@ private slots:
 signals:
     void ReplyCamaraIPFoto(const QImage &Reply);
     void CamaraIPWeb(const QString &CamaraWeb);
-
     /** END REDES **/
 };
 

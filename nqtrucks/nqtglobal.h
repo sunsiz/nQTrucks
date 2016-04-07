@@ -47,6 +47,7 @@ namespace nQTrucks
 
     #define CAMARA1 "Camara1"
     #define CAMARA2 "Camara2"
+    #define NEWSAGESIO "NEWSAGESIO"
 
     QString extractClassName(QString className);
     class nQTrucksError : public std::runtime_error{

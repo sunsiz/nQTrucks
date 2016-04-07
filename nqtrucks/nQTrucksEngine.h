@@ -65,6 +65,17 @@ signals:
     void CamaraIPWeb2(const QString &url);
     /** END Camaras **/
 
+    /** NEWSAGES I/O **/
+public:
+    QStringList getIODevices();
+public slots:
+    void setIODevicesPin10(bool _value);
+    void setIODevicesConfig();
+signals:
+    void IODevicesStatusChanged(const bool &status);
+    void IODevicesPIN10Changed(const bool &value);
+    /** END NEWSAGES I/O **/
+
     /** nQTrucksEnginePrivate **/
 protected:
     nQTrucksEnginePrivate * const d_ptr;

@@ -66,7 +66,23 @@ private slots:
     void onGetFoto2(QImage foto);
     /** END CAMARAS **/
 
+private:
+    QPalette m_deviceNotReady_palette;
+    QPalette m_deviceReady_palette;
+    //QPalette m_semaforoON_palette;
+    QPalette m_semaforoOFF_palette;
+    QPalette m_semaforoRED_palette;
+    QPalette m_semaforoGREEN_palette;
+
     /** CONFIG **/
+private slots:
+    void on_actualizarIODEvicestoolButton_clicked();
+    void on_guardarIODevicesPushButton1_clicked();
+    void on_ioDeviceONpushButton_clicked();
+    void on_ioDeviceOFFpushButton_clicked();
+    void on_ioDeviceSTATUS(bool status);
+    void on_ioDevicePIN10(bool value);
+
 private:
     //QSettings *m_config;
     void loadconfig();

@@ -57,6 +57,28 @@ nQTrucksEnginePrivate::~nQTrucksEnginePrivate()
 
 }
 
+/** SETTINGS **/
+void nQTrucksEnginePrivate::setSettings(QSettings* value)
+{
+    if (value){
+        m_settings = value;
+    }
+}
+
+QSettings*nQTrucksEnginePrivate::settings()
+{
+    if (m_settings){
+        return m_settings;
+    }else{
+        m_settings = new QSettings(
+                    QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("nQTrucks"),
+                    QSettings::IniFormat);
+        return m_settings;
+    }
+}
+/** END SETTINGS **/
+
+/** CAMARAS  **/
 QStringList nQTrucksEnginePrivate::getCameraTypes()
 {
     QMetaObject MetaObject = Devices::CamaraIP::staticMetaObject;
@@ -68,7 +90,6 @@ QStringList nQTrucksEnginePrivate::getCameraTypes()
     }
     return listCameraTypes;
 }
-
 
 void nQTrucksEnginePrivate::setCamaraIP(int nDevice,  QString type, QString host, QString port, QString user, QString passwd)
 {
@@ -91,24 +112,31 @@ void nQTrucksEnginePrivate::setCamaraIP(int nDevice,  QString type, QString host
         break;
     }
 }
-void nQTrucksEnginePrivate::setSettings(QSettings* value)
+/** END CAMARAS **/
+
+QStringList nQTrucksEnginePrivate::getIODevices()
 {
-    if (value){
-        m_settings = value;
+    QStringList listIODevices;
+    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+        /* qDebug() << QObject::tr("Port: ") + info.portName() + "\n"
+                    + QObject::tr("Location: ") + info.systemLocation() + "\n"
+                    + QObject::tr("Description: ") + info.description() + "\n"
+                    + QObject::tr("Manufacturer: ") + info.manufacturer() + "\n"
+                    + QObject::tr("Serial number: ") + info.serialNumber() + "\n"
+                    + QObject::tr("Vendor Identifier: ") + (info.hasVendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString()) + "\n"
+                    + QObject::tr("Product Identifier: ") + (info.hasProductIdentifier() ? QString::number(info.productIdentifier(), 16) : QString()) + "\n"
+                    + QObject::tr("Busy: ") + (info.isBusy() ? QObject::tr("Yes") : QObject::tr("No")) + "\n";
+       */
+        if (info.manufacturer()=="FTDI"){
+            //if (!info.isBusy()){
+                listIODevices.append(info.systemLocation());
+            //}
+        }
+
     }
+    return listIODevices;
 }
 
-QSettings*nQTrucksEnginePrivate::settings()
-{
-    if (m_settings){
-        return m_settings;
-    }else{
-        m_settings = new QSettings(
-                    QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("nQTrucks"),
-                    QSettings::IniFormat);
-        return m_settings;
-    }
-}
 
 /** Public Impl **/
 /** **************************************************************************************** **/
@@ -125,7 +153,18 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     connect(d->m_camara1,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb1(QString)));
     connect(d->m_camara2,SIGNAL(ReplyCamaraIPFoto(QImage)),this,SIGNAL(CamaraIPFoto2(QImage)));
     connect(d->m_camara2,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb2(QString)));
+    connect(d->m_newsagesIO,SIGNAL(readyChanged(bool)),this,SIGNAL(IODevicesStatusChanged(bool)));
+    connect(d->m_newsagesIO,SIGNAL(ValuePin10Changed(bool)),this,SIGNAL(IODevicesPIN10Changed(bool)));
+}
 
+nQTrucksEngine::nQTrucksEngine(nQTrucksEnginePrivate &dd, QObject *parent)
+    : QObject(parent)
+    , d_ptr(&dd)
+{
+    Q_D(nQTrucksEngine);
+    d->q_ptr=this;
+    //conector private
+    //connect(d, SIGNAL(señal private), this, SIGNAL(señal lib));
 }
 
 nQTrucksEngine::~nQTrucksEngine()
@@ -133,6 +172,7 @@ nQTrucksEngine::~nQTrucksEngine()
     delete d_ptr;
 }
 
+/** SETTINGS **/
 void nQTrucksEngine::setAppConfig(QSettings *value)
 {
     Q_D(nQTrucksEngine);
@@ -148,8 +188,9 @@ QSettings *nQTrucksEngine::appConfig()
     d->q_ptr=this;
     return d->settings();
 }
+/** END SETTINGS **/
 
-
+/** CAMARAS **/
 QStringList nQTrucksEngine::getTiposCamaras()
 {
     Q_D(nQTrucksEngine);
@@ -176,16 +217,33 @@ void nQTrucksEngine::setCamaraIP(int nCamara, QString type, QString host, QStrin
     Q_D(nQTrucksEngine);
     d->setCamaraIP(nCamara,type,host,port,user,passwd);
 }
+/** END CAMARAS **/
 
-nQTrucksEngine::nQTrucksEngine(nQTrucksEnginePrivate &dd, QObject *parent)
-    : QObject(parent)
-    , d_ptr(&dd)
+/** NEWSAGES I/O **/
+QStringList nQTrucksEngine::getIODevices()
 {
     Q_D(nQTrucksEngine);
-    d->q_ptr=this;
-    //conector private
-    //connect(d, SIGNAL(señal private), this, SIGNAL(señal lib));
+    return d->getIODevices();
 }
+
+
+void nQTrucksEngine::setIODevicesPin10(bool _value)
+{
+    Q_D(nQTrucksEngine);
+    d->m_newsagesIO->setValuePin10(_value);
+            //m_camara1->sendCamaraIPFotoRequest();
+}
+
+void nQTrucksEngine::setIODevicesConfig()
+{
+    Q_D(nQTrucksEngine);
+    d->m_newsagesIO->setIODeviceConfig();
+            //m_camara1->sendCamaraIPFotoRequest();
+}
+
+/** END NEWSAGES I/O **/
+
+
 
 /** ***************************************************************************************/
 

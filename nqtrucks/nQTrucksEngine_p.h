@@ -40,7 +40,9 @@
 #include "nQTrucksEngine.h"
 
 #include "Dispositivos/CamaraIP.h"
+
 #include "Dispositivos/NewsagesIO.h"
+#include <QtSerialPort/QSerialPortInfo>
 
 namespace nQTrucks {
 
@@ -72,13 +74,9 @@ public:
 
     /** NEWSAGES I/O **/
 public:
-    Devices::NewsagesIO *m_nio= new Devices::NewsagesIO(settings(),this);
-    //void getIOPorts(){
-     //   m_nio->m_ioPortList->refresh();
-     //   emit ioPortsChanged((QAbstractListModel)m_nio->m_ioPortList);
-     //   ;}
+    Devices::NewsagesIO *m_newsagesIO= new Devices::NewsagesIO(settings(),this);
+    QStringList getIODevices();
 signals:
-    //void ioPortsChanged(const QAbstractListModel &m_ioportlist);
     /** END NEWSAGES I/O **/
 
 };

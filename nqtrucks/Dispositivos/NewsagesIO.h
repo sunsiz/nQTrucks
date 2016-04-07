@@ -50,31 +50,49 @@ namespace Devices {
 class NewsagesIO : public Firmata
 {
     Q_OBJECT
+    Q_PROPERTY(QString IODevice   READ IODevice   WRITE setIODevice   NOTIFY IODeviceChanged)
+    Q_PROPERTY(bool    ValuePin10 READ ValuePin10 WRITE setValuePin10 NOTIFY ValuePin10Changed)
+
 public:
     explicit NewsagesIO(QSettings *_appsettings=0,QObject *parent = 0);
 
-    /** FTDI **/
+    /** PROPIEDADES **/
+    QString IODevice()   const{return m_IODevice;}
+    bool    ValuePin10() const{return m_ValuePin10;}
+signals:
+    void IODeviceChanged();
+    void ValuePin10Changed(const bool &value);
+public slots:
+    void setIODevice  (const QString &_IODevice);
+    void setValuePin10(const bool &value);
+    void setIODeviceConfig();
 private:
-    /* FTDI Arduino MiniPro
-     *  Has vendor ID:  true
-        Vendor ID:  1027
-        Has Product ID:  true
-        Product ID:  24577
-     */
+    QString m_IODevice;
+    bool    m_ValuePin10; //Guardar el valor del pin para controlar reset y ultimo estado
+    /** FIN PROPIEDADES **/
+
+
+    /** FTDI **/
     SerialPortList *m_ioPortList;
     SerialFirmata  *m_ioFtdi;
+private slots:
+    void onIOConectado();
+    void onIOReset(int r, int v);
     /** END FTDI **/
 
-    /** PINS **/
-public:
-    DigitalPin *m_ioPin10;
+    /** SETTINGS **/
 private:
-    bool m_ioPin10Value; //Guardar el valor del para controlar reset y ultimo estado
-public slots:
-    void getIO10(bool value);
-    void conectado();
-    void disponible(int r, int v);
-    /** END PINS **/
+    QString   m_configroot;
+    void      loadconfig();
+    QSettings *m_settings;
+    /** END SETTINGS **/
+
+    /**     PINS      **/
+    /** RELE SEMAFORO **/
+public:
+    DigitalPin *m_OutPin10;
+    /** END RELE SEMAFORO **/
+    /**      END PINS     **/
 
 
 };

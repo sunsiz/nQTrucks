@@ -48,13 +48,46 @@ MainWindow::MainWindow(QWidget *parent)
 
     engine  = new nQTrucks::nQTrucksEngine(this);
 
-    QStringList lcamaras = engine->getTiposCamaras();
-    ui->camaraComboBox1->addItems(lcamaras);
-    ui->camaraComboBox2->addItems(lcamaras);
+    /** CAMARAS **/
+    QStringList l_Camaras = engine->getTiposCamaras();
+    ui->camaraComboBox1->addItems(l_Camaras);
+    ui->camaraComboBox2->addItems(l_Camaras);
+    /** END CAMARAS **/
+
+    /** IO DEVICES **/
+    QStringList l_IODevices = engine->getIODevices();
+    ui->ioDevicesComboBox1->addItems(l_IODevices);
+    ui->ioDeviceSTATUSLabel->setAutoFillBackground(true);
+
+    /** colores por defecto solo para configuracion **/
+    m_semaforoOFF_palette.setColor(QPalette::Window, Qt::black);
+    m_semaforoOFF_palette.setColor(QPalette::WindowText, Qt::black);
+    m_semaforoRED_palette.setColor(QPalette::Window, Qt::red);
+    m_semaforoRED_palette.setColor(QPalette::WindowText, Qt::red);
+    m_semaforoGREEN_palette.setColor(QPalette::Window, Qt::green);
+    m_semaforoGREEN_palette.setColor(QPalette::WindowText, Qt::green);
+
+    ui->ioDeviceREDLabel->setPalette(m_semaforoOFF_palette);
+    ui->ioDeviceGREENLabel->setPalette(m_semaforoOFF_palette);
+
+    m_deviceNotReady_palette.setColor(QPalette::Window,Qt::yellow);
+    m_deviceNotReady_palette.setColor(QPalette::WindowText,Qt::red);
+    m_deviceReady_palette.setColor(QPalette::Window,Qt::blue);
+    m_deviceReady_palette.setColor(QPalette::WindowText,Qt::black);
+
+    ui->ioDeviceSTATUSLabel->setPalette(m_deviceNotReady_palette);
+    ui->ioDeviceSTATUSLabel->setText("Disc");
+
+    //semaforo_palette.setColor(QPalette::WindowText, Qt::blue);
+    //ui->ioDeviceSTATUSLabel->setPalette(semaforo_palette);
+    //ui->ioDeviceSTATUSLabel->setText("NOT READY");
+
+    /** IO DEVICES **/
 
     connect(engine,SIGNAL(CamaraIPFoto1(QImage)),this,SLOT(onGetFoto1(QImage)));
     connect(engine,SIGNAL(CamaraIPFoto2(QImage)),this,SLOT(onGetFoto2(QImage)));
-
+    connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
+    connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
     loadconfig();
 
 }
@@ -89,7 +122,7 @@ void MainWindow::loadconfig()
 void MainWindow::on_guardarPushButton1_clicked()
 {
     engine->appConfig()->beginGroup(CAMARA1);
-    engine->appConfig()->setValue("tipo",QString(ui->camaraComboBox1->currentIndex()));
+    engine->appConfig()->setValue("tipo",QString::number(ui->camaraComboBox1->currentIndex()));
     engine->appConfig()->setValue("host",ui->hostLineEdit1->text());
     engine->appConfig()->setValue("port",ui->puertoLineEdit1->text());
     engine->appConfig()->setValue("user",ui->usuarioLineEdit1->text());
@@ -102,7 +135,7 @@ void MainWindow::on_guardarPushButton1_clicked()
 void MainWindow::on_guardarPushButton2_clicked()
 {
     engine->appConfig()->beginGroup(CAMARA2);
-    engine->appConfig()->setValue("tipo",QString(ui->camaraComboBox2->currentIndex()));
+    engine->appConfig()->setValue("tipo",QString::number(ui->camaraComboBox2->currentIndex()));
     engine->appConfig()->setValue("host",ui->hostLineEdit2->text());
     engine->appConfig()->setValue("port",ui->puertoLineEdit2->text());
     engine->appConfig()->setValue("user",ui->usuarioLineEdit2->text());
@@ -121,4 +154,54 @@ void MainWindow::onGetFoto1(QImage foto)
 void MainWindow::onGetFoto2(QImage foto)
 {
     ui->camaraLabel2->setPixmap(QPixmap::fromImage(foto));
+}
+
+void MainWindow::on_actualizarIODEvicestoolButton_clicked()
+{
+    ui->ioDevicesComboBox1->clear();
+    QStringList l_IODevices = engine->getIODevices();
+    ui->ioDevicesComboBox1->addItems(l_IODevices);
+}
+
+void MainWindow::on_guardarIODevicesPushButton1_clicked()
+{
+    engine->appConfig()->beginGroup(NEWSAGESIO);
+    engine->appConfig()->setValue("device",ui->ioDevicesComboBox1->currentText());
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+    engine->setIODevicesConfig();
+}
+
+void MainWindow::on_ioDeviceONpushButton_clicked()
+{
+
+    engine->setIODevicesPin10(false);
+
+}
+
+void MainWindow::on_ioDeviceOFFpushButton_clicked()
+{
+    engine->setIODevicesPin10(true);
+}
+
+void MainWindow::on_ioDeviceSTATUS(bool status)
+{
+  if(status){
+      ui->ioDeviceSTATUSLabel->setPalette(m_deviceReady_palette);
+      ui->ioDeviceSTATUSLabel->setText("READY");
+  }else{
+      ui->ioDeviceSTATUSLabel->setPalette(m_deviceNotReady_palette);
+      ui->ioDeviceSTATUSLabel->setText("Not READY");
+  }
+}
+
+void MainWindow::on_ioDevicePIN10(bool value)
+{
+    if (value){
+        ui->ioDeviceGREENLabel->setPalette(m_semaforoOFF_palette);
+        ui->ioDeviceREDLabel->setPalette(m_semaforoRED_palette);
+    }else{
+        ui->ioDeviceGREENLabel->setPalette(m_semaforoGREEN_palette);
+        ui->ioDeviceREDLabel->setPalette(m_semaforoOFF_palette);
+    }
 }

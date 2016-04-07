@@ -57,7 +57,7 @@ void SerialFirmata::setDevice(const QString &device)
         } else {
             d->port = new QSerialPort(device);
             d->port->setBaudRate(d->baudRate);
-            /*connect(
+            connect(
                 d->port,
                 static_cast<void(QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
                 [this](QSerialPort::SerialPortError e) {
@@ -71,7 +71,7 @@ void SerialFirmata::setDevice(const QString &device)
                     }
 
                     setStatusText(msg);
-                });*/
+                });
 
             if(!d->port->open(QIODevice::ReadWrite)) {
                 qWarning() << "Error opening" << device << d->port->error();
