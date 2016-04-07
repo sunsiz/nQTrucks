@@ -1,13 +1,32 @@
 language: cpp
-
-compiler:
-  - gcc
-
 sudo: required
 dist: trusty
+  
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env: 
+      - COMPILER=g++-5
+      - QT_BASE=56
+#    - compiler: clang
+#      addons:
+#        apt:
+#          sources:
+#            - ubuntu-toolchain-r-test
+#            - llvm-toolchain-precise-3.7
+#          packages:
+#            - clang-3.7
+#      env: 
+#        - COMPILER=clang++-3.7
+#        - QT_BASE=56
 
-env:
-  - QT_BASE=56
+
 
 before_install:
   - if [ "$QT_BASE" = "56" ]; then sudo add-apt-repository ppa:beineri/opt-qt56-trusty -y; fi
@@ -15,11 +34,11 @@ before_install:
 
 install:
   - if [ "$QT_BASE" = "56" ]; then sudo apt-get install -qq libqt5webkit5-dev qt56base qt56script qt56tools qt56serialport qt56translations qt56webengine   ; source /opt/qt56/bin/qt56-env.sh; fi
-  
+
 
 script:
   - qmake -r
-  - make
+  - make CXX=$COMPILER
 
 notifications:
   email: false
