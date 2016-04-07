@@ -4,7 +4,7 @@ compiler:
   - gcc
 
 sudo: required
-dist: vivid
+dist: trusty
 
 env:
   - QT_BASE=56
@@ -20,7 +20,6 @@ install:
 script:
   - qmake -r
   - make
-  - make check
 
 notifications:
   email: false
