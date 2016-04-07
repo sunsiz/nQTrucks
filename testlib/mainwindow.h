@@ -53,28 +53,31 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private:
+    Ui::MainWindow *ui;
 
+    /** nQTrucks Lib **/
 private:
     nQTrucks::nQTrucksEngine *engine;
-    Ui::MainWindow *ui;
+    /** END nQTrucks Lib **/
 
     /** CAMARAS **/
 private slots:
-    void on_guardarPushButton1_clicked();
-    void on_guardarPushButton2_clicked();
+    void on_GuardarCamara1_clicked();
+    void on_GuardarCamara2_clicked();
     void onGetFoto1(QImage foto);
     void onGetFoto2(QImage foto);
     /** END CAMARAS **/
 
+
+    /** NEWSAGES I/O  **/
 private:
     QPalette m_deviceNotReady_palette;
     QPalette m_deviceReady_palette;
-    //QPalette m_semaforoON_palette;
     QPalette m_semaforoOFF_palette;
     QPalette m_semaforoRED_palette;
     QPalette m_semaforoGREEN_palette;
 
-    /** CONFIG **/
 private slots:
     void on_actualizarIODEvicestoolButton_clicked();
     void on_guardarIODevicesPushButton1_clicked();
@@ -82,15 +85,14 @@ private slots:
     void on_ioDeviceOFFpushButton_clicked();
     void on_ioDeviceSTATUS(bool status);
     void on_ioDevicePIN10(bool value);
+    void on_conectarIODevicesPushButton_clicked();
+    void on_desconectarIODevicesPushButton_clicked();
+    /** END NEWSAGES I/O  **/
 
+    /** CONFIG **/
 private:
-    //QSettings *m_config;
     void loadconfig();
     /** END CONFIG **/
-
-    //QSqlDatabase m_db;
-    //QSqlQuery* m_customers;
-    //QSqlQuery* m_orders;
 };
 
 #endif // MAINWINDOW_H

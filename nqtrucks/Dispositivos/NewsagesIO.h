@@ -59,16 +59,22 @@ public:
     /** PROPIEDADES **/
     QString IODevice()   const{return m_IODevice;}
     bool    ValuePin10() const{return m_ValuePin10;}
+
 signals:
+    void IODeviceConnectChanged(const bool &value);
     void IODeviceChanged();
     void ValuePin10Changed(const bool &value);
+
 public slots:
     void setIODevice  (const QString &_IODevice);
     void setValuePin10(const bool &value);
     void setIODeviceConfig();
+    void setIODeviceConnect(const bool &value);
+
 private:
     QString m_IODevice;
-    bool    m_ValuePin10; //Guardar el valor del pin para controlar reset y ultimo estado
+    bool    m_ValuePin10;
+    bool    m_conectado;//Guardar el valor del pin para controlar reset y ultimo estado
     /** FIN PROPIEDADES **/
 
 

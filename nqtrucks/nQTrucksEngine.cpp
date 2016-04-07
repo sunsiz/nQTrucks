@@ -153,6 +153,7 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     connect(d->m_camara1,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb1(QString)));
     connect(d->m_camara2,SIGNAL(ReplyCamaraIPFoto(QImage)),this,SIGNAL(CamaraIPFoto2(QImage)));
     connect(d->m_camara2,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb2(QString)));
+    connect(d->m_newsagesIO,SIGNAL(IODeviceConnectChanged(bool)),this,SIGNAL(IODevicesStatusChanged(bool)));
     connect(d->m_newsagesIO,SIGNAL(readyChanged(bool)),this,SIGNAL(IODevicesStatusChanged(bool)));
     connect(d->m_newsagesIO,SIGNAL(ValuePin10Changed(bool)),this,SIGNAL(IODevicesPIN10Changed(bool)));
 }
@@ -227,18 +228,22 @@ QStringList nQTrucksEngine::getIODevices()
 }
 
 
+void nQTrucksEngine::setIODevicesConnect(bool _value)
+{
+    Q_D(nQTrucksEngine);
+    d->m_newsagesIO->setIODeviceConnect(_value);
+}
+
 void nQTrucksEngine::setIODevicesPin10(bool _value)
 {
     Q_D(nQTrucksEngine);
     d->m_newsagesIO->setValuePin10(_value);
-            //m_camara1->sendCamaraIPFotoRequest();
 }
 
 void nQTrucksEngine::setIODevicesConfig()
 {
     Q_D(nQTrucksEngine);
     d->m_newsagesIO->setIODeviceConfig();
-            //m_camara1->sendCamaraIPFotoRequest();
 }
 
 /** END NEWSAGES I/O **/

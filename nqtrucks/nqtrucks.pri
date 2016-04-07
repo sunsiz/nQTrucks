@@ -8,10 +8,8 @@ INCLUDEPATH += \
 
 SOURCES += \
     $$PWD/nqtglobal.cpp \
-    $$PWD/nQTrucksEngine.cpp \
-    $$PWD/Dispositivos/CamaraIP.cpp \
-    $$PWD/Dispositivos/NewsagesIO.cpp \
-    $$PWD/Dispositivos/nQSerialPort.cpp
+    $$PWD/nQTrucksEngine.cpp
+
 
 contains(CONFIG, zint){
 #    SOURCES += $$REPORT_PATH/items/lrbarcodeitem.cpp
@@ -20,10 +18,8 @@ contains(CONFIG, zint){
 HEADERS += \
     $$PWD/nqtglobal.h \
     $$PWD/nQTrucksEngine_p.h \
-    $$PWD/nQTrucksEngine.h \
-    $$PWD/Dispositivos/CamaraIP.h \
-    $$PWD/Dispositivos/NewsagesIO.h \
-    $$PWD/Dispositivos/nQSerialPort.h
+    $$PWD/nQTrucksEngine.h
+
 
 contains(CONFIG,zint){
 #    HEADERS += $$REPORT_PATH/items/lrbarcodeitem.h
@@ -35,6 +31,33 @@ FORMS += \
 RESOURCES += \
 #    $$REPORT_PATH/objectinspector/lobjectinspector.qrc \
 
+
+#** CAMARAS  **#
+SOURCES += \
+    $$PWD/Dispositivos/CamaraIP.cpp
+
+HEADERS += \
+    $$PWD/Dispositivos/CamaraIP.h
+
+#** NEWSAGES I/O **#
+SOURCES += \
+    $$PWD/Dispositivos/NewsagesIO.cpp
+HEADERS += \
+    $$PWD/Dispositivos/NewsagesIO.h
+
+
+#** BASCULAS **#
+SOURCES += \
+    $$PWD/Dispositivos/Basculas/nQSerialPort.cpp
+HEADERS += \
+    $$PWD/Dispositivos/Basculas/nQSerialPort.h
+
+OTHER_FILES += \
+    $$PWD/Dispositivos/Basculas/bascula_puerto.hex
+
+
+
+#** AUXILIARES  **#
 #** FIRMATA   **#
 HEADERS += \
         #$$PWD/Dispositivos/Firmata/qtfirmata_global.h \

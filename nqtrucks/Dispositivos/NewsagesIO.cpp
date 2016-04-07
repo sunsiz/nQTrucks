@@ -44,8 +44,8 @@ NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
     , m_ioFtdi(new SerialFirmata)
     , m_settings(_appsettings)
     , m_OutPin10(new DigitalPin)
+    , m_conectado(false)
 {
-
     /** FIRMATA **/
     this->setBackend(m_ioFtdi);
     this->setInitPins(false);
@@ -56,33 +56,31 @@ NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
     m_OutPin10->setFirmata(this);
 
 
-    /** LISTADO DE PUERTOS **/
-    /** DEBUG **/
-    /**if (m_ioPortList->rowCount() > 0)
-      {
-         for (int row = 0; row < m_ioPortList->rowCount(); row++)
-         {
-           QModelIndex idx = (m_ioPortList->index(row, 0));
-           //qDebug() << m_ioPortList->data(idx,SerialPortList::SerialPortRoles::NameRole).toString();
-           //qDebug() << m_ioPortList->data(idx,SerialPortList::SerialPortRoles::SystemLocationRole).toString();
-           //qDebug() << m_ioPortList->data(idx,SerialPortList::SerialPortRoles::DescriptionRole).toString();
-
-         }
-      }
-
-      **/
 
     connect(m_OutPin10,SIGNAL(valueChanged(bool)),this,SLOT(setValuePin10(bool)));
     connect(this->m_ioFtdi, &FirmataBackend::protocolVersion ,this, &NewsagesIO::onIOConectado);
-    loadconfig();
+
 }
+
+void NewsagesIO::setIODeviceConnect(const bool &value){
+    m_conectado=value;
+    if(m_conectado){
+        loadconfig();
+        this->m_ioFtdi->setDevice(m_IODevice);
+        emit ValuePin10Changed(m_OutPin10->value());
+    }else{
+        this->m_ioFtdi->setDevice("null");
+    }
+    emit IODeviceConnectChanged(m_conectado);
+}
+
+
 /** SETTINGS **/
 void NewsagesIO::setIODevice(const QString &_IODevice){
     if (m_IODevice != _IODevice) {
         m_IODevice = _IODevice;
         m_settings->setValue("device",m_IODevice);
         m_settings->sync();
-        this->m_ioFtdi->setDevice(m_IODevice);
     }
 }
 
@@ -102,9 +100,7 @@ void NewsagesIO::setIODeviceConfig(){
 
 void NewsagesIO::onIOReset(int v, int r)
 {
-    //qDebug() << "ESTATUS: " << this->isReady();
     onIOConectado();
-
 }
 
 void NewsagesIO::onIOConectado()
@@ -112,8 +108,6 @@ void NewsagesIO::onIOConectado()
     /** PINS **/
     m_OutPin10->initialize();
     m_OutPin10->setValue(m_ValuePin10);
-    //emit readyChanged(isReady());
-    //qDebug() << "ESTATUS: " <<this->isReady();
     emit ValuePin10Changed(m_OutPin10->value());
 
 }
@@ -121,13 +115,14 @@ void NewsagesIO::onIOConectado()
 void NewsagesIO::setValuePin10(const bool &value)
 {
     qDebug() << "valor: " << value;
+
     if(m_ValuePin10!=value){
-        m_ValuePin10=value;
-        m_OutPin10->setValue(m_ValuePin10);
-        emit ValuePin10Changed(m_OutPin10->value());
+        if(m_conectado){
+            m_ValuePin10=value;
+            m_OutPin10->setValue(m_ValuePin10);
+            emit ValuePin10Changed(m_OutPin10->value());
+        }
     }
-
-
 }
 
 } /** END NAMESPACE Devices  **/

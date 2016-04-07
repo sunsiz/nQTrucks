@@ -69,6 +69,7 @@ signals:
 public:
     QStringList getIODevices();
 public slots:
+    void setIODevicesConnect(bool _value);
     void setIODevicesPin10(bool _value);
     void setIODevicesConfig();
 signals:

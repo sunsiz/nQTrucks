@@ -53,8 +53,16 @@ void SerialFirmata::setDevice(const QString &device)
         if(device.isEmpty()) {
             d->port = nullptr;
             setStatusText(QStringLiteral("Device not set"));
-
+        /** NEWSAGES
+         * CONECT AND DISCONNECT
+         **/
         } else {
+           if(device=="null"){
+              if(d->port->isOpen()){
+                 d->port->close();
+               }
+        }else{
+
             d->port = new QSerialPort(device);
             d->port->setBaudRate(d->baudRate);
             connect(
@@ -81,6 +89,7 @@ void SerialFirmata::setDevice(const QString &device)
                 setAvailable(true);
                 setStatusText(QStringLiteral("Serial port opened"));
             }
+        }
         }
 
         emit deviceChanged(device);

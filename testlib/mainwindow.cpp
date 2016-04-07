@@ -48,11 +48,46 @@ MainWindow::MainWindow(QWidget *parent)
 
     engine  = new nQTrucks::nQTrucksEngine(this);
 
+    connect(engine,SIGNAL(CamaraIPFoto1(QImage)),this,SLOT(onGetFoto1(QImage)));
+    connect(engine,SIGNAL(CamaraIPFoto2(QImage)),this,SLOT(onGetFoto2(QImage)));
+    connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
+    connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
+    loadconfig();
+
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+/** SETTINGS **/
+void MainWindow::loadconfig()
+{
     /** CAMARAS **/
     QStringList l_Camaras = engine->getTiposCamaras();
     ui->camaraComboBox1->addItems(l_Camaras);
     ui->camaraComboBox2->addItems(l_Camaras);
+
+    engine->appConfig()->beginGroup(CAMARA1);
+    ui->camaraComboBox1->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
+    ui->hostLineEdit1->setText(engine->appConfig()->value("host").toString());
+    ui->puertoLineEdit1->setText(engine->appConfig()->value("port").toString());
+    ui->usuarioLineEdit1->setText(engine->appConfig()->value("user").toString());
+    ui->passwdLineEdit1->setText(engine->appConfig()->value("pass").toString());
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+
+    engine->appConfig()->beginGroup(CAMARA2);
+    ui->camaraComboBox2->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
+    ui->hostLineEdit2->setText(engine->appConfig()->value("host").toString());
+    ui->puertoLineEdit2->setText(engine->appConfig()->value("port").toString());
+    ui->usuarioLineEdit2->setText(engine->appConfig()->value("user").toString());
+    ui->passwdLineEdit2->setText(engine->appConfig()->value("pass").toString());
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
     /** END CAMARAS **/
+
 
     /** IO DEVICES **/
     QStringList l_IODevices = engine->getIODevices();
@@ -77,49 +112,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->ioDeviceSTATUSLabel->setPalette(m_deviceNotReady_palette);
     ui->ioDeviceSTATUSLabel->setText("Disc");
-
-    //semaforo_palette.setColor(QPalette::WindowText, Qt::blue);
-    //ui->ioDeviceSTATUSLabel->setPalette(semaforo_palette);
-    //ui->ioDeviceSTATUSLabel->setText("NOT READY");
-
     /** IO DEVICES **/
 
-    connect(engine,SIGNAL(CamaraIPFoto1(QImage)),this,SLOT(onGetFoto1(QImage)));
-    connect(engine,SIGNAL(CamaraIPFoto2(QImage)),this,SLOT(onGetFoto2(QImage)));
-    connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
-    connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
-    loadconfig();
-
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-/** SETTINGS **/
-void MainWindow::loadconfig()
-{
-    engine->appConfig()->beginGroup(CAMARA1);
-    ui->camaraComboBox1->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
-    ui->hostLineEdit1->setText(engine->appConfig()->value("host").toString());
-    ui->puertoLineEdit1->setText(engine->appConfig()->value("port").toString());
-    ui->usuarioLineEdit1->setText(engine->appConfig()->value("user").toString());
-    ui->passwdLineEdit1->setText(engine->appConfig()->value("pass").toString());
-    engine->appConfig()->endGroup();
-    engine->appConfig()->sync();
-
-    engine->appConfig()->beginGroup(CAMARA2);
-    ui->camaraComboBox2->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
-    ui->hostLineEdit2->setText(engine->appConfig()->value("host").toString());
-    ui->puertoLineEdit2->setText(engine->appConfig()->value("port").toString());
-    ui->usuarioLineEdit2->setText(engine->appConfig()->value("user").toString());
-    ui->passwdLineEdit2->setText(engine->appConfig()->value("pass").toString());
-    engine->appConfig()->endGroup();
-    engine->appConfig()->sync();
-}
-
-void MainWindow::on_guardarPushButton1_clicked()
+void MainWindow::on_GuardarCamara1_clicked()
 {
     engine->appConfig()->beginGroup(CAMARA1);
     engine->appConfig()->setValue("tipo",QString::number(ui->camaraComboBox1->currentIndex()));
@@ -132,7 +129,7 @@ void MainWindow::on_guardarPushButton1_clicked()
     engine->getCamaraFoto(1);
 
 }
-void MainWindow::on_guardarPushButton2_clicked()
+void MainWindow::on_GuardarCamara2_clicked()
 {
     engine->appConfig()->beginGroup(CAMARA2);
     engine->appConfig()->setValue("tipo",QString::number(ui->camaraComboBox2->currentIndex()));
@@ -146,6 +143,8 @@ void MainWindow::on_guardarPushButton2_clicked()
 }
 /** END SETTINGS **/
 
+
+/** CAMARAS **/
 void MainWindow::onGetFoto1(QImage foto)
 {
     ui->camaraLabel1->setPixmap(QPixmap::fromImage(foto));
@@ -156,6 +155,10 @@ void MainWindow::onGetFoto2(QImage foto)
     ui->camaraLabel2->setPixmap(QPixmap::fromImage(foto));
 }
 
+
+/** END CAMARAS **/
+
+/** NEWSAGES I/O  **/
 void MainWindow::on_actualizarIODEvicestoolButton_clicked()
 {
     ui->ioDevicesComboBox1->clear();
@@ -174,9 +177,7 @@ void MainWindow::on_guardarIODevicesPushButton1_clicked()
 
 void MainWindow::on_ioDeviceONpushButton_clicked()
 {
-
     engine->setIODevicesPin10(false);
-
 }
 
 void MainWindow::on_ioDeviceOFFpushButton_clicked()
@@ -191,7 +192,7 @@ void MainWindow::on_ioDeviceSTATUS(bool status)
       ui->ioDeviceSTATUSLabel->setText("READY");
   }else{
       ui->ioDeviceSTATUSLabel->setPalette(m_deviceNotReady_palette);
-      ui->ioDeviceSTATUSLabel->setText("Not READY");
+      ui->ioDeviceSTATUSLabel->setText("Disc");
   }
 }
 
@@ -205,3 +206,15 @@ void MainWindow::on_ioDevicePIN10(bool value)
         ui->ioDeviceREDLabel->setPalette(m_semaforoOFF_palette);
     }
 }
+
+void MainWindow::on_conectarIODevicesPushButton_clicked()
+{
+    engine->setIODevicesConnect(true);
+}
+
+void MainWindow::on_desconectarIODevicesPushButton_clicked()
+{
+    engine->setIODevicesConnect(false);
+}
+/** END NEWSAGES I/O **/
+
