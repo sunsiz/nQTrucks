@@ -8,7 +8,8 @@ INCLUDEPATH += \
 
 SOURCES += \
     $$PWD/nqtglobal.cpp \
-    $$PWD/nQTrucksEngine.cpp
+    $$PWD/nQTrucksEngine.cpp \
+    $$PWD/Dispositivos/Basculas/nQSerialPortReader.cpp
 
 
 contains(CONFIG, zint){
@@ -18,7 +19,8 @@ contains(CONFIG, zint){
 HEADERS += \
     $$PWD/nqtglobal.h \
     $$PWD/nQTrucksEngine_p.h \
-    $$PWD/nQTrucksEngine.h
+    $$PWD/nQTrucksEngine.h \
+    $$PWD/Dispositivos/Basculas/nQSerialPortReader.h
 
 
 contains(CONFIG,zint){
@@ -47,10 +49,8 @@ HEADERS += \
 
 
 #** BASCULAS **#
-SOURCES += \
-    $$PWD/Dispositivos/Basculas/nQSerialPort.cpp
-HEADERS += \
-    $$PWD/Dispositivos/Basculas/nQSerialPort.h
+SOURCES +=
+HEADERS +=
 
 OTHER_FILES += \
     $$PWD/Dispositivos/Basculas/bascula_puerto.hex

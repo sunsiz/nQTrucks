@@ -28,10 +28,42 @@
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
 
-#include "nQSerialPort.h"
+#ifndef NQSERIALPORTREADER_H
+#define NQSERIALPORTREADER_H
 
-nQSerialPort::nQSerialPort(QObject *parent) : QObject(parent)
+#include <QtSerialPort/QSerialPort>
+
+#include <QTextStream>
+#include <QTimer>
+#include <QByteArray>
+
+#include <QObject>
+
+#include <nqtglobal.h>
+
+namespace nQTrucks {
+namespace Devices {
+
+class nQSerialPortReader : public QObject
 {
+    Q_OBJECT
+public:
+    explicit nQSerialPortReader(QSerialPort *serialPort,QObject *parent = 0);
+    ~nQSerialPortReader();
 
-}
+private slots:
+    void handleReadyRead();
+    void handleTimeout();
+    void handleError(QSerialPort::SerialPortError error);
 
+private:
+    QSerialPort *m_serialPort;
+    QByteArray   m_readData;
+    QTextStream  m_standardOutput;
+
+};
+
+} /** END NAMESPACE Devices  **/
+
+} /** END NAMESPACE nQTrucks **/
+#endif // NQSERIALPORTREADER_H

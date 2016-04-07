@@ -34,9 +34,6 @@
 #include <QObject>
 #include <nqtglobal.h>
 
-//#include <QtSerialPort/QSerialPort>
-//#include <QtSerialPort/QSerialPortInfo>
-
 #include "Firmata/firmata.h"
 #include "Firmata/backends/serialinfo.h"
 #include "Firmata/backends/serialport.h"

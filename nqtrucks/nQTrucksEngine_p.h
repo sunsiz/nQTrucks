@@ -44,6 +44,8 @@
 #include "Dispositivos/NewsagesIO.h"
 #include <QtSerialPort/QSerialPortInfo>
 
+#include <Dispositivos/Basculas/nQSerialPortReader.h>
+
 namespace nQTrucks {
 
 class nQTrucksEnginePrivate : public QObject
@@ -78,6 +80,15 @@ public:
     QStringList getIODevices();
 signals:
     /** END NEWSAGES I/O **/
+
+    /** BASCULAS **/
+public:
+    QSerialPort m_bascula1;
+
+private:
+    Devices::nQSerialPortReader *m_basculaReader1= new Devices::nQSerialPortReader(&m_bascula1);
+
+    /** END BASCULAS **/
 
 };
 

@@ -28,21 +28,62 @@
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
 
-#ifndef NQSERIALPORT_H
-#define NQSERIALPORT_H
+#include "nQSerialPortReader.h"
+#include <QDebug>
 
-#include <QObject>
+namespace nQTrucks {
+namespace Devices {
 
-class nQSerialPort : public QObject
+nQSerialPortReader::nQSerialPortReader(QSerialPort *serialPort, QObject *parent)
+    : QObject(parent)
+    , m_serialPort(serialPort)
+    , m_standardOutput(stdout)
 {
-    Q_OBJECT
-public:
-    explicit nQSerialPort(QObject *parent = 0);
+    QString serialPortName = "/dev/ttyUSB0";
+    int serialPortBaudRate = QSerialPort::Baud9600;
 
-signals:
+    m_serialPort->setPortName(serialPortName);
+    m_serialPort->setBaudRate(serialPortBaudRate);
+    m_serialPort->setDataBits(QSerialPort::Data7);
+    m_serialPort->setReadBufferSize(36);
 
-public slots:
+    if (!m_serialPort->open(QIODevice::ReadOnly)) {
+        m_standardOutput << QObject::tr("Failed to open port %1, error: %2").arg(serialPortName).arg(m_serialPort->errorString()) << endl;
+    }else{
 
-};
+        connect(m_serialPort, SIGNAL(readyRead()), SLOT(handleReadyRead()));
+    }
 
-#endif // NQSERIALPORT_H
+
+}
+
+nQSerialPortReader::~nQSerialPortReader()
+{
+
+}
+
+
+void nQSerialPortReader::handleReadyRead()
+{
+    m_readData.append(m_serialPort->readAll());
+    m_standardOutput << m_readData << endl;
+}
+
+void nQSerialPortReader::handleTimeout()
+{
+        m_standardOutput << QObject::tr("Data successfully received from port %1").arg(m_serialPort->portName()) << endl;
+        //m_standardOutput << m_readData << endl;
+        qDebug() << m_readData;
+}
+
+void nQSerialPortReader::handleError(QSerialPort::SerialPortError serialPortError)
+{
+    if (serialPortError == QSerialPort::ReadError) {
+        m_standardOutput << QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(m_serialPort->portName()).arg(m_serialPort->errorString()) << endl;
+    }
+}
+
+
+} /** END NAMESPACE Devices  **/
+
+} /** END NAMESPACE nQTrucks **/
