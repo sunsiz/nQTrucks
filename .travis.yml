@@ -16,6 +16,25 @@ before_install:
 install:
   - if [ "$QT_BASE" = "56" ]; then sudo apt-get install -qq libqt5webkit5-dev qt56base qt56script qt56tools qt56serialport qt56translations qt56webengine   ; source /opt/qt56/bin/qt56-env.sh; fi
   
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env: COMPILER=g++-5
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.7
+          packages:
+            - clang-3.7
+      env: COMPILER=clang++-3.7
 
 script:
   - qmake -r
