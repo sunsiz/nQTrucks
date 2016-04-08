@@ -139,24 +139,15 @@ void nQSerialPortReader::ReadType0()
         }else{
             charInicio=0;
             m_bascula.bEstadoAnterior = m_bascula.bEstado;
-            if(m_serialBuffer.mid(1,1) == "E"){m_bascula.bEstado= true;
-            }else m_bascula.bEstado=false;
+            if(m_serialBuffer.mid(1,1) != "E"){m_bascula.bEstado= false;
+            }else m_bascula.bEstado=true;
 
             m_bascula.iBruto = m_serialBuffer.mid(4,8).toFloat();
             m_bascula.iTara = m_serialBuffer.mid(14,8).toFloat();
             m_bascula.iNeto = m_serialBuffer.mid(24,8).toFloat();
 
             if (m_serialBuffer.mid(24,8).contains("-")){m_bascula.iNeto = -m_bascula.iNeto;}
-
-/*
-        qDebug() <<  " Estado: "  << m_bascula.bEstado << endl <<
-                     " Bruto:  "  << m_bascula.iBruto  << endl <<
-                     " Tara:   "  << m_bascula.iTara   << endl <<
-                     " Neto:   "  << m_bascula.iNeto   << endl ;
-                     */
-
-        emit BasculaChanged(m_bascula);
-
+            emit BasculaChanged(m_bascula);
         }
         break;
     default:

@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(engine,SIGNAL(CamaraIPFoto2(QImage)),this,SLOT(onGetFoto2(QImage)));
     connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
     connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
-    connect(engine,SIGNAL(BasculaStatus(bool)),ui->BasculaStatus,SLOT(setChecked(bool)));
+    connect(engine,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
     connect(engine,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
     loadconfig();
 
@@ -115,6 +115,28 @@ void MainWindow::loadconfig()
     ui->ioDeviceSTATUSLabel->setPalette(m_deviceNotReady_palette);
     ui->ioDeviceSTATUSLabel->setText("Disc");
     /** IO DEVICES **/
+
+    /** BASCULAS **/
+    ui->BasculaLcd->display("-------");
+    ui->BasculaLcd2->display("-------");
+    ui->BasculaLcd3->display("-------");
+    ui->BasculaEstable->setChecked(false);
+    ui->BasculaEstable->setAutoExclusive(false);
+
+    QStringList l_BasculaTipo = engine->getTiposBasculas();
+    ui->BasculaTipoComboBox->addItems(l_BasculaTipo);
+
+    QStringList l_BasculaDevices = engine->getSerialDevices();
+    ui->BasculaDevicesComboBox->addItems(l_BasculaDevices);
+
+
+    engine->appConfig()->beginGroup(BASCULA);
+    //ui->BasculaDevicesComboBox->setCurrentIndex(engine->appConfig()->value("device","0").toInt());
+    ui->BasculaTipoComboBox->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+
+    /** END BASCULAS **/
 
 }
 
@@ -233,11 +255,53 @@ void MainWindow::on_desconectarBasculaPushButton_clicked()
 
 void MainWindow::onBascula(t_Bascula _bascula)
 {
+    ui->BasculaLcd->display(_bascula.iBruto);
+    ui->BasculaLcd2->display(_bascula.iTara);
+    ui->BasculaLcd3->display(_bascula.iNeto);
+
+    if(_bascula.bEstado == _bascula.bEstado){
+        ui->BasculaEstable->setChecked(_bascula.bEstado);
+    }
+
+    /*
     qDebug() <<  " Estado: "  << _bascula.bEstado << endl <<
                  " Bruto:  "  << _bascula.iBruto  << endl <<
                  " Tara:   "  << _bascula.iTara   << endl <<
                  " Neto:   "  << _bascula.iNeto   << endl ;
-    ui->BasculaLcd->display(_bascula.iBruto);
-    ui->BasculaEstable->setChecked(_bascula.bEstado);
+    */
+
+}
+
+void MainWindow::on_guardarBasculaPushButton_clicked()
+{
+    engine->appConfig()->beginGroup(BASCULA);
+    engine->appConfig()->setValue("device",ui->BasculaDevicesComboBox->currentText());
+    engine->appConfig()->setValue("tipo",QString::number(ui->BasculaTipoComboBox->currentIndex()));
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+    engine->setIODevicesConfig();
+}
+
+void MainWindow::on_actualizarIBasculasButton_clicked()
+{
+    ui->BasculaDevicesComboBox->clear();
+    QStringList l_Devices = engine->getSerialDevices();
+    ui->BasculaDevicesComboBox->addItems(l_Devices);
+}
+
+void MainWindow::on_BasculaConectada(bool conectada)
+{
+    ui->BasculaStatus->setChecked(conectada);
+    switch (conectada) {
+    case true:
+        break;
+    case false:
+        ui->BasculaLcd->display("-------");
+        ui->BasculaLcd2->display("-------");
+        ui->BasculaLcd3->display("-------");
+        ui->BasculaEstable->setChecked(false);
+        break;
+    }
+
 
 }

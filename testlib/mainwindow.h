@@ -94,7 +94,12 @@ private slots:
     void on_conectarBasculaPushButton_clicked();
     void on_desconectarBasculaPushButton_clicked();
     void onBascula(t_Bascula _bascula);
+    void on_guardarBasculaPushButton_clicked();
+
+    void on_actualizarIBasculasButton_clicked();
+    void on_BasculaConectada(bool conectada);
 private:
+    //bool m_basculaEstado=false;
     //nQTrucks::t_Bascula m_bascula;
     /** END BASCULAS **/
 

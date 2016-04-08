@@ -49,3 +49,8 @@ unix:{
         QMAKE_LFLAGS_RPATH += #. .. ./libs
     }
 }
+
+
+
+RESOURCES += \
+        $$PWD/../stylesheets/qdarkstyle/style.qrc

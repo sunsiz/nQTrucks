@@ -78,6 +78,9 @@ signals:
     /** END NEWSAGES I/O **/
 
     /** BASCULAS **/
+public:
+    QStringList getTiposBasculas();
+    QStringList getSerialDevices();
 public slots:
     void setBasculaConnect(bool _value);
 signals:

@@ -114,6 +114,7 @@ void nQTrucksEnginePrivate::setCamaraIP(int nDevice,  QString type, QString host
 }
 /** END CAMARAS **/
 
+/** NEWSAGES I/O **/
 QStringList nQTrucksEnginePrivate::getIODevices()
 {
     QStringList listIODevices;
@@ -136,6 +137,45 @@ QStringList nQTrucksEnginePrivate::getIODevices()
     }
     return listIODevices;
 }
+/** FIN NEWSAGES I/O **/
+
+/** BASCULAS **/
+QStringList nQTrucksEnginePrivate::getBasculaTypes()
+{
+    QMetaObject MetaObject = Devices::nQSerialPortReader::staticMetaObject;
+    QMetaEnum MetaEnum = MetaObject.enumerator(MetaObject.indexOfEnumerator("BasculaType"));
+    QStringList listTypes;
+    for (int i = 0; i < MetaEnum.keyCount(); i++)
+    {
+        listTypes.insert(MetaEnum.value(i), MetaEnum.key(i));
+    }
+    return listTypes;
+}
+
+QStringList nQTrucksEnginePrivate::getSerialDevices()
+{
+    QStringList listDevices;
+    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+        /* qDebug() << QObject::tr("Port: ") + info.portName() + "\n"
+                    + QObject::tr("Location: ") + info.systemLocation() + "\n"
+                    + QObject::tr("Description: ") + info.description() + "\n"
+                    + QObject::tr("Manufacturer: ") + info.manufacturer() + "\n"
+                    + QObject::tr("Serial number: ") + info.serialNumber() + "\n"
+                    + QObject::tr("Vendor Identifier: ") + (info.hasVendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString()) + "\n"
+                    + QObject::tr("Product Identifier: ") + (info.hasProductIdentifier() ? QString::number(info.productIdentifier(), 16) : QString()) + "\n"
+                    + QObject::tr("Busy: ") + (info.isBusy() ? QObject::tr("Yes") : QObject::tr("No")) + "\n";
+       */
+        //if (info.manufacturer()=="FTDI"){
+            //if (!info.isBusy()){
+                listDevices.append(info.systemLocation());
+            //}
+        //}
+
+    }
+    return listDevices;
+}
+
+/** END BASCULAS **/
 
 
 /** Public Impl **/
@@ -253,11 +293,24 @@ void nQTrucksEngine::setIODevicesConfig()
 /** END NEWSAGES I/O **/
 
 /** BASCULAS  **/
+QStringList nQTrucksEngine::getTiposBasculas()
+{
+    Q_D(nQTrucksEngine);
+    return d->getBasculaTypes();
+}
+
 void nQTrucksEngine::setBasculaConnect(bool _value)
 {
     Q_D(nQTrucksEngine);
     d->m_basculaReader1->connectPort(_value);
 }
+
+QStringList nQTrucksEngine::getSerialDevices()
+{
+    Q_D(nQTrucksEngine);
+    return d->getSerialDevices();
+}
+
 /** END BASCULAS **/
 
 

@@ -43,6 +43,7 @@ namespace Devices {
 class nQSerialPortReader : public QObject
 {
     Q_OBJECT
+    Q_ENUMS(BasculaType)
 public:
     explicit nQSerialPortReader(QSettings *_appsettings=0,QObject *parent = 0);
     ~nQSerialPortReader();
@@ -73,7 +74,7 @@ public slots:
     /** END INTERFACE **/
 
 
-    /** SETTINGS **/   
+    /** SETTINGS **/
 private slots:
     void setBasculaType(const int &_TipoBascula);
     void setBasculaPort(const QString &_IODevice);
