@@ -34,54 +34,136 @@
 namespace nQTrucks {
 namespace Devices {
 
-nQSerialPortReader::nQSerialPortReader(QSerialPort *serialPort, QObject *parent)
+nQSerialPortReader::nQSerialPortReader(QSettings *_appsettings, QObject *parent)
     : QObject(parent)
-    , m_serialPort(serialPort)
-    , m_standardOutput(stdout)
+    , m_serialPort(new QSerialPort(this))
+    , m_serialBuffer("")
+    , m_settings(_appsettings)
 {
-    QString serialPortName = "/dev/ttyUSB0";
-    int serialPortBaudRate = QSerialPort::Baud9600;
-
-    m_serialPort->setPortName(serialPortName);
-    m_serialPort->setBaudRate(serialPortBaudRate);
-    m_serialPort->setDataBits(QSerialPort::Data7);
-    m_serialPort->setReadBufferSize(36);
-
-    if (!m_serialPort->open(QIODevice::ReadOnly)) {
-        m_standardOutput << QObject::tr("Failed to open port %1, error: %2").arg(serialPortName).arg(m_serialPort->errorString()) << endl;
-    }else{
-
-        connect(m_serialPort, SIGNAL(readyRead()), SLOT(handleReadyRead()));
-    }
-
-
+    qRegisterMetaType<t_Bascula>("t_Bascula");
+    emit BasculaStatus(false);
+    //connectPort();
 }
 
 nQSerialPortReader::~nQSerialPortReader()
 {
-
+    if(m_serialPort->isOpen()){
+        m_serialPort->close();
+    }
 }
 
-
-void nQSerialPortReader::handleReadyRead()
+void nQSerialPortReader::setBasculaType(const int &_TipoBascula)
 {
-    m_readData.append(m_serialPort->readAll());
-    m_standardOutput << m_readData << endl;
+    if (m_type != _TipoBascula){
+        m_type = _TipoBascula;
+        m_settings->setValue("tipo",QString::number(m_type));
+        m_settings->sync();
+    }
 }
 
-void nQSerialPortReader::handleTimeout()
+void nQSerialPortReader::setBasculaPort(const QString &_IODevice)
 {
-        m_standardOutput << QObject::tr("Data successfully received from port %1").arg(m_serialPort->portName()) << endl;
-        //m_standardOutput << m_readData << endl;
-        qDebug() << m_readData;
+    if (m_serialPortName != _IODevice) {
+        m_serialPortName = _IODevice;
+        m_settings->setValue("device",m_serialPortName);
+        m_settings->sync();
+    }
 }
+
+void nQSerialPortReader::loadconfig(){
+    m_configroot = (QString(BASCULA));
+    m_settings->beginGroup(m_configroot);
+    setBasculaPort(m_settings->value("device","/dev/ttyUSB0").toString());
+    setBasculaType(m_settings->value("tipo","0").toInt());
+    m_settings->endGroup();
+    m_settings->sync();
+}
+void nQSerialPortReader::connectPort(const bool &_value){
+    if(m_serialPort->isOpen()){
+        m_serialPort->close();
+        emit BasculaStatus(false);
+    }
+    if(_value){
+        loadconfig();
+        m_serialPort->setPortName(m_serialPortName);
+        connectBasculaType(m_type);
+    }
+
+
+}
+
+
+/** LOGICA **/
+void nQSerialPortReader::connectBasculaType(int _type)
+{
+    switch (_type) {
+    case BasculaType::NEWSAGES0:
+        m_serialPort->setBaudRate(QSerialPort::Baud9600);
+        m_serialPort->setDataBits(QSerialPort::Data7);
+        if (m_serialPort->open(QIODevice::ReadOnly)) {
+            emit BasculaStatus(true);
+            connect(m_serialPort, SIGNAL(readyRead()), SLOT(ReadType0()));
+        }
+        break;
+    default:
+        break;
+    }
+}
+
 
 void nQSerialPortReader::handleError(QSerialPort::SerialPortError serialPortError)
 {
+    qDebug() << "Error Serie: " << serialPortError;
     if (serialPortError == QSerialPort::ReadError) {
-        m_standardOutput << QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(m_serialPort->portName()).arg(m_serialPort->errorString()) << endl;
+        emit BasculaStatus(false);
     }
 }
+
+
+/** Funciones de lectura segun Tipos **/
+
+void nQSerialPortReader::ReadType0()
+{
+    m_serialData = m_serialPort->read(1);
+    switch (charInicio) {
+
+    case 0:
+        m_serialBuffer="";
+        if( m_serialData == QChar(2)) {
+            emit BasculaStatus(true);
+            charInicio=1;
+        }
+        break;
+    case 1:
+        if(m_serialData != QChar(3)){m_serialBuffer += QString::fromStdString(m_serialData.toStdString());
+        }else{
+            charInicio=0;
+            m_bascula.bEstadoAnterior = m_bascula.bEstado;
+            if(m_serialBuffer.mid(1,1) == "E"){m_bascula.bEstado= true;
+            }else m_bascula.bEstado=false;
+
+            m_bascula.iBruto = m_serialBuffer.mid(4,8).toFloat();
+            m_bascula.iTara = m_serialBuffer.mid(14,8).toFloat();
+            m_bascula.iNeto = m_serialBuffer.mid(24,8).toFloat();
+
+            if (m_serialBuffer.mid(24,8).contains("-")){m_bascula.iNeto = -m_bascula.iNeto;}
+
+/*
+        qDebug() <<  " Estado: "  << m_bascula.bEstado << endl <<
+                     " Bruto:  "  << m_bascula.iBruto  << endl <<
+                     " Tara:   "  << m_bascula.iTara   << endl <<
+                     " Neto:   "  << m_bascula.iNeto   << endl ;
+                     */
+
+        emit BasculaChanged(m_bascula);
+
+        }
+        break;
+    default:
+        break;
+    }
+}
+
 
 
 } /** END NAMESPACE Devices  **/

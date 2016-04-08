@@ -82,8 +82,10 @@ void SerialFirmata::setDevice(const QString &device)
                 });
 
             if(!d->port->open(QIODevice::ReadWrite)) {
+                QString msg;
                 qWarning() << "Error opening" << device << d->port->error();
-
+                msg = QStringLiteral("Error opening ");
+                setStatusText(msg);
             } else {
                 connect(d->port, &QSerialPort::readyRead, this, &SerialFirmata::onReadyRead);
                 setAvailable(true);

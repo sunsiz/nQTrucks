@@ -31,6 +31,7 @@
 #include "NewsagesIO.h"
 #include <QDebug>
 #include <QtTest/QTest>
+#include <QMessageBox>
 
 namespace nQTrucks {
 namespace Devices {
@@ -40,11 +41,11 @@ namespace Devices {
 NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
     : Firmata(parent)
     , m_ValuePin10(false)
+    , m_conectado(false)
     , m_ioPortList(new SerialPortList)
     , m_ioFtdi(new SerialFirmata)
     , m_settings(_appsettings)
     , m_OutPin10(new DigitalPin)
-    , m_conectado(false)
 {
     /** FIRMATA **/
     this->setBackend(m_ioFtdi);
@@ -55,22 +56,25 @@ NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
     m_OutPin10->setOutput(true);
     m_OutPin10->setFirmata(this);
 
-
-
     connect(m_OutPin10,SIGNAL(valueChanged(bool)),this,SLOT(setValuePin10(bool)));
     connect(this->m_ioFtdi, &FirmataBackend::protocolVersion ,this, &NewsagesIO::onIOConectado);
-
 }
 
 void NewsagesIO::setIODeviceConnect(const bool &value){
     m_conectado=value;
     if(m_conectado){
         loadconfig();
-        this->m_ioFtdi->setDevice(m_IODevice);
-        emit ValuePin10Changed(m_OutPin10->value());
+        m_ioFtdi->setDevice(m_IODevice);
+        if(m_ioFtdi->isAvailable()){
+            emit ValuePin10Changed(m_OutPin10->value());
+        }else{
+            m_conectado=false;
+            QMessageBox::information(nullptr,"Info",statusText() + ":" + m_IODevice);
+        }
     }else{
         this->m_ioFtdi->setDevice("null");
     }
+
     emit IODeviceConnectChanged(m_conectado);
 }
 
@@ -100,6 +104,8 @@ void NewsagesIO::setIODeviceConfig(){
 
 void NewsagesIO::onIOReset(int v, int r)
 {
+    Q_UNUSED(v);
+    Q_UNUSED(r);
     onIOConectado();
 }
 
@@ -118,9 +124,11 @@ void NewsagesIO::setValuePin10(const bool &value)
 
     if(m_ValuePin10!=value){
         if(m_conectado){
-            m_ValuePin10=value;
-            m_OutPin10->setValue(m_ValuePin10);
-            emit ValuePin10Changed(m_OutPin10->value());
+            if(m_ioFtdi->isAvailable()){
+                m_ValuePin10=value;
+                m_OutPin10->setValue(m_ValuePin10);
+                emit ValuePin10Changed(m_OutPin10->value());
+            }
         }
     }
 }

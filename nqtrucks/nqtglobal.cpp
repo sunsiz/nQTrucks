@@ -45,12 +45,7 @@ QString nQTrucks::extractClassName(QString className)
     return className.right(className.length()-startPos);
 }
 
-/** SETTINGS
-nQTrucks::nQTrucksConfig::nQTrucksConfig()
-    : m_ficheroconfig(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("nQTrucks"))
 
-{
-    m_settings = new QSettings(m_ficheroconfig,QSettings::IniFormat);
-}
-**/
-/** END SETTINGS **/
+//}
+
+

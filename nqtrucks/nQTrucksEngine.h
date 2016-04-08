@@ -77,6 +77,14 @@ signals:
     void IODevicesPIN10Changed(const bool &value);
     /** END NEWSAGES I/O **/
 
+    /** BASCULAS **/
+public slots:
+    void setBasculaConnect(bool _value);
+signals:
+    void BasculaStatus(const bool &status);
+    void BasculaChanged(const t_Bascula &bascula);
+    /** END BASCULAS **/
+
     /** nQTrucksEnginePrivate **/
 protected:
     nQTrucksEnginePrivate * const d_ptr;

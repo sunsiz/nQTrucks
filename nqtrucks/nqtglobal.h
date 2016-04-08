@@ -42,12 +42,25 @@
 #  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
+struct Bascula{
+    bool bEstado=false;
+    bool bEstadoAnterior=false;
+    float iBruto=0;
+    float iTara=0;
+    float iNeto=0;
+};
+typedef Bascula t_Bascula;
+
 namespace nQTrucks
 {
 
     #define CAMARA1 "Camara1"
     #define CAMARA2 "Camara2"
     #define NEWSAGESIO "NEWSAGESIO"
+    #define BASCULA "BASCULA"
+
+
+
 
     QString extractClassName(QString className);
     class nQTrucksError : public std::runtime_error{
@@ -55,19 +68,6 @@ namespace nQTrucks
         nQTrucksError(const QString& message):std::runtime_error(message.toStdString()){}
     };
 
-
-    /** CONFIG
-    class nQTrucksConfig {
-    public:
-        explicit nQTrucksConfig();
-        void setSettings(QSettings *value){m_settings=value;}
-        static QSettings*  settings(){return m_settings;}
-    private:
-        static QSettings* m_settings;
-        QString m_ficheroconfig;
-    };
-    **/
-   /** END CONFIG **/
 
     namespace Const{
     }

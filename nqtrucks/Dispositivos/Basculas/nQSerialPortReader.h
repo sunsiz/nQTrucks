@@ -32,11 +32,7 @@
 #define NQSERIALPORTREADER_H
 
 #include <QtSerialPort/QSerialPort>
-
-#include <QTextStream>
-#include <QTimer>
 #include <QByteArray>
-
 #include <QObject>
 
 #include <nqtglobal.h>
@@ -48,18 +44,54 @@ class nQSerialPortReader : public QObject
 {
     Q_OBJECT
 public:
-    explicit nQSerialPortReader(QSerialPort *serialPort,QObject *parent = 0);
+    explicit nQSerialPortReader(QSettings *_appsettings=0,QObject *parent = 0);
     ~nQSerialPortReader();
 
-private slots:
-    void handleReadyRead();
-    void handleTimeout();
-    void handleError(QSerialPort::SerialPortError error);
+    enum BasculaType
+    {
+        NEWSAGES0=0,
+        NEWSAGES1
+    };
 
 private:
+    int m_type;
+    QString      m_serialPortName;
     QSerialPort *m_serialPort;
-    QByteArray   m_readData;
-    QTextStream  m_standardOutput;
+    t_Bascula    m_bascula;
+    QByteArray   m_serialData;
+    QString      m_serialBuffer;
+    int          charInicio=0;
+
+
+    /** INTERFACE **/
+signals:
+    void BasculaChanged(const t_Bascula &bascula);
+    void BasculaStatus(const bool &status);
+
+public slots:
+    void connectPort(const bool &_value);
+    /** END INTERFACE **/
+
+
+    /** SETTINGS **/   
+private slots:
+    void setBasculaType(const int &_TipoBascula);
+    void setBasculaPort(const QString &_IODevice);
+
+private:
+    QString   m_configroot;
+    QSettings *m_settings;
+    void loadconfig();
+    /** END SETTINGS **/
+
+private slots:
+    void connectBasculaType(int _type);
+    void handleError(QSerialPort::SerialPortError error);
+
+    /** LECTURA SEGUN TIPOS **/
+private slots:
+    void ReadType0();
+    /** END LECTURA SEGUN TIPOS **/
 
 };
 

@@ -151,11 +151,17 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     d->q_ptr=this;
     connect(d->m_camara1,SIGNAL(ReplyCamaraIPFoto(QImage)),this,SIGNAL(CamaraIPFoto1(QImage)));
     connect(d->m_camara1,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb1(QString)));
+
     connect(d->m_camara2,SIGNAL(ReplyCamaraIPFoto(QImage)),this,SIGNAL(CamaraIPFoto2(QImage)));
     connect(d->m_camara2,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb2(QString)));
+
     connect(d->m_newsagesIO,SIGNAL(IODeviceConnectChanged(bool)),this,SIGNAL(IODevicesStatusChanged(bool)));
     connect(d->m_newsagesIO,SIGNAL(readyChanged(bool)),this,SIGNAL(IODevicesStatusChanged(bool)));
     connect(d->m_newsagesIO,SIGNAL(ValuePin10Changed(bool)),this,SIGNAL(IODevicesPIN10Changed(bool)));
+
+    connect(d->m_basculaReader1,SIGNAL(BasculaStatus(bool)),this,SIGNAL(BasculaStatus(bool)));
+    connect(d->m_basculaReader1,SIGNAL(BasculaChanged(t_Bascula)),
+            this,SIGNAL(BasculaChanged(t_Bascula)));
 }
 
 nQTrucksEngine::nQTrucksEngine(nQTrucksEnginePrivate &dd, QObject *parent)
@@ -227,7 +233,6 @@ QStringList nQTrucksEngine::getIODevices()
     return d->getIODevices();
 }
 
-
 void nQTrucksEngine::setIODevicesConnect(bool _value)
 {
     Q_D(nQTrucksEngine);
@@ -245,8 +250,15 @@ void nQTrucksEngine::setIODevicesConfig()
     Q_D(nQTrucksEngine);
     d->m_newsagesIO->setIODeviceConfig();
 }
-
 /** END NEWSAGES I/O **/
+
+/** BASCULAS  **/
+void nQTrucksEngine::setBasculaConnect(bool _value)
+{
+    Q_D(nQTrucksEngine);
+    d->m_basculaReader1->connectPort(_value);
+}
+/** END BASCULAS **/
 
 
 

@@ -89,6 +89,16 @@ private slots:
     void on_desconectarIODevicesPushButton_clicked();
     /** END NEWSAGES I/O  **/
 
+    /** BASCULAS **/
+private slots:
+    void on_conectarBasculaPushButton_clicked();
+    void on_desconectarBasculaPushButton_clicked();
+    void onBascula(t_Bascula _bascula);
+private:
+    //nQTrucks::t_Bascula m_bascula;
+    /** END BASCULAS **/
+
+
     /** CONFIG **/
 private:
     void loadconfig();

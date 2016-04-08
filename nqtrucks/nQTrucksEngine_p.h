@@ -82,12 +82,8 @@ signals:
     /** END NEWSAGES I/O **/
 
     /** BASCULAS **/
-public:
-    QSerialPort m_bascula1;
-
 private:
-    Devices::nQSerialPortReader *m_basculaReader1= new Devices::nQSerialPortReader(&m_bascula1);
-
+    Devices::nQSerialPortReader *m_basculaReader1= new Devices::nQSerialPortReader(settings(),this);
     /** END BASCULAS **/
 
 };

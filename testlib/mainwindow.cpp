@@ -32,9 +32,9 @@
 /*
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
-#include <QDebug>
 #include <QStringListModel>
 */
+#include <QDebug>
 #include "nQTrucksEngine.h"
 
 #include <QUrl>
@@ -52,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(engine,SIGNAL(CamaraIPFoto2(QImage)),this,SLOT(onGetFoto2(QImage)));
     connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
     connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
+    connect(engine,SIGNAL(BasculaStatus(bool)),ui->BasculaStatus,SLOT(setChecked(bool)));
+    connect(engine,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
     loadconfig();
 
 }
@@ -218,3 +220,24 @@ void MainWindow::on_desconectarIODevicesPushButton_clicked()
 }
 /** END NEWSAGES I/O **/
 
+
+void MainWindow::on_conectarBasculaPushButton_clicked()
+{
+    engine->setBasculaConnect(true);
+}
+
+void MainWindow::on_desconectarBasculaPushButton_clicked()
+{
+    engine->setBasculaConnect(false);
+}
+
+void MainWindow::onBascula(t_Bascula _bascula)
+{
+    qDebug() <<  " Estado: "  << _bascula.bEstado << endl <<
+                 " Bruto:  "  << _bascula.iBruto  << endl <<
+                 " Tara:   "  << _bascula.iTara   << endl <<
+                 " Neto:   "  << _bascula.iNeto   << endl ;
+    ui->BasculaLcd->display(_bascula.iBruto);
+    ui->BasculaEstable->setChecked(_bascula.bEstado);
+
+}
