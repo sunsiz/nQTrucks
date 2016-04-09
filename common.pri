@@ -47,11 +47,21 @@ unix{
     }
     linux{
         !contains(QT_ARCH, x86_64){
-            ARCH_TYPE       =  linux32
-            message("Compiling for 32bit system")
+            !contains(QT_ARCH, arm){
+                ARCH_TYPE       =  linux32
+                message("Compiling for " $$QT_ARCH " 32bit system")
+            }else{
+                ARCH_TYPE       =  arm
+                message("Compiling for " $$QT_ARCH " 32bit system")
+            }
         }else{
-            ARCH_TYPE       =  linux64
-            message("Compiling for 64bit system")
+            !contains(QT_ARCH, arm){
+                ARCH_TYPE       =  linux64
+                message("Compiling for " $$QT_ARCH " 64bit system")
+            }else{
+                ARCH_TYPE       =  arm64
+                message("Compiling for " $$QT_ARCH " 64bit system")
+            }
         }
     }
 }
