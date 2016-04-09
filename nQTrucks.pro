@@ -5,9 +5,7 @@ contains(CONFIG, zint){
 }
 
 SUBDIRS += \
-        support \
-        statedetection \
-        openalpr \
+        nQAlpr \
         nqtrucks
 
 CONFIG   += ordered

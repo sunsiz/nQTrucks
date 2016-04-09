@@ -28,7 +28,7 @@ macx{
 unix {
     CONFIG += link_pkgconfig
     PKGCONFIG += opencv
-    LIBS +=  tesseract-dev
+    LIBS += libtesseract-dev
     QMAKE_CXXFLAGS += -DOPENCV_MAJOR_VERSION=2
     QMAKE_CXXFLAGS += -DCOMPILE_GPU=1
     #QMAKE_CXXFLAGS += -DDEFAULT_CONFIG_FILE=\\\$\$ORIGIN/../config/openalpr.conf

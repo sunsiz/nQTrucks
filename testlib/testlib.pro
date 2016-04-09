@@ -32,7 +32,7 @@ LIBS += -L$${DEST_LIBS}
 
 unix:{
     CONFIG += link_pkgconfig
-    PKGCONFIG += opencv tesseract
+    PKGCONFIG += opencv
     LIBS += -lnQTrucks -lopenalpr -lsupport -lstatedetection
     DESTDIR = $$DEST_BINS
     #QMAKE_POST_LINK += mkdir -p $$quote($$REPORTS_DIR) | $$QMAKE_COPY $$quote($$EXTRA_DIR)/* $$quote($$REPORTS_DIR) $$escape_expand(\n\t)
