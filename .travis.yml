@@ -34,6 +34,8 @@ before_install:
 
 install:
   - if [ "$QT_BASE" = "56" ]; then sudo apt-get install -qq libqt5webkit5-dev qt56base qt56script qt56tools qt56serialport qt56translations qt56webengine   ; source /opt/qt56/bin/qt56-env.sh; fi
+  - sudo apt-get install libopencv-dev libtesseract-dev git cmake build-essential libleptonica-dev -qq
+  - sudo apt-get install liblog4cplus-dev libcurl3-dev -qq
 
 
 script:
