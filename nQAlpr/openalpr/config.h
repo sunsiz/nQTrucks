@@ -60,6 +60,8 @@ namespace alpr
       float contrastDetectionThreshold;
       
       bool skipDetection;
+      
+      std::string detection_mask_image;
 
       int analysis_count;
       
@@ -152,8 +154,6 @@ namespace alpr
       std::vector<std::string> loaded_countries;
 
       bool setCountry(std::string country);
-      bool updatePrewarp(std::string configFile, std::string newprewarp);
-      std::string getPrewarp(std::string configFile);
 
     private:
     

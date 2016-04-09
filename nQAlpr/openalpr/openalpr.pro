@@ -12,10 +12,13 @@ CONFIG += link_prl
 DEFINES += OPENALPR_MAJOR_VERSION=1
 DEFINES += OPENALPR_MINOR_VERSION=3
 DEFINES += OPENALPR_PATCH_VERSION=10
+DEFINES += INSTALL_PREFIX=$${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}
+
 
 OPENALPR_VERSION = '\\"$${OPENALPR_MAJOR_VERSION}.$${OPENALPR_MINOR_VERSION}.$${OPENALPR_PATCH_VERSION}\\"'
 DEFINES += OPENALPR_VERSION_STR=\"$${OPENALPR}\"
 DEFINES += OPENALPR_VERSION=$${OPENALPR}
+DEFINES += STATE_DETECTION_LIB=statedetection
 
 macx{
     CONFIG  -= dll
@@ -27,8 +30,7 @@ macx{
 # add open CV
 unix {
     CONFIG += link_pkgconfig
-    PKGCONFIG += opencv
-    LIBS += libtesseract-dev
+    PKGCONFIG += opencv tesseract
     QMAKE_CXXFLAGS += -DOPENCV_MAJOR_VERSION=2
     QMAKE_CXXFLAGS += -DCOMPILE_GPU=1
     #QMAKE_CXXFLAGS += -DDEFAULT_CONFIG_FILE=\\\$\$ORIGIN/../config/openalpr.conf
@@ -50,6 +52,8 @@ include(openalpr.pri)
 LIBS += -L$${DEST_LIBS}
 LIBS += -lsupport
 LIBS += -lstatedetection
+LIBS += -lsimpleini
+LIBS += -lvideo
 
 
 unix:{
@@ -62,6 +66,9 @@ unix:{
 
     }
     QMAKE_POST_LINK += $(COPY_DIR) $$quote($${DEST_INCLUDE_DIR}) $$quote($${DESTDIR})  #inside of libs make /include/files
+    ##QMAKE_POST_LINK += $(COPY_DIR) $$quote($${PWD}/../config)    $$quote($${DESTDIR}/../)  #inside of libs make /include/files
+    ##QMAKE_POST_LINK += $(COPY_DIR) $$quote($${PWD}/../runtime_data)  $$quote($${DESTDIR}/../)  #inside of libs make /include/files
+
 }
 
 

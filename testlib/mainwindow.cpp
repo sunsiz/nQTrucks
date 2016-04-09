@@ -307,7 +307,7 @@ void MainWindow::testalpr()
 {
     // Initialize the library using United States style license plates.
     // You can use other countries/regions as well (for example: "eu", "au", or "kr")
-    alpr::Alpr openalpr("us", "/path/to/openalpr.conf");
+    alpr::Alpr openalpr("us", "../config/openalpr.conf.defaults");
 
     // Optionally specify the top N possible plates to return (with confidences).  Default is 10
     openalpr.setTopN(20);
@@ -325,7 +325,7 @@ void MainWindow::testalpr()
     }
 
     // Recognize an image file.  You could alternatively provide the image bytes in-memory.
-    alpr::AlprResults results = openalpr.recognize("/path/to/image.jpg");
+    alpr::AlprResults results = openalpr.recognize("image.jpg");
 
     // Iterate through the results.  There may be multiple plates in an image,
     // and each plate return sthe top N candidates.

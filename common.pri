@@ -91,6 +91,5 @@ RCC_DIR        = $${ARCH_DIR}/$${BUILD_TYPE}/rcc
 #*** INCLUDE IMPL ***#
 DEST_INCLUDE_DIR = $$PWD/include
 
-
 #REPORT_PATH = $$PWD/limereport
 TRANSLATIONS_PATH = $$PWD/translations
