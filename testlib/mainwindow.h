@@ -40,6 +40,7 @@
 
 #include "nQTrucksEngine.h"
 #include "nqtglobal.h"
+#include "alpr.h"
 
 namespace Ui {
 class MainWindow;
@@ -55,6 +56,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void testalpr();
 
     /** nQTrucks Lib **/
 private:

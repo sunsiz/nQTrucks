@@ -84,4 +84,3 @@ DEST_INCLUDE_DIR = $$PWD/include
 
 #REPORT_PATH = $$PWD/limereport
 TRANSLATIONS_PATH = $$PWD/translations
-

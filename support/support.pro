@@ -1,4 +1,4 @@
-TARGET = statedetection
+TARGET = support
 TEMPLATE = lib
 CONFIG += lib
 CONFIG += staticlib
@@ -8,32 +8,36 @@ CONFIG += dll
 CONFIG += create_prl
 CONFIG += link_prl
 
-
-
 macx{
     CONFIG  -= dll
     CONFIG  += lib_bundle
     CONFIG  += plugin
 }
-OPENCV_MAJOR_VERSION = 2
+
+
 # add open CV
 unix {
     CONFIG += link_pkgconfig
-    PKGCONFIG += opencv
-    CONFIG += OPENCV_MAJOR_VERSION=2
+#    PKGCONFIG += opencv tesseract
+#    QMAKE_CXXFLAGS += -DOPENCV_MAJOR_VERSION=2
+#    QMAKE_CXXFLAGS += -DCOMPILE_GPU=1
+    #QMAKE_CXXFLAGS += -DDEFAULT_CONFIG_FILE=\\\$\$ORIGIN/../config/openalpr.conf
+
 }
 
-INCLUDEPATH += $$PWD/../support
-DEPENDPATH  += $$PWD/../support
+DEFINES += SUPPORT_LIBRARY
+RC_FILE = support.rc
 
-#DEFINES += NQTRUCKS_LIBRARY
-#RC_FILE = nQTrucks.rc
+#install (FILES   alpr.h     DESTINATION    ${CMAKE_INSTALL_PREFIX}/include)
+#install (TARGETS openalpr-static DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+#install (TARGETS openalpr   DESTINATION    ${CMAKE_INSTALL_PREFIX}/lib)
 
-EXTRA_FILES += \
-    $$PWD/state_detector.h
 
-include(statedetection.pri)
+include(support.pri)
+
 LIBS += -L$${DEST_LIBS}
+#LIBS += -lstatedetection
+
 unix:{
     DESTDIR  = $${DEST_LIBS}
     linux{

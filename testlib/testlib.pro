@@ -2,6 +2,7 @@
 include(../common.pri)
 TARGET = testlib
 TEMPLATE = app
+#CONFIG += shared_and_static build_all
 
 QT += core gui
 
@@ -30,7 +31,9 @@ DEPENDPATH  += $$PWD/../include
 LIBS += -L$${DEST_LIBS}
 
 unix:{
-    LIBS += -lnQTrucks
+    CONFIG += link_pkgconfig
+    PKGCONFIG += opencv tesseract
+    LIBS += -lnQTrucks -lopenalpr -lsupport -lstatedetection
     DESTDIR = $$DEST_BINS
     #QMAKE_POST_LINK += mkdir -p $$quote($$REPORTS_DIR) | $$QMAKE_COPY $$quote($$EXTRA_DIR)/* $$quote($$REPORTS_DIR) $$escape_expand(\n\t)
 

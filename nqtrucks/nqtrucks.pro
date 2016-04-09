@@ -1,11 +1,14 @@
 QT += network sql core serialport qml testlib
 TARGET = nQTrucks
 TEMPLATE = lib
-
 CONFIG += lib
+CONFIG += staticlib
 CONFIG += dll
+#CONFIG += shared_and_static build_all
+
 CONFIG += create_prl
 CONFIG += link_prl
+
 
 macx{
     CONFIG  -= dll
@@ -22,7 +25,7 @@ EXTRA_FILES += \
     $$PWD/nQTrucksEngine.h
 
 include(nqtrucks.pri)
-LIBS += -L$${DEST_LIBS}
+LIBS += -L$${DEST_LIBS} -lsupport -lstatedetection -lopenalpr
 unix:{
     DESTDIR  = $${DEST_LIBS}
     linux{

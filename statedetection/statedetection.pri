@@ -1,5 +1,9 @@
 include(../common.pri)
 
+
+INCLUDEPATH += $$PWD/..
+DEPENDPATH  += $$PWD/..
+
 SOURCES += \
   	$$PWD/state_detector.cpp \
   	$$PWD/featurematcher.cpp \

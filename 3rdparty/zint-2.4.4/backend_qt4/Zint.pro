@@ -1,7 +1,11 @@
 DEFINES += NO_PNG
 
 TEMPLATE = lib
+
+CONFIG += lib
+CONFIG += staticlib
 CONFIG += dll
+#CONFIG += shared_and_static build_all
 
 include(../../../common.pri)
 
