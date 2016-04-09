@@ -292,16 +292,10 @@ void MainWindow::on_actualizarIBasculasButton_clicked()
 void MainWindow::on_BasculaConectada(bool conectada)
 {
     ui->BasculaStatus->setChecked(conectada);
-    switch (conectada) {
-    case true:
-        break;
-    case false:
+    if (!conectada){
         ui->BasculaLcd->display("-------");
         ui->BasculaLcd2->display("-------");
         ui->BasculaLcd3->display("-------");
         ui->BasculaEstable->setChecked(false);
-        break;
     }
-
-
 }

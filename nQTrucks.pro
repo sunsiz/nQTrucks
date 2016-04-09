@@ -5,6 +5,7 @@ contains(CONFIG, zint){
 }
 
 SUBDIRS += \
+        statedetection \
         nqtrucks
 
 CONFIG   += ordered

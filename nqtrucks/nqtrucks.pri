@@ -39,6 +39,9 @@ SOURCES += \
 HEADERS += \
     $$PWD/Dispositivos/CamaraIP.h
 
+OTHER_FILES += \
+        $$PWD/Dispositivos/cameras.yaml
+
 #** NEWSAGES I/O **#
 SOURCES += \
     $$PWD/Dispositivos/NewsagesIO.cpp
