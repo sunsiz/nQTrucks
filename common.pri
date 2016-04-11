@@ -78,10 +78,10 @@ win32{
 }
 
 ARCH_DIR = $${OUT_PWD}/$${ARCH_TYPE}
-DEST_LIBS = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nqtrucks/lib
-DEST_BINS = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nqtrucks
-DEST_INCLUDE_DIR = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nqtrucks/include
-INCLUDE_DIR      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nqtrucks/include
+DEST_LIBS = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nQTrucks/lib
+DEST_BINS = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nQTrucks
+DEST_INCLUDE_DIR = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nQTrucks/include
+INCLUDE_DIR      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nQTrucks/include
 
 GLOBAL_INCLUDE   = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}
 GLOBAL_LIBS      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}

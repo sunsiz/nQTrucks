@@ -24,13 +24,20 @@ HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 
-INCLUDEPATH += $${INCLUDE_DIR}
-DEPENDPATH  += $${INCLUDE_DIR}
+
+
+# *** LIBS ***#
+# ** nQTrucks ** #
+unix:{
+    LIBS += -L$${DEST_LIBS}
+    INCLUDEPATH += $${INCLUDE_DIR}
+    DEPENDPATH  += $${INCLUDE_DIR}
+    LIBS += -lnQTrucks
+}
 
 #INCLUDEPATH += $${GLOBAL_INCLUDE}/openalpr/include
 #DEPENDPATH  += $${GLOBAL_INCLUDE}/openalpr/include
 
-LIBS += -L$${DEST_LIBS}
 #-L$${GLOBAL_LIBS}/openalpr/lib
 #    CONFIG += link_pkgconfig
 #    PKGCONFIG += opencv tesseract
