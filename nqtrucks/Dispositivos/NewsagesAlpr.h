@@ -27,78 +27,38 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
-#ifndef NQTRUCKSENGINE_P_H
-#define NQTRUCKSENGINE_P_H
+
+#ifndef NEWSAGESALPR_H
+#define NEWSAGESALPR_H
 
 #include <QObject>
-#include <QSharedPointer>
-#include <QMetaEnum>
-#include <QCoreApplication>
-#include <QDir>
+#include <nqtglobal.h>
 
-#include "nqtglobal.h"
-#include "nQTrucksEngine.h"
+#include <cstdlib>
+#include <cstdio>
+#include <iostream>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
+#include "alpr.h"
+#include "state_detector.h"
 
-#include "Dispositivos/CamaraIP.h"
-
-#include "Dispositivos/NewsagesIO.h"
-#include <QtSerialPort/QSerialPortInfo>
-
-#include <Dispositivos/Basculas/nQSerialPortReader.h>
-
-#include <Dispositivos/NewsagesAlpr.h>
 
 namespace nQTrucks {
-
-class nQTrucksEnginePrivate : public QObject
+namespace Devices {
+    using namespace alpr;
+class NewsagesAlpr : public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PUBLIC(nQTrucksEngine)
-    Q_ENUMS(CameraType)
-
 public:
-    explicit nQTrucksEnginePrivate(QObject *parent=0);
-    virtual ~nQTrucksEnginePrivate();
-    nQTrucksEngine * q_ptr;
+    explicit NewsagesAlpr(QObject *parent = 0);
 
-    /** SETTINGS **/
-    void    setSettings(QSettings* value);
-    QSettings*  settings();
-private:
-    QSettings* m_settings;
-    /** FIN SETTINGS **/
-
-    /** CAMARAS **/
-public:
-    QStringList getCameraTypes();
-    void setCamaraIP(int nDevice, QString type, QString host, QString port, QString user, QString passwd);
-    Devices::CamaraIP *m_camara1 = new Devices::CamaraIP(1,settings(), this);
-    Devices::CamaraIP *m_camara2 = new Devices::CamaraIP(2,settings(), this);
-    /** FIN CAMARAS **/
-
-    /** NEWSAGES I/O **/
-public:
-    Devices::NewsagesIO *m_newsagesIO= new Devices::NewsagesIO(settings(),this);
-    QStringList getIODevices();
 signals:
-    /** END NEWSAGES I/O **/
 
-    /** BASCULAS **/
-public:
-    QStringList getBasculaTypes();
-    QStringList getSerialDevices();
-private:
-    Devices::nQSerialPortReader *m_basculaReader1= new Devices::nQSerialPortReader(settings(),this);
-    /** END BASCULAS **/
-
-    /** ALPR **/
-    Devices::NewsagesAlpr *m_alpr1= new Devices::NewsagesAlpr(this);//settings(),this);
-    /** END ALPR **/
-
+public slots:
 };
 
+} /** END NAMESPACE Devices  **/
 
-}
-
-#endif // NQTRUCKSENGINE_P_H
-
+} /** END NAMESPACE nQTrucks **/
+#endif // NEWSAGESALPR_H

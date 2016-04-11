@@ -35,17 +35,9 @@
 #include <QStringListModel>
 */
 
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
-
 #include <QDebug>
 #include "nQTrucksEngine.h"
 
-//#include "alpr.h"
 
 #include <QUrl>
 
@@ -65,8 +57,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(engine,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
     connect(engine,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
     loadconfig();
-
-  //  testalpr();
 
 }
 
@@ -150,6 +140,9 @@ void MainWindow::loadconfig()
     engine->appConfig()->sync();
 
     /** END BASCULAS **/
+
+    /** ALPR  **/
+
 
 }
 
@@ -311,49 +304,5 @@ void MainWindow::on_BasculaConectada(bool conectada)
         ui->BasculaLcd3->display("-------");
         ui->BasculaEstable->setChecked(false);
     }
-}
-
-
-
-void MainWindow::testalpr()
-{
-//    // Initialize the library using United States style license plates.
-//    // You can use other countries/regions as well (for example: "eu", "au", or "kr")
-//    alpr::Alpr openalpr("eu", "config/openalpr.conf");
-
-//    // Optionally specify the top N possible plates to return (with confidences).  Default is 10
-//    openalpr.setTopN(1);
-
-//    // Optionally, provide the library with a region for pattern matching.  This improves accuracy by
-//    // comparing the plate text with the regional pattern.
-//    openalpr.setDefaultRegion("es");
-
-//    openalpr.setPrewarp("");
-//    // Make sure the library loaded before continuing.
-//    // For example, it could fail if the config/runtime_data is not found
-//    if (openalpr.isLoaded() == false)
-//    {
-//        std::cerr << "Error loading OpenALPR" << std::endl;
-//        //return;
-//    }
-//    QString file ="matriculas/image.jpg";
-//    // Recognize an image file.  You could alternatively provide the image bytes in-memory.
-//    alpr::AlprResults results = openalpr.recognize(file.toStdString()    );
-
-//    // Iterate through the results.  There may be multiple plates in an image,
-//    // and each plate return sthe top N candidates.
-//    for (int i = 0; i < results.plates.size(); i++)
-//    {
-//      alpr::AlprPlateResult plate = results.plates[i];
-//      //std::cout << "plate" << i << ": " << plate.topNPlates.size() << " results" << std::endl;
-
-//        for (int k = 0; k < plate.topNPlates.size(); k++)
-//        {
-//          alpr::AlprPlate candidate = plate.topNPlates[k];
-//          std::cout << "    - " << candidate.characters << "\t confidence: " << candidate.overall_confidence;
-//          //std::cout << "\t pattern_match: " << candidate.matches_template << std::endl;
-//        }
-//    }
-
 }
 

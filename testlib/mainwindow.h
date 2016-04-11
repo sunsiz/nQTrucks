@@ -55,7 +55,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    void testalpr();
 
     /** nQTrucks Lib **/
 private:

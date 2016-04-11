@@ -1,3 +1,4 @@
+include(../common.pri)
 QT += network sql core serialport qml #testlib
 TARGET = nQTrucks
 TEMPLATE = lib
@@ -9,7 +10,6 @@ CONFIG += shared_and_static build_all
 CONFIG += create_prl
 CONFIG += link_prl
 
-
 macx{
     CONFIG  -= dll
     CONFIG  += lib_bundle
@@ -19,52 +19,71 @@ macx{
 DEFINES += NQTRUCKS_LIBRARY
 RC_FILE = nQTrucks.rc
 
-include(nqtrucks.pri)
-
+#** LIBS  **#
 LIBS += -L$${DEST_LIBS}
 
-
-# ***  LIBS **** #
-#*** OPENCV  ***#
-unix:linux{
-    CONFIG += link_pkgconfig
-    PKGCONFIG += opencv tesseract
-}
-
-#*** nQAlpr ***#
-#unix:linux{
-#    LIBS += -L$${GLOBAL_LIBS}/openalpr/lib
-#    LIBS            += -lopenalpr -lstatedetection -lpthread -lsupport -lsimpleini
-#    PRE_TARGETDEPS  +=  $${GLOBAL_LIBS}/openalpr/lib/libsupport.a $${GLOBAL_LIBS}/openalpr/lib/libsimpleini.a  $${GLOBAL_LIBS}/openalpr/lib/libstatedetection.a
-#}
-
-
-EXTRA_FILES += \
-    $$PWD/nqtglobal.cpp \
-    $$PWD/nqtglobal.h \
-    $$PWD/nQTrucksEngine.h
 unix:{
     DESTDIR  = $${DEST_LIBS}
+    EXTRA_FILES += \
+        $$PWD/nqtglobal.cpp \
+        $$PWD/nqtglobal.h \
+        $$PWD/nQTrucksEngine.h
     linux{
         QMAKE_POST_LINK += mkdir -p $$quote($${DEST_INCLUDE_DIR}) $$escape_expand(\\n\\t) # qmake need make mkdir -p on subdirs more than root
         for(FILE,EXTRA_FILES){
             QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILE) $$quote($${DEST_INCLUDE_DIR}) $$escape_expand(\\n\\t) # copy includes for impl
         }
-
     }
-    #QMAKE_POST_LINK += $(COPY_DIR) $$quote($${DEST_INCLUDE_DIR}) $$quote($${DESTDIR})  #inside of libs make /include/files
 }
 
-
+#*** OPENCV  ***#
+unix:linux{
+    CONFIG += link_pkgconfig
+    PKGCONFIG += opencv
+    LIBS += -ltesseract
+}
+#** ZINT **#
+#CONFIG += zint
+#ZINT_PATH = $$PWD/3rdparty/zint-2.4.4
 contains(CONFIG,zint){
     message(zint)
     INCLUDEPATH += $$ZINT_PATH/backend $$ZINT_PATH/backend_qt4
     DEPENDPATH += $$ZINT_PATH/backend $$ZINT_PATH/backend_qt4
     LIBS += -lQtZint
+    PRE_TARGETDEPS  += $${DEST_LIBS}/libQtZint.a
 }
 
-####Automatically build required translation files (*.qm)
+#*** nQAlpr ***#
+unix:{
+    DEPENDPATH  += $${GLOBAL_INCLUDE}/openalpr/include
+    INCLUDEPATH += $${GLOBAL_INCLUDE}/openalpr/include
+    CONFIG += link_pkgconfig
+    PKGCONFIG += opencv
 
+    LIBS        += -L$${GLOBAL_LIBS}/openalpr/lib
+    LIBS +=  -lopenalpr -lstatedetection -ltesseract
+    PRE_TARGETDEPS  += $${GLOBAL_LIBS}/openalpr/lib/libopenalpr.a  $${GLOBAL_LIBS}/openalpr/lib/libstatedetection.a
+
+    EXTRA_DIRS += \
+        $${GLOBAL_LIBS}/openalpr/config \
+        $${GLOBAL_LIBS}/openalpr/runtime_data \
+        $${GLOBAL_LIBS}/openalpr/matriculas
+    QMAKE_POST_LINK += $(COPY_DIR) $$quote($${EXTRA_DIRS}) $$quote($${DEST_BINS}) $$escape_expand(\\n\\t) #inside of libs make /include/files
+
+    EXTRA_LIBS += \
+        $${GLOBAL_LIBS}/openalpr/lib/*
+     for(FILES_EXTRA_LIBS,EXTRA_LIBS){
+         QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILES_EXTRA_LIBS) $$quote($${DEST_BINS}) $$escape_expand(\\n\\t) # copy includes for impl
+        }
+}
+
+
+include(nqtrucks.pri)
+
+####Automatically build required translation files (*.qm)
+#REPORT_PATH = $$PWD/limereport
+CONFIG += build_translations
+TRANSLATIONS_PATH = $$PWD/../translations
 contains(CONFIG,build_translations){
     LANGUAGES = ru es_ES
 

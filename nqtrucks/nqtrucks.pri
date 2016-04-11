@@ -1,5 +1,3 @@
-include(../common.pri)
-
 DEFINES += INSPECT_BASEDESIGN
 
 INCLUDEPATH += \
@@ -98,4 +96,10 @@ SOURCES += \
         $$PWD/Dispositivos/Firmata/pins/i2c.cpp
 
 
+#** ALPR  **#
+SOURCES += \
+    $$PWD/Dispositivos/NewsagesAlpr.cpp
+
+HEADERS += \
+    $$PWD/Dispositivos/NewsagesAlpr.h
 

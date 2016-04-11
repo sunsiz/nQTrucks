@@ -24,12 +24,7 @@ DEFINES += NQTRUCKS_VERSION_STR=\"$${NQTRUCKS_VERSION}\"
 DEFINES += NQTRUCKS_VERSION=$${NQTRUCKS_VERSION}
 
 
-CONFIG += build_translations
-CONFIG += c++11
 
-#*** ZINT ***#
-CONFIG += zint
-ZINT_PATH = $$PWD/3rdparty/zint-2.4.4
 
 #***  VARIABLES FOR MULTI_OS_ARCH ***#
 CONFIG(release, debug|release){
@@ -96,5 +91,10 @@ GLOBAL_LIBS      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}
 QMAKE_CXXFLAGS += -DOPENCV_MAJOR_VERSION=2
 #*** INCLUDE IMPL ***#
 
-#REPORT_PATH = $$PWD/limereport
-TRANSLATIONS_PATH = $$PWD/translations
+
+#** ZINT **#
+CONFIG += zint
+ZINT_PATH = $$PWD/3rdparty/zint-2.4.4
+
+
+

@@ -14,6 +14,7 @@ CONFIG   += ordered
 
 #** BINS **#
 SUBDIRS += \
+        #testalpr \
         testlib
 
 OTHER_FILES += \
