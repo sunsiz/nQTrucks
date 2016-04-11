@@ -30,7 +30,6 @@
 
 #include "NewsagesIO.h"
 #include <QDebug>
-#include <QtTest/QTest>
 #include <QMessageBox>
 
 namespace nQTrucks {

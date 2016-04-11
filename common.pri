@@ -1,3 +1,4 @@
+CONFIG += c++11
 greaterThan(QT_MAJOR_VERSION, 4) {
     DEFINES+=HAVE_QT5
     QT+= printsupport widgets
@@ -39,7 +40,8 @@ CONFIG(release, debug|release){
     BUILD_TYPE = debug
 }
 
-BUILD_DIR = $$PWD/build/$${QT_VERSION}
+BUILD_DIR = $$PWD/../../../builds
+#BUILD_DIR = $$PWD/build/$${QT_VERSION}
 
 unix{
     macx{
@@ -76,20 +78,23 @@ win32{
 }
 
 ARCH_DIR = $${OUT_PWD}/$${ARCH_TYPE}
-DEST_LIBS = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/lib
-DEST_BINS = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/$${TARGET}
+DEST_LIBS = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nqtrucks/lib
+DEST_BINS = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nqtrucks
+DEST_INCLUDE_DIR = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nqtrucks/include
+INCLUDE_DIR      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nqtrucks/include
 
+GLOBAL_INCLUDE   = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}
+GLOBAL_LIBS      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}
 
-MOC_DIR        = $${ARCH_DIR}/$${BUILD_TYPE}/moc
-UI_DIR         = $${ARCH_DIR}/$${BUILD_TYPE}/ui
-UI_HEADERS_DIR = $${ARCH_DIR}/$${BUILD_TYPE}/ui
-UI_SOURCES_DIR = $${ARCH_DIR}/$${BUILD_TYPE}/ui
-OBJECTS_DIR    = $${ARCH_DIR}/$${BUILD_TYPE}/obj
-RCC_DIR        = $${ARCH_DIR}/$${BUILD_TYPE}/rcc
+#MOC_DIR        = $${ARCH_DIR}/$${BUILD_TYPE}/moc
+#UI_DIR         = $${ARCH_DIR}/$${BUILD_TYPE}/ui
+#UI_HEADERS_DIR = $${ARCH_DIR}/$${BUILD_TYPE}/ui
+#UI_SOURCES_DIR = $${ARCH_DIR}/$${BUILD_TYPE}/ui
+#OBJECTS_DIR    = $${ARCH_DIR}/$${BUILD_TYPE}/obj
+#RCC_DIR        = $${ARCH_DIR}/$${BUILD_TYPE}/rcc
 
-
+QMAKE_CXXFLAGS += -DOPENCV_MAJOR_VERSION=2
 #*** INCLUDE IMPL ***#
-DEST_INCLUDE_DIR = $$PWD/include
 
 #REPORT_PATH = $$PWD/limereport
 TRANSLATIONS_PATH = $$PWD/translations

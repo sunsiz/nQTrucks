@@ -1,10 +1,10 @@
-QT += network sql core serialport qml testlib
+QT += network sql core serialport qml #testlib
 TARGET = nQTrucks
 TEMPLATE = lib
-CONFIG += lib
-CONFIG += staticlib
-CONFIG += dll
-#CONFIG += shared_and_static build_all
+#CONFIG += lib
+#CONFIG += staticlib
+#CONFIG += dll
+CONFIG += shared_and_static build_all
 
 CONFIG += create_prl
 CONFIG += link_prl
@@ -19,13 +19,30 @@ macx{
 DEFINES += NQTRUCKS_LIBRARY
 RC_FILE = nQTrucks.rc
 
+include(nqtrucks.pri)
+
+LIBS += -L$${DEST_LIBS}
+
+
+# ***  LIBS **** #
+#*** OPENCV  ***#
+unix:linux{
+    CONFIG += link_pkgconfig
+    PKGCONFIG += opencv tesseract
+}
+
+#*** nQAlpr ***#
+#unix:linux{
+#    LIBS += -L$${GLOBAL_LIBS}/openalpr/lib
+#    LIBS            += -lopenalpr -lstatedetection -lpthread -lsupport -lsimpleini
+#    PRE_TARGETDEPS  +=  $${GLOBAL_LIBS}/openalpr/lib/libsupport.a $${GLOBAL_LIBS}/openalpr/lib/libsimpleini.a  $${GLOBAL_LIBS}/openalpr/lib/libstatedetection.a
+#}
+
+
 EXTRA_FILES += \
     $$PWD/nqtglobal.cpp \
     $$PWD/nqtglobal.h \
     $$PWD/nQTrucksEngine.h
-
-include(nqtrucks.pri)
-LIBS += -L$${DEST_LIBS} -lsupport -lstatedetection -lopenalpr
 unix:{
     DESTDIR  = $${DEST_LIBS}
     linux{
@@ -35,7 +52,7 @@ unix:{
         }
 
     }
-    QMAKE_POST_LINK += $(COPY_DIR) $$quote($${DEST_INCLUDE_DIR}) $$quote($${DESTDIR})  #inside of libs make /include/files
+    #QMAKE_POST_LINK += $(COPY_DIR) $$quote($${DEST_INCLUDE_DIR}) $$quote($${DESTDIR})  #inside of libs make /include/files
 }
 
 

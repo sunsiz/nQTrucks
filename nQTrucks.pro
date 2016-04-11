@@ -6,9 +6,6 @@ contains(CONFIG, zint){
     SUBDIRS += 3rdparty
 }
 
-#** nQAlpr **#
-SUBDIRS += nQAlpr
-
 #** nQTrucks **#
 SUBDIRS += nqtrucks
 
