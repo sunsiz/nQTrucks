@@ -6,13 +6,14 @@ contains(CONFIG, zint){
     SUBDIRS += 3rdparty
 }
 
+#** nQAlpr **#
+SUBDIRS += $$PWD/../../nQAlpr/nQAlpr
+
 #** nQTrucks **#
 SUBDIRS += nqtrucks
 
-CONFIG   += ordered
-
-
 #** BINS **#
+CONFIG   += ordered
 SUBDIRS += \
         #testalpr \
         testlib

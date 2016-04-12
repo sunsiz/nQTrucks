@@ -73,7 +73,7 @@ unix:{
     EXTRA_LIBS += \
         $${GLOBAL_LIBS}/openalpr/lib/*
      for(FILES_EXTRA_LIBS,EXTRA_LIBS){
-         QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILES_EXTRA_LIBS) $$quote($${DEST_BINS}) $$escape_expand(\\n\\t) # copy includes for impl
+         QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILES_EXTRA_LIBS) $$quote($${DEST_LIBS}) $$escape_expand(\\n\\t) # copy includes for impl
         }
 }
 
