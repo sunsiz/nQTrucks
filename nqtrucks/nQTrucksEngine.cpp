@@ -128,13 +128,23 @@ QStringList nQTrucksEnginePrivate::getIODevices()
                     + QObject::tr("Product Identifier: ") + (info.hasProductIdentifier() ? QString::number(info.productIdentifier(), 16) : QString()) + "\n"
                     + QObject::tr("Busy: ") + (info.isBusy() ? QObject::tr("Yes") : QObject::tr("No")) + "\n";
        */
-        if (info.manufacturer()=="FTDI"){
-            //if (!info.isBusy()){
-                listIODevices.append(info.systemLocation());
-            //}
-        }
 
+        if (info.manufacturer()=="Newsages NewsTechs")
+        {
+            if(info.description()=="NewsagesIO")
+            {
+                if (!info.isBusy())
+                {
+                    if(info.serialNumber()=="")
+                    {
+                        listIODevices.append(info.systemLocation());
+                    }
+                }
+            }
+        }
     }
+
+
     return listIODevices;
 }
 /** FIN NEWSAGES I/O **/
@@ -156,7 +166,7 @@ QStringList nQTrucksEnginePrivate::getSerialDevices()
 {
     QStringList listDevices;
     foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
-        /* qDebug() << QObject::tr("Port: ") + info.portName() + "\n"
+         qDebug() << QObject::tr("Port: ") + info.portName() + "\n"
                     + QObject::tr("Location: ") + info.systemLocation() + "\n"
                     + QObject::tr("Description: ") + info.description() + "\n"
                     + QObject::tr("Manufacturer: ") + info.manufacturer() + "\n"
@@ -164,15 +174,23 @@ QStringList nQTrucksEnginePrivate::getSerialDevices()
                     + QObject::tr("Vendor Identifier: ") + (info.hasVendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString()) + "\n"
                     + QObject::tr("Product Identifier: ") + (info.hasProductIdentifier() ? QString::number(info.productIdentifier(), 16) : QString()) + "\n"
                     + QObject::tr("Busy: ") + (info.isBusy() ? QObject::tr("Yes") : QObject::tr("No")) + "\n";
-       */
-        //if (info.manufacturer()=="FTDI"){
-            //if (!info.isBusy()){
-                listDevices.append(info.systemLocation());
-            //}
-        //}
 
+//        if (info.manufacturer()=="Newsages NewsTechs")
+//        {
+//            if(info.description()=="NewsagesIO")
+//            {
+//                if (!info.isBusy())
+//                {
+//                    if(info.serialNumber()=="")
+//                    {
+                        listDevices.append(info.systemLocation());
+//                    }
+//                }
+//            }
+//        }
     }
     return listDevices;
+
 }
 
 /** END BASCULAS **/
@@ -202,6 +220,11 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     connect(d->m_basculaReader1,SIGNAL(BasculaStatus(bool)),this,SIGNAL(BasculaStatus(bool)));
     connect(d->m_basculaReader1,SIGNAL(BasculaChanged(t_Bascula)),
             this,SIGNAL(BasculaChanged(t_Bascula)));
+
+    /** NEWSAGES ALPR **/
+    connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(QImage)),this,SIGNAL(ReplyOriginalFoto1(QImage)));
+    connect(d->m_alpr1,SIGNAL(ReplyMatriculaFoto(QImage)),this,SIGNAL(ReplyMatriculaFoto1(QImage)));
+    /** END NEWSAGES ALPR **/
 }
 
 nQTrucksEngine::nQTrucksEngine(nQTrucksEnginePrivate &dd, QObject *parent)
@@ -210,8 +233,7 @@ nQTrucksEngine::nQTrucksEngine(nQTrucksEnginePrivate &dd, QObject *parent)
 {
     Q_D(nQTrucksEngine);
     d->q_ptr=this;
-    //conector private
-    //connect(d, SIGNAL(señal private), this, SIGNAL(señal lib));
+
 }
 
 nQTrucksEngine::~nQTrucksEngine()
@@ -303,6 +325,13 @@ void nQTrucksEngine::setBasculaConnect(bool _value)
 {
     Q_D(nQTrucksEngine);
     d->m_basculaReader1->connectPort(_value);
+}
+
+void nQTrucksEngine::getFotoMatricula1()
+{
+    Q_D(nQTrucksEngine);
+    d->m_alpr1->ProcessFoto();
+
 }
 
 QStringList nQTrucksEngine::getSerialDevices()

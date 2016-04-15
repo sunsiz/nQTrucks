@@ -103,8 +103,15 @@ private:
     //nQTrucks::t_Bascula m_bascula;
     /** END BASCULAS **/
 
+    /** NEWSAGES ALPR **/
+private slots:
+    void onGetOriginalMatricula1(QImage foto);
+    void onGetMatriculaFoto1(QImage foto);
+    /** END NEWSAGES ALPR **/
 
     /** CONFIG **/
+    void on_TestMatricula1_clicked();
+
 private:
     void loadconfig();
     /** END CONFIG **/

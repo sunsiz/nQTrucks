@@ -88,6 +88,14 @@ signals:
     void BasculaChanged(const t_Bascula &bascula);
     /** END BASCULAS **/
 
+    /** NEWSAGES ALPR **/
+public:
+    void getFotoMatricula1();
+signals:
+    void ReplyOriginalFoto1(const QImage &Foto);
+    void ReplyMatriculaFoto1(const QImage &Foto);
+    /** END NEWSAGES ALPR **/
+
     /** nQTrucksEnginePrivate **/
 protected:
     nQTrucksEnginePrivate * const d_ptr;

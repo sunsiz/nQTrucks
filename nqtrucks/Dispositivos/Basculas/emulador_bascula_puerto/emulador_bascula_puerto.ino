@@ -83,7 +83,7 @@ void loop()
 
 
 void azero(){
-  for(int i=0; i <=10; i++)
+  for(int i=0; i <=20; i++)
   {
    Serial.write(2);
    Serial.print(" E");
@@ -100,7 +100,7 @@ void azero(){
 }
 
 void estable(){
-  for(int i=0; i <=10; i++)
+  for(int i=0; i <=20; i++)
   {
    Serial.write(2);
    Serial.print(" E");

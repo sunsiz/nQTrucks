@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>4</number>
     </property>
     <property name="documentMode">
      <bool>false</bool>
@@ -54,9 +54,9 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QLabel" name="label_7">
+           <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>Tipo</string>
+             <string>Dispositivo</string>
             </property>
            </widget>
           </item>
@@ -67,13 +67,6 @@
               <width>200</width>
               <height>0</height>
              </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Dispositivo</string>
             </property>
            </widget>
           </item>
@@ -206,7 +199,7 @@
                </size>
               </property>
               <property name="smallDecimalPoint">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="digitCount">
                <number>7</number>
@@ -904,6 +897,104 @@
        </spacer>
       </item>
      </layout>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Page</string>
+     </attribute>
+     <widget class="QLabel" name="FotoOriginal">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>320</width>
+        <height>240</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>320</width>
+        <height>240</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>320</width>
+        <height>240</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>2</number>
+      </property>
+      <property name="midLineWidth">
+       <number>2</number>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="FotoMatricula">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>10</y>
+        <width>320</width>
+        <height>240</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>320</width>
+        <height>240</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>320</width>
+        <height>240</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>2</number>
+      </property>
+      <property name="midLineWidth">
+       <number>2</number>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="TestMatricula1">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>270</y>
+        <width>99</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Test</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>

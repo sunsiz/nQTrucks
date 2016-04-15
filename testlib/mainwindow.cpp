@@ -56,6 +56,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
     connect(engine,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
     connect(engine,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
+    connect(engine,SIGNAL(ReplyOriginalFoto1(QImage)),this,SLOT(onGetOriginalMatricula1(QImage)));
+    connect(engine,SIGNAL(ReplyMatriculaFoto1(QImage)),this,SLOT(onGetMatriculaFoto1(QImage)));
     loadconfig();
 
 }
@@ -306,3 +308,17 @@ void MainWindow::on_BasculaConectada(bool conectada)
     }
 }
 
+void MainWindow::onGetOriginalMatricula1(QImage foto)
+{
+    ui->FotoOriginal->setPixmap(QPixmap::fromImage(foto));
+}
+
+void MainWindow::onGetMatriculaFoto1(QImage foto)
+{
+    ui->FotoMatricula->setPixmap(QPixmap::fromImage(foto));
+}
+
+void MainWindow::on_TestMatricula1_clicked()
+{
+    engine->getFotoMatricula1();
+}

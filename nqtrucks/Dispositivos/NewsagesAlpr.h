@@ -50,12 +50,15 @@ namespace Devices {
 class NewsagesAlpr : public QObject
 {
     Q_OBJECT
+    cv::Mat QImage2cvMat(QImage image);
 public:
     explicit NewsagesAlpr(QObject *parent = 0);
 
 signals:
-
+    void ReplyOriginalFoto(const QImage &Foto);
+    void ReplyMatriculaFoto(const QImage &Foto);
 public slots:
+    void ProcessFoto();
 };
 
 } /** END NAMESPACE Devices  **/
