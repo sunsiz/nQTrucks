@@ -94,6 +94,7 @@ public:
 signals:
     void ReplyOriginalFoto1(const QImage &Foto);
     void ReplyMatriculaFoto1(const QImage &Foto);
+    void ReplyMatriculaFoto2(const QImage &Foto);
     /** END NEWSAGES ALPR **/
 
     /** nQTrucksEnginePrivate **/

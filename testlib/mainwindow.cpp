@@ -44,20 +44,22 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , m_running(false)
     //, m_config(new QSettings)
 {
     ui->setupUi(this);
 
+    connect(ui->runningCheckBox,SIGNAL(clicked(bool)),this,SLOT(isRunning(bool)));
     engine  = new nQTrucks::nQTrucksEngine(this);
-
     connect(engine,SIGNAL(CamaraIPFoto1(QImage)),this,SLOT(onGetFoto1(QImage)));
     connect(engine,SIGNAL(CamaraIPFoto2(QImage)),this,SLOT(onGetFoto2(QImage)));
     connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
     connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
     connect(engine,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
     connect(engine,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
-    connect(engine,SIGNAL(ReplyOriginalFoto1(QImage)),this,SLOT(onGetOriginalMatricula1(QImage)));
-    connect(engine,SIGNAL(ReplyMatriculaFoto1(QImage)),this,SLOT(onGetMatriculaFoto1(QImage)));
+    connect(engine,SIGNAL(ReplyOriginalFoto1(QImage)),this,SLOT(onGetOriginalMatriculaA1(QImage)));
+    connect(engine,SIGNAL(ReplyMatriculaFoto1(QImage)),this,SLOT(onGetMatriculaFotoA1(QImage)));
+    connect(engine,SIGNAL(ReplyMatriculaFoto2(QImage)),this,SLOT(onGetMatriculaFotoA2(QImage)));
     loadconfig();
 
 }
@@ -67,10 +69,23 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::isRunning(bool clicked)
+{
+    m_running=clicked;
+    ui->configTabWidget->setEnabled(!m_running);
+    if (m_running){
+        ui->runningCheckBox->setText("Running...");
+    }else{
+        ui->runningCheckBox->setText("Stoped...");
+    }
+}
 
 /** SETTINGS **/
 void MainWindow::loadconfig()
 {
+    /** INTERFACE **/
+    ui->configTabWidget->setEnabled(!m_running);
+
     /** CAMARAS **/
     QStringList l_Camaras = engine->getTiposCamaras();
     ui->camaraComboBox1->addItems(l_Camaras);
@@ -308,17 +323,22 @@ void MainWindow::on_BasculaConectada(bool conectada)
     }
 }
 
-void MainWindow::onGetOriginalMatricula1(QImage foto)
+void MainWindow::onGetOriginalMatriculaA1(QImage foto)
 {
-    ui->FotoOriginal->setPixmap(QPixmap::fromImage(foto));
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(foto));
 }
 
-void MainWindow::onGetMatriculaFoto1(QImage foto)
+void MainWindow::onGetMatriculaFotoA1(QImage foto)
 {
-    ui->FotoMatricula->setPixmap(QPixmap::fromImage(foto));
+    ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(foto));
+}
+void MainWindow::onGetMatriculaFotoA2(QImage foto)
+{
+    ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(foto));
 }
 
-void MainWindow::on_TestMatricula1_clicked()
+
+void MainWindow::on_TestMatriculaA1_clicked()
 {
     engine->getFotoMatricula1();
 }

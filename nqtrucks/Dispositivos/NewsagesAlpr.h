@@ -32,14 +32,11 @@
 #define NEWSAGESALPR_H
 
 #include <QObject>
+#include <QImage>
+#include <QThread>
 #include <nqtglobal.h>
 
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
-#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
 #include "alpr.h"
 #include "state_detector.h"
 
@@ -47,18 +44,54 @@
 namespace nQTrucks {
 namespace Devices {
     using namespace alpr;
+
+class NewsagesAlprTask : public QObject{
+    Q_OBJECT
+public:
+    NewsagesAlprTask(QObject *parent = 0);
+    ~NewsagesAlprTask();
+private:
+    QImage *m_fotocamara;
+    cv::Mat QImage2cvMat(QImage image);
+private:
+    Alpr *matricula;
+    Alpr *remolque;
+
+public slots:
+    void setFotoCamara(const QImage &Foto){m_fotocamara = new QImage(Foto);}
+    void procesarBlancas();
+    void procesarRojas();
+signals:
+    void ReplyMatriculaFoto(const QImage &Foto);
+    void ReplyMatriculaRemolqueFoto(const QImage &Foto);
+    void workFinished();
+};
+
 class NewsagesAlpr : public QObject
 {
     Q_OBJECT
-    cv::Mat QImage2cvMat(QImage image);
 public:
-    explicit NewsagesAlpr(QObject *parent = 0);
+    explicit NewsagesAlpr(/*QImage *_fotocamara =0,*/ QObject *parent = 0);
 
 signals:
     void ReplyOriginalFoto(const QImage &Foto);
     void ReplyMatriculaFoto(const QImage &Foto);
+    void ReplyMatriculaRemolqueFoto(const QImage &Foto);
+
 public slots:
     void ProcessFoto();
+
+    /** Matriculas **/
+private:
+    QImage *m_fotocamara;
+
+    /** Multi Tareas **/
+    QThread *hilo1;
+    NewsagesAlprTask *tarea1;
+
+    QThread *hilo2;
+    NewsagesAlprTask *tarea2;
+
 };
 
 } /** END NAMESPACE Devices  **/

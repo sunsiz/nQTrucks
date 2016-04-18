@@ -55,6 +55,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    bool m_running=false;
+private slots:
+    void isRunning(bool clicked);
 
     /** nQTrucks Lib **/
 private:
@@ -105,12 +108,13 @@ private:
 
     /** NEWSAGES ALPR **/
 private slots:
-    void onGetOriginalMatricula1(QImage foto);
-    void onGetMatriculaFoto1(QImage foto);
+    void onGetOriginalMatriculaA1(QImage foto);
+    void onGetMatriculaFotoA1(QImage foto);
+    void onGetMatriculaFotoA2(QImage foto);
     /** END NEWSAGES ALPR **/
 
     /** CONFIG **/
-    void on_TestMatricula1_clicked();
+    void on_TestMatriculaA1_clicked();
 
 private:
     void loadconfig();

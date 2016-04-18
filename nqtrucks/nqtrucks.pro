@@ -42,39 +42,36 @@ unix:linux{
     PKGCONFIG += opencv
     LIBS += -ltesseract
 }
-#** ZINT **#
-#CONFIG += zint
-#ZINT_PATH = $$PWD/3rdparty/zint-2.4.4
-contains(CONFIG,zint){
-    message(zint)
-    INCLUDEPATH += $$ZINT_PATH/backend $$ZINT_PATH/backend_qt4
-    DEPENDPATH += $$ZINT_PATH/backend $$ZINT_PATH/backend_qt4
-    LIBS += -lQtZint
-    PRE_TARGETDEPS  += $${DEST_LIBS}/libQtZint.a
-}
 
 #*** nQAlpr ***#
 unix:{
-    DEPENDPATH  += $${GLOBAL_INCLUDE}/openalpr/include
-    INCLUDEPATH += $${GLOBAL_INCLUDE}/openalpr/include
+    DEPENDPATH  += $${GLOBAL_INCLUDE}/nQAlpr/include
+    INCLUDEPATH += $${GLOBAL_INCLUDE}/nQAlpr/include
     CONFIG += link_pkgconfig
     PKGCONFIG += opencv
 
-    LIBS        += -L$${GLOBAL_LIBS}/openalpr/lib
-    LIBS +=  -lopenalpr -lstatedetection -ltesseract
-    PRE_TARGETDEPS  += $${GLOBAL_LIBS}/openalpr/lib/libopenalpr.a  $${GLOBAL_LIBS}/openalpr/lib/libstatedetection.a
+    LIBS        += -L$${GLOBAL_LIBS}/nQAlpr/lib
+    LIBS        += -lnQAlpr -lstatedetection -ltesseract
+    PRE_TARGETDEPS  += $${GLOBAL_LIBS}/nQAlpr/lib/libnQAlpr.a  $${GLOBAL_LIBS}/nQAlpr/lib/libstatedetection.a
 
     EXTRA_DIRS += \
-        $${GLOBAL_LIBS}/openalpr/config \
-        $${GLOBAL_LIBS}/openalpr/runtime_data \
-        $${GLOBAL_LIBS}/openalpr/matriculas
+        $${GLOBAL_LIBS}/nQAlpr/config \
+        $${GLOBAL_LIBS}/nQAlpr/runtime_data \
+        $${GLOBAL_LIBS}/nQAlpr/matriculas
     QMAKE_POST_LINK += $(COPY_DIR) $$quote($${EXTRA_DIRS}) $$quote($${DEST_BINS}) $$escape_expand(\\n\\t) #inside of libs make /include/files
 
     EXTRA_LIBS += \
-        $${GLOBAL_LIBS}/openalpr/lib/*
+        $${GLOBAL_LIBS}/nQAlpr/lib/*
      for(FILES_EXTRA_LIBS,EXTRA_LIBS){
          QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILES_EXTRA_LIBS) $$quote($${DEST_LIBS}) $$escape_expand(\\n\\t) # copy includes for impl
         }
+
+    EXTRA_INCLUDES += \
+        $${GLOBAL_INCLUDE}/nQAlpr/include/*
+        QMAKE_POST_LINK += mkdir -p $$quote($${DEST_BINS}/include) $$escape_expand(\\n\\t) # qmake need make mkdir -p on subdirs more than root/
+     for(FILES_EXTRA_INCLUDES,EXTRA_INCLUDES){
+         QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILES_EXTRA_INCLUDES) $$quote($${DEST_BINS}/include/) $$escape_expand(\\n\\t) # copy includes for impl
+     }
 }
 
 

@@ -135,10 +135,7 @@ QStringList nQTrucksEnginePrivate::getIODevices()
             {
                 if (!info.isBusy())
                 {
-                    if(info.serialNumber()=="")
-                    {
                         listIODevices.append(info.systemLocation());
-                    }
                 }
             }
         }
@@ -224,6 +221,7 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     /** NEWSAGES ALPR **/
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(QImage)),this,SIGNAL(ReplyOriginalFoto1(QImage)));
     connect(d->m_alpr1,SIGNAL(ReplyMatriculaFoto(QImage)),this,SIGNAL(ReplyMatriculaFoto1(QImage)));
+    connect(d->m_alpr1,SIGNAL(ReplyMatriculaRemolqueFoto(QImage)),this,SIGNAL(ReplyMatriculaFoto2(QImage)));
     /** END NEWSAGES ALPR **/
 }
 
