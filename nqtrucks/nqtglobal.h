@@ -35,6 +35,7 @@
 
 #include <QObject>
 #include <QSettings>
+#include <QImage>
 
 #if defined(NQTRUCKS_LIBRARY)
 #  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_EXPORT
@@ -42,21 +43,46 @@
 #  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
+/** BASCULAS **/
 struct Bascula{
     bool bEstado=false;
     bool bEstadoAnterior=false;
     float iBruto=0;
     float iTara=0;
     float iNeto=0;
-};
-typedef Bascula t_Bascula;
+}; typedef Bascula t_Bascula;
+/** END BASCULAS **/
 
+/** ALPR  **/
 struct PlanK{
     int A;
     int B;
     int C;
-};
-typedef PlanK t_Plank;
+}; typedef PlanK t_Plank;
+
+struct MatriculaResults{
+    int     tipo=0;  //0 para calibracion, 1 para procesado
+    int     id=0;    //id fuente de captura de foto
+    QImage  OrigenFoto; //Imagen Original
+    QImage  OrigenFotoPrewarp; // Imagen con calibracion prewarp
+    QImage  OrigenFotoBlanca;  //  Imagen con calibracion de Blancos
+    QImage  OrigenFotoRoja;    // Imagen con calibracion de Rojos
+
+    bool    MatriculaDetectedA=false;  // Coincide con un patron de busqueda?
+    QString MatriculaA="";             // STring de la matricula
+    QImage  MatriculaFotoA;            // Imagen recortada de la Matricula
+    long    MatriculaPrecisionA=0;     // Precision del OCR
+
+    bool    MatriculaDetectedB=false;  // Coincide con un patron de busqueda?
+    QString MatriculaB="";             // STring de la matricula
+    QImage  MatriculaFotoB;            // Imagen recortada de la Matricula
+    long    MatriculaPrecisionB=0;     // Precision del OCR
+
+}; typedef MatriculaResults t_MatriculaResults;
+/** END ALRP **/
+
+
+/** SETTINGS **/
 namespace nQTrucks
 {
 
@@ -79,5 +105,7 @@ namespace nQTrucks
     }
 
 } // namespace nQTrucks
+
+/** END SETTINGS **/
 
 #endif // NQTRUCKS_H

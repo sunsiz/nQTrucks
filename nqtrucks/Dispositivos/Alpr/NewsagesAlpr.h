@@ -51,14 +51,13 @@ public:
     explicit NewsagesAlpr(int nDevice=0, QSettings *_appsettings=0, QObject *parent = 0);
 
     /** SETTINGS **/
+public slots:
+    void setFoto(QImage *_fotocamara){m_fotocamara=_fotocamara;}
 private:
-    QString   m_configroot;
+    //QString   m_configroot;
     int       m_nDevice;
-    void      loadconfig();
     QSettings *m_settings;
-    t_Plank    m_Plank;
-    void setPlank(QString A,QString B, QString C);
-
+    t_MatriculaResults *m_matricularesults;
     /** END SETTINGS **/
 
 
@@ -71,12 +70,15 @@ signals:
     void ReplyMatriculaFoto(const QImage &Foto);
     void ReplyMatriculaFotoRemolque(const QImage &Foto);
 
+    void ReplyMatriculaResults(const t_MatriculaResults &_MatriculaResults);
+
 public slots:
     void ProcessFoto();
+
 public slots:
-    void setFotoCamara(const QImage &Foto){m_fotocamara = new QImage(Foto);}
-    void calibrarBlancas();
-    void calibrarRojas();
+    //void setFotoCamara(const QImage &Foto){m_fotocamara = new QImage(Foto);}
+    //void calibrarBlancas();
+    //void calibrarRojas();
 
     /** Matriculas **/
 private:
@@ -89,8 +91,14 @@ private:
     QThread *hilo2;
     NewsagesAlprTask *tarea2;
 
-    cv::Mat QImage2cvMat(QImage image);
-    QImage cvMat2QImage(const cv::Mat &image);
+    QThread *hilo3;
+    NewsagesAlprTask *tarea3;
+
+    QThread *hilo4;
+    NewsagesAlprTask *tarea4;
+
+    //cv::Mat QImage2cvMat(QImage image);
+    //QImage cvMat2QImage(const cv::Mat &image);
 };
 
 } /** END NAMESPACE Devices  **/

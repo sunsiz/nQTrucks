@@ -42,21 +42,15 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
     : QObject(parent)
     , m_nDevice(nDevice)
     , m_settings(_appsettings)
+//    , m_fotocamara(new QImage(_fotocamara))
+    , m_matricularesults(new t_MatriculaResults)
 {
-    qRegisterMetaType<t_Plank>("t_Plank");
 
     QString filename ="matriculas/r1.jpg";
     m_fotocamara = new QImage(filename);
-    this->setFotoCamara(*m_fotocamara);
+    //this->setFotoCamara(*m_fotocamara);
 
-    loadconfig();
-    //calibrarBlancas();
-    //calibrarRojas();
-
-}
-
-void NewsagesAlpr::ProcessFoto()
-{
+    m_matricularesults->OrigenFoto=m_fotocamara;
 
     /** Crear hilos por matriculas **/
     hilo1 = new QThread();
@@ -65,17 +59,17 @@ void NewsagesAlpr::ProcessFoto()
     hilo4 = new QThread();
 
     /** Crear tareas **/
-    tarea1 = new NewsagesAlprTask;
-    tarea2 = new NewsagesAlprTask;
-    tarea3 = new NewsagesAlprTask;
-    tarea4 = new NewsagesAlprTask;
+    tarea1 = new NewsagesAlprTask(m_nDevice,m_settings,this);
+    tarea2 = new NewsagesAlprTask(m_nDevice,m_settings,this);
+    tarea3 = new NewsagesAlprTask(m_nDevice,m_settings,this);
+    tarea4 = new NewsagesAlprTask(m_nDevice,m_settings,this);
 
 
     /** Asignar tareas a hilos **/
     tarea1->moveToThread(hilo1);
     tarea2->moveToThread(hilo2);
-    tarea3->moveToThread(hilo1);
-    tarea4->moveToThread(hilo2);
+    tarea3->moveToThread(hilo3);
+    tarea4->moveToThread(hilo4);
 
 
     /** conectar hilos con proceso **/
@@ -94,14 +88,24 @@ void NewsagesAlpr::ProcessFoto()
     connect( tarea2, SIGNAL(ReplyMatriculaFotoRemolque(QImage)),this,SIGNAL(ReplyMatriculaFotoRemolque(QImage)));
 
 
+
+    //loadconfig();
+    //calibrarBlancas();
+    //calibrarRojas();
+
+}
+
+void NewsagesAlpr::ProcessFoto()
+{
+
+
     //Configurar hilos
     //DEBUG
-    QString filename ="matriculas/r1.jpg";
-    m_fotocamara = new QImage(filename);
+    //QString filename ="matriculas/r1.jpg";
+    //m_fotocamara = new QImage(filename);
 
-    emit ReplyOriginalFoto(*m_fotocamara);
-    calibrarBlancas();
-    calibrarRojas();
+    //calibrarBlancas();
+    //calibrarRojas();
 
     /** buscar blancos **/
 
@@ -110,48 +114,49 @@ void NewsagesAlpr::ProcessFoto()
     tarea2->setFotoCamara(*m_fotocamara);
     hilo1->start();//QThread::TimeCriticalPriority);
     hilo2->start();//QThread::TimeCriticalPriority);
+    emit ReplyOriginalFoto(*m_fotocamara);
 
 
 }
 
-cv::Mat NewsagesAlpr::QImage2cvMat(QImage image)
-{
-    /** CONVERSOR QImage to std::vector<char>) **/
-    QByteArray baScene; // byte array with data
-    QBuffer buffer(&baScene);
-    buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer,"PNG");
+//cv::Mat NewsagesAlpr::QImage2cvMat(QImage image)
+//{
+//    /** CONVERSOR QImage to std::vector<char>) **/
+//    QByteArray baScene; // byte array with data
+//    QBuffer buffer(&baScene);
+//    buffer.open(QIODevice::WriteOnly);
+//    image.save(&buffer,"PNG");
 
-    const char* begin = reinterpret_cast<char*>(baScene.data());
-    const char* end = begin + baScene.size();
-    std::vector<char> pic(begin, end);
-    cv::Mat img = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
-    return img;
+//    const char* begin = reinterpret_cast<char*>(baScene.data());
+//    const char* end = begin + baScene.size();
+//    std::vector<char> pic(begin, end);
+//    cv::Mat img = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
+//    return img;
 
-}
+//}
 
-QImage NewsagesAlpr::cvMat2QImage(const cv::Mat &image)
-{
-    QImage qtImg;
-    if( !image.empty() && image.depth() == CV_8U ){
-        if(image.channels() == 1){
-            qtImg = QImage( (const unsigned char *)(image.data),
-                            image.cols,
-                            image.rows,
-                            QImage::Format_Indexed8 );
-        }
-        else{
-            cvtColor( image, image, CV_BGR2RGB );
-            qtImg = QImage( (const unsigned char *)(image.data),
-                            image.cols,
-                            image.rows,
-                            QImage::Format_RGB888 );
-        }
-    }
-    //emit ReplyMatriculaFoto(qtImg);
-    return qtImg;
-    /** CONVERSOR QImage to std::vector<char>) **/
-}
+//QImage NewsagesAlpr::cvMat2QImage(const cv::Mat &image)
+//{
+//    QImage qtImg;
+//    if( !image.empty() && image.depth() == CV_8U ){
+//        if(image.channels() == 1){
+//            qtImg = QImage( (const unsigned char *)(image.data),
+//                            image.cols,
+//                            image.rows,
+//                            QImage::Format_Indexed8 );
+//        }
+//        else{
+//            cvtColor( image, image, CV_BGR2RGB );
+//            qtImg = QImage( (const unsigned char *)(image.data),
+//                            image.cols,
+//                            image.rows,
+//                            QImage::Format_RGB888 );
+//        }
+//    }
+//    //emit ReplyMatriculaFoto(qtImg);
+//    return qtImg;
+//    /** CONVERSOR QImage to std::vector<char>) **/
+//}
 
 
 

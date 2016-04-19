@@ -10,9 +10,14 @@ namespace nQTrucks {
 
     /** TAREAS **/
 
-NewsagesAlprTask::NewsagesAlprTask(QObject *parent)
+NewsagesAlprTask::NewsagesAlprTask(int nDevice, QSettings *_appsettings, QObject *parent)
     : QObject(parent)
+    , m_nDevice(nDevice)
+    , m_settings(_appsettings)
 {
+    qRegisterMetaType<t_Plank>("t_Plank");
+    qRegisterMetaType<MatriculaResults>("t_MatriculaResults");
+
     setlocale(LC_NUMERIC, "C");
 }
 

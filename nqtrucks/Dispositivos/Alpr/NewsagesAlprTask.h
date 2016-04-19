@@ -17,7 +17,7 @@ namespace Devices {
 class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
-    NewsagesAlprTask(QObject *parent = 0);
+    NewsagesAlprTask(int nDevice=0, QSettings *_appsettings=0,QObject *parent = 0);
     ~NewsagesAlprTask();
 
     /** SETTINGS **/
@@ -28,6 +28,9 @@ private:
     QSettings *m_settings;
     t_Plank    m_Plank;
     void setPlank(QString A,QString B, QString C);
+
+public slots:
+    void setFotoCamara(const QImage &Foto){m_fotocamara = new QImage(Foto);}
     /** END SETTINGS **/
 
 private:
@@ -39,7 +42,6 @@ private:
     Alpr *remolque;
 
 public slots:
-    void setFotoCamara(const QImage &Foto){m_fotocamara = new QImage(Foto);}
     void procesarBlancas();
     void procesarRojas();
 signals:
