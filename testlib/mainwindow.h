@@ -109,6 +109,10 @@ private:
     /** NEWSAGES ALPR **/
 private slots:
     void onGetOriginalMatriculaA1(QImage foto);
+
+    void onGetOriginalMatriculaRojaA(QImage foto);
+    void onGetOriginalMatriculaBlancaA(QImage foto);
+
     void onGetMatriculaFotoA1(QImage foto);
     void onGetMatriculaFotoA2(QImage foto);
     /** END NEWSAGES ALPR **/

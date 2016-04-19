@@ -46,7 +46,7 @@
 
 #include <Dispositivos/Basculas/nQSerialPortReader.h>
 
-#include <Dispositivos/NewsagesAlpr.h>
+#include <Dispositivos/Alpr/NewsagesAlpr.h>
 
 namespace nQTrucks {
 
@@ -92,7 +92,8 @@ private:
     /** END BASCULAS **/
 
     /** ALPR **/
-    Devices::NewsagesAlpr *m_alpr1= new Devices::NewsagesAlpr(this);//settings(),this);
+    Devices::NewsagesAlpr *m_alpr1= new Devices::NewsagesAlpr(1,settings(),this);//settings(),this);
+    Devices::NewsagesAlpr *m_alpr2= new Devices::NewsagesAlpr(2,settings(),this);//settings(),this);
     /** END ALPR **/
 
 };

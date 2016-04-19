@@ -53,13 +53,20 @@ MainWindow::MainWindow(QWidget *parent)
     engine  = new nQTrucks::nQTrucksEngine(this);
     connect(engine,SIGNAL(CamaraIPFoto1(QImage)),this,SLOT(onGetFoto1(QImage)));
     connect(engine,SIGNAL(CamaraIPFoto2(QImage)),this,SLOT(onGetFoto2(QImage)));
+
     connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
     connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
+
     connect(engine,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
     connect(engine,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
-    connect(engine,SIGNAL(ReplyOriginalFoto1(QImage)),this,SLOT(onGetOriginalMatriculaA1(QImage)));
-    connect(engine,SIGNAL(ReplyMatriculaFoto1(QImage)),this,SLOT(onGetMatriculaFotoA1(QImage)));
-    connect(engine,SIGNAL(ReplyMatriculaFoto2(QImage)),this,SLOT(onGetMatriculaFotoA2(QImage)));
+
+    connect(engine,SIGNAL(ReplyOriginalFotoA(QImage)),this,SLOT(onGetOriginalMatriculaA1(QImage)));
+
+    connect(engine,SIGNAL(ReplyOriginalFotoRojaA(QImage)),this,SLOT(onGetOriginalMatriculaRojaA(QImage)));
+    connect(engine,SIGNAL(ReplyOriginalFotoBlancaA(QImage)),this,SLOT(onGetOriginalMatriculaBlancaA(QImage)));
+
+    connect(engine,SIGNAL(ReplyMatriculaFotoA1(QImage)),this,SLOT(onGetMatriculaFotoA1(QImage)));
+    connect(engine,SIGNAL(ReplyMatriculaFotoA2(QImage)),this,SLOT(onGetMatriculaFotoA2(QImage)));
     loadconfig();
 
 }
@@ -326,6 +333,16 @@ void MainWindow::on_BasculaConectada(bool conectada)
 void MainWindow::onGetOriginalMatriculaA1(QImage foto)
 {
     ui->FotoOriginalA->setPixmap(QPixmap::fromImage(foto));
+}
+
+void MainWindow::onGetOriginalMatriculaRojaA(QImage foto)
+{
+    ui->FotoRojosA->setPixmap(QPixmap::fromImage(foto));
+}
+
+void MainWindow::onGetOriginalMatriculaBlancaA(QImage foto)
+{
+    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(foto));
 }
 
 void MainWindow::onGetMatriculaFotoA1(QImage foto)

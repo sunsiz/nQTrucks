@@ -1,102 +1,14 @@
-/***************************************************************************
- *   This file is part of the nQTrucks project                             *
- *   Copyright (C) 2015 by Efraím Pérez                                    *
- *   newsages2014@gmail.com                                                *
- *                                                                         *
- **                   GNU General Public License Usage                    **
- *                                                                         *
- *   This library is free software: you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation, either version 3 of the License, or     *
- *   (at your option) any later version.                                   *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
- *                                                                         *
- **                  GNU Lesser General Public License                    **
- *                                                                         *
- *   This library is free software: you can redistribute it and/or modify  *
- *   it under the terms of the GNU Lesser General Public License as        *
- *   published by the Free Software Foundation, either version 3 of the    *
- *   License, or (at your option) any later version.                       *
- *   You should have received a copy of the GNU Lesser General Public      *
- *   License along with this library.                                      *
- *   If not, see <http://www.gnu.org/licenses/>.                           *
- *                                                                         *
- *   This library is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- ****************************************************************************/
-
-#include "NewsagesAlpr.h"
-#include <QDebug>
-
-#include "opencv2/opencv.hpp"
-//#include <stdio.h>
+#include "NewsagesAlprTask.h"
 
 #include <QByteArray>
 #include <QBuffer>
+#include <QDebug>
 
 namespace nQTrucks {
     namespace Devices {
     using namespace alpr;
-NewsagesAlpr::NewsagesAlpr(QObject *parent)
-    : QObject(parent)
-    //, m_fotocamara(new QImage(_fotocamara))
-{
-    setlocale(LC_NUMERIC, "C");
-}
 
-void NewsagesAlpr::ProcessFoto()
-{
-
-    /** Crear hilos por matriculas **/
-    hilo1 = new QThread();
-    hilo2 = new QThread();
-
-    /** Crear tareas **/
-    tarea1 = new NewsagesAlprTask;
-    tarea2 = new NewsagesAlprTask;
-
-    /** Asignar tareas a hilos **/
-    tarea1->moveToThread(hilo1);
-    tarea2->moveToThread(hilo2);
-
-    /** conectar hilos con proceso **/
-    connect( hilo1, SIGNAL(started()), tarea1, SLOT(procesarBlancas()) );
-    connect( tarea1,SIGNAL(workFinished()), hilo1, SLOT(quit()) );
-    connect( hilo1, SIGNAL(finished()), tarea1, SLOT(deleteLater()) );
-    connect( hilo1, SIGNAL(finished()), hilo1, SLOT(deleteLater()) );
-
-    connect( hilo2, SIGNAL(started()), tarea2, SLOT(procesarRojas()) );
-    connect( tarea2,SIGNAL(workFinished()), hilo2, SLOT(quit()) );
-    connect( hilo2, SIGNAL(finished()), tarea2, SLOT(deleteLater()) );
-    connect( hilo2, SIGNAL(finished()), hilo2, SLOT(deleteLater()) );
-
-    /** conectar respuestas con padre **/
-    connect( tarea1, SIGNAL(ReplyMatriculaFoto(QImage)),this,SIGNAL(ReplyMatriculaFoto(QImage)));
-    connect( tarea2, SIGNAL(ReplyMatriculaRemolqueFoto(QImage)),this,SIGNAL(ReplyMatriculaRemolqueFoto(QImage)));
-
-
-    //Configurar hilos
-    //DEBUG
-    QString filename ="matriculas/r1.jpg";
-    m_fotocamara = new QImage(filename);
-
-    /** buscar blancos **/
-
-
-    tarea1->setFotoCamara(*m_fotocamara);
-    tarea2->setFotoCamara(*m_fotocamara);
-
-    /** Iniciar Hilos **/
-    hilo1->start(QThread::TimeCriticalPriority);
-    hilo2->start(QThread::TimeCriticalPriority);
-
-    emit ReplyOriginalFoto(*m_fotocamara);
-
-}
-
+    /** TAREAS **/
 
 NewsagesAlprTask::NewsagesAlprTask(QObject *parent)
     : QObject(parent)
@@ -109,13 +21,67 @@ NewsagesAlprTask::~NewsagesAlprTask()
     this->deleteLater();
 }
 
+
+/** SETTINGS **/
+void NewsagesAlprTask::loadconfig()
+{
+    switch (m_nDevice) {
+    case 1:
+        m_configroot = (QString(CAMARA1));
+        break;
+    case 2:
+        m_configroot = (QString(CAMARA2));
+        break;
+    default:
+        //m_configroot = (QString(CAMARA1));
+        break;
+    }
+
+    m_settings->beginGroup(m_configroot);
+    setPlank(m_settings->value("plankA","0").toString(),
+             m_settings->value("plankB","20").toString(),
+             m_settings->value("plankC","40").toString()
+            );
+    m_settings->endGroup();
+    m_settings->sync();
+}
+
+void NewsagesAlprTask::setPlank(QString A, QString B, QString C)
+{
+  m_Plank.A=A.toInt();
+  m_Plank.B=B.toInt();
+  m_Plank.C=C.toInt();
+}
+
+void NewsagesAlprTask::calibrarBlancas()
+{
+    loadconfig();
+    cv::Mat img = QImage2cvMat(*m_fotocamara);
+    cv::add(img,cv::Scalar(m_Plank.C,m_Plank.B,m_Plank.A),img);
+    cv::Mat channel[3];
+    cv::split(img, channel);
+    img = channel[2] - channel[1] -   channel[2] + channel[0];
+    emit ReplyOriginalFotoBlanca(cvMat2QImage(img));
+}
+
+void NewsagesAlprTask::calibrarRojas()
+{
+    cv::Mat img = QImage2cvMat(*m_fotocamara);
+    cv::add(img,cv::Scalar(m_Plank.A,m_Plank.B,m_Plank.C),img);
+    cv::Mat channel[3];
+    cv::split(img, channel);
+    cv::add(channel[0], channel[1], img);
+    cv::subtract(channel[2], channel[1], img);
+    emit ReplyOriginalFotoRoja(cvMat2QImage(img));
+}
+
 cv::Mat NewsagesAlprTask::QImage2cvMat(QImage image)
 {
     /** CONVERSOR QImage to std::vector<char>) **/
     QByteArray baScene; // byte array with data
     QBuffer buffer(&baScene);
     buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer,"JPG");
+    image.save(&buffer,"PNG");
 
     const char* begin = reinterpret_cast<char*>(baScene.data());
     const char* end = begin + baScene.size();
@@ -124,6 +90,31 @@ cv::Mat NewsagesAlprTask::QImage2cvMat(QImage image)
     return img;
 
 }
+
+QImage NewsagesAlprTask::cvMat2QImage(const cv::Mat &image)
+{
+    QImage qtImg;
+    if( !image.empty() && image.depth() == CV_8U ){
+        if(image.channels() == 1){
+            qtImg = QImage( (const unsigned char *)(image.data),
+                            image.cols,
+                            image.rows,
+                            QImage::Format_Indexed8 );
+        }
+        else{
+            cvtColor( image, image, CV_BGR2RGB );
+            qtImg = QImage( (const unsigned char *)(image.data),
+                            image.cols,
+                            image.rows,
+                            QImage::Format_RGB888 );
+        }
+    }
+    //emit ReplyMatriculaFoto(qtImg);
+    return qtImg;
+    /** CONVERSOR QImage to std::vector<char>) **/
+}
+
+
 
 void NewsagesAlprTask::procesarBlancas()
 {
@@ -147,7 +138,7 @@ void NewsagesAlprTask::procesarBlancas()
         cv::Mat channel[3];
         cv::split(img, channel);
         img = channel[2] - channel[1] -   channel[2] + channel[0];
-
+        //emit ReplyMatriculaFoto(cvMat2QImage(img));
         // RECONOCER
         std::vector<AlprRegionOfInterest> regionsOfInterest;
         AlprResults results = matricula->recognize(img.data, img.elemSize(), img.cols, img.rows,regionsOfInterest);
@@ -208,7 +199,7 @@ void NewsagesAlprTask::procesarRojas()
                             candidate.matches_template << endl;
                 image_matricula = image_matricula.copy(QRect(QPoint(plate.plate_points[0].x,plate.plate_points[0].y),
                                                      QPoint(plate.plate_points[2].x,plate.plate_points[2].y)));
-                emit ReplyMatriculaRemolqueFoto(image_matricula);
+                emit ReplyMatriculaFotoRemolque(image_matricula);
             }
         }
     }

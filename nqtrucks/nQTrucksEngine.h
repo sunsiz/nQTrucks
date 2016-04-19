@@ -92,9 +92,11 @@ signals:
 public:
     void getFotoMatricula1();
 signals:
-    void ReplyOriginalFoto1(const QImage &Foto);
-    void ReplyMatriculaFoto1(const QImage &Foto);
-    void ReplyMatriculaFoto2(const QImage &Foto);
+    void ReplyOriginalFotoA(const QImage &Foto);
+    void ReplyOriginalFotoBlancaA(const QImage &Foto);
+    void ReplyOriginalFotoRojaA(const QImage &Foto);
+    void ReplyMatriculaFotoA1(const QImage &Foto);
+    void ReplyMatriculaFotoA2(const QImage &Foto);
     /** END NEWSAGES ALPR **/
 
     /** nQTrucksEnginePrivate **/

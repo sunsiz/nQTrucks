@@ -6,7 +6,8 @@ INCLUDEPATH += \
 
 SOURCES += \
     $$PWD/nqtglobal.cpp \
-    $$PWD/nQTrucksEngine.cpp
+    $$PWD/nQTrucksEngine.cpp \
+    $$PWD/Dispositivos/Alpr/NewsagesAlprTask.cpp
 
 
 contains(CONFIG, zint){
@@ -16,7 +17,8 @@ contains(CONFIG, zint){
 HEADERS += \
     $$PWD/nqtglobal.h \
     $$PWD/nQTrucksEngine_p.h \
-    $$PWD/nQTrucksEngine.h
+    $$PWD/nQTrucksEngine.h \
+    $$PWD/Dispositivos/Alpr/NewsagesAlprTask.h
 
 
 contains(CONFIG,zint){
@@ -98,8 +100,8 @@ SOURCES += \
 
 #** ALPR  **#
 SOURCES += \
-    $$PWD/Dispositivos/NewsagesAlpr.cpp
+    $$PWD/Dispositivos/Alpr/NewsagesAlpr.cpp
 
 HEADERS += \
-    $$PWD/Dispositivos/NewsagesAlpr.h
+    $$PWD/Dispositivos/Alpr/NewsagesAlpr.h
 

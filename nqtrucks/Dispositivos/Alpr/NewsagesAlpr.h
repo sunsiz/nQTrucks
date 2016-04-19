@@ -35,51 +35,48 @@
 #include <QImage>
 #include <QThread>
 #include <nqtglobal.h>
+#include "NewsagesAlprTask.h"
 
-#include <opencv2/imgproc/imgproc.hpp>
-#include "alpr.h"
-#include "state_detector.h"
+
 
 
 namespace nQTrucks {
 namespace Devices {
     using namespace alpr;
 
-class NewsagesAlprTask : public QObject{
-    Q_OBJECT
-public:
-    NewsagesAlprTask(QObject *parent = 0);
-    ~NewsagesAlprTask();
-private:
-    QImage *m_fotocamara;
-    cv::Mat QImage2cvMat(QImage image);
-private:
-    Alpr *matricula;
-    Alpr *remolque;
-
-public slots:
-    void setFotoCamara(const QImage &Foto){m_fotocamara = new QImage(Foto);}
-    void procesarBlancas();
-    void procesarRojas();
-signals:
-    void ReplyMatriculaFoto(const QImage &Foto);
-    void ReplyMatriculaRemolqueFoto(const QImage &Foto);
-    void workFinished();
-};
-
 class NewsagesAlpr : public QObject
 {
     Q_OBJECT
 public:
-    explicit NewsagesAlpr(/*QImage *_fotocamara =0,*/ QObject *parent = 0);
+    explicit NewsagesAlpr(int nDevice=0, QSettings *_appsettings=0, QObject *parent = 0);
+
+    /** SETTINGS **/
+private:
+    QString   m_configroot;
+    int       m_nDevice;
+    void      loadconfig();
+    QSettings *m_settings;
+    t_Plank    m_Plank;
+    void setPlank(QString A,QString B, QString C);
+
+    /** END SETTINGS **/
+
 
 signals:
     void ReplyOriginalFoto(const QImage &Foto);
+
+    void ReplyOriginalFotoRoja(const QImage &Foto);
+    void ReplyOriginalFotoBlanca(const QImage &Foto);
+
     void ReplyMatriculaFoto(const QImage &Foto);
-    void ReplyMatriculaRemolqueFoto(const QImage &Foto);
+    void ReplyMatriculaFotoRemolque(const QImage &Foto);
 
 public slots:
     void ProcessFoto();
+public slots:
+    void setFotoCamara(const QImage &Foto){m_fotocamara = new QImage(Foto);}
+    void calibrarBlancas();
+    void calibrarRojas();
 
     /** Matriculas **/
 private:
@@ -92,6 +89,8 @@ private:
     QThread *hilo2;
     NewsagesAlprTask *tarea2;
 
+    cv::Mat QImage2cvMat(QImage image);
+    QImage cvMat2QImage(const cv::Mat &image);
 };
 
 } /** END NAMESPACE Devices  **/

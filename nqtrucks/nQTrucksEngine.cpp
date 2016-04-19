@@ -219,9 +219,14 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
             this,SIGNAL(BasculaChanged(t_Bascula)));
 
     /** NEWSAGES ALPR **/
-    connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(QImage)),this,SIGNAL(ReplyOriginalFoto1(QImage)));
-    connect(d->m_alpr1,SIGNAL(ReplyMatriculaFoto(QImage)),this,SIGNAL(ReplyMatriculaFoto1(QImage)));
-    connect(d->m_alpr1,SIGNAL(ReplyMatriculaRemolqueFoto(QImage)),this,SIGNAL(ReplyMatriculaFoto2(QImage)));
+    /** 1 **/
+    connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(QImage)),this,SIGNAL(ReplyOriginalFotoA(QImage)));
+
+    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoBlanca(QImage)),this,SIGNAL(ReplyOriginalFotoBlancaA(QImage)));
+    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoRoja(QImage)),this,SIGNAL(ReplyOriginalFotoRojaA(QImage)));
+
+    connect(d->m_alpr1,SIGNAL(ReplyMatriculaFoto(QImage)),this,SIGNAL(ReplyMatriculaFotoA1(QImage)));
+    connect(d->m_alpr1,SIGNAL(ReplyMatriculaFotoRemolque(QImage)),this,SIGNAL(ReplyMatriculaFotoA2(QImage)));
     /** END NEWSAGES ALPR **/
 }
 

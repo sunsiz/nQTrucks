@@ -51,6 +51,12 @@ struct Bascula{
 };
 typedef Bascula t_Bascula;
 
+struct PlanK{
+    int A;
+    int B;
+    int C;
+};
+typedef PlanK t_Plank;
 namespace nQTrucks
 {
 
