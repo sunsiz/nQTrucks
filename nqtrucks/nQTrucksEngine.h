@@ -90,6 +90,7 @@ signals:
 
     /** NEWSAGES ALPR **/
 public:
+    void calibrarFoto(int _device, QImage _foto);
     void getFotoMatricula1();
 signals:
     void ReplyOriginalFotoA(const QImage &Foto);

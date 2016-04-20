@@ -68,6 +68,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(engine,SIGNAL(ReplyMatriculaFotoA1(QImage)),this,SLOT(onGetMatriculaFotoA1(QImage)));
     connect(engine,SIGNAL(ReplyMatriculaFotoA2(QImage)),this,SLOT(onGetMatriculaFotoA2(QImage)));
     loadconfig();
+    /** DEBUG **/
+    QString filename ="matriculas/r1.jpg";
+    m_fotocamara = QImage(filename);
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_fotocamara));
 
 }
 
@@ -92,6 +96,7 @@ void MainWindow::loadconfig()
 {
     /** INTERFACE **/
     ui->configTabWidget->setEnabled(!m_running);
+
 
     /** CAMARAS **/
     QStringList l_Camaras = engine->getTiposCamaras();
@@ -357,5 +362,10 @@ void MainWindow::onGetMatriculaFotoA2(QImage foto)
 
 void MainWindow::on_TestMatriculaA1_clicked()
 {
-    engine->getFotoMatricula1();
+    //engine->getFotoMatricula1();
+}
+
+void MainWindow::on_onCalibrarA_clicked()
+{
+    engine->calibrarFoto(0,m_fotocamara);
 }

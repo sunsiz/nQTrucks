@@ -330,10 +330,25 @@ void nQTrucksEngine::setBasculaConnect(bool _value)
     d->m_basculaReader1->connectPort(_value);
 }
 
+void nQTrucksEngine::calibrarFoto(int _device, QImage _foto)
+{
+    Q_D(nQTrucksEngine);
+    switch (_device) {
+    case 0:
+        d->m_alpr1->calibrarFoto(_foto);
+        break;
+    case 1:
+        d->m_alpr2->calibrarFoto(_foto);
+        break;
+    default:
+        break;
+    }
+}
+
 void nQTrucksEngine::getFotoMatricula1()
 {
     Q_D(nQTrucksEngine);
-    d->m_alpr1->ProcessFoto();
+    d->m_alpr1->processFoto();
 
 }
 

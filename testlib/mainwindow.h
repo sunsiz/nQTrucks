@@ -120,7 +120,10 @@ private slots:
     /** CONFIG **/
     void on_TestMatriculaA1_clicked();
 
+    void on_onCalibrarA_clicked();
+
 private:
+    QImage m_fotocamara;
     void loadconfig();
     /** END CONFIG **/
 };

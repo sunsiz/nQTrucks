@@ -52,28 +52,34 @@ public:
 
     /** SETTINGS **/
 public slots:
-    void setFoto(QImage *_fotocamara){m_fotocamara=_fotocamara;}
+    void setFoto(QImage _fotocamara){m_fotocamara=_fotocamara;}
 private:
     //QString   m_configroot;
-    int       m_nDevice;
-    QSettings *m_settings;
+    int         m_nDevice;
+    QImage      m_fotocamara;
+    QSettings   *m_settings;
     t_MatriculaResults *m_matricularesults;
     /** END SETTINGS **/
 
 
 signals:
     void ReplyOriginalFoto(const QImage &Foto);
-
-    void ReplyOriginalFotoRoja(const QImage &Foto);
-    void ReplyOriginalFotoBlanca(const QImage &Foto);
-
     void ReplyMatriculaFoto(const QImage &Foto);
     void ReplyMatriculaFotoRemolque(const QImage &Foto);
-
     void ReplyMatriculaResults(const t_MatriculaResults &_MatriculaResults);
 
+
+    /** CALIBRAR *****************************************************/
 public slots:
-    void ProcessFoto();
+    void calibrarFoto(QImage _foto);
+signals:
+    void ReplyOriginalFotoRoja(const QImage &Foto);
+    void ReplyOriginalFotoBlanca(const QImage &Foto);
+    /** END CALIBRAR *******************************************************/
+
+public slots:
+    void processFoto();
+
 
 public slots:
     //void setFotoCamara(const QImage &Foto){m_fotocamara = new QImage(Foto);}
@@ -82,7 +88,7 @@ public slots:
 
     /** Matriculas **/
 private:
-    QImage *m_fotocamara;
+
 
     /** Multi Tareas **/
     QThread *hilo1;
