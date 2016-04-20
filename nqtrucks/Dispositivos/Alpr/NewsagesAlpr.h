@@ -51,12 +51,15 @@ public:
     explicit NewsagesAlpr(int nDevice=0, QSettings *_appsettings=0, QObject *parent = 0);
 
     /** SETTINGS **/
+
 public slots:
-    void setFoto(QImage _fotocamara){m_fotocamara=_fotocamara;}
+    QImage FotoCamara() const {return m_FotoCamara; }
+    void setFotoCamara(const QImage &FotoCamara) { m_FotoCamara = FotoCamara; }
+
 private:
     //QString   m_configroot;
     int         m_nDevice;
-    QImage      m_fotocamara;
+    QImage      m_FotoCamara;
     QSettings   *m_settings;
     t_MatriculaResults *m_matricularesults;
     /** END SETTINGS **/
@@ -71,7 +74,7 @@ signals:
 
     /** CALIBRAR *****************************************************/
 public slots:
-    void calibrarFoto(QImage _foto);
+    void calibrarFoto();
 signals:
     void ReplyOriginalFotoRoja(const QImage &Foto);
     void ReplyOriginalFotoBlanca(const QImage &Foto);

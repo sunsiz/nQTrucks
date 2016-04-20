@@ -18,18 +18,23 @@ class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
     NewsagesAlprTask(int nDevice=0, QSettings *_appsettings=0,QObject *parent = 0);
-    ~NewsagesAlprTask();
+    ~NewsagesAlprTask();          
+
+    QImage getFotoCalibrada(){return m_FotoCalibrada;}
 public slots:
-    void setFotoCamara(QImage _fotocamara){m_fotocamara = _fotocamara;}
+    QImage FotoCamara() const {return m_FotoCamara;}
+    void setFotoCamara(const QImage &FotoCamara) {m_FotoCamara = FotoCamara;}
+
 private:
-    QImage m_fotocamara;
+    QImage m_FotoCamara;
+    QImage m_FotoCalibrada;
 signals:
     void workFinished();
 
     /** CONVERSORES ********************************************************/
 private:
-    cv::Mat QImage2cvMat(QImage image);
-    QImage  cvMat2QImage(cv::Mat image);
+    cv::Mat QImage2cvMat(QImage  &image);
+    QImage  cvMat2QImage(cv::Mat &image);
     /** END CONVERSORES **********************************************************/
 
 
@@ -38,7 +43,7 @@ public slots:
     void calibrarBlanco();
     void calibrarRojo();
 signals:
-    void onCalibrar(const QImage &_results);
+    void onCalibrar();
     /** END CALIBRACION ************************************************/
 
     /** SETTINGS *******************************************************/
@@ -58,20 +63,19 @@ private:
 
 
 
-
-
+/** PROCESAR **************************************************************/
 private:
     Alpr *matricula;
     Alpr *remolque;
 
-//public slots:
-//    void procesarBlancas();
-//    void procesarRojas();
+public slots:
+    void procesarBlancas();
+    void procesarRojas();
 
-//signals:
-//    void ReplyMatriculaFoto(const QImage &Foto);
-//    void ReplyMatriculaFotoRemolque(const QImage &Foto);
-//    void workFinished();
+signals:
+    void ReplyMatriculaFoto(const QImage &Foto);
+    void ReplyMatriculaFotoRemolque(const QImage &Foto);
+    //void workFinished();
 };
 
 }

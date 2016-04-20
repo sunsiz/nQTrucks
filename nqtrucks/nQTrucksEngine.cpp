@@ -335,10 +335,10 @@ void nQTrucksEngine::calibrarFoto(int _device, QImage _foto)
     Q_D(nQTrucksEngine);
     switch (_device) {
     case 0:
-        d->m_alpr1->calibrarFoto(_foto);
+        d->m_alpr1->calibrarFoto();
         break;
     case 1:
-        d->m_alpr2->calibrarFoto(_foto);
+        d->m_alpr2->calibrarFoto();
         break;
     default:
         break;
