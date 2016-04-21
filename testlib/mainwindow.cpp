@@ -38,7 +38,7 @@
 #include <QDebug>
 #include "nQTrucksEngine.h"
 
-
+#include <QDir>
 #include <QUrl>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -65,12 +65,17 @@ MainWindow::MainWindow(QWidget *parent)
     connect(engine,SIGNAL(ReplyOriginalFotoRojaA(QImage)),this,SLOT(onGetOriginalMatriculaRojaA(QImage)));
     connect(engine,SIGNAL(ReplyOriginalFotoBlancaA(QImage)),this,SLOT(onGetOriginalMatriculaBlancaA(QImage)));
 
-    connect(engine,SIGNAL(ReplyMatriculaFotoA1(QImage)),this,SLOT(onGetMatriculaFotoA1(QImage)));
-    connect(engine,SIGNAL(ReplyMatriculaFotoA2(QImage)),this,SLOT(onGetMatriculaFotoA2(QImage)));
+    connect(engine, SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,QImage)),
+            this  , SLOT(onGetMatriculaFotoA1(  QString,QString,bool,QImage)));
+
+    connect(engine, SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,QImage)),
+            this  , SLOT(onGetMatriculaFotoA2(  QString,QString,bool,QImage)));
+
     loadconfig();
+
     /** DEBUG **/
     QString filename ="matriculas/r1.jpg";
-    m_fotocamara = QImage(filename);
+    m_fotocamara = QImage(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(filename));
     ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_fotocamara));
 
 }
@@ -96,7 +101,6 @@ void MainWindow::loadconfig()
 {
     /** INTERFACE **/
     ui->configTabWidget->setEnabled(!m_running);
-
 
     /** CAMARAS **/
     QStringList l_Camaras = engine->getTiposCamaras();
@@ -204,18 +208,20 @@ void MainWindow::on_GuardarCamara2_clicked()
 
 
 /** CAMARAS **/
+    /** CAMARA1 **/
 void MainWindow::onGetFoto1(QImage foto)
 {
     ui->camaraLabel1->setPixmap(QPixmap::fromImage(foto));
 }
 
+    /** CAMARA2 **/
 void MainWindow::onGetFoto2(QImage foto)
 {
     ui->camaraLabel2->setPixmap(QPixmap::fromImage(foto));
 }
-
-
 /** END CAMARAS **/
+
+
 
 /** NEWSAGES I/O  **/
 void MainWindow::on_actualizarIODEvicestoolButton_clicked()
@@ -278,6 +284,9 @@ void MainWindow::on_desconectarIODevicesPushButton_clicked()
 /** END NEWSAGES I/O **/
 
 
+
+
+/** BASCULAS **/
 void MainWindow::on_conectarBasculaPushButton_clicked()
 {
     engine->setBasculaConnect(true);
@@ -334,7 +343,9 @@ void MainWindow::on_BasculaConectada(bool conectada)
         ui->BasculaEstable->setChecked(false);
     }
 }
+/** END BASCULAS **/
 
+/** ALRP **/
 void MainWindow::onGetOriginalMatriculaA1(QImage foto)
 {
     ui->FotoOriginalA->setPixmap(QPixmap::fromImage(foto));
@@ -350,22 +361,28 @@ void MainWindow::onGetOriginalMatriculaBlancaA(QImage foto)
     ui->FotoBlancosA->setPixmap(QPixmap::fromImage(foto));
 }
 
-void MainWindow::onGetMatriculaFotoA1(QImage foto)
+void MainWindow::onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, QImage foto)
 {
+    ui->LongMatriculaA1->setText(confianza+ "%");
+    ui->MatriculaA1->setText(matricula);
     ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(foto));
 }
-void MainWindow::onGetMatriculaFotoA2(QImage foto)
+void MainWindow::onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, QImage foto)
 {
+
+    ui->LongMatriculaA2->setText(confianza + "%");
+    ui->MatriculaA2->setText(matricula);
     ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(foto));
 }
 
 
 void MainWindow::on_TestMatriculaA1_clicked()
 {
-    //engine->getFotoMatricula1();
+    engine->getFotoMatricula(0,m_fotocamara);
 }
 
 void MainWindow::on_onCalibrarA_clicked()
 {
     engine->calibrarFoto(0,m_fotocamara);
 }
+/** END ALRP **/

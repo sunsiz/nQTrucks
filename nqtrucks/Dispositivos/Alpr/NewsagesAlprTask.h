@@ -7,12 +7,10 @@
 
 #include "opencv2/opencv.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
-#include "alpr.h"
-#include "state_detector.h"
+
 
 namespace nQTrucks {
 namespace Devices {
-    using namespace alpr;
 
 class NewsagesAlprTask : public QObject{
     Q_OBJECT
@@ -33,8 +31,8 @@ signals:
 
     /** CONVERSORES ********************************************************/
 private:
-    cv::Mat QImage2cvMat(QImage  &image);
-    QImage  cvMat2QImage(cv::Mat &image);
+    cv::Mat QImage2cvMat(const QImage  &image);
+    QImage  cvMat2QImage(const cv::Mat &image);
     /** END CONVERSORES **********************************************************/
 
 
@@ -64,17 +62,13 @@ private:
 
 
 /** PROCESAR **************************************************************/
-private:
-    Alpr *matricula;
-    Alpr *remolque;
-
 public slots:
     void procesarBlancas();
     void procesarRojas();
 
 signals:
-    void ReplyMatriculaFoto(const QImage &Foto);
-    void ReplyMatriculaFotoRemolque(const QImage &Foto);
+    void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
+    void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
     //void workFinished();
 };
 

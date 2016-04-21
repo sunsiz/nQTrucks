@@ -41,8 +41,7 @@
 
 
 namespace nQTrucks {
-namespace Devices {
-    using namespace alpr;
+namespace Devices {    
 
 class NewsagesAlpr : public QObject
 {
@@ -50,14 +49,12 @@ class NewsagesAlpr : public QObject
 public:
     explicit NewsagesAlpr(int nDevice=0, QSettings *_appsettings=0, QObject *parent = 0);
 
-    /** SETTINGS **/
 
+    /** SETTINGS **/
 public slots:
     QImage FotoCamara() const {return m_FotoCamara; }
     void setFotoCamara(const QImage &FotoCamara) { m_FotoCamara = FotoCamara; }
-
 private:
-    //QString   m_configroot;
     int         m_nDevice;
     QImage      m_FotoCamara;
     QSettings   *m_settings;
@@ -67,9 +64,9 @@ private:
 
 signals:
     void ReplyOriginalFoto(const QImage &Foto);
-    void ReplyMatriculaFoto(const QImage &Foto);
-    void ReplyMatriculaFotoRemolque(const QImage &Foto);
-    void ReplyMatriculaResults(const t_MatriculaResults &_MatriculaResults);
+    void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
+    void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
+
 
 
     /** CALIBRAR *****************************************************/
@@ -80,34 +77,31 @@ signals:
     void ReplyOriginalFotoBlanca(const QImage &Foto);
     /** END CALIBRAR *******************************************************/
 
-public slots:
-    void processFoto();
 
-
+    /** Procesar Matriculas **/
 public slots:
+    void processFoto(const QImage &Foto);
+signals:
+    void ReplyMatriculaResults(const t_MatriculaResults &_MatriculaResults);
     //void setFotoCamara(const QImage &Foto){m_fotocamara = new QImage(Foto);}
     //void calibrarBlancas();
     //void calibrarRojas();
 
-    /** Matriculas **/
 private:
-
-
     /** Multi Tareas **/
     QThread *hilo1;
     NewsagesAlprTask *tarea1;
+    bool bhilo1;
 
     QThread *hilo2;
     NewsagesAlprTask *tarea2;
+    bool bhilo2;
 
     QThread *hilo3;
     NewsagesAlprTask *tarea3;
 
     QThread *hilo4;
     NewsagesAlprTask *tarea4;
-
-    //cv::Mat QImage2cvMat(QImage image);
-    //QImage cvMat2QImage(const cv::Mat &image);
 };
 
 } /** END NAMESPACE Devices  **/

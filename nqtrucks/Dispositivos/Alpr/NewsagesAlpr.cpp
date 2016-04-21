@@ -34,75 +34,118 @@
 #include <QByteArray>
 #include <QBuffer>
 
+#include <QDir>
+#include <QCoreApplication>
+
 namespace nQTrucks {
     namespace Devices {
-    using namespace alpr;
 
 NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent)
     : QObject(parent)
     , m_nDevice(nDevice)
     , m_settings(_appsettings)
     , m_matricularesults(new t_MatriculaResults)
+    , bhilo1(false)
+    , bhilo2(false)
 {
 
+
 }
-
-
-
-
 
 void NewsagesAlpr::calibrarFoto(){
 
-    QString filename ="matriculas/r1.jpg";
-    QImage temp = QImage(filename);
-    this->setFotoCamara(temp);
 
-    m_matricularesults->id=m_nDevice;
-    m_matricularesults->OrigenFoto=FotoCamara();
-    m_matricularesults->OrigenFotoPrewarp=FotoCamara();
-    emit ReplyOriginalFoto(m_matricularesults->OrigenFoto);
-
-
-
-    /** Crear hilos por Tipos de matriculas **/
-    hilo1 = new QThread;
-    hilo2 = new QThread;
-
-    /** Crear tareas **/
-    tarea1 = new NewsagesAlprTask(m_nDevice,m_settings);
-    tarea1->setFotoCamara(m_matricularesults->OrigenFotoPrewarp);
-
-    tarea2 = new NewsagesAlprTask(m_nDevice,m_settings);
-    tarea2->setFotoCamara(m_matricularesults->OrigenFotoPrewarp);
-
-    /** Asignar tareas a hilos **/
-    tarea1->moveToThread(hilo1);
-    tarea2->moveToThread(hilo2);
-
-    /** conectar hilos con proceso **/
-    connect( hilo1, SIGNAL(started()), tarea1, SLOT(procesarBlancas()) );
-    connect( tarea1,SIGNAL(workFinished()), hilo1, SLOT(quit()) );
-    connect( tarea1, SIGNAL(workFinished()), tarea1, SLOT(deleteLater()) );
-    connect( hilo1, SIGNAL(finished()), hilo1, SLOT(deleteLater()) );
-
-    connect( hilo2, SIGNAL(started()), tarea2, SLOT(procesarRojas()) );
-    connect( tarea2,SIGNAL(workFinished()), hilo2, SLOT(quit()) );
-    connect( tarea2, SIGNAL(workFinished()), tarea2, SLOT(deleteLater()) );
-    connect( hilo2, SIGNAL(finished()), hilo2, SLOT(deleteLater()) );
-
-    /** conectar respuestas con padre **/
-    connect( tarea1, SIGNAL(ReplyMatriculaFoto(QImage)),this,SIGNAL(ReplyMatriculaFoto(QImage)));
-    connect( tarea2, SIGNAL(ReplyMatriculaFotoRemolque(QImage)),this,SIGNAL(ReplyMatriculaFotoRemolque(QImage)));
-
-    hilo1->start();
-    hilo2->start();
 }
 
 
-void NewsagesAlpr::processFoto()
+void NewsagesAlpr::processFoto(const QImage &Foto)
 {
 
+    if(!bhilo1 && !bhilo2){
+        bhilo1=true;
+        bhilo2=true;
 
+        this->setFotoCamara(Foto);
+        m_matricularesults->id=m_nDevice;
+        m_matricularesults->OrigenFoto=FotoCamara();
+
+        m_matricularesults->OrigenFotoPrewarp=FotoCamara(); /** <<<<<< TODO CHANGE TO FUNCTION load and set prewarp **/
+        emit ReplyOriginalFoto(m_matricularesults->OrigenFoto);
+
+        /** Crear hilos por Tipos de matriculas **/
+        hilo1 = new QThread;
+        hilo2 = new QThread;
+
+        /** Crear tareas **/
+        tarea1 = new NewsagesAlprTask(m_nDevice,m_settings);
+        tarea2 = new NewsagesAlprTask(m_nDevice,m_settings);
+
+        /** Asignar tareas a hilos **/
+        tarea1->moveToThread(hilo1);
+        tarea2->moveToThread(hilo2);
+
+
+        /** Configurar tareas **/
+        tarea1->setFotoCamara(m_matricularesults->OrigenFotoPrewarp);
+        tarea2->setFotoCamara(m_matricularesults->OrigenFotoPrewarp);
+
+
+        /** conectar hilos con proceso **/
+        connect( hilo1, SIGNAL(started()), tarea1, SLOT(procesarBlancas()) );
+        connect( tarea1,SIGNAL(workFinished()), hilo1, SLOT(quit()) );
+        connect( tarea1, SIGNAL(workFinished()), tarea1, SLOT(deleteLater()) );
+        connect( hilo1, SIGNAL(finished()), hilo1, SLOT(deleteLater()) );
+        QObject:: c1 =connect( hilo1, &QThread::finished, [=](){
+                bhilo1=false;
+                if (!bhilo1 && !bhilo2){
+                    emit ReplyMatriculaResults(*m_matricularesults);
+                    qDebug() << m_matricularesults->MatriculaA << " y " << m_matricularesults->MatriculaB;
+                }
+                c1;
+             });
+
+        connect( hilo2, SIGNAL(started()), tarea2, SLOT(procesarRojas()) );
+        connect( tarea2,SIGNAL(workFinished()), hilo2, SLOT(quit()) );
+        connect( tarea2, SIGNAL(workFinished()), tarea2, SLOT(deleteLater()) );
+        connect( hilo2, SIGNAL(finished()), hilo2, SLOT(deleteLater()) );
+        auto c2 = connect( hilo2, &QThread::finished, [=](){
+                bhilo2=false;
+                if (!bhilo1 && !bhilo2){
+                    emit ReplyMatriculaResults(*m_matricularesults);
+                    qDebug() << m_matricularesults->MatriculaA << " y " << m_matricularesults->MatriculaB;
+                }
+
+            });
+
+
+        /** conectar respuestas con padre **/
+        connect( tarea1, SIGNAL(ReplyMatriculaFoto(QString,QString,bool,QImage)),
+                 this  , SIGNAL(ReplyMatriculaFoto(QString,QString,bool,QImage)));
+
+        connect( tarea1, &NewsagesAlprTask::ReplyMatriculaFoto, [=](const QString &matricula, const QString &precision ,const bool &detectada,const QImage &foto){
+           m_matricularesults->MatriculaA=matricula;
+           m_matricularesults->MatriculaDetectedA=detectada;
+           m_matricularesults->MatriculaFotoA=foto;
+           m_matricularesults->MatriculaPrecisionA=precision.toDouble();
+
+        });
+
+
+        connect( tarea2, SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,QImage)),
+                 this  , SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,QImage)));
+
+        connect( tarea2, &NewsagesAlprTask::ReplyMatriculaFotoRemolque, [=](const QString &matricula, const QString &precision ,const bool &detectada,const QImage &foto){
+           m_matricularesults->MatriculaB=matricula;
+           m_matricularesults->MatriculaDetectedB=detectada;
+           m_matricularesults->MatriculaFotoB=foto;
+           m_matricularesults->MatriculaPrecisionB=precision.toDouble();
+
+        });
+
+        /** Ejecutar Procesos **/
+        hilo1->start();
+        hilo2->start();
+    }
 
 }
 

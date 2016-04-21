@@ -1,5 +1,8 @@
 #include "NewsagesAlprTask.h"
 
+
+#include "alpr.h"
+#include "state_detector.h"
 #include <QByteArray>
 #include <QBuffer>
 #include <QDebug>
@@ -36,7 +39,7 @@ NewsagesAlprTask::~NewsagesAlprTask()
 
 
 /** CONVERSORES *************************************************************************/
-cv::Mat NewsagesAlprTask::QImage2cvMat(QImage &image){
+cv::Mat NewsagesAlprTask::QImage2cvMat(const QImage &image){
     /** CONVERSOR QImage to std::vector<char>) **/
     QByteArray baScene; // byte array with data
     QBuffer buffer(&baScene);
@@ -50,7 +53,7 @@ cv::Mat NewsagesAlprTask::QImage2cvMat(QImage &image){
     return img;
 
 }
-QImage NewsagesAlprTask::cvMat2QImage(cv::Mat &image){
+QImage NewsagesAlprTask::cvMat2QImage(const cv::Mat &image){
     QImage qtImg;
     if( !image.empty() && image.depth() == CV_8U ){
         if(image.channels() == 1){
@@ -142,20 +145,31 @@ void NewsagesAlprTask::setPlank(QString A, QString B, QString C)
 
 void NewsagesAlprTask::procesarBlancas()
 {
-    //Alpr matricula("eu", "config/openalpr.conf");
     loadconfig();
+
+    Alpr *matricula;
     matricula = new Alpr("truck",  "config/openalpr.conf");
     matricula->setDefaultRegion("truck");
     matricula->setTopN(1);
 
     //matricula->setPrewarp("");
 
+    //Respuesta por defecto
+    float confianza=0;
+    double dconfianza=0;
+
+    QString tconfianza="0";
+    bool detectada= false;
+    QString matriculadetected="";
+    QImage image_matricula = QImage(300,200,QImage::Format_RGB888);
+    image_matricula.fill(Qt::red);
+
     if (matricula->isLoaded() == false){
         qDebug() << "Error loading OpenALPR" << endl;
     }else{
         //Implementado:
+        image_matricula = m_FotoCamara.copy();
         cv::Mat img = QImage2cvMat(m_FotoCamara);
-        QImage image_matricula = QImage(m_FotoCamara);
 
         //CONVERSION de BLANCOS
          // CALIBRACION —---»» PARAMETRIZAR :::::
@@ -167,39 +181,58 @@ void NewsagesAlprTask::procesarBlancas()
         // RECONOCER
         std::vector<AlprRegionOfInterest> regionsOfInterest;
         AlprResults results = matricula->recognize(img.data, img.elemSize(), img.cols, img.rows,regionsOfInterest);
-        for (int i = 0; i < results.plates.size(); i++)
-        {
-            AlprPlateResult plate = results.plates[i];
-            for (int k = 0; k < plate.topNPlates.size(); k++)
-            {
-                AlprPlate candidate = plate.topNPlates[k];
-                float confianza = candidate.overall_confidence;
-                qDebug() << "  blanca  - " << QString::fromStdString(candidate.characters) << "\t precision: " << confianza << "% " <<
-                            candidate.matches_template << endl;
-                image_matricula = image_matricula.copy(QRect(QPoint(plate.plate_points[0].x,plate.plate_points[0].y),
-                                                     QPoint(plate.plate_points[2].x,plate.plate_points[2].y)));
 
-                emit ReplyMatriculaFoto(image_matricula);
+        for (int i = 0; i < results.plates.size(); i++){
+            AlprPlateResult plate = results.plates[i];
+            for (int k = 0; k < plate.topNPlates.size(); k++){
+                AlprPlate candidate = plate.topNPlates[k];
+                if (candidate.matches_template  && confianza < candidate.overall_confidence){
+                    confianza = candidate.overall_confidence;
+                    dconfianza = (double)candidate.overall_confidence;
+                    tconfianza = QString::number(confianza,'g',6);
+                    detectada = candidate.matches_template;
+                    matriculadetected = QString::fromStdString(candidate.characters);
+                    image_matricula = image_matricula.copy(QRect
+                                                           (QPoint(plate.plate_points[0].x,plate.plate_points[0].y),
+                                                            QPoint(plate.plate_points[2].x,plate.plate_points[2].y)));
+
+                    qDebug() << "  blanca  - " << QString::fromStdString(candidate.characters) << "\t precision: " << confianza << "% " <<
+                                candidate.matches_template << endl;
+                }
             }
         }
     }
+
+    emit ReplyMatriculaFoto(matriculadetected,tconfianza,detectada,image_matricula);
+    emit workFinished();
 }
 
 void NewsagesAlprTask::procesarRojas()
 {
     loadconfig();
-    //Alpr remolque("eur", "config/openalpr.conf");
+
+    Alpr *remolque;
     remolque  = new Alpr("eur", "config/openalpr.conf");
     remolque->setTopN(1);
     remolque->setDefaultRegion("eur");
     //openalpr.setPrewarp("");
 
+    //Respuesta por defecto
+    float confianza=0;
+    double dconfianza=0;
+
+    QString tconfianza="0";
+    bool detectada= false;
+    QString matriculadetected="";
+    QImage image_matricula = QImage(300,200,QImage::Format_RGB888);
+    image_matricula.fill(Qt::red);
+
     if (remolque->isLoaded() == false){
         qDebug() << "Error loading OpenALPR" << endl;
     }else{
         //Implementado:
+        image_matricula = FotoCamara().copy();
         cv::Mat img = QImage2cvMat(m_FotoCamara);
-        QImage image_matricula = QImage(m_FotoCamara);
 
         //CONVERSION de ROJA
         // CALIBRACION —---»» PARAMETRIZAR :::::
@@ -209,26 +242,34 @@ void NewsagesAlprTask::procesarRojas()
         cv::add(channel[0], channel[1], img);
         cv::subtract(channel[2], channel[1], img);
 
-        //cv::imshow("ROJOS",img);
-
         // RECONOCER
         std::vector<AlprRegionOfInterest> regionsOfInterest;
         AlprResults results = remolque->recognize(img.data, img.elemSize(), img.cols, img.rows,regionsOfInterest);
-        for (int i = 0; i < results.plates.size(); i++)
-        {
+        for (int i = 0; i < results.plates.size(); i++){
             AlprPlateResult plate = results.plates[i];
-            for (int k = 0; k < plate.topNPlates.size(); k++)
-            {
+            for (int k = 0; k < plate.topNPlates.size(); k++){
                 AlprPlate candidate = plate.topNPlates[k];
-                float confianza = candidate.overall_confidence;
-                qDebug() << "  remolque  - " << QString::fromStdString(candidate.characters) << "\t precision: " << confianza << "% " <<
-                            candidate.matches_template << endl;
-                image_matricula = image_matricula.copy(QRect(QPoint(plate.plate_points[0].x,plate.plate_points[0].y),
-                                                     QPoint(plate.plate_points[2].x,plate.plate_points[2].y)));
-                emit ReplyMatriculaFotoRemolque(image_matricula);
+                 if (candidate.matches_template  && confianza < candidate.overall_confidence){
+                     float confianza = candidate.overall_confidence;
+                     confianza = candidate.overall_confidence;
+                     dconfianza = (double)candidate.overall_confidence;
+                     tconfianza = QString::number(confianza,'g',6);
+                     detectada = candidate.matches_template;
+                     matriculadetected = QString::fromStdString(candidate.characters);
+                     image_matricula = image_matricula.copy(QRect(
+                                                                QPoint(plate.plate_points[0].x,plate.plate_points[0].y),
+                                                                QPoint(plate.plate_points[2].x,plate.plate_points[2].y)));
+
+
+                     qDebug() << "  remolque  - " << QString::fromStdString(candidate.characters) << "\t precision: " << confianza << "% " <<
+                                 candidate.matches_template << endl;
+
+                 }
             }
         }
     }
+    emit ReplyMatriculaFotoRemolque(matriculadetected,tconfianza,detectada,image_matricula);
+    emit workFinished();
 }
 
 

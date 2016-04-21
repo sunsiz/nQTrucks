@@ -113,8 +113,8 @@ private slots:
     void onGetOriginalMatriculaRojaA(QImage foto);
     void onGetOriginalMatriculaBlancaA(QImage foto);
 
-    void onGetMatriculaFotoA1(QImage foto);
-    void onGetMatriculaFotoA2(QImage foto);
+    void onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, QImage foto);
+    void onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, QImage foto);
     /** END NEWSAGES ALPR **/
 
     /** CONFIG **/

@@ -225,8 +225,11 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoBlanca(QImage)),this,SIGNAL(ReplyOriginalFotoBlancaA(QImage)));
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoRoja(QImage)),this,SIGNAL(ReplyOriginalFotoRojaA(QImage)));
 
-    connect(d->m_alpr1,SIGNAL(ReplyMatriculaFoto(QImage)),this,SIGNAL(ReplyMatriculaFotoA1(QImage)));
-    connect(d->m_alpr1,SIGNAL(ReplyMatriculaFotoRemolque(QImage)),this,SIGNAL(ReplyMatriculaFotoA2(QImage)));
+    connect(d->m_alpr1, SIGNAL(ReplyMatriculaFoto(QString,QString,bool,QImage)),
+            this      , SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,QImage)));
+
+    connect(d->m_alpr1, SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,QImage)),
+            this      , SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,QImage)));
     /** END NEWSAGES ALPR **/
 }
 
@@ -345,10 +348,25 @@ void nQTrucksEngine::calibrarFoto(int _device, QImage _foto)
     }
 }
 
+void nQTrucksEngine::getFotoMatricula(int _device, QImage _foto)
+{
+     Q_D(nQTrucksEngine);
+    switch (_device) {
+    case 0:
+         d->m_alpr1->processFoto(_foto);
+        break;
+    case 1:
+         d->m_alpr2->processFoto(_foto);
+        break;
+    default:
+        break;
+    }
+}
+
 void nQTrucksEngine::getFotoMatricula1()
 {
     Q_D(nQTrucksEngine);
-    d->m_alpr1->processFoto();
+    //d->m_alpr1->processFoto();
 
 }
 
