@@ -175,6 +175,14 @@ void MainWindow::loadconfig()
     /** END BASCULAS **/
 
     /** ALPR  **/
+    engine->appConfig()->beginGroup(CAMARA1);
+    ui->vPlankA1->setValue(engine->appConfig()->value("plankA","0").toInt());
+    ui->vPlankB1->setValue(engine->appConfig()->value("plankB","20").toInt());
+    ui->vPlankC1->setValue(engine->appConfig()->value("plankC","40").toInt());
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+
+    /** END ALPR **/
 
 
 }
@@ -378,11 +386,28 @@ void MainWindow::onGetMatriculaFotoA2(QString matricula, QString confianza, bool
 
 void MainWindow::on_TestMatriculaA1_clicked()
 {
+    /** DEBUG **/
+    QString filename ="matriculas/r1.jpg";
+    m_fotocamara = QImage(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(filename));
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_fotocamara));
+
     engine->getFotoMatricula(0,m_fotocamara);
 }
 
 void MainWindow::on_onCalibrarA_clicked()
 {
+    /** DEBUG **/
+    QString filename ="matriculas/r1.jpg";
+    m_fotocamara = QImage(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(filename));
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_fotocamara));
+
+    engine->appConfig()->beginGroup(CAMARA1);
+    engine->appConfig()->setValue("plankA",QString::number(ui->vPlankA1->value()));
+    engine->appConfig()->setValue("plankB",QString::number(ui->vPlankB1->value()));
+    engine->appConfig()->setValue("plankC",QString::number(ui->vPlankC1->value()));
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+
     engine->calibrarFoto(0,m_fotocamara);
 }
 /** END ALRP **/

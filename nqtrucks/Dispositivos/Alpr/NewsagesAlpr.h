@@ -49,7 +49,6 @@ class NewsagesAlpr : public QObject
 public:
     explicit NewsagesAlpr(int nDevice=0, QSettings *_appsettings=0, QObject *parent = 0);
 
-
     /** SETTINGS **/
 public slots:
     QImage FotoCamara() const {return m_FotoCamara; }
@@ -61,17 +60,22 @@ private:
     t_MatriculaResults *m_matricularesults;
     /** END SETTINGS **/
 
-
 signals:
     void ReplyOriginalFoto(const QImage &Foto);
     void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
     void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
 
-
-
     /** CALIBRAR *****************************************************/
+private:
+    QThread *hiloCalibrar1;
+    NewsagesAlprTask *tareaCalibrar1;
+    bool bhiloCalibrar1;
+
+    QThread *hiloCalibrar2;
+    NewsagesAlprTask *tareaCalibrar2;
+    bool bhiloCalibrar2;
 public slots:
-    void calibrarFoto();
+    void calibrarFoto(const QImage &Foto);
 signals:
     void ReplyOriginalFotoRoja(const QImage &Foto);
     void ReplyOriginalFotoBlanca(const QImage &Foto);
@@ -83,12 +87,7 @@ public slots:
     void processFoto(const QImage &Foto);
 signals:
     void ReplyMatriculaResults(const t_MatriculaResults &_MatriculaResults);
-    //void setFotoCamara(const QImage &Foto){m_fotocamara = new QImage(Foto);}
-    //void calibrarBlancas();
-    //void calibrarRojas();
-
 private:
-    /** Multi Tareas **/
     QThread *hilo1;
     NewsagesAlprTask *tarea1;
     bool bhilo1;

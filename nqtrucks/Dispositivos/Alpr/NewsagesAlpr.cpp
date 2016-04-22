@@ -49,24 +49,72 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
     , m_matricularesults(new t_MatriculaResults)
     , bhilo1(false)
     , bhilo2(false)
+    , bhiloCalibrar1(false)
+    , bhiloCalibrar2(false)
 {       
     m_matricularesults->id=m_nDevice;
-
 }
+
 
 void NewsagesAlpr::setFotoCamara(const QImage &Foto) {
     m_FotoCamara = Foto;
     m_matricularesults->OrigenFoto=FotoCamara();
     m_matricularesults->OrigenFotoPrewarp=FotoCamara(); /** <<<<<< TODO CHANGE TO FUNCTION load and set prewarp **/
-    emit ReplyOriginalFoto(m_matricularesults->OrigenFoto);
+    emit ReplyOriginalFoto(m_matricularesults->OrigenFoto.copy());
 }
 
-void NewsagesAlpr::calibrarFoto(){
+/** SOLO CALIBRACION ***************************************************************************************/
+void NewsagesAlpr::calibrarFoto(const QImage &Foto){
+
+    if(!bhiloCalibrar1 && !bhiloCalibrar2){
+        bhiloCalibrar1=true;
+        bhiloCalibrar2=true;
+
+        this->setFotoCamara(Foto);
+
+        /** Crear hilos por Tipos de matriculas **/
+        hiloCalibrar1 = new QThread;
+        hiloCalibrar2 = new QThread;
+
+        /** Crear tareas **/
+        tareaCalibrar1 = new NewsagesAlprTask(m_nDevice,m_matricularesults->OrigenFotoPrewarp,m_settings);
+        tareaCalibrar2 = new NewsagesAlprTask(m_nDevice,m_matricularesults->OrigenFotoPrewarp,m_settings);
+
+        /** Asignar tareas a hilos **/
+        tareaCalibrar1->moveToThread(hiloCalibrar1);
+        tareaCalibrar2->moveToThread(hiloCalibrar2);
 
 
+        /** conectar hilos con proceso BLANCOS **/
+        connect( tareaCalibrar1, SIGNAL(ReplyOriginalFotoBlanca(QImage)),this,SIGNAL(ReplyOriginalFotoBlanca(QImage)));
+        connect( hiloCalibrar1,  SIGNAL(started()),      tareaCalibrar1, SLOT(calibrarBlanco()) );
+        connect( tareaCalibrar1, SIGNAL(workFinished()), hiloCalibrar1,  SLOT(quit()) );
+        connect( tareaCalibrar1, SIGNAL(workFinished()), tareaCalibrar1, SLOT(deleteLater()) );
+        connect( hiloCalibrar1,  SIGNAL(finished()),     hiloCalibrar1,  SLOT(deleteLater()) );
+
+        std::unique_ptr<QMetaObject::Connection> pconnCalibrar1{new QMetaObject::Connection};
+        QMetaObject::Connection &connCalibrar1 = *pconnCalibrar1;
+        connCalibrar1=connect( hiloCalibrar1, &QThread::finished, [=](){ QObject::disconnect(connCalibrar1); bhiloCalibrar1=false; });
+
+        /** conectar hilos con proceso ROJOS **/
+        connect( tareaCalibrar2, SIGNAL(ReplyOriginalFotoRoja(QImage)),this,SIGNAL(ReplyOriginalFotoRoja(QImage)));
+        connect( hiloCalibrar2,  SIGNAL(started()),      tareaCalibrar2, SLOT(calibrarRojo()) );
+        connect( tareaCalibrar2, SIGNAL(workFinished()), hiloCalibrar2,  SLOT(quit()) );
+        connect( tareaCalibrar2, SIGNAL(workFinished()), tareaCalibrar2, SLOT(deleteLater()) );
+        connect( hiloCalibrar2,  SIGNAL(finished()),     hiloCalibrar2,  SLOT(deleteLater()) );
+        std::unique_ptr<QMetaObject::Connection> pconnCalibrar2{new QMetaObject::Connection};
+        QMetaObject::Connection &connCalibrar2 = *pconnCalibrar2;
+        connCalibrar2=connect( hiloCalibrar2, &QThread::finished, [=](){ QObject::disconnect(connCalibrar2); bhiloCalibrar2=false; });
+
+        /** Ejecutar Procesos **/
+        hiloCalibrar1->start();
+        hiloCalibrar2->start();
+    }
 }
+/** END SOLO CALIBRACION *************************************************************************************/
 
 
+/** PROCESAR ************************************************************************************************/
 void NewsagesAlpr::processFoto(const QImage &Foto)
 {
 
@@ -90,7 +138,7 @@ void NewsagesAlpr::processFoto(const QImage &Foto)
         tarea2->moveToThread(hilo2);
 
 
-        connect( tarea1, SIGNAL(ReplyOriginalFotoBlanca(QImage)),this,SIGNAL(ReplyOriginalFotoBlanca(QImage)));
+        //connect( tarea1, SIGNAL(ReplyOriginalFotoBlanca(QImage)),this,SIGNAL(ReplyOriginalFotoBlanca(QImage)));
         /** conectar hilos con proceso **/
         connect( hilo1, SIGNAL(started()), tarea1, SLOT(procesarBlancas()) );
         connect( tarea1,SIGNAL(workFinished()), hilo1, SLOT(quit()) );
@@ -109,6 +157,8 @@ void NewsagesAlpr::processFoto(const QImage &Foto)
                 }
              });
 
+        //connect( tarea2, SIGNAL(ReplyOriginalFotoRoja(QImage)),this,SIGNAL(ReplyOriginalFotoRoja(QImage)));
+
         connect( hilo2, SIGNAL(started()), tarea2, SLOT(procesarRojas()) );
         connect( tarea2,SIGNAL(workFinished()), hilo2, SLOT(quit()) );
         connect( tarea2, SIGNAL(workFinished()), tarea2, SLOT(deleteLater()) );
@@ -125,7 +175,6 @@ void NewsagesAlpr::processFoto(const QImage &Foto)
                 }
 
             });
-
 
         /** conectar respuestas con padre **/
         connect( tarea1, SIGNAL(ReplyMatriculaFoto(QString,QString,bool,QImage)),
@@ -163,48 +212,7 @@ void NewsagesAlpr::processFoto(const QImage &Foto)
     }
 
 }
-
-//cv::Mat NewsagesAlpr::QImage2cvMat(QImage image)
-//{
-//    /** CONVERSOR QImage to std::vector<char>) **/
-//    QByteArray baScene; // byte array with data
-//    QBuffer buffer(&baScene);
-//    buffer.open(QIODevice::WriteOnly);
-//    image.save(&buffer,"PNG");
-
-//    const char* begin = reinterpret_cast<char*>(baScene.data());
-//    const char* end = begin + baScene.size();
-//    std::vector<char> pic(begin, end);
-//    cv::Mat img = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
-//    return img;
-
-//}
-
-//QImage NewsagesAlpr::cvMat2QImage(const cv::Mat &image)
-//{
-//    QImage qtImg;
-//    if( !image.empty() && image.depth() == CV_8U ){
-//        if(image.channels() == 1){
-//            qtImg = QImage( (const unsigned char *)(image.data),
-//                            image.cols,
-//                            image.rows,
-//                            QImage::Format_Indexed8 );
-//        }
-//        else{
-//            cvtColor( image, image, CV_BGR2RGB );
-//            qtImg = QImage( (const unsigned char *)(image.data),
-//                            image.cols,
-//                            image.rows,
-//                            QImage::Format_RGB888 );
-//        }
-//    }
-//    //emit ReplyMatriculaFoto(qtImg);
-//    return qtImg;
-//    /** CONVERSOR QImage to std::vector<char>) **/
-//}
-
-
-
+/** END PROCESAR ********************************************************************************************************/
 
 
     } /** END NAMESPACE Devices  **/

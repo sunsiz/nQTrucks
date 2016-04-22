@@ -41,14 +41,16 @@
 #include "nQTrucksEngine.h"
 
 namespace nQTrucks{
-
-//nQTrucksConfig *nQTrucksEngine::m_config =0;
 QSettings* nQTrucksEngine::m_settings = 0;
 
-    /** Private Share Pointer Impl **/
+
+/** ****************************************************************************************************
+ * IMPL PRIVATE ****************************************************************************************
+********************************************************************************************************/
+/** Private Share Pointer Impl **/
 nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
-    : QObject(parent)
-    , m_settings(0)
+: QObject(parent)
+, m_settings(0)
 {
 }
 
@@ -57,7 +59,7 @@ nQTrucksEnginePrivate::~nQTrucksEnginePrivate()
 
 }
 
-/** SETTINGS **/
+/** SETTINGS **********************************************************************************************/
 void nQTrucksEnginePrivate::setSettings(QSettings* value)
 {
     if (value){
@@ -76,9 +78,9 @@ QSettings*nQTrucksEnginePrivate::settings()
         return m_settings;
     }
 }
-/** END SETTINGS **/
+/** END SETTINGS ********************************************************************************************/
 
-/** CAMARAS  **/
+/** CAMARAS  *************************************************************************************************/
 QStringList nQTrucksEnginePrivate::getCameraTypes()
 {
     QMetaObject MetaObject = Devices::CamaraIP::staticMetaObject;
@@ -112,9 +114,9 @@ void nQTrucksEnginePrivate::setCamaraIP(int nDevice,  QString type, QString host
         break;
     }
 }
-/** END CAMARAS **/
+/** END CAMARAS **************************************************************************************************/
 
-/** NEWSAGES I/O **/
+/** NEWSAGES I/O *************************************************************************************************/
 QStringList nQTrucksEnginePrivate::getIODevices()
 {
     QStringList listIODevices;
@@ -144,9 +146,9 @@ QStringList nQTrucksEnginePrivate::getIODevices()
 
     return listIODevices;
 }
-/** FIN NEWSAGES I/O **/
+/** FIN NEWSAGES I/O ************************************************************************************************************/
 
-/** BASCULAS **/
+/** BASCULAS ********************************************************************************************************************/
 QStringList nQTrucksEnginePrivate::getBasculaTypes()
 {
     QMetaObject MetaObject = Devices::nQSerialPortReader::staticMetaObject;
@@ -189,13 +191,16 @@ QStringList nQTrucksEnginePrivate::getSerialDevices()
     return listDevices;
 
 }
+/** END BASCULAS ***************************************************************************************/
 
-/** END BASCULAS **/
+/** ****************************************************************************************************
+ *  END IMPL PRIVATE ***********************************************************************************
+********************************************************************************************************/
 
 
-/** Public Impl **/
-/** **************************************************************************************** **/
-
+/** *****************************************************************************************
+ * PUBLIC IMPL ******************************************************************************
+*********************************************************************************************/
 nQTrucksEngine::nQTrucksEngine(QObject *parent)
     : QObject(parent)
     //, m_config(0)
@@ -221,15 +226,14 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     /** NEWSAGES ALPR **/
     /** 1 **/
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(QImage)),this,SIGNAL(ReplyOriginalFotoA(QImage)));
-
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoBlanca(QImage)),this,SIGNAL(ReplyOriginalFotoBlancaA(QImage)));
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoRoja(QImage)),this,SIGNAL(ReplyOriginalFotoRojaA(QImage)));
-
     connect(d->m_alpr1, SIGNAL(ReplyMatriculaFoto(QString,QString,bool,QImage)),
             this      , SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,QImage)));
 
     connect(d->m_alpr1, SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,QImage)),
             this      , SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,QImage)));
+
     /** END NEWSAGES ALPR **/
 }
 
@@ -247,7 +251,7 @@ nQTrucksEngine::~nQTrucksEngine()
     delete d_ptr;
 }
 
-/** SETTINGS **/
+/** SETTINGS ***********************************************************************************************************/
 void nQTrucksEngine::setAppConfig(QSettings *value)
 {
     Q_D(nQTrucksEngine);
@@ -263,9 +267,9 @@ QSettings *nQTrucksEngine::appConfig()
     d->q_ptr=this;
     return d->settings();
 }
-/** END SETTINGS **/
+/** END SETTINGS ********************************************************************************************************/
 
-/** CAMARAS **/
+/** CAMARAS *************************************************************************************************************/
 QStringList nQTrucksEngine::getTiposCamaras()
 {
     Q_D(nQTrucksEngine);
@@ -292,9 +296,9 @@ void nQTrucksEngine::setCamaraIP(int nCamara, QString type, QString host, QStrin
     Q_D(nQTrucksEngine);
     d->setCamaraIP(nCamara,type,host,port,user,passwd);
 }
-/** END CAMARAS **/
+/** END CAMARAS ***********************************************************************************************************/
 
-/** NEWSAGES I/O **/
+/** NEWSAGES I/O **********************************************************************************************************/
 QStringList nQTrucksEngine::getIODevices()
 {
     Q_D(nQTrucksEngine);
@@ -318,9 +322,9 @@ void nQTrucksEngine::setIODevicesConfig()
     Q_D(nQTrucksEngine);
     d->m_newsagesIO->setIODeviceConfig();
 }
-/** END NEWSAGES I/O **/
+/** END NEWSAGES I/O *******************************************************************************************************/
 
-/** BASCULAS  **/
+/** BASCULAS  **************************************************************************************************************/
 QStringList nQTrucksEngine::getTiposBasculas()
 {
     Q_D(nQTrucksEngine);
@@ -333,15 +337,24 @@ void nQTrucksEngine::setBasculaConnect(bool _value)
     d->m_basculaReader1->connectPort(_value);
 }
 
+QStringList nQTrucksEngine::getSerialDevices()
+{
+    Q_D(nQTrucksEngine);
+    return d->getSerialDevices();
+}
+/** END BASCULAS ************************************************************************************************************/
+
+
+/** ALRP ********************************************************************************************************************/
 void nQTrucksEngine::calibrarFoto(int _device, QImage _foto)
 {
     Q_D(nQTrucksEngine);
     switch (_device) {
     case 0:
-        d->m_alpr1->calibrarFoto();
+        d->m_alpr1->calibrarFoto(_foto);
         break;
     case 1:
-        d->m_alpr2->calibrarFoto();
+        d->m_alpr2->calibrarFoto(_foto);
         break;
     default:
         break;
@@ -362,24 +375,10 @@ void nQTrucksEngine::getFotoMatricula(int _device, QImage _foto)
         break;
     }
 }
+/** END ALRP ****************************************************************************************************************/
 
-void nQTrucksEngine::getFotoMatricula1()
-{
-    Q_D(nQTrucksEngine);
-    //d->m_alpr1->processFoto();
-
-}
-
-QStringList nQTrucksEngine::getSerialDevices()
-{
-    Q_D(nQTrucksEngine);
-    return d->getSerialDevices();
-}
-
-/** END BASCULAS **/
-
-
-
-/** ***************************************************************************************/
+/** *****************************************************************************************
+ * END PUBLIC IMPL ******************************************************************************
+*********************************************************************************************/
 
 } /** END NAME SPACE **/

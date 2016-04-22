@@ -92,7 +92,6 @@ signals:
 public:
     void calibrarFoto(int _device, QImage _foto);
     void getFotoMatricula(int _device, QImage _foto);
-    void getFotoMatricula1();
 signals:
     void ReplyOriginalFotoA(const QImage &Foto);    
     void ReplyOriginalFotoBlancaA(const QImage &Foto);
@@ -100,7 +99,6 @@ signals:
 
     void ReplyMatriculaFotoA1(const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
     void ReplyMatriculaFotoA2(const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
-    //void ReplyMatriculaFotoA1(const QImage &Foto);
     /** END NEWSAGES ALPR **/
 
     /** nQTrucksEnginePrivate **/

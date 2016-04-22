@@ -8,26 +8,25 @@
 #include "opencv2/opencv.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
 
-
-
-
-
 namespace nQTrucks {
 namespace Devices {
 
 class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
-    NewsagesAlprTask(int nDevice=0, QImage _fotoCamara=QImage(), QSettings *_appsettings=0, QObject *parent = 0);
+    explicit NewsagesAlprTask(int _nDevice=0, QImage _fotoCamara=QImage(), QSettings *_appsettings=0, QObject *parent = 0);
     ~NewsagesAlprTask();          
 
     //QImage getFotoCalibrada(){return m_FotoCalibrada;}
 
 
+
 public slots:
+    //QImage FotoCamara() const {return m_FotoCamara;}
+    //void setFotoCamara();//QImage *FotoCamara);
     QImage FotoCamara() const {return m_FotoCamara;}
-    cv::Mat FotoCamaraCV() const {return m_FotoCamaraCV;}
     void setFotoCamara();
+    cv::Mat FotoCamaraCV() const {return m_FotoCamaraCV;}
 private:
     QImage m_FotoCamara;
     cv::Mat m_FotoCamaraCV;
@@ -55,22 +54,20 @@ private:
 
 
     /** CALIBRACION **************************************************/
-public slots:
-    QImage FotoCalibradaBlancos() const;
-    void setFotoCalibradaBlancos();
 private:
     QImage m_FotoCalibradaBlancos;
-    cv::Mat m_FotoCalibradaBlancosCV;
     QImage m_FotoCalibradaRojos;
-//    QThread *hiloCalibrarBlancas;
-//    QThread *hiloCalibrarRojas;
+    cv::Mat m_FotoCalibradaBlancosCV;
+    cv::Mat m_FotoCalibradaRojosCV;
 public slots:
     void calibrarBlanco();
     void calibrarRojo();
+    QImage FotoCalibrada(int n) const;
+    void setFotoCalibrada(int n);
 signals:
     void ReplyOriginalFotoBlanca(const QImage &Foto);
     void ReplyOriginalFotoRoja(const QImage &Foto);
-    void onCalibrar();
+    //void onCalibrar();
     /** END CALIBRACION ************************************************/
 
     /** PROCESAR **************************************************************/
