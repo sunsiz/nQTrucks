@@ -39,6 +39,10 @@
 #include <QImage>
 #include <QUrl>
 
+#include "opencv2/opencv.hpp"
+#include <opencv2/imgproc/imgproc.hpp>
+
+
 namespace nQTrucks {
 namespace Devices {
 
@@ -115,6 +119,7 @@ private slots:
 
 signals:
     void ReplyCamaraIPFoto(const QImage &Reply);
+    void ReplyCamaraIPFotoCV(const cv::Mat &ReplyCV);
     void CamaraIPWeb(const QString &CamaraWeb);
     /** END REDES **/
 };

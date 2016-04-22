@@ -53,7 +53,7 @@ public:
     /** SETTINGS **/
 public slots:
     QImage FotoCamara() const {return m_FotoCamara; }
-    void setFotoCamara(const QImage &FotoCamara) { m_FotoCamara = FotoCamara; }
+    void setFotoCamara(const QImage &Foto);
 private:
     int         m_nDevice;
     QImage      m_FotoCamara;
@@ -97,11 +97,6 @@ private:
     NewsagesAlprTask *tarea2;
     bool bhilo2;
 
-    QThread *hilo3;
-    NewsagesAlprTask *tarea3;
-
-    QThread *hilo4;
-    NewsagesAlprTask *tarea4;
 };
 
 } /** END NAMESPACE Devices  **/

@@ -3,8 +3,10 @@
 
 #include "alpr.h"
 #include "state_detector.h"
+
 #include <QByteArray>
 #include <QBuffer>
+
 #include <QDebug>
 
 namespace nQTrucks {
@@ -13,9 +15,10 @@ namespace nQTrucks {
 
     /** TAREAS **/
 
-NewsagesAlprTask::NewsagesAlprTask(int nDevice, QSettings *_appsettings, QObject *parent)
+NewsagesAlprTask::NewsagesAlprTask(int nDevice, QImage _fotoCamara, QSettings *_appsettings, QObject *parent)
     : QObject(parent)
     , m_nDevice(nDevice)
+    , m_FotoCamara(_fotoCamara)
     , m_settings(_appsettings)
 {
     qRegisterMetaType<t_Plank>("t_Plank");
@@ -28,50 +31,97 @@ NewsagesAlprTask::~NewsagesAlprTask()
     this->deleteLater();
 }
 
-
-
-
-
-
-
-
-
+void NewsagesAlprTask::setFotoCamara() {
+    //m_FotoCamara = FotoCamara;
+    m_FotoCamaraCV = convertQImage2Mat(FotoCamara());
+}
 
 
 /** CONVERSORES *************************************************************************/
-cv::Mat NewsagesAlprTask::QImage2cvMat(const QImage &image){
-    /** CONVERSOR QImage to std::vector<char>) **/
+cv::Mat NewsagesAlprTask::convertQImage2Mat(const QImage& img) {
     QByteArray baScene; // byte array with data
     QBuffer buffer(&baScene);
     buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer,"PNG");
+    img.save(&buffer,"PNG");
 
     const char* begin = reinterpret_cast<char*>(baScene.data());
     const char* end = begin + baScene.size();
     std::vector<char> pic(begin, end);
-    cv::Mat img = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
-    return img;
+    cv::Mat mat = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
+    buffer.close();
+    return mat;
+}
+
+QImage NewsagesAlprTask::convertMat2QImage(const cv::Mat& src)
+{
+//    QImage dest(src.cols, src.rows, QImage::Format_RGB32);
+
+//    for (unsigned int i = 0; i < src.rows; i++) {
+//        for (unsigned int j = 0; j < src.cols; j++) {
+//            cv::Vec3f data = src.at<cv::Vec3f>(i, j);
+//            QRgb pixel = qRgb((int)(data[2]), (int)(data[1]), (int)(data[0]));
+//            dest.setPixel(j, i, pixel);
+//        }
+//    }
+
+//    return dest;
+
+        QImage qtImg;
+        if( !src.empty() && src.depth() == CV_8U ){
+            if(src.channels() == 1){
+                qtImg = QImage( (const unsigned char *)(src.data),
+                                src.cols,
+                                src.rows,
+                                QImage::Format_Indexed8 );
+            }
+            else{
+                cv::cvtColor( src, src, CV_BGR2RGB );
+                qtImg = QImage( (const unsigned char *)(src.data),
+                                src.cols,
+                                src.rows,
+                                QImage::Format_RGB888 );
+            }
+        }
+        return qtImg;
 
 }
-QImage NewsagesAlprTask::cvMat2QImage(const cv::Mat &image){
-    QImage qtImg;
-    if( !image.empty() && image.depth() == CV_8U ){
-        if(image.channels() == 1){
-            qtImg = QImage( (const unsigned char *)(image.data),
-                            image.cols,
-                            image.rows,
-                            QImage::Format_Indexed8 );
-        }
-        else{
-            cvtColor( image, image, CV_BGR2RGB );
-            qtImg = QImage( (const unsigned char *)(image.data),
-                            image.cols,
-                            image.rows,
-                            QImage::Format_RGB888 );
-        }
-    }
-    return qtImg;
-}
+
+
+
+
+//cv::Mat NewsagesAlprTask::QImage2cvMat(QImage &image){
+//    /** CONVERSOR QImage to std::vector<char>) **/
+//    baScene = new QByteArray; // byte array with data
+//    buffer = new QBuffer(baScene);
+//    buffer->open(QIODevice::WriteOnly);
+//    image.save(buffer,"PNG");
+//    buffer->close();
+//    const char* begin = reinterpret_cast<char*>(baScene->data());
+//    const char* end = begin + baScene->size();
+//    std::vector<char> pic(begin, end);
+//    cv::Mat img = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
+//    return img;
+
+//}
+//QImage NewsagesAlprTask::cvMat2QImage(const cv::Mat &image){
+//    QImage qtImg;
+//    if( !image.empty() && image.depth() == CV_8U ){
+//        if(image.channels() == 1){
+//            qtImg = QImage( (const unsigned char *)(image.data),
+//                            image.cols,
+//                            image.rows,
+//                            QImage::Format_Indexed8 );
+//        }
+//        else{
+//            cvtColor( image, image, CV_BGR2RGB );
+//            qtImg = QImage( (const unsigned char *)(image.data),
+//                            image.cols,
+//                            image.rows,
+//                            QImage::Format_RGB888 );
+//        }
+//    }
+//    return qtImg;
+//}
 /** END CONVERSORES ***********************************************************/
 
 
@@ -80,29 +130,6 @@ QImage NewsagesAlprTask::cvMat2QImage(const cv::Mat &image){
 /** ROJAS **/
 void NewsagesAlprTask::calibrarRojo()
 {
-    loadconfig();
-    cv::Mat img = QImage2cvMat(m_FotoCamara);
-    cv::add(img,cv::Scalar(m_Plank.A,m_Plank.B,m_Plank.C),img);
-    cv::Mat channel[3];
-    cv::split(img, channel);
-    cv::add(channel[0], channel[1], img);
-    cv::subtract(channel[2], channel[1], img);
-    m_FotoCalibrada=cvMat2QImage(img);
-    emit onCalibrar();
-
-}
-
-/** BLANCAS **/
-void NewsagesAlprTask::calibrarBlanco()
-{
-    loadconfig();
-    cv::Mat img = QImage2cvMat(m_FotoCamara);
-    cv::add(img,cv::Scalar(m_Plank.C,m_Plank.B,m_Plank.A),img);
-    cv::Mat channel[3];
-    cv::split(img, channel);
-    img = channel[2] - channel[1] -   channel[2] + channel[0];
-    m_FotoCalibrada=cvMat2QImage(img);
-    emit onCalibrar();
 }
 
 /** SETTINGS **/
@@ -135,6 +162,7 @@ void NewsagesAlprTask::setPlank(QString A, QString B, QString C)
   m_Plank.B=B.toInt();
   m_Plank.C=C.toInt();
 }
+
 /** END SETTINGS **/
 
 
@@ -143,41 +171,33 @@ void NewsagesAlprTask::setPlank(QString A, QString B, QString C)
 
 
 
+/** BLANCAS **/
 void NewsagesAlprTask::procesarBlancas()
 {
-    loadconfig();
+    //loadconfig();
 
     Alpr *matricula;
     matricula = new Alpr("truck",  "config/openalpr.conf");
     matricula->setDefaultRegion("truck");
     matricula->setTopN(1);
 
-    //matricula->setPrewarp("");
-
     //Respuesta por defecto
     float confianza=0;
     double dconfianza=0;
-
     QString tconfianza="0";
     bool detectada= false;
     QString matriculadetected="";
     QImage image_matricula = QImage(300,200,QImage::Format_RGB888);
     image_matricula.fill(Qt::red);
 
+
     if (matricula->isLoaded() == false){
         qDebug() << "Error loading OpenALPR" << endl;
     }else{
-        //Implementado:
         image_matricula = m_FotoCamara.copy();
-        cv::Mat img = QImage2cvMat(m_FotoCamara);
-
         //CONVERSION de BLANCOS
-         // CALIBRACION —---»» PARAMETRIZAR :::::
-        cv::add(img,cv::Scalar(m_Plank.C,m_Plank.B,m_Plank.A),img);
-        cv::Mat channel[3];
-        cv::split(img, channel);
-        img = channel[2] - channel[1] -   channel[2] + channel[0];
-        //emit ReplyMatriculaFoto(cvMat2QImage(img));
+        setFotoCalibradaBlancos();
+        cv::Mat img = m_FotoCalibradaBlancosCV;
         // RECONOCER
         std::vector<AlprRegionOfInterest> regionsOfInterest;
         AlprResults results = matricula->recognize(img.data, img.elemSize(), img.cols, img.rows,regionsOfInterest);
@@ -207,6 +227,34 @@ void NewsagesAlprTask::procesarBlancas()
     emit workFinished();
 }
 
+QImage NewsagesAlprTask::FotoCalibradaBlancos() const
+{
+    return m_FotoCalibradaBlancos;
+}
+
+void NewsagesAlprTask::setFotoCalibradaBlancos()
+{
+    // CALIBRACION —---»» PARAMETRIZAR :::::
+    loadconfig();
+    setFotoCamara();
+    cv::Mat img = m_FotoCamaraCV;
+    cv::add(img,cv::Scalar(m_Plank.C,m_Plank.B,m_Plank.A),img);
+    cv::Mat channel[3];
+    cv::split(img, channel);
+    img = channel[2] - channel[1] -   channel[2] + channel[0];
+    m_FotoCalibradaBlancosCV = img;
+    m_FotoCalibradaBlancos = convertMat2QImage(img);
+    emit ReplyOriginalFotoBlanca(m_FotoCalibradaBlancos);
+
+}
+
+
+
+
+void NewsagesAlprTask::calibrarBlanco()
+{
+}
+
 void NewsagesAlprTask::procesarRojas()
 {
     loadconfig();
@@ -227,47 +275,47 @@ void NewsagesAlprTask::procesarRojas()
     QImage image_matricula = QImage(300,200,QImage::Format_RGB888);
     image_matricula.fill(Qt::red);
 
-    if (remolque->isLoaded() == false){
-        qDebug() << "Error loading OpenALPR" << endl;
-    }else{
-        //Implementado:
-        image_matricula = FotoCamara().copy();
-        cv::Mat img = QImage2cvMat(m_FotoCamara);
+//    if (remolque->isLoaded() == false){
+//        qDebug() << "Error loading OpenALPR" << endl;
+//    }else{
+//        //Implementado:
+//        image_matricula = FotoCamara().copy();
+//        cv::Mat img = convertQImage2Mat(m_FotoCamara);
 
-        //CONVERSION de ROJA
-        // CALIBRACION —---»» PARAMETRIZAR :::::
-            cv::add(img,cv::Scalar(m_Plank.A,m_Plank.B,m_Plank.C),img);
-        cv::Mat channel[3];
-        cv::split(img, channel);
-        cv::add(channel[0], channel[1], img);
-        cv::subtract(channel[2], channel[1], img);
+//        //CONVERSION de ROJA
+//        // CALIBRACION —---»» PARAMETRIZAR :::::
+//            cv::add(img,cv::Scalar(m_Plank.A,m_Plank.B,m_Plank.C),img);
+//        cv::Mat channel[3];
+//        cv::split(img, channel);
+//        cv::add(channel[0], channel[1], img);
+//        cv::subtract(channel[2], channel[1], img);
 
-        // RECONOCER
-        std::vector<AlprRegionOfInterest> regionsOfInterest;
-        AlprResults results = remolque->recognize(img.data, img.elemSize(), img.cols, img.rows,regionsOfInterest);
-        for (int i = 0; i < results.plates.size(); i++){
-            AlprPlateResult plate = results.plates[i];
-            for (int k = 0; k < plate.topNPlates.size(); k++){
-                AlprPlate candidate = plate.topNPlates[k];
-                 if (candidate.matches_template  && confianza < candidate.overall_confidence){
-                     float confianza = candidate.overall_confidence;
-                     confianza = candidate.overall_confidence;
-                     dconfianza = (double)candidate.overall_confidence;
-                     tconfianza = QString::number(confianza,'g',6);
-                     detectada = candidate.matches_template;
-                     matriculadetected = QString::fromStdString(candidate.characters);
-                     image_matricula = image_matricula.copy(QRect(
-                                                                QPoint(plate.plate_points[0].x,plate.plate_points[0].y),
-                                                                QPoint(plate.plate_points[2].x,plate.plate_points[2].y)));
+//        // RECONOCER
+//        std::vector<AlprRegionOfInterest> regionsOfInterest;
+//        AlprResults results = remolque->recognize(img.data, img.elemSize(), img.cols, img.rows,regionsOfInterest);
+//        for (int i = 0; i < results.plates.size(); i++){
+//            AlprPlateResult plate = results.plates[i];
+//            for (int k = 0; k < plate.topNPlates.size(); k++){
+//                AlprPlate candidate = plate.topNPlates[k];
+//                 if (candidate.matches_template  && confianza < candidate.overall_confidence){
+//                     float confianza = candidate.overall_confidence;
+//                     confianza = candidate.overall_confidence;
+//                     dconfianza = (double)candidate.overall_confidence;
+//                     tconfianza = QString::number(confianza,'g',6);
+//                     detectada = candidate.matches_template;
+//                     matriculadetected = QString::fromStdString(candidate.characters);
+//                     image_matricula = image_matricula.copy(QRect(
+//                                                                QPoint(plate.plate_points[0].x,plate.plate_points[0].y),
+//                                                                QPoint(plate.plate_points[2].x,plate.plate_points[2].y)));
 
 
-                     qDebug() << "  remolque  - " << QString::fromStdString(candidate.characters) << "\t precision: " << confianza << "% " <<
-                                 candidate.matches_template << endl;
+//                     qDebug() << "  remolque  - " << QString::fromStdString(candidate.characters) << "\t precision: " << confianza << "% " <<
+//                                 candidate.matches_template << endl;
 
-                 }
-            }
-        }
-    }
+//                 }
+//            }
+//        }
+//    }
     emit ReplyMatriculaFotoRemolque(matriculadetected,tconfianza,detectada,image_matricula);
     emit workFinished();
 }
