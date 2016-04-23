@@ -51,38 +51,55 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->runningCheckBox,SIGNAL(clicked(bool)),this,SLOT(isRunning(bool)));
     engine  = new nQTrucks::nQTrucksEngine(this);
-    connect(engine,SIGNAL(CamaraIPFoto1(QImage)),this,SLOT(onGetFoto1(QImage)));
-    connect(engine,SIGNAL(CamaraIPFoto2(QImage)),this,SLOT(onGetFoto2(QImage)));
+    /** CAMARAS **/
+    connect(engine,SIGNAL(CamaraIPFotoCV1(cv::Mat,cv::Mat,QImage)),
+            this  ,SLOT(onGetFotoCV1(cv::Mat,cv::Mat,QImage)));
+    connect(engine,SIGNAL(CamaraIPFotoCV2(cv::Mat,cv::Mat,QImage)),
+            this  ,SLOT(onGetFotoCV2(cv::Mat,cv::Mat,QImage)));
 
+    /** IO **/
     connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
     connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
 
+    /** BASCULAS **/
     connect(engine,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
     connect(engine,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
 
-    connect(engine,SIGNAL(ReplyOriginalFotoA(QImage)),this,SLOT(onGetOriginalMatriculaA1(QImage)));
+    /** ALPR **/
+    connect(engine,SIGNAL(ReplyOriginalFotoA(cv::Mat)),this,SLOT(onGetOriginalMatriculaA1(cv::Mat)));
 
-    connect(engine,SIGNAL(ReplyOriginalFotoRojaA(QImage)),this,SLOT(onGetOriginalMatriculaRojaA(QImage)));
-    connect(engine,SIGNAL(ReplyOriginalFotoBlancaA(QImage)),this,SLOT(onGetOriginalMatriculaBlancaA(QImage)));
+    connect(engine,SIGNAL(ReplyOriginalFotoRojaA(cv::Mat)),this,SLOT(onGetOriginalMatriculaRojaA(cv::Mat)));
+    connect(engine,SIGNAL(ReplyOriginalFotoBlancaA(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlancaA(cv::Mat)));
 
-    connect(engine, SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,QImage)),
-            this  , SLOT(onGetMatriculaFotoA1(  QString,QString,bool,QImage)));
+    connect(engine, SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,cv::Mat)),
+            this  , SLOT(onGetMatriculaFotoA1(  QString,QString,bool,cv::Mat)));
 
-    connect(engine, SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,QImage)),
-            this  , SLOT(onGetMatriculaFotoA2(  QString,QString,bool,QImage)));
+    connect(engine, SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,cv::Mat)),
+            this  , SLOT(onGetMatriculaFotoA2(  QString,QString,bool,cv::Mat)));
 
     loadconfig();
 
     /** DEBUG **/
-    QString filename ="matriculas/r1.jpg";
-    m_fotocamara = QImage(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(filename));
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_fotocamara));
+    updateOriginal();
 
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::updateOriginal(){
+    QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("matriculas/r1.jpg");
+    m_fotocamara = QImage(filename);
+    m_fotocamaraCV = cv::imread(filename.toStdString(), CV_LOAD_IMAGE_COLOR);
+    cv::cvtColor(m_fotocamaraCV,m_fotocamaraRGBCV,CV_BGR2RGB);
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(QImage(
+                                 (const unsigned char *)(m_fotocamaraRGBCV.data),
+                                 m_fotocamaraRGBCV.cols,
+                                 m_fotocamaraRGBCV.rows,
+                                 m_fotocamaraRGBCV.step,
+                                 QImage::Format_RGB888)));
 }
 
 void MainWindow::isRunning(bool clicked)
@@ -175,7 +192,7 @@ void MainWindow::loadconfig()
     /** END BASCULAS **/
 
     /** ALPR  **/
-    engine->appConfig()->beginGroup(CAMARA1);
+    engine->appConfig()->beginGroup(ALPR1);
     ui->vPlankA1->setValue(engine->appConfig()->value("plankA","0").toInt());
     ui->vPlankB1->setValue(engine->appConfig()->value("plankB","20").toInt());
     ui->vPlankC1->setValue(engine->appConfig()->value("plankC","40").toInt());
@@ -215,19 +232,22 @@ void MainWindow::on_GuardarCamara2_clicked()
 /** END SETTINGS **/
 
 
-/** CAMARAS **/
+/** CAMARAS *************************************************************************/
     /** CAMARA1 **/
-void MainWindow::onGetFoto1(QImage foto)
+void MainWindow::onGetFotoCV1(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
 {
+    m_fotocamaraCV=fotocv;
+    m_fotocamaraRGBCV=fotorgbcv;
+    m_fotocamara=foto;
     ui->camaraLabel1->setPixmap(QPixmap::fromImage(foto));
 }
 
     /** CAMARA2 **/
-void MainWindow::onGetFoto2(QImage foto)
+void MainWindow::onGetFotoCV2(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
 {
     ui->camaraLabel2->setPixmap(QPixmap::fromImage(foto));
 }
-/** END CAMARAS **/
+/** END CAMARAS ************************************************************************/
 
 
 
@@ -354,60 +374,82 @@ void MainWindow::on_BasculaConectada(bool conectada)
 /** END BASCULAS **/
 
 /** ALRP **/
-void MainWindow::onGetOriginalMatriculaA1(QImage foto)
+void MainWindow::onGetOriginalMatriculaA1(cv::Mat foto)
 {
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(foto));
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 
-void MainWindow::onGetOriginalMatriculaRojaA(QImage foto)
+void MainWindow::onGetOriginalMatriculaRojaA(cv::Mat foto)
 {
-    ui->FotoRojosA->setPixmap(QPixmap::fromImage(foto));
+    ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 
-void MainWindow::onGetOriginalMatriculaBlancaA(QImage foto)
+void MainWindow::onGetOriginalMatriculaBlancaA(cv::Mat foto)
 {
-    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(foto));
+    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 
-void MainWindow::onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, QImage foto)
+void MainWindow::onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto)
 {
     ui->LongMatriculaA1->setText(confianza+ "%");
     ui->MatriculaA1->setText(matricula);
-    ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(foto));
+    ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
-void MainWindow::onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, QImage foto)
+void MainWindow::onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto)
 {
 
     ui->LongMatriculaA2->setText(confianza + "%");
     ui->MatriculaA2->setText(matricula);
-    ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(foto));
+    ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 
 
 void MainWindow::on_TestMatriculaA1_clicked()
 {
     /** DEBUG **/
-    QString filename ="matriculas/r1.jpg";
-    m_fotocamara = QImage(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(filename));
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_fotocamara));
-
-    engine->getFotoMatricula(0,m_fotocamara);
+    updateOriginal();
+    engine->getFotoMatricula(0,m_fotocamaraCV);
 }
 
 void MainWindow::on_onCalibrarA_clicked()
 {
     /** DEBUG **/
-    QString filename ="matriculas/r1.jpg";
-    m_fotocamara = QImage(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(filename));
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_fotocamara));
-
-    engine->appConfig()->beginGroup(CAMARA1);
+    updateOriginal();
+    engine->appConfig()->beginGroup(ALPR1);
     engine->appConfig()->setValue("plankA",QString::number(ui->vPlankA1->value()));
     engine->appConfig()->setValue("plankB",QString::number(ui->vPlankB1->value()));
     engine->appConfig()->setValue("plankC",QString::number(ui->vPlankC1->value()));
     engine->appConfig()->endGroup();
     engine->appConfig()->sync();
-
-    engine->calibrarFoto(0,m_fotocamara);
+    engine->calibrarFoto(0,m_fotocamaraCV);
 }
 /** END ALRP **/
+
+QImage MainWindow::convertMat2QImage(const cv::Mat& src)
+{
+    QImage qtImg;
+    if( !src.empty() && src.depth() == CV_8U ){
+        if(src.channels() == 1){
+            qtImg = QImage( (const unsigned char *)(src.data),
+                            src.cols,
+                            src.rows,
+                            QImage::Format_Indexed8 );
+        }
+        else{
+            cv::cvtColor( src, src, CV_BGR2RGB );
+            qtImg = QImage( (const unsigned char *)(src.data),
+                            src.cols,
+                            src.rows,
+                            src.step,
+                            QImage::Format_RGB888 );
+        }
+    }
+    return qtImg.copy();
+}
+
+
+
+
+
+
+

@@ -39,10 +39,6 @@
 #include <QImage>
 #include <QUrl>
 
-#include "opencv2/opencv.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
-
-
 namespace nQTrucks {
 namespace Devices {
 
@@ -110,6 +106,8 @@ private:
     QUrl setCamaraURL();
     QNetworkAccessManager *m_netmanager;
     QImage fotoCamaraError;
+    cv::Mat fotoCamaraErrorCV;
+    cv::Mat fotoCamaraErrorRGBCV;
 
 public slots:
     void sendCamaraIPFotoRequest();
@@ -118,8 +116,8 @@ private slots:
     void camaraNetworkReplyFinished(QNetworkReply *reply);
 
 signals:
-    void ReplyCamaraIPFoto(const QImage &Reply);
-    void ReplyCamaraIPFotoCV(const cv::Mat &ReplyCV);
+    //void ReplyCamaraIPFoto(const QImage &Reply);
+    void ReplyCamaraIPFotoCV(const cv::Mat &ReplyCV ,const cv::Mat &ReplyCVRGB, const QImage &ReplyQImage);
     void CamaraIPWeb(const QString &CamaraWeb);
     /** END REDES **/
 };

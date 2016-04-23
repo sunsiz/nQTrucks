@@ -35,7 +35,9 @@
 
 #include <QObject>
 #include <QSettings>
-#include <QImage>
+//#include <QImage>
+#include "opencv2/opencv.hpp"
+#include <opencv2/imgproc/imgproc.hpp>
 
 #if defined(NQTRUCKS_LIBRARY)
 #  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_EXPORT
@@ -63,19 +65,19 @@ struct PlanK{
 struct MatriculaResults{
     int     tipo=0;  //0 para calibracion, 1 para procesado
     int     id=0;    //id fuente de captura de foto
-    QImage  OrigenFoto; //Imagen Original
-    QImage  OrigenFotoPrewarp; // Imagen con calibracion prewarp
-    QImage  OrigenFotoBlanca;  //  Imagen con calibracion de Blancos
-    QImage  OrigenFotoRoja;    // Imagen con calibracion de Rojos
+    cv::Mat  OrigenFoto; //Imagen Original
+    cv::Mat  OrigenFotoPrewarp; // Imagen con calibracion prewarp
+    cv::Mat  OrigenFotoBlanca;  //  Imagen con calibracion de Blancos
+    cv::Mat  OrigenFotoRoja;    // Imagen con calibracion de Rojos
 
     bool    MatriculaDetectedA=false;  // Coincide con un patron de busqueda?
     QString MatriculaA="";             // STring de la matricula
-    QImage  MatriculaFotoA;            // Imagen recortada de la Matricula
+    cv::Mat MatriculaFotoA;            // Imagen recortada de la Matricula
     long    MatriculaPrecisionA=0;     // Precision del OCR
 
     bool    MatriculaDetectedB=false;  // Coincide con un patron de busqueda?
     QString MatriculaB="";             // STring de la matricula
-    QImage  MatriculaFotoB;            // Imagen recortada de la Matricula
+    cv::Mat MatriculaFotoB;            // Imagen recortada de la Matricula
     long    MatriculaPrecisionB=0;     // Precision del OCR
 
 }; typedef MatriculaResults t_MatriculaResults;
@@ -90,6 +92,9 @@ namespace nQTrucks
     #define CAMARA2 "Camara2"
     #define NEWSAGESIO "NEWSAGESIO"
     #define BASCULA "BASCULA"
+    #define ALPR1  "Alpr1"
+    #define ALPR2  "Alpr2"
+
 
 
 

@@ -31,6 +31,7 @@
 #include "CamaraIP.h"
 #include <QNetworkRequest>
 #include <QLoggingCategory>
+#include <QBuffer>
 
 namespace nQTrucks{
 namespace Devices {
@@ -47,6 +48,9 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
     fotoCamaraError.fill(Qt::red);
     fotoCamaraError.text("ERROR DE CONEXION");
 
+    fotoCamaraErrorCV = cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    fotoCamaraErrorCV = cv::Scalar( 0, 0, 255 );
+    cv::cvtColor(fotoCamaraErrorCV,fotoCamaraErrorRGBCV,CV_BGR2RGB);
     loadconfig();
 
     connect(m_netmanager, SIGNAL(finished(QNetworkReply*)), this , SLOT(camaraNetworkReplyFinished(QNetworkReply*)));
@@ -176,10 +180,22 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply)
 {
     QByteArray data = reply->readAll();
     QImage fotoCamara;
+    cv::Mat fotoCamaraCV;
     if (fotoCamara.loadFromData(data)){
-        emit ReplyCamaraIPFoto(fotoCamara);
+        QBuffer buffer(&data);
+        buffer.open(QIODevice::ReadOnly);
+        const char* begin = reinterpret_cast<char*>(data.data());
+        const char* end = begin + data.size();
+        std::vector<char> pic(begin, end);
+        fotoCamaraCV = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
+        cv::Mat fotoCamaraRGBCV;
+        cv::cvtColor(fotoCamaraCV, fotoCamaraRGBCV, CV_BGR2RGB );
+        buffer.close();
+        //emit ReplyCamaraIPFoto(fotoCamara);
+        emit ReplyCamaraIPFotoCV(fotoCamaraCV,fotoCamaraRGBCV,fotoCamara);
+
     }else{
-        emit ReplyCamaraIPFoto(fotoCamaraError);
+        emit ReplyCamaraIPFotoCV(fotoCamaraErrorCV,fotoCamaraErrorRGBCV,fotoCamaraError);
     }
     reply->deleteLater();
 }

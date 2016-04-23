@@ -27,15 +27,6 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
-/*
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QMessageBox>
-#include <QApplication>
-#include <QDesktopWidget>
-
-#include "time.h"
-*/
 
 #include "nQTrucksEngine_p.h"
 #include "nQTrucksEngine.h"
@@ -209,10 +200,12 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 {
     Q_D(nQTrucksEngine);
     d->q_ptr=this;
-    connect(d->m_camara1,SIGNAL(ReplyCamaraIPFoto(QImage)),this,SIGNAL(CamaraIPFoto1(QImage)));
+    connect(d->m_camara1,SIGNAL(ReplyCamaraIPFotoCV(cv::Mat,cv::Mat,QImage)),
+            this,        SIGNAL(CamaraIPFotoCV1(cv::Mat,cv::Mat,QImage)));
     connect(d->m_camara1,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb1(QString)));
 
-    connect(d->m_camara2,SIGNAL(ReplyCamaraIPFoto(QImage)),this,SIGNAL(CamaraIPFoto2(QImage)));
+    connect(d->m_camara2,SIGNAL(ReplyCamaraIPFotoCV(cv::Mat,cv::Mat,QImage)),
+            this,        SIGNAL(CamaraIPFotoCV2(cv::Mat,cv::Mat,QImage)));
     connect(d->m_camara2,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb2(QString)));
 
     connect(d->m_newsagesIO,SIGNAL(IODeviceConnectChanged(bool)),this,SIGNAL(IODevicesStatusChanged(bool)));
@@ -225,14 +218,14 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** NEWSAGES ALPR **/
     /** 1 **/
-    connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(QImage)),this,SIGNAL(ReplyOriginalFotoA(QImage)));
-    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoBlanca(QImage)),this,SIGNAL(ReplyOriginalFotoBlancaA(QImage)));
-    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoRoja(QImage)),this,SIGNAL(ReplyOriginalFotoRojaA(QImage)));
-    connect(d->m_alpr1, SIGNAL(ReplyMatriculaFoto(QString,QString,bool,QImage)),
-            this      , SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,QImage)));
+    connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFotoA(cv::Mat)));
+    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlancaA(cv::Mat)));
+    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRojaA(cv::Mat)));
+    connect(d->m_alpr1, SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat)),
+            this      , SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,cv::Mat)));
 
-    connect(d->m_alpr1, SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,QImage)),
-            this      , SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,QImage)));
+    connect(d->m_alpr1, SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat)),
+            this      , SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,cv::Mat)));
 
     /** END NEWSAGES ALPR **/
 }
@@ -346,7 +339,7 @@ QStringList nQTrucksEngine::getSerialDevices()
 
 
 /** ALRP ********************************************************************************************************************/
-void nQTrucksEngine::calibrarFoto(int _device, QImage _foto)
+void nQTrucksEngine::calibrarFoto(int _device, cv::Mat _foto)
 {
     Q_D(nQTrucksEngine);
     switch (_device) {
@@ -361,7 +354,7 @@ void nQTrucksEngine::calibrarFoto(int _device, QImage _foto)
     }
 }
 
-void nQTrucksEngine::getFotoMatricula(int _device, QImage _foto)
+void nQTrucksEngine::getFotoMatricula(int _device, cv::Mat _foto)
 {
      Q_D(nQTrucksEngine);
     switch (_device) {

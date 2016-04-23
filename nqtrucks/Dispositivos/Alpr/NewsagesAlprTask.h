@@ -5,17 +5,14 @@
 #include <QImage>
 #include <nqtglobal.h>
 
-#include "opencv2/opencv.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
-
 namespace nQTrucks {
 namespace Devices {
 
 class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
-    explicit NewsagesAlprTask(int _nDevice=0, QImage _fotoCamara=QImage(), QSettings *_appsettings=0, QObject *parent = 0);
-    ~NewsagesAlprTask();          
+    explicit NewsagesAlprTask(int _nDevice=0, cv::Mat _fotoCamara=cv::Mat(), QSettings *_appsettings=0, QObject *parent = 0);
+    ~NewsagesAlprTask();
 
     //QImage getFotoCalibrada(){return m_FotoCalibrada;}
 
@@ -24,16 +21,14 @@ public:
 public slots:
     //QImage FotoCamara() const {return m_FotoCamara;}
     //void setFotoCamara();//QImage *FotoCamara);
-    QImage FotoCamara() const {return m_FotoCamara;}
+    cv::Mat FotoCamara() const {return m_FotoCamara;}
     void setFotoCamara();
     cv::Mat FotoCamaraCV() const {return m_FotoCamaraCV;}
 private:
-    QImage m_FotoCamara;
+    cv::Mat m_FotoCamara;
     cv::Mat m_FotoCamaraCV;
 signals:
     void workFinished();
-
-
 
     /** CONVERSORES ********************************************************/
 private:
@@ -52,21 +47,20 @@ private:
     /** END SETTINGS ****************************************************/
 
 
-
     /** CALIBRACION **************************************************/
 private:
-    QImage m_FotoCalibradaBlancos;
-    QImage m_FotoCalibradaRojos;
+    //cv::Mat m_FotoCalibradaBlancos;
+    //cv::Mat m_FotoCalibradaRojos;
     cv::Mat m_FotoCalibradaBlancosCV;
     cv::Mat m_FotoCalibradaRojosCV;
 public slots:
     void calibrarBlanco();
     void calibrarRojo();
-    QImage FotoCalibrada(int n) const;
+    cv::Mat FotoCalibrada(int n) const;
     void setFotoCalibrada(int n);
 signals:
-    void ReplyOriginalFotoBlanca(const QImage &Foto);
-    void ReplyOriginalFotoRoja(const QImage &Foto);
+    void ReplyOriginalFotoBlanca(const cv::Mat &Foto);
+    void ReplyOriginalFotoRoja(const cv::Mat &Foto);
     //void onCalibrar();
     /** END CALIBRACION ************************************************/
 
@@ -75,8 +69,8 @@ public slots:
     void procesarBlancas();
     void procesarRojas();
 signals:
-    void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
-    void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
+    void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto);
+    void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto);
     /** END PROCESAR **************************************************************/
 
 };

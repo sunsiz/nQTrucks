@@ -68,8 +68,8 @@ private:
 private slots:
     void on_GuardarCamara1_clicked();
     void on_GuardarCamara2_clicked();
-    void onGetFoto1(QImage foto);
-    void onGetFoto2(QImage foto);
+    void onGetFotoCV1(cv::Mat fotocv,cv::Mat fotorgbcv, QImage foto);
+    void onGetFotoCV2(cv::Mat fotocv,cv::Mat fotorgbcv, QImage foto);
     /** END CAMARAS **/
 
 
@@ -108,13 +108,13 @@ private:
 
     /** NEWSAGES ALPR **/
 private slots:
-    void onGetOriginalMatriculaA1(QImage foto);
+    void onGetOriginalMatriculaA1(cv::Mat foto);
 
-    void onGetOriginalMatriculaRojaA(QImage foto);
-    void onGetOriginalMatriculaBlancaA(QImage foto);
+    void onGetOriginalMatriculaRojaA(cv::Mat foto);
+    void onGetOriginalMatriculaBlancaA(cv::Mat foto);
 
-    void onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, QImage foto);
-    void onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, QImage foto);
+    void onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto);
+    void onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto);
     /** END NEWSAGES ALPR **/
 
     /** CONFIG **/
@@ -124,8 +124,12 @@ private slots:
 
 private:
     QImage m_fotocamara;
+    cv::Mat m_fotocamaraCV;
+    cv::Mat m_fotocamaraRGBCV;
     void loadconfig();
+    void updateOriginal(); //*<< DEBUG
     /** END CONFIG **/
+    static QImage convertMat2QImage(const cv::Mat &src);
 };
 
 #endif // MAINWINDOW_H

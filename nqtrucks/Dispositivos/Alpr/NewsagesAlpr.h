@@ -37,11 +37,8 @@
 #include <nqtglobal.h>
 #include "NewsagesAlprTask.h"
 
-
-
-
 namespace nQTrucks {
-namespace Devices {    
+namespace Devices {
 
 class NewsagesAlpr : public QObject
 {
@@ -51,19 +48,19 @@ public:
 
     /** SETTINGS **/
 public slots:
-    QImage FotoCamara() const {return m_FotoCamara; }
-    void setFotoCamara(const QImage &Foto);
+    cv::Mat FotoCamara() const {return m_FotoCamara; }
+    void setFotoCamara(const cv::Mat &Foto);
 private:
     int         m_nDevice;
-    QImage      m_FotoCamara;
+    cv::Mat     m_FotoCamara;
     QSettings   *m_settings;
     t_MatriculaResults *m_matricularesults;
     /** END SETTINGS **/
 
 signals:
-    void ReplyOriginalFoto(const QImage &Foto);
-    void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
-    void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const QImage &Foto);
+    void ReplyOriginalFoto(const cv::Mat &Foto);
+    void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto);
+    void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto);
 
     /** CALIBRAR *****************************************************/
 private:
@@ -75,16 +72,16 @@ private:
     NewsagesAlprTask *tareaCalibrar2;
     bool bhiloCalibrar2;
 public slots:
-    void calibrarFoto(const QImage &Foto);
+    void calibrarFoto(const cv::Mat &Foto);
 signals:
-    void ReplyOriginalFotoRoja(const QImage &Foto);
-    void ReplyOriginalFotoBlanca(const QImage &Foto);
+    void ReplyOriginalFotoRoja(const cv::Mat &Foto);
+    void ReplyOriginalFotoBlanca(const cv::Mat &Foto);
     /** END CALIBRAR *******************************************************/
 
 
     /** Procesar Matriculas **/
 public slots:
-    void processFoto(const QImage &Foto);
+    void processFoto(const cv::Mat &Foto);
 signals:
     void ReplyMatriculaResults(const t_MatriculaResults &_MatriculaResults);
 private:
