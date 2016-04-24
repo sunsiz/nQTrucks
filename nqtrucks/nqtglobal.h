@@ -62,6 +62,8 @@ struct PlanK{
     int C;
 }; typedef PlanK t_Plank;
 
+
+
 struct MatriculaResults{
     int     tipo=0;  //0 para calibracion, 1 para procesado
     int     id=0;    //id fuente de captura de foto
@@ -95,8 +97,18 @@ namespace nQTrucks
     #define ALPR1  "Alpr1"
     #define ALPR2  "Alpr2"
 
-
-
+struct Prewarp{
+    QString type="planar";
+    QString m_w;
+    QString m_h;
+    QString m_panX = "0";
+    QString m_panY = "0";
+    QString m_rotationx = "0";
+    QString m_rotationy = "0";
+    QString m_rotationz = "0";
+    QString m_stretchX = "1.0";
+    QString m_dist = "1.0";
+}; typedef Prewarp t_Prewarp;
 
 
     QString extractClassName(QString className);

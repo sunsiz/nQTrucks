@@ -97,13 +97,23 @@ signals:
 public:
     void calibrarFoto(int _device, cv::Mat _foto);
     void getFotoMatricula(int _device, cv::Mat _foto);
+
+    /** ALPR A **/
 signals:
     void ReplyOriginalFotoA(const cv::Mat &Foto);
     void ReplyOriginalFotoBlancaA(const cv::Mat &Foto);
     void ReplyOriginalFotoRojaA(const cv::Mat &Foto);
-
     void ReplyMatriculaFotoA1(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto);
     void ReplyMatriculaFotoA2(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto);
+
+    /** ALPR B **/
+signals:
+    void ReplyOriginalFotoB(const cv::Mat &Foto);
+    void ReplyOriginalFotoBlancaB(const cv::Mat &Foto);
+    void ReplyOriginalFotoRojaB(const cv::Mat &Foto);
+    void ReplyMatriculaFotoB1(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto);
+    void ReplyMatriculaFotoB2(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto);
+
     /** END NEWSAGES ALPR **/
 
     /** nQTrucksEnginePrivate **/
