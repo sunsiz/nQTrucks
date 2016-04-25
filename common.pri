@@ -35,7 +35,7 @@ CONFIG(release, debug|release){
     BUILD_TYPE = debug
 }
 
-BUILD_DIR = $$PWD/../../../builds
+BUILD_DIR = $$PWD/../../../builds/$${QT_VERSION}
 #BUILD_DIR = $$PWD/build/$${QT_VERSION}
 
 unix{
