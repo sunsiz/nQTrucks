@@ -34,10 +34,10 @@ NewsagesAlprTask::~NewsagesAlprTask()
 
 
 /** SETTINGS **/
-void NewsagesAlprTask::setFotoCamara() {
+//void NewsagesAlprTask::setFotoCamara() {
     //m_FotoCamaraCV = convertQImage2Mat(m_FotoCamara.copy());
-    m_FotoCamaraCV = m_FotoCamara.clone();
-}
+    //m_FotoCamara = m_FotoCamara.clone();
+//}
 
 void NewsagesAlprTask::loadconfig()
 {
@@ -55,18 +55,22 @@ void NewsagesAlprTask::loadconfig()
     m_settings->beginGroup(m_configroot);
     setPlank(m_settings->value("plankA","0").toString(),
              m_settings->value("plankB","20").toString(),
-             m_settings->value("plankC","40").toString()
-            );
+             m_settings->value("plankC","40").toString());
+    setPrewarp(m_settings->value("prewarp","").toString());
     m_settings->endGroup();
     m_settings->sync();
 }
 
-void NewsagesAlprTask::setPlank(QString A, QString B, QString C)
-{
+void NewsagesAlprTask::setPlank(QString A, QString B, QString C){
   m_Plank.A=A.toInt();
   m_Plank.B=B.toInt();
   m_Plank.C=C.toInt();
 }
+void NewsagesAlprTask::setPrewarp(QString prewarp){
+  m_prewarp=prewarp;
+}
+
+
 /** END SETTINGS **/
 
 
@@ -102,8 +106,7 @@ void NewsagesAlprTask::setFotoCalibrada(int n)
 {
     // CALIBRACION —---»» PARAMETRIZAR :::::
     loadconfig();
-    setFotoCamara();
-    cv::Mat img = m_FotoCamaraCV.clone();
+    cv::Mat img = m_FotoCamara.clone();
     cv::Mat channel[3];
     switch (n) {
     case 0:
@@ -136,6 +139,7 @@ void NewsagesAlprTask::procesarBlancas()
     matricula = new Alpr("truck",  "config/openalpr.conf");
     matricula->setDefaultRegion("truck");
     matricula->setTopN(1);
+    matricula->setPrewarp(m_prewarp.toStdString());
 
     //Respuesta por defecto
     float confianza=0;
@@ -170,6 +174,10 @@ void NewsagesAlprTask::procesarBlancas()
                     //image_matricula = image_matricula.copy(QRect
                     //                                       (QPoint(plate.plate_points[0].x,plate.plate_points[0].y),
                     //                                        QPoint(plate.plate_points[2].x,plate.plate_points[2].y)));
+                    cv::Rect rect = cv::Rect(plate.plate_points[0].x,plate.plate_points[0].y,
+                                             plate.plate_points[2].x - plate.plate_points[0].x,
+                                             plate.plate_points[2].y - plate.plate_points[0].y);
+                    image_matricula= cv::Mat(image_matricula,rect);
 
                     qDebug() << "  blanca  - " << QString::fromStdString(candidate.characters) << "\t precision: " << confianza << "% " <<
                                 candidate.matches_template << endl;
@@ -190,6 +198,7 @@ void NewsagesAlprTask::procesarRojas()
     remolque  = new Alpr("eur", "config/openalpr.conf");
     remolque->setTopN(1);
     remolque->setDefaultRegion("eur");
+    remolque->setPrewarp(m_prewarp.toStdString());
 
     //Respuesta por defecto
     float confianza=0;
@@ -224,7 +233,10 @@ void NewsagesAlprTask::procesarRojas()
                     // image_matricula = image_matricula.copy(QRect(
                       //                                          QPoint(plate.plate_points[0].x,plate.plate_points[0].y),
                         //                                        QPoint(plate.plate_points[2].x,plate.plate_points[2].y)));
-
+                     cv::Rect rect = cv::Rect(plate.plate_points[0].x,plate.plate_points[0].y,
+                                              plate.plate_points[2].x - plate.plate_points[0].x,
+                                              plate.plate_points[2].y - plate.plate_points[0].y);
+                     image_matricula= cv::Mat(image_matricula,rect);
 
                      qDebug() << "  remolque  - " << QString::fromStdString(candidate.characters) << "\t precision: " << confianza << "% " <<
                                  candidate.matches_template << endl;

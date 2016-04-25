@@ -40,6 +40,7 @@
 
 #include "nQTrucksEngine.h"
 #include "nqtglobal.h"
+//#include "prewarp.h"
 
 namespace Ui {
 class MainWindow;
@@ -66,8 +67,7 @@ private:
 
     /** CAMARAS **/
 private slots:
-    void on_GuardarCamara1_clicked();
-    void on_GuardarCamara2_clicked();
+    void on_GuardarCamara_clicked();
     void onGetFotoCV1(cv::Mat fotocv,cv::Mat fotorgbcv, QImage foto);
     void onGetFotoCV2(cv::Mat fotocv,cv::Mat fotorgbcv, QImage foto);
     /** END CAMARAS **/
@@ -98,34 +98,65 @@ private slots:
     void on_desconectarBasculaPushButton_clicked();
     void onBascula(t_Bascula _bascula);
     void on_guardarBasculaPushButton_clicked();
-
     void on_actualizarIBasculasButton_clicked();
     void on_BasculaConectada(bool conectada);
-private:
-    //bool m_basculaEstado=false;
-    //nQTrucks::t_Bascula m_bascula;
     /** END BASCULAS **/
 
-    /** NEWSAGES ALPR **/
+    /** NEWSAGES ALPR A **/
 private slots:
     void onGetOriginalMatriculaA1(cv::Mat foto);
-
     void onGetOriginalMatriculaRojaA(cv::Mat foto);
     void onGetOriginalMatriculaBlancaA(cv::Mat foto);
-
     void onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto);
     void onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto);
-    /** END NEWSAGES ALPR **/
+    /** END NEWSAGES ALPR A **/
+
+    /** NEWSAGES ALPR B **/
+private slots:
+    void onGetOriginalMatriculaB1(cv::Mat foto);
+    void onGetOriginalMatriculaRojaB(cv::Mat foto);
+    void onGetOriginalMatriculaBlancaB(cv::Mat foto);
+    void onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto);
+    void onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto);
+    /** END NEWSAGES ALPR B **/
+
+    /** PREWARP **/
+private:
+
+    cv::Mat m_fotoprewarpCVA;
+    QString m_prewarp;
+    QString get_prewarp_config();
+    nQTrucks::t_Prewarp prewarp;
+
+
+
+
+    /** END  PREWARP **/
+
+
+
+
+
+
+
+
 
     /** CONFIG **/
-    void on_TestMatriculaA1_clicked();
+private slots:
+    void on_vPlankA_valueChanged(int value);
+    void on_vPlankA_sliderMoved(int position);
+    void on_vPlankB_sliderMoved(int position);
+    void on_vPlankB_valueChanged(int value);
+    void on_vPlankC_valueChanged(int value);
+    void on_vPlankC_sliderMoved(int position);
 
+    void on_TestMatriculaA1_clicked();
     void on_onCalibrarA_clicked();
+    void on_CamaraSelect_currentIndexChanged(const QString &arg1);
+    void on_calibracionSelect_currentIndexChanged(const QString &arg1);
 
 private:
-    QImage m_fotocamara;
-    cv::Mat m_fotocamaraCV;
-    cv::Mat m_fotocamaraRGBCV;
+    cv::Mat m_fotocamaraCVA;
     void loadconfig();
     void updateOriginal(); //*<< DEBUG
     /** END CONFIG **/

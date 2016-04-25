@@ -14,19 +14,11 @@ public:
     explicit NewsagesAlprTask(int _nDevice=0, cv::Mat _fotoCamara=cv::Mat(), QSettings *_appsettings=0, QObject *parent = 0);
     ~NewsagesAlprTask();
 
-    //QImage getFotoCalibrada(){return m_FotoCalibrada;}
-
-
-
 public slots:
-    //QImage FotoCamara() const {return m_FotoCamara;}
-    //void setFotoCamara();//QImage *FotoCamara);
     cv::Mat FotoCamara() const {return m_FotoCamara;}
-    void setFotoCamara();
-    cv::Mat FotoCamaraCV() const {return m_FotoCamaraCV;}
+    //void setFotoCamara();
 private:
     cv::Mat m_FotoCamara;
-    cv::Mat m_FotoCamaraCV;
 signals:
     void workFinished();
 
@@ -44,13 +36,13 @@ private:
     QSettings *m_settings;
     t_Plank    m_Plank;
     void setPlank(QString A,QString B, QString C);
+    QString  m_prewarp;
+    void setPrewarp(QString prewarp);
     /** END SETTINGS ****************************************************/
 
 
     /** CALIBRACION **************************************************/
 private:
-    //cv::Mat m_FotoCalibradaBlancos;
-    //cv::Mat m_FotoCalibradaRojos;
     cv::Mat m_FotoCalibradaBlancosCV;
     cv::Mat m_FotoCalibradaRojosCV;
 public slots:
@@ -61,7 +53,6 @@ public slots:
 signals:
     void ReplyOriginalFotoBlanca(const cv::Mat &Foto);
     void ReplyOriginalFotoRoja(const cv::Mat &Foto);
-    //void onCalibrar();
     /** END CALIBRACION ************************************************/
 
     /** PROCESAR **************************************************************/

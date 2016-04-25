@@ -65,17 +65,24 @@ MainWindow::MainWindow(QWidget *parent)
     connect(engine,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
     connect(engine,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
 
-    /** ALPR **/
+    /** ALPR A **/
     connect(engine,SIGNAL(ReplyOriginalFotoA(cv::Mat)),this,SLOT(onGetOriginalMatriculaA1(cv::Mat)));
-
     connect(engine,SIGNAL(ReplyOriginalFotoRojaA(cv::Mat)),this,SLOT(onGetOriginalMatriculaRojaA(cv::Mat)));
     connect(engine,SIGNAL(ReplyOriginalFotoBlancaA(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlancaA(cv::Mat)));
-
     connect(engine, SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,cv::Mat)),
             this  , SLOT(onGetMatriculaFotoA1(  QString,QString,bool,cv::Mat)));
-
     connect(engine, SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,cv::Mat)),
             this  , SLOT(onGetMatriculaFotoA2(  QString,QString,bool,cv::Mat)));
+
+    /** ALPR B **/
+    connect(engine,SIGNAL(ReplyOriginalFotoB(cv::Mat)),this,SLOT(onGetOriginalMatriculaB1(cv::Mat)));
+    connect(engine,SIGNAL(ReplyOriginalFotoRojaB(cv::Mat)),this,SLOT(onGetOriginalMatriculaRojaB(cv::Mat)));
+    connect(engine,SIGNAL(ReplyOriginalFotoBlancaB(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlancaB(cv::Mat)));
+    connect(engine, SIGNAL(ReplyMatriculaFotoB1(QString,QString,bool,cv::Mat)),
+            this  , SLOT(onGetMatriculaFotoB1(  QString,QString,bool,cv::Mat)));
+    connect(engine, SIGNAL(ReplyMatriculaFotoB2(QString,QString,bool,cv::Mat)),
+            this  , SLOT(onGetMatriculaFotoB2(  QString,QString,bool,cv::Mat)));
+
 
     loadconfig();
 
@@ -91,15 +98,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateOriginal(){
     QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("matriculas/r1.jpg");
-    m_fotocamara = QImage(filename);
-    m_fotocamaraCV = cv::imread(filename.toStdString(), CV_LOAD_IMAGE_COLOR);
-    cv::cvtColor(m_fotocamaraCV,m_fotocamaraRGBCV,CV_BGR2RGB);
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(QImage(
-                                 (const unsigned char *)(m_fotocamaraRGBCV.data),
-                                 m_fotocamaraRGBCV.cols,
-                                 m_fotocamaraRGBCV.rows,
-                                 m_fotocamaraRGBCV.step,
-                                 QImage::Format_RGB888)));
+    m_fotocamaraCVA = cv::imread(filename.toStdString(), CV_LOAD_IMAGE_COLOR);
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
+    ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
+    //cv::imshow(this->windowTitle().toStdString(),m_fotocamaraCVA);
 }
 
 void MainWindow::isRunning(bool clicked)
@@ -120,29 +122,9 @@ void MainWindow::loadconfig()
     ui->configTabWidget->setEnabled(!m_running);
 
     /** CAMARAS **/
-    QStringList l_Camaras = engine->getTiposCamaras();
-    ui->camaraComboBox1->addItems(l_Camaras);
-    ui->camaraComboBox2->addItems(l_Camaras);
-
-    engine->appConfig()->beginGroup(CAMARA1);
-    ui->camaraComboBox1->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
-    ui->hostLineEdit1->setText(engine->appConfig()->value("host").toString());
-    ui->puertoLineEdit1->setText(engine->appConfig()->value("port").toString());
-    ui->usuarioLineEdit1->setText(engine->appConfig()->value("user").toString());
-    ui->passwdLineEdit1->setText(engine->appConfig()->value("pass").toString());
-    engine->appConfig()->endGroup();
-    engine->appConfig()->sync();
-
-    engine->appConfig()->beginGroup(CAMARA2);
-    ui->camaraComboBox2->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
-    ui->hostLineEdit2->setText(engine->appConfig()->value("host").toString());
-    ui->puertoLineEdit2->setText(engine->appConfig()->value("port").toString());
-    ui->usuarioLineEdit2->setText(engine->appConfig()->value("user").toString());
-    ui->passwdLineEdit2->setText(engine->appConfig()->value("pass").toString());
-    engine->appConfig()->endGroup();
-    engine->appConfig()->sync();
+    ui->CamaraSelect->addItem(CAMARA1);
+    ui->CamaraSelect->addItem(CAMARA2);
     /** END CAMARAS **/
-
 
     /** IO DEVICES **/
     QStringList l_IODevices = engine->getIODevices();
@@ -192,42 +174,11 @@ void MainWindow::loadconfig()
     /** END BASCULAS **/
 
     /** ALPR  **/
-    engine->appConfig()->beginGroup(ALPR1);
-    ui->vPlankA1->setValue(engine->appConfig()->value("plankA","0").toInt());
-    ui->vPlankB1->setValue(engine->appConfig()->value("plankB","20").toInt());
-    ui->vPlankC1->setValue(engine->appConfig()->value("plankC","40").toInt());
-    engine->appConfig()->endGroup();
-    engine->appConfig()->sync();
-
+    ui->calibracionSelect->addItem(ALPR1);
+    ui->calibracionSelect->addItem(ALPR2);
     /** END ALPR **/
 
 
-}
-
-void MainWindow::on_GuardarCamara1_clicked()
-{
-    engine->appConfig()->beginGroup(CAMARA1);
-    engine->appConfig()->setValue("tipo",QString::number(ui->camaraComboBox1->currentIndex()));
-    engine->appConfig()->setValue("host",ui->hostLineEdit1->text());
-    engine->appConfig()->setValue("port",ui->puertoLineEdit1->text());
-    engine->appConfig()->setValue("user",ui->usuarioLineEdit1->text());
-    engine->appConfig()->setValue("pass",ui->passwdLineEdit1->text());
-    engine->appConfig()->endGroup();
-    engine->appConfig()->sync();
-    engine->getCamaraFoto(1);
-
-}
-void MainWindow::on_GuardarCamara2_clicked()
-{
-    engine->appConfig()->beginGroup(CAMARA2);
-    engine->appConfig()->setValue("tipo",QString::number(ui->camaraComboBox2->currentIndex()));
-    engine->appConfig()->setValue("host",ui->hostLineEdit2->text());
-    engine->appConfig()->setValue("port",ui->puertoLineEdit2->text());
-    engine->appConfig()->setValue("user",ui->usuarioLineEdit2->text());
-    engine->appConfig()->setValue("pass",ui->passwdLineEdit2->text());
-    engine->appConfig()->endGroup();
-    engine->appConfig()->sync();
-    engine->getCamaraFoto(2);
 }
 /** END SETTINGS **/
 
@@ -236,17 +187,45 @@ void MainWindow::on_GuardarCamara2_clicked()
     /** CAMARA1 **/
 void MainWindow::onGetFotoCV1(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
 {
-    m_fotocamaraCV=fotocv;
-    m_fotocamaraRGBCV=fotorgbcv;
-    m_fotocamara=foto;
-    ui->camaraLabel1->setPixmap(QPixmap::fromImage(foto));
+    m_fotocamaraCVA=fotocv.clone();
+    ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
 }
-
     /** CAMARA2 **/
 void MainWindow::onGetFotoCV2(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
 {
-    ui->camaraLabel2->setPixmap(QPixmap::fromImage(foto));
+    m_fotocamaraCVA=fotocv.clone();
+    ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
 }
+
+void MainWindow::on_CamaraSelect_currentIndexChanged(const QString &arg1)
+{
+    QStringList l_Camaras = engine->getTiposCamaras();
+    ui->camaraTipo->addItems(l_Camaras);
+    engine->appConfig()->beginGroup(arg1);
+    ui->camaraTipo->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
+    ui->hostLineEdit->setText(engine->appConfig()->value("host").toString());
+    ui->puertoLineEdit->setText(engine->appConfig()->value("port").toString());
+    ui->usuarioLineEdit->setText(engine->appConfig()->value("user").toString());
+    ui->passwdLineEdit->setText(engine->appConfig()->value("pass").toString());
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+}
+
+
+void MainWindow::on_GuardarCamara_clicked()
+{
+    engine->appConfig()->beginGroup(ui->CamaraSelect->currentText());
+    engine->appConfig()->setValue("tipo",QString::number(ui->camaraTipo->currentIndex()));
+    engine->appConfig()->setValue("host",ui->hostLineEdit->text());
+    engine->appConfig()->setValue("port",ui->puertoLineEdit->text());
+    engine->appConfig()->setValue("user",ui->usuarioLineEdit->text());
+    engine->appConfig()->setValue("pass",ui->passwdLineEdit->text());
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+    engine->getCamaraFoto(ui->CamaraSelect->currentIndex());
+}
+
+
 /** END CAMARAS ************************************************************************/
 
 
@@ -334,14 +313,6 @@ void MainWindow::onBascula(t_Bascula _bascula)
     if(_bascula.bEstado == _bascula.bEstado){
         ui->BasculaEstable->setChecked(_bascula.bEstado);
     }
-
-    /*
-    qDebug() <<  " Estado: "  << _bascula.bEstado << endl <<
-                 " Bruto:  "  << _bascula.iBruto  << endl <<
-                 " Tara:   "  << _bascula.iTara   << endl <<
-                 " Neto:   "  << _bascula.iNeto   << endl ;
-    */
-
 }
 
 void MainWindow::on_guardarBasculaPushButton_clicked()
@@ -373,7 +344,7 @@ void MainWindow::on_BasculaConectada(bool conectada)
 }
 /** END BASCULAS **/
 
-/** ALRP **/
+/** ALRP A **/
 void MainWindow::onGetOriginalMatriculaA1(cv::Mat foto)
 {
     ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
@@ -397,31 +368,69 @@ void MainWindow::onGetMatriculaFotoA1(QString matricula, QString confianza, bool
 }
 void MainWindow::onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto)
 {
+    ui->LongMatriculaA2->setText(confianza + "%");
+    ui->MatriculaA2->setText(matricula);
+    ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+}
+/** ALPR B **/
+void MainWindow::onGetOriginalMatriculaB1(cv::Mat foto)
+{
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+}
 
+void MainWindow::onGetOriginalMatriculaRojaB(cv::Mat foto)
+{
+    ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+}
+
+void MainWindow::onGetOriginalMatriculaBlancaB(cv::Mat foto)
+{
+    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+}
+
+void MainWindow::onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto)
+{
+    ui->LongMatriculaA1->setText(confianza+ "%");
+    ui->MatriculaA1->setText(matricula);
+    ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+}
+void MainWindow::onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto)
+{
     ui->LongMatriculaA2->setText(confianza + "%");
     ui->MatriculaA2->setText(matricula);
     ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 
+void MainWindow::on_calibracionSelect_currentIndexChanged(const QString &arg1)
+{
+    engine->appConfig()->beginGroup(arg1);
+    ui->vPlankA->setValue(engine->appConfig()->value("plankA","0").toInt());
+    ui->vPlankB->setValue(engine->appConfig()->value("plankB","20").toInt());
+    ui->vPlankC->setValue(engine->appConfig()->value("plankC","40").toInt());
+
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+}
 
 void MainWindow::on_TestMatriculaA1_clicked()
 {
     /** DEBUG **/
     updateOriginal();
-    engine->getFotoMatricula(0,m_fotocamaraCV);
+
+    engine->getFotoMatricula(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA.clone());
 }
 
 void MainWindow::on_onCalibrarA_clicked()
 {
     /** DEBUG **/
     updateOriginal();
-    engine->appConfig()->beginGroup(ALPR1);
-    engine->appConfig()->setValue("plankA",QString::number(ui->vPlankA1->value()));
-    engine->appConfig()->setValue("plankB",QString::number(ui->vPlankB1->value()));
-    engine->appConfig()->setValue("plankC",QString::number(ui->vPlankC1->value()));
+    engine->appConfig()->beginGroup(ui->calibracionSelect->currentText());
+    engine->appConfig()->setValue("plankA",QString::number(ui->vPlankA->value()));
+    engine->appConfig()->setValue("plankB",QString::number(ui->vPlankB->value()));
+    engine->appConfig()->setValue("plankC",QString::number(ui->vPlankC->value()));
     engine->appConfig()->endGroup();
     engine->appConfig()->sync();
-    engine->calibrarFoto(0,m_fotocamaraCV);
+    engine->calibrarFoto(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA.clone());
 }
 /** END ALRP **/
 
@@ -449,7 +458,98 @@ QImage MainWindow::convertMat2QImage(const cv::Mat& src)
 
 
 
+/** PREWARP **/
+QString MainWindow::get_prewarp_config()
+{
+
+    /*
+     *  prewarp =
+     *  planar,
+     * 1280.000000,
+     * 720.000000,
+     * 0.000000,
+     * 0.000000,
+     * 0.000000,
+     * 1.000000,
+     * 1.000000,
+     * 0.000000,
+     * 0.000000
+    */
+    /*
+    prewarp.m_w = QString(m_fotocamaraCVA.cols);
+    prewarp.m_h = QString(m_fotocamaraCVA.rows);
+    prewarp.m_rotationx ="0";
+    prewarp.m_rotationy="0";
+    prewarp.m_rotationz="0";
+    prewarp.m_stretchX="1";
+    prewarp.m_dist="1";
+    prewarp.m_panX="0";
+    prewarp.m_panY="0";
+*/
+    //qDebug() << prewarp;
+ return "";
+
+}
+
+/** END PREWARP **/
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+/** CHECK PARES PLANK **/
+void MainWindow::on_vPlankA_valueChanged(int value)
+{
+    if (value!=0){
+        if (value % 2){
+            ui->vPlankA->setValue(value+1);
+        }
+    }
+}
+
+void MainWindow::on_vPlankA_sliderMoved(int position)
+{
+   if (position % 2){
+            ui->vPlankA->setValue(position+1);
+        }
+}
+void MainWindow::on_vPlankB_valueChanged(int value)
+{
+    if (value!=0){
+        if (value % 2){
+            ui->vPlankB->setValue(value+1);
+        }
+    }
+}
+void MainWindow::on_vPlankB_sliderMoved(int position)
+{
+    if (position % 2){
+             ui->vPlankB->setValue(position+1);
+         }
+}
+
+void MainWindow::on_vPlankC_valueChanged(int value)
+{
+    if (value!=0){
+        if (value % 2){
+            ui->vPlankC->setValue(value+1);
+        }
+    }
+}
+
+void MainWindow::on_vPlankC_sliderMoved(int position)
+{
+    if (position % 2){
+             ui->vPlankC->setValue(position+1);
+         }
+}

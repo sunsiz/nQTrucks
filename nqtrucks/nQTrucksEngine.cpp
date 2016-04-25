@@ -43,6 +43,7 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
 : QObject(parent)
 , m_settings(0)
 {
+    qRegisterMetaType<nQTrucks::t_Prewarp>("nQTrucks::t_Prewarp");
 }
 
 nQTrucksEnginePrivate::~nQTrucksEnginePrivate()
@@ -217,15 +218,22 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
             this,SIGNAL(BasculaChanged(t_Bascula)));
 
     /** NEWSAGES ALPR **/
-    /** 1 **/
+    /** A **/
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFotoA(cv::Mat)));
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlancaA(cv::Mat)));
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRojaA(cv::Mat)));
-    connect(d->m_alpr1, SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat)),
-            this      , SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,cv::Mat)));
-
-    connect(d->m_alpr1, SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat)),
-            this      , SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,cv::Mat)));
+    connect(d->m_alpr1,SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat)),
+            this      ,SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,cv::Mat)));
+    connect(d->m_alpr1,SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat)),
+            this      ,SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,cv::Mat)));
+    /** B **/
+    connect(d->m_alpr2,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFotoB(cv::Mat)));
+    connect(d->m_alpr2,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlancaB(cv::Mat)));
+    connect(d->m_alpr2,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRojaB(cv::Mat)));
+    connect(d->m_alpr2,SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat)),
+            this      ,SIGNAL(ReplyMatriculaFotoB1(QString,QString,bool,cv::Mat)));
+    connect(d->m_alpr2,SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat)),
+            this      ,SIGNAL(ReplyMatriculaFotoB2(QString,QString,bool,cv::Mat)));
 
     /** END NEWSAGES ALPR **/
 }
@@ -273,10 +281,10 @@ void nQTrucksEngine::getCamaraFoto(int _ncamara)
 {
     Q_D(nQTrucksEngine);
     switch (_ncamara) {
-    case 1:
+    case 0:
         d->m_camara1->sendCamaraIPFotoRequest();
         break;
-    case 2:
+    case 1:
         d->m_camara2->sendCamaraIPFotoRequest();
         break;
     default:
