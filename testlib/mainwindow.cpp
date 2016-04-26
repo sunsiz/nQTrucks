@@ -463,25 +463,26 @@ void MainWindow::loadprewarp(){
       cv::resize(m_fotoprewarpCVA, m_fotoprewarpCVA, cv::Size((int) x, (int) max_height));
     }
 
-    prewarp.w = m_fotoprewarpCVA.cols;
-    prewarp.h = m_fotoprewarpCVA.rows;
 
     QStringList valores = m_prewarp.split(",");
 
     if (valores.count()==10){
+        prewarp.w = m_fotoprewarpCVA.cols;
+        prewarp.h = m_fotoprewarpCVA.rows;
         prewarp.rotationx   = QString(valores.value(3)).toFloat();
         prewarp.rotationy   = QString(valores.value(4)).toFloat();
         prewarp.rotationz   = QString(valores.value(5)).toFloat();
         prewarp.stretchX    = QString(valores.value(6)).toFloat();
         prewarp.dist        = QString(valores.value(7)).toFloat();
-        //prewarp.panX        = QString(valores.value(8)).toFloat();
-        //prewarp.panY        = QString(valores.value(9)).toFloat();
+        prewarp.panX        = QString(valores.value(8)).toFloat();
+        prewarp.panY        = QString(valores.value(9)).toFloat();
+
         //set bars
-        ui->valueXA1->setValue((-(prewarp.rotationx*20000.0)+100));
+        ui->valueXA1->setValue(-(prewarp.rotationx*20000.0)+100);
         ui->valueYA1->setValue((prewarp.rotationy*20000.0)+100);
         ui->valueZA1->setValue(-(prewarp.rotationz*100.0)+100);
         ui->valueWA1->setValue(-(1-prewarp.stretchX)*-200+100);
-        ui->valueXA1->setValue((1-prewarp.dist)*200+100);
+        ui->valueDA1->setValue((1-prewarp.dist)*200+100);
 
     }
     else{
@@ -499,7 +500,6 @@ void MainWindow::loadprewarp(){
 
 QString MainWindow::get_prewarp_config()
 {
-
     float width_ratio = prewarp.w / ((float)m_fotoprewarpCVA.cols);
     float height_ratio = prewarp.h / ((float)m_fotoprewarpCVA.rows);
     prewarp.rotationx *=width_ratio;
