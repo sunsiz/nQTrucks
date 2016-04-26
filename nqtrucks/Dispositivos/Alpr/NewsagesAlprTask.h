@@ -45,6 +45,7 @@ private:
 private:
     cv::Mat m_FotoCalibradaBlancosCV;
     cv::Mat m_FotoCalibradaRojosCV;
+    cv::Mat apply_prewarp(cv::Mat img);
 public slots:
     void calibrarBlanco();
     void calibrarRojo();

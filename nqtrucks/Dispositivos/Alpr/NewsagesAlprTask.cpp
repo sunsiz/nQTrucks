@@ -3,13 +3,16 @@
 
 #include "alpr.h"
 #include "state_detector.h"
+#include "prewarp.h"
 
 #include <QByteArray>
 #include <QBuffer>
 
 #include <QDebug>
+#include <QCoreApplication>
+#include <QDir>
+#include <QStringList>
 
-#include "prewarp.h"
 
 namespace nQTrucks {
     namespace Devices {
@@ -26,6 +29,7 @@ NewsagesAlprTask::NewsagesAlprTask(int _nDevice, cv::Mat _fotoCamara, QSettings 
     qRegisterMetaType<t_Plank>("t_Plank");
     qRegisterMetaType<MatriculaResults>("t_MatriculaResults");
     setlocale(LC_NUMERIC, "C");
+    loadconfig();
 }
 
 NewsagesAlprTask::~NewsagesAlprTask()
@@ -60,7 +64,6 @@ void NewsagesAlprTask::loadconfig()
              m_settings->value("plankc").toString());
     setPrewarp(m_settings->value("prewarp").toString());
     m_settings->endGroup();
-   // m_settings->sync();
 }
 
 void NewsagesAlprTask::setPlank(QString A, QString B, QString C){
@@ -117,7 +120,7 @@ void NewsagesAlprTask::setFotoCalibrada(int n)
         cv::split(img, channel);
         img = channel[2] - channel[1] -   channel[2] + channel[0];
         m_FotoCalibradaBlancosCV = img.clone();
-        emit ReplyOriginalFotoBlanca(m_FotoCalibradaBlancosCV.clone());
+        emit ReplyOriginalFotoBlanca(apply_prewarp(m_FotoCalibradaBlancosCV.clone()));
         break;
     case 1:
         loadconfig();
@@ -126,29 +129,31 @@ void NewsagesAlprTask::setFotoCalibrada(int n)
         cv::add(channel[0], channel[1], img);
         cv::subtract(channel[2], channel[1], img);
         m_FotoCalibradaRojosCV = img.clone();
-        emit ReplyOriginalFotoRoja(m_FotoCalibradaRojosCV.clone());
+        emit ReplyOriginalFotoRoja(apply_prewarp(m_FotoCalibradaRojosCV.clone()));
         break;
     default:
         break;
     }
 }
 
-
+cv::Mat NewsagesAlprTask::apply_prewarp(cv::Mat img){
+    loadconfig();
+    alpr::Config config("truck");
+    config.prewarp = m_prewarp.toStdString();
+    config.setDebug(false);
+    alpr::PreWarp prewarp(&config);
+    return prewarp.warpImage(img.clone());
+}
 
 /** PROCESAR *******************************************************************************/
     /** BLANCAS **/
 void NewsagesAlprTask::procesarBlancas()
 {
     Alpr *matricula;
-    matricula = new Alpr("truck",  "config/openalpr.conf");
+    matricula = new Alpr("truck", "config/openalpr.conf");
     matricula->setDefaultRegion("truck");
     matricula->setTopN(1);
     matricula->setPrewarp(m_prewarp.toStdString());
-    alpr::Config config("truck");
-    config = matricula->getConfig()->prewarp;
-    alpr::PreWarp prewarp(&config);
-    cv::Mat curWarpedImage;
-
     //Respuesta por defecto
     float confianza=0;
     double dconfianza=0;
@@ -178,14 +183,11 @@ void NewsagesAlprTask::procesarBlancas()
                     tconfianza = QString::number(confianza,'g',6);
                     detectada = candidate.matches_template;
                     matriculadetected = QString::fromStdString(candidate.characters);
-                    //image_matricula = image_matricula.copy(QRect
-                    //                                       (QPoint(plate.plate_points[0].x,plate.plate_points[0].y),
-                    //                                        QPoint(plate.plate_points[2].x,plate.plate_points[2].y)));
                     cv::Rect rect = cv::Rect(plate.plate_points[0].x,plate.plate_points[0].y,
                                              plate.plate_points[2].x - plate.plate_points[0].x,
                                              plate.plate_points[2].y - plate.plate_points[0].y);
-                    curWarpedImage = prewarp.warpImage(image_matricula);
-                    curWarpedImage= cv::Mat(curWarpedImage,rect);
+                    //image_matricula = apply_prewarp(image_matricula);
+                    image_matricula= cv::Mat(image_matricula,rect);
 
 
 
@@ -197,7 +199,7 @@ void NewsagesAlprTask::procesarBlancas()
         }
     }
 
-    emit ReplyMatriculaFoto(matriculadetected,tconfianza,detectada,curWarpedImage.clone());
+    emit ReplyMatriculaFoto(matriculadetected,tconfianza,detectada,image_matricula.clone());
     emit workFinished();
 }
 
@@ -210,11 +212,6 @@ void NewsagesAlprTask::procesarRojas()
     remolque->setTopN(1);
     remolque->setDefaultRegion("eur");
     remolque->setPrewarp(m_prewarp.toStdString());
-    alpr::Config config("eur");
-    config = remolque->getConfig()->prewarp;
-    alpr::PreWarp prewarp(&config);
-    qDebug() << "prewarp cargado:" << QString::fromStdString(prewarp.toString());
-    cv::Mat curWarpedImage;
     //Respuesta por defecto
     float confianza=0;
     double dconfianza=0;
@@ -250,14 +247,8 @@ void NewsagesAlprTask::procesarRojas()
                                               plate.plate_points[2].y - plate.plate_points[0].y);
 
                      //prewarp.setTransform(1280.000000,720.000000,-0.000350,-0.000350,-0.060000,0.750000,1.240000,1.0,1.0);
-                     curWarpedImage = prewarp.warpImage(image_matricula);
-                     curWarpedImage= cv::Mat(curWarpedImage,rect);
-
-                     //float rotationx=-0.000350;
-                     //prewarp.rotationy=-0.000350;
-                     //prewarp.rotationz=-0.060000
-
-                     //prewarp.setTransform(1280,720,0,0,-0.06,0,0,1.0,1.0);
+                     //curWarpedImage = prewarp.warpImage(image_matricula);
+                     image_matricula= cv::Mat(image_matricula,rect);
 
                      qDebug() << "  remolque  - " << QString::fromStdString(candidate.characters) << "\t precision: " << confianza << "% " <<
                                  candidate.matches_template << endl;
@@ -266,7 +257,7 @@ void NewsagesAlprTask::procesarRojas()
             }
         }
     }
-    emit ReplyMatriculaFotoRemolque(matriculadetected,tconfianza,detectada,curWarpedImage.clone());
+    emit ReplyMatriculaFotoRemolque(matriculadetected,tconfianza,detectada,image_matricula.clone());
     emit workFinished();
 }
 /** END PROCESAR ************************************************************************/

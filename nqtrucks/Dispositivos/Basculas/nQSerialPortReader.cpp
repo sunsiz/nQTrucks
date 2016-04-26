@@ -56,8 +56,7 @@ void nQSerialPortReader::setBasculaType(const int &_TipoBascula)
 {
     if (m_type != _TipoBascula){
         m_type = _TipoBascula;
-        m_settings->setValue("tipo",QString::number(m_type));
-        m_settings->sync();
+        m_settings->setValue("tipo",QString::number(m_type));        
     }
 }
 
@@ -66,7 +65,6 @@ void nQSerialPortReader::setBasculaPort(const QString &_IODevice)
     if (m_serialPortName != _IODevice) {
         m_serialPortName = _IODevice;
         m_settings->setValue("device",m_serialPortName);
-        m_settings->sync();
     }
 }
 
@@ -76,7 +74,7 @@ void nQSerialPortReader::loadconfig(){
     setBasculaPort(m_settings->value("device","/dev/ttyUSB0").toString());
     setBasculaType(m_settings->value("tipo","0").toInt());
     m_settings->endGroup();
-    m_settings->sync();
+
 }
 void nQSerialPortReader::connectPort(const bool &_value){
     if(m_serialPort->isOpen()){

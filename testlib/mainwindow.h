@@ -31,16 +31,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-/*
-#include <QProgressDialog>
-#include <QtSql/QSqlDatabase>
-#include <QtSql/QSqlQueryModel>
-#include <QtWebKitWidgets/QWebView>
-*/
 
 #include "nQTrucksEngine.h"
 #include "nqtglobal.h"
-//#include "prewarp.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -123,6 +117,7 @@ private slots:
     /** PREWARP **/
 private:
     void updateprewarp(cv::Mat img);
+    void loadprewarp();
     QString get_prewarp_config();
     cv::Mat m_fotoprewarpCVA;
     cv::Mat curWarpedImage;

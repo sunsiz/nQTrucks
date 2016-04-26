@@ -83,7 +83,6 @@ void NewsagesIO::setIODevice(const QString &_IODevice){
     if (m_IODevice != _IODevice) {
         m_IODevice = _IODevice;
         m_settings->setValue("device",m_IODevice);
-        m_settings->sync();
     }
 }
 
@@ -92,7 +91,6 @@ void NewsagesIO::loadconfig(){
     m_settings->beginGroup(m_configroot);
     setIODevice(m_settings->value("device").toString());
     m_settings->endGroup();
-    m_settings->sync();
 }
 
 void NewsagesIO::setIODeviceConfig(){

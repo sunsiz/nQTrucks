@@ -81,7 +81,6 @@ INCLUDE_DIR      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nQTrucks/include
 
 GLOBAL_INCLUDE   = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}
 GLOBAL_LIBS      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}
-INCLUDEPATH += $${SOURCE_GITS}/openalpr/src/openalpr
 
 #MOC_DIR        = $${ARCH_DIR}/$${BUILD_TYPE}/moc
 #UI_DIR         = $${ARCH_DIR}/$${BUILD_TYPE}/ui

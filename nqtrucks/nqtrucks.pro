@@ -47,6 +47,8 @@ unix:linux{
 unix:{
     DEPENDPATH  += $${GLOBAL_INCLUDE}/nQAlpr/include
     INCLUDEPATH += $${GLOBAL_INCLUDE}/nQAlpr/include
+    INCLUDEPATH += $${SOURCE_GITS}/openalpr/src/openalpr
+    DEPENDPATH  += $${SOURCE_GITS}/openalpr/src/openalpr
     CONFIG += link_pkgconfig
     PKGCONFIG += opencv
 

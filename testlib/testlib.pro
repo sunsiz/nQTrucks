@@ -15,6 +15,8 @@ greaterThan(QT_MAJOR_VERSION, 4){
 unix:{
     DESTDIR = $$DEST_BINS
     LIBS += -L$${DEST_LIBS}
+    INCLUDEPATH += $${SOURCE_GITS}/openalpr/src/openalpr
+    DEPENDPATH  += $${SOURCE_GITS}/openalpr/src/openalpr
     INCLUDEPATH += $${INCLUDE_DIR}
     DEPENDPATH  += $${INCLUDE_DIR}
     LIBS += -lnQTrucks
