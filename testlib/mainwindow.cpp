@@ -41,6 +41,11 @@
 #include <QDir>
 #include <QUrl>
 
+#include "alpr.h"
+#include "prewarp.h"
+
+alpr::Config config("eur");
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -88,6 +93,40 @@ MainWindow::MainWindow(QWidget *parent)
 
     /** DEBUG **/
     updateOriginal();
+    //this->setWindowFlags(Qt::X11BypassWindowManagerHint);
+
+
+    /** PREWARP **/
+    m_fotoprewarpCVA = m_fotocamaraCVA.clone();
+    int max_width = 1280;
+    int max_height = 1024;
+
+    prewarp.w = m_fotocamaraCVA.cols;
+    prewarp.h = m_fotocamaraCVA.rows;
+
+    if (m_fotoprewarpCVA.cols > max_width)
+    {
+      float aspect = max_width / ((float)m_fotoprewarpCVA.cols);
+      float y = ((float)m_fotoprewarpCVA.rows) * aspect;
+
+      cv::resize(m_fotoprewarpCVA, m_fotoprewarpCVA, cv::Size((int) max_width, (int) y));
+    }
+    if (m_fotoprewarpCVA.rows > max_height)
+    {
+      float aspect = max_height / ((float)m_fotoprewarpCVA.rows);
+      float x = ((float)m_fotoprewarpCVA.cols) * aspect;
+
+      cv::resize(m_fotoprewarpCVA, m_fotoprewarpCVA, cv::Size((int) x, (int) max_height));
+    }
+
+    prewarp.w = m_fotoprewarpCVA.cols;
+    prewarp.h = m_fotoprewarpCVA.rows;
+    ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoprewarpCVA.clone())));
+
+    get_prewarp_config();
+
+
+
 
 }
 
@@ -97,11 +136,10 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::updateOriginal(){
-    QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("matriculas/r1.jpg");
+    QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("matriculas/r3333.jpg");
     m_fotocamaraCVA = cv::imread(filename.toStdString(), CV_LOAD_IMAGE_COLOR);
     ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
-    ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
-    //cv::imshow(this->windowTitle().toStdString(),m_fotocamaraCVA);
+    //ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
 }
 
 void MainWindow::isRunning(bool clicked)
@@ -404,10 +442,10 @@ void MainWindow::onGetMatriculaFotoB2(QString matricula, QString confianza, bool
 void MainWindow::on_calibracionSelect_currentIndexChanged(const QString &arg1)
 {
     engine->appConfig()->beginGroup(arg1);
-    ui->vPlankA->setValue(engine->appConfig()->value("plankA","0").toInt());
-    ui->vPlankB->setValue(engine->appConfig()->value("plankB","20").toInt());
-    ui->vPlankC->setValue(engine->appConfig()->value("plankC","40").toInt());
-
+    ui->vPlankA->setValue(engine->appConfig()->value("planka","0").toInt());
+    ui->vPlankB->setValue(engine->appConfig()->value("plankb","20").toInt());
+    ui->vPlankC->setValue(engine->appConfig()->value("plankc","40").toInt());
+    m_prewarp = engine->appConfig()->value("prewarp","").toString();
     engine->appConfig()->endGroup();
     engine->appConfig()->sync();
 }
@@ -420,20 +458,7 @@ void MainWindow::on_TestMatriculaA1_clicked()
     engine->getFotoMatricula(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA.clone());
 }
 
-void MainWindow::on_onCalibrarA_clicked()
-{
-    /** DEBUG **/
-    updateOriginal();
-    engine->appConfig()->beginGroup(ui->calibracionSelect->currentText());
-    engine->appConfig()->setValue("plankA",QString::number(ui->vPlankA->value()));
-    engine->appConfig()->setValue("plankB",QString::number(ui->vPlankB->value()));
-    engine->appConfig()->setValue("plankC",QString::number(ui->vPlankC->value()));
-    engine->appConfig()->endGroup();
-    engine->appConfig()->sync();
-    engine->calibrarFoto(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA.clone());
-}
 /** END ALRP **/
-
 QImage MainWindow::convertMat2QImage(const cv::Mat& src)
 {
     QImage qtImg;
@@ -462,6 +487,21 @@ QImage MainWindow::convertMat2QImage(const cv::Mat& src)
 QString MainWindow::get_prewarp_config()
 {
 
+    float width_ratio = prewarp.w / ((float)m_fotoprewarpCVA.cols);
+    float height_ratio = prewarp.h / ((float)m_fotoprewarpCVA.rows);
+    prewarp.rotationx *=width_ratio;
+    prewarp.rotationy *=width_ratio;
+    prewarp.panX /= width_ratio;
+    prewarp.panY /= height_ratio;
+
+
+    std::stringstream output;
+    output << "planar," << std::fixed;
+    output << prewarp.w << "," << prewarp.h << ",";
+    output << prewarp.rotationx << "," << prewarp.rotationy << "," << prewarp.rotationz << ",";
+    output << prewarp.stretchX << "," << prewarp.dist << ",";
+    output << prewarp.panX << "," << prewarp.panY;
+    m_prewarp= QString::fromStdString(output.str());
     /*
      *  prewarp =
      *  planar,
@@ -475,9 +515,8 @@ QString MainWindow::get_prewarp_config()
      * 0.000000,
      * 0.000000
     */
+
     /*
-    prewarp.m_w = QString(m_fotocamaraCVA.cols);
-    prewarp.m_h = QString(m_fotocamaraCVA.rows);
     prewarp.m_rotationx ="0";
     prewarp.m_rotationy="0";
     prewarp.m_rotationz="0";
@@ -486,11 +525,58 @@ QString MainWindow::get_prewarp_config()
     prewarp.m_panX="0";
     prewarp.m_panY="0";
 */
-    //qDebug() << prewarp;
- return "";
+    qDebug() << m_prewarp;
+    //updateOriginal(); //DEBUG
+
+    return m_prewarp;
 
 }
 
+void MainWindow::updateprewarp(cv::Mat img){
+
+    config.prewarp = get_prewarp_config().toStdString();
+    alpr::PreWarp prewarp(&config);
+    curWarpedImage = prewarp.warpImage(img);
+    ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(curWarpedImage)));
+}
+
+void MainWindow::on_valueXA1_valueChanged(int value)
+{
+    prewarp.rotationx = -((float)value - 100) / 20000.0;
+    updateprewarp(m_fotoprewarpCVA);
+}
+
+void MainWindow::on_valueYA1_valueChanged(int value)
+{
+      prewarp.rotationy = ((float)value - 100) / 20000.0;
+      updateprewarp(m_fotoprewarpCVA);
+}
+
+void MainWindow::on_valueZA1_valueChanged(int value)
+{
+  prewarp.rotationz = -((float)value - 100) / 100.0;
+   updateprewarp(m_fotoprewarpCVA);
+}
+
+void MainWindow::on_valueWA1_valueChanged(int value)
+{
+    prewarp.stretchX = 1.0 + ((float)value - 100) / -200.0;
+    updateprewarp(m_fotoprewarpCVA);
+}
+
+void MainWindow::on_valueDA1_valueChanged(int value)
+{
+    prewarp.dist = 1.0 - ((float)value - 100) / 200.0;
+    updateprewarp(m_fotoprewarpCVA);
+}
+
+void MainWindow::on_guardarPrewarp_clicked()
+{
+    engine->appConfig()->beginGroup(ui->calibracionSelect->currentText());
+    engine->appConfig()->setValue("prewarp",get_prewarp_config());
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+}
 /** END PREWARP **/
 
 
@@ -515,6 +601,7 @@ void MainWindow::on_vPlankA_valueChanged(int value)
             ui->vPlankA->setValue(value+1);
         }
     }
+    ui->lvPlankA->setText(QString::number( ui->vPlankA->value()));
 }
 
 void MainWindow::on_vPlankA_sliderMoved(int position)
@@ -525,11 +612,12 @@ void MainWindow::on_vPlankA_sliderMoved(int position)
 }
 void MainWindow::on_vPlankB_valueChanged(int value)
 {
-    if (value!=0){
-        if (value % 2){
-            ui->vPlankB->setValue(value+1);
-        }
+    if (!value) ui->vPlankB->setValue(2);
+    if (value % 2){
+        ui->vPlankB->setValue(value+1);
     }
+    ui->lvPlankB->setText(QString::number( ui->vPlankB->value()));
+
 }
 void MainWindow::on_vPlankB_sliderMoved(int position)
 {
@@ -540,11 +628,12 @@ void MainWindow::on_vPlankB_sliderMoved(int position)
 
 void MainWindow::on_vPlankC_valueChanged(int value)
 {
-    if (value!=0){
+    if(!value) ui->vPlankC->setValue(2);
         if (value % 2){
             ui->vPlankC->setValue(value+1);
-        }
     }
+    ui->lvPlankC->setText(QString::number( ui->vPlankC->value()));
+
 }
 
 void MainWindow::on_vPlankC_sliderMoved(int position)
@@ -552,4 +641,15 @@ void MainWindow::on_vPlankC_sliderMoved(int position)
     if (position % 2){
              ui->vPlankC->setValue(position+1);
          }
+}
+
+void MainWindow::on_guardarPlanK_clicked()
+{
+    engine->appConfig()->beginGroup(ui->calibracionSelect->currentText());
+    engine->appConfig()->setValue("planka",QString::number(ui->vPlankA->value()));
+    engine->appConfig()->setValue("plankb",QString::number(ui->vPlankB->value()));
+    engine->appConfig()->setValue("plankc",QString::number(ui->vPlankC->value()));
+    engine->appConfig()->endGroup();
+    engine->appConfig()->sync();
+    engine->calibrarFoto(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA.clone());
 }

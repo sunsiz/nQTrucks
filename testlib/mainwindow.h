@@ -122,26 +122,24 @@ private slots:
 
     /** PREWARP **/
 private:
-
-    cv::Mat m_fotoprewarpCVA;
-    QString m_prewarp;
+    void updateprewarp(cv::Mat img);
     QString get_prewarp_config();
+    cv::Mat m_fotoprewarpCVA;
+    cv::Mat curWarpedImage;
+    QString m_prewarp;
     nQTrucks::t_Prewarp prewarp;
-
-
-
-
+private slots:
+    void on_valueXA1_valueChanged(int value);
+    void on_valueYA1_valueChanged(int value);
+    void on_valueZA1_valueChanged(int value);
+    void on_valueWA1_valueChanged(int value);
+    void on_valueDA1_valueChanged(int value);
+    void on_guardarPrewarp_clicked();
     /** END  PREWARP **/
 
 
 
-
-
-
-
-
-
-    /** CONFIG **/
+    /** PLANK **/
 private slots:
     void on_vPlankA_valueChanged(int value);
     void on_vPlankA_sliderMoved(int position);
@@ -149,11 +147,16 @@ private slots:
     void on_vPlankB_valueChanged(int value);
     void on_vPlankC_valueChanged(int value);
     void on_vPlankC_sliderMoved(int position);
+    void on_guardarPlanK_clicked();
 
+
+    /** CONFIG **/
+private slots:
     void on_TestMatriculaA1_clicked();
-    void on_onCalibrarA_clicked();
     void on_CamaraSelect_currentIndexChanged(const QString &arg1);
     void on_calibracionSelect_currentIndexChanged(const QString &arg1);
+
+
 
 private:
     cv::Mat m_fotocamaraCVA;

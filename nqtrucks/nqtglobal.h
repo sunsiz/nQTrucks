@@ -98,16 +98,17 @@ namespace nQTrucks
     #define ALPR2  "Alpr2"
 
 struct Prewarp{
-    QString type="planar";
-    QString m_w;
-    QString m_h;
-    QString m_panX = "0";
-    QString m_panY = "0";
-    QString m_rotationx = "0";
-    QString m_rotationy = "0";
-    QString m_rotationz = "0";
-    QString m_stretchX = "1.0";
-    QString m_dist = "1.0";
+    QString type="planar";  
+    float w=1208;
+    float h=1024;
+    float panX = 0;
+    float panY = 0;
+    float rotationx = 0;
+    float rotationy = 0;
+    float rotationz = 0;
+    float stretchX = 1.0;
+    float dist = 1.0;
+
 }; typedef Prewarp t_Prewarp;
 
 

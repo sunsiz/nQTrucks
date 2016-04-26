@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     app.setStyle("fusion");
 
     //w.setWindowIcon(QIcon(":/images/main_ico"));
-    w.show();
+    w.showFullScreen();
 
     return app.exec();
 }

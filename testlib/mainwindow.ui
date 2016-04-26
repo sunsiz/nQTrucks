@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>987</width>
-    <height>791</height>
+    <height>796</height>
    </rect>
   </property>
   <property name="font">
@@ -1001,6 +1001,13 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QPushButton" name="guardarPrewarp">
+                 <property name="text">
+                  <string>Guardar</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -1180,11 +1187,68 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="lvPlankA">
+                   <property name="minimumSize">
+                    <size>
+                     <width>18</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>18</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>0</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="lvPlankB">
+                   <property name="minimumSize">
+                    <size>
+                     <width>18</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>18</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>0</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="lvPlankC">
+                   <property name="minimumSize">
+                    <size>
+                     <width>18</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>18</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>0</string>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="onCalibrarA">
+               <widget class="QPushButton" name="guardarPlanK">
                 <property name="text">
                  <string>Guardar</string>
                 </property>
@@ -1208,7 +1272,7 @@
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>160</width>
+                  <width>340</width>
                   <height>120</height>
                  </size>
                 </property>
@@ -1267,7 +1331,7 @@
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>160</width>
+                  <width>340</width>
                   <height>120</height>
                  </size>
                 </property>
@@ -1338,6 +1402,19 @@
            </layout>
           </item>
          </layout>
+        </item>
+        <item row="2" column="0">
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>

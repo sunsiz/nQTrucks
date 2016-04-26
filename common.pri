@@ -36,6 +36,7 @@ CONFIG(release, debug|release){
 }
 
 BUILD_DIR = $$PWD/../../../builds/$${QT_VERSION}
+SOURCE_GITS = $$PWD/../../../src
 #BUILD_DIR = $$PWD/build/$${QT_VERSION}
 
 unix{
@@ -80,6 +81,7 @@ INCLUDE_DIR      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}/nQTrucks/include
 
 GLOBAL_INCLUDE   = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}
 GLOBAL_LIBS      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}
+INCLUDEPATH += $${SOURCE_GITS}/openalpr/src/openalpr
 
 #MOC_DIR        = $${ARCH_DIR}/$${BUILD_TYPE}/moc
 #UI_DIR         = $${ARCH_DIR}/$${BUILD_TYPE}/ui
