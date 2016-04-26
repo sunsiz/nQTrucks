@@ -20,18 +20,11 @@
    <string>TEST LIB</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout_7">
-    <item row="1" column="0">
-     <widget class="QCheckBox" name="runningCheckBox">
-      <property name="text">
-       <string>Running</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
+   <layout class="QVBoxLayout" name="verticalLayout_5">
+    <item>
      <widget class="QTabWidget" name="configTabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <property name="documentMode">
        <bool>false</bool>
@@ -51,11 +44,23 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
+         <widget class="QSplitter" name="splitter_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <widget class="QWidget" name="layoutWidget">
            <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetDefaultConstraint</enum>
+            </property>
             <item>
              <widget class="QLabel" name="label_8">
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
                <string>Dispositivo</string>
               </property>
@@ -65,7 +70,7 @@
              <widget class="QComboBox" name="BasculaTipoComboBox">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>300</width>
                 <height>0</height>
                </size>
               </property>
@@ -75,7 +80,7 @@
              <widget class="QComboBox" name="BasculaDevicesComboBox">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>300</width>
                 <height>0</height>
                </size>
               </property>
@@ -88,8 +93,52 @@
               </property>
              </widget>
             </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetDefaultConstraint</enum>
+            </property>
             <item>
-             <spacer name="horizontalSpacer_4">
+             <widget class="QPushButton" name="conectarBasculaPushButton">
+              <property name="text">
+               <string>Conectar</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="desconectarBasculaPushButton">
+              <property name="text">
+               <string>Desconectar</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="BasculaStatus">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="guardarBasculaPushButton">
+              <property name="text">
+               <string>Guardar</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -101,6 +150,13 @@
               </property>
              </spacer>
             </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMaximumSize</enum>
+            </property>
             <item>
              <widget class="QRadioButton" name="BasculaEstable">
               <property name="minimumSize">
@@ -108,6 +164,9 @@
                 <width>0</width>
                 <height>30</height>
                </size>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::RightToLeft</enum>
               </property>
               <property name="text">
                <string>Estable</string>
@@ -117,176 +176,75 @@
               </property>
              </widget>
             </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_5">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
-                 <widget class="QPushButton" name="conectarBasculaPushButton">
-                  <property name="text">
-                   <string>Conectar</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="desconectarBasculaPushButton">
-                  <property name="text">
-                   <string>Desconectar</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="BasculaStatus">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_6">
-                <item>
-                 <widget class="QPushButton" name="guardarBasculaPushButton">
-                  <property name="text">
-                   <string>Guardar</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_3">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <spacer name="verticalSpacer_4">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>40</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
+             <widget class="QLCDNumber" name="BasculaLcd">
+              <property name="minimumSize">
+               <size>
+                <width>480</width>
+                <height>150</height>
+               </size>
+              </property>
+              <property name="smallDecimalPoint">
+               <bool>true</bool>
+              </property>
+              <property name="digitCount">
+               <number>7</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Filled</enum>
+              </property>
+              <property name="value" stdset="0">
+               <double>99999.979999999995925</double>
+              </property>
+             </widget>
             </item>
             <item>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
-              <item>
-               <widget class="QLCDNumber" name="BasculaLcd">
-                <property name="minimumSize">
-                 <size>
-                  <width>480</width>
-                  <height>150</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>480</width>
-                  <height>150</height>
-                 </size>
-                </property>
-                <property name="smallDecimalPoint">
-                 <bool>true</bool>
-                </property>
-                <property name="digitCount">
-                 <number>7</number>
-                </property>
-                <property name="segmentStyle">
-                 <enum>QLCDNumber::Filled</enum>
-                </property>
-                <property name="value" stdset="0">
-                 <double>99999.979999999995925</double>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLCDNumber" name="BasculaLcd2">
-                <property name="minimumSize">
-                 <size>
-                  <width>480</width>
-                  <height>150</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>480</width>
-                  <height>150</height>
-                 </size>
-                </property>
-                <property name="smallDecimalPoint">
-                 <bool>true</bool>
-                </property>
-                <property name="digitCount">
-                 <number>7</number>
-                </property>
-                <property name="segmentStyle">
-                 <enum>QLCDNumber::Filled</enum>
-                </property>
-                <property name="value" stdset="0">
-                 <double>99999.990000000005239</double>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLCDNumber" name="BasculaLcd3">
-                <property name="minimumSize">
-                 <size>
-                  <width>480</width>
-                  <height>150</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>480</width>
-                  <height>150</height>
-                 </size>
-                </property>
-                <property name="smallDecimalPoint">
-                 <bool>true</bool>
-                </property>
-                <property name="digitCount">
-                 <number>7</number>
-                </property>
-                <property name="segmentStyle">
-                 <enum>QLCDNumber::Filled</enum>
-                </property>
-                <property name="value" stdset="0">
-                 <double>99999.990000000005239</double>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QLCDNumber" name="BasculaLcd2">
+              <property name="minimumSize">
+               <size>
+                <width>480</width>
+                <height>150</height>
+               </size>
+              </property>
+              <property name="smallDecimalPoint">
+               <bool>true</bool>
+              </property>
+              <property name="digitCount">
+               <number>7</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Filled</enum>
+              </property>
+              <property name="value" stdset="0">
+               <double>99999.990000000005239</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="BasculaLcd3">
+              <property name="minimumSize">
+               <size>
+                <width>480</width>
+                <height>150</height>
+               </size>
+              </property>
+              <property name="smallDecimalPoint">
+               <bool>true</bool>
+              </property>
+              <property name="digitCount">
+               <number>7</number>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Filled</enum>
+              </property>
+              <property name="value" stdset="0">
+               <double>99999.990000000005239</double>
+              </property>
+             </widget>
             </item>
            </layout>
-          </item>
-         </layout>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -1490,6 +1448,13 @@
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="runningCheckBox">
+      <property name="text">
+       <string>Running</string>
+      </property>
      </widget>
     </item>
    </layout>
