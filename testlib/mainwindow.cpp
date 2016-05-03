@@ -36,6 +36,7 @@
 */
 
 #include <QDebug>
+#include <QDesktopWidget>
 
 #include <QDir>
 #include <QUrl>
@@ -45,7 +46,7 @@
 
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : QWidget(parent)
     , ui(new Ui::MainWindow)
     , m_running(false)
     //, m_config(new QSettings)
@@ -88,6 +89,17 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     loadconfig();   
+    //this->setWindowFlags(Qt::FramelessWindowHint);
+//    this->showMaximized();
+//    QRect rec = QApplication::desktop()->screenGeometry();
+//    int height = rec.height();
+//    int width = rec.width();
+//    setFixedSize(width,height);
+
+    setFixedSize(1024,600);
+
+    this->showFullScreen();
+            //w.setWindowFlags(Qt::Window););
 }
 
 MainWindow::~MainWindow()
@@ -525,6 +537,12 @@ void MainWindow::updateprewarp(cv::Mat img){
     config.setDebug(false);
     alpr::PreWarp prewarp(&config);
     curWarpedImage = prewarp.warpImage(img);
+    
+    //Area Matricula
+//    cv::Point start = 400;
+//    cv::Point end = 400;
+//    cv::rectangle(curWarpedImage, start, end, cv::Scalar(255,0,255), 2);
+
     ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(curWarpedImage)));
 }
 

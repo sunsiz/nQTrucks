@@ -187,7 +187,7 @@ void NewsagesAlprTask::procesarBlancas()
                                              plate.plate_points[2].x - plate.plate_points[0].x,
                                              plate.plate_points[2].y - plate.plate_points[0].y);
                     //image_matricula = apply_prewarp(image_matricula);
-                    image_matricula= cv::Mat(image_matricula,rect);
+                    image_matricula= cv::Mat(image_matricula.clone(),rect);
 
 
 
