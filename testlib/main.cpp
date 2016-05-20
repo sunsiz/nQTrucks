@@ -37,11 +37,11 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     MainWindow w;
 
-    //QFile qss(":qdarkstyle/style.qss");
-    //qss.open(QFile::ReadOnly);
-    //app.setStyleSheet(qss.readAll());
-    //qss.close();
-    //app.setStyle("fusion");
+    QFile qss(":qdarkstyle/style.qss");
+    qss.open(QFile::ReadOnly);
+    app.setStyleSheet(qss.readAll());
+    qss.close();
+    app.setStyle("fusion");
 
     //w.setWindowIcon(QIcon(":/images/main_ico"));
     w.showFullScreen();

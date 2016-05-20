@@ -96,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    int width = rec.width();
 //    setFixedSize(width,height);
 
-    setFixedSize(1024,600);
+    setFixedSize(1024,768);
 
     this->showFullScreen();
             //w.setWindowFlags(Qt::Window););
