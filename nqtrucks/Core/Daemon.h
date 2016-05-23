@@ -2,10 +2,23 @@
 #define DAEMON_H
 
 
-class Daemon
+#include <QObject>
+#include "nqtglobal.h"
+
+
+class Daemon : public QObject
 {
+    Q_OBJECT
 public:
-    Daemon();
+    explicit Daemon(QObject *parent=nullptr);
+    void setIniciado(bool iniciado);
+
+private:
+    bool m_iniciado;
+
+private slots:
+
+
 };
 
 #endif // DAEMON_H
