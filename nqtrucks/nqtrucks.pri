@@ -7,7 +7,8 @@ INCLUDEPATH += \
 SOURCES += \
     $$PWD/nqtglobal.cpp \
     $$PWD/nQTrucksEngine.cpp \
-    $$PWD/Dispositivos/Alpr/NewsagesAlprTask.cpp
+    $$PWD/Dispositivos/Alpr/NewsagesAlprTask.cpp \
+    $$PWD/Core/Daemon.cpp
 
 
 contains(CONFIG, zint){
@@ -18,7 +19,8 @@ HEADERS += \
     $$PWD/nqtglobal.h \
     $$PWD/nQTrucksEngine_p.h \
     $$PWD/nQTrucksEngine.h \
-    $$PWD/Dispositivos/Alpr/NewsagesAlprTask.h
+    $$PWD/Dispositivos/Alpr/NewsagesAlprTask.h \
+    $$PWD/Core/Daemon.h
 
 
 contains(CONFIG,zint){
@@ -61,7 +63,8 @@ HEADERS += \
 
 OTHER_FILES += \
     $$PWD/Dispositivos/Basculas/bascula_puerto.hex \
-    $$PWD/Dispositivos/Basculas/emulador_bascula_puerto/emulador_bascula_puerto.ino
+    $$PWD/Dispositivos/Basculas/emulador_bascula_puerto/emulador_bascula_puerto.ino \
+    $$PWD/Db/nqtrucks_schema.mwb
 
 
 

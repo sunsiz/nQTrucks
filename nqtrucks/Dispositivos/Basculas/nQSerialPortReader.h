@@ -45,7 +45,7 @@ class nQSerialPortReader : public QObject
     Q_OBJECT
     Q_ENUMS(BasculaType)
 public:
-    explicit nQSerialPortReader(QSettings *_appsettings=0,QObject *parent = 0);
+    explicit nQSerialPortReader(QSettings *_appsettings=0,QObject *parent=nullptr);
     ~nQSerialPortReader();
 
     enum BasculaType
@@ -64,14 +64,14 @@ private:
     int          charInicio=0;
 
 
-    /** INTERFACE **/
+    /** INTERFACE REALTIME **/
 signals:
     void BasculaChanged(const t_Bascula &bascula);
     void BasculaStatus(const bool &status);
 
 public slots:
     void connectPort(const bool &_value);
-    /** END INTERFACE **/
+    /** END INTERFACE REALTIME**/
 
 
     /** SETTINGS **/
@@ -93,6 +93,18 @@ private slots:
 private slots:
     void ReadType0();
     /** END LECTURA SEGUN TIPOS **/
+
+    /** INTERFACE ESTABILIZADA **/
+private:
+    int m_muestras;
+    bool m_inicio_peso;
+    bool m_fin_peso;
+    t_Bascula    m_bascula_estable;
+signals:
+    void BasculaPesoNuevo(const t_Bascula &_nuevaPesada);
+private slots:
+    void MuestrearBascula(const t_Bascula &_bascula);
+    /** FIN INTERFACE ESTABILIZADA **/
 
 };
 

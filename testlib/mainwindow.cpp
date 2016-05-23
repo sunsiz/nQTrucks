@@ -55,37 +55,58 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->runningCheckBox,SIGNAL(clicked(bool)),this,SLOT(isRunning(bool)));
     engine  = new nQTrucks::nQTrucksEngine(this);
+
     /** CAMARAS **/
     connect(engine,SIGNAL(CamaraIPFotoCV1(cv::Mat,cv::Mat,QImage)),
             this  ,SLOT(onGetFotoCV1(cv::Mat,cv::Mat,QImage)));
+
     connect(engine,SIGNAL(CamaraIPFotoCV2(cv::Mat,cv::Mat,QImage)),
             this  ,SLOT(onGetFotoCV2(cv::Mat,cv::Mat,QImage)));
 
     /** IO **/
-    connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
-    connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
+    connect(engine  ,SIGNAL(IODevicesStatusChanged(bool)),
+            this    ,SLOT(on_ioDeviceSTATUS(bool)));
+
+    connect(engine  ,SIGNAL(IODevicesPIN10Changed(bool)),
+            this    ,SLOT(on_ioDevicePIN10(bool)));
 
     /** BASCULAS **/
-    connect(engine,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
-    connect(engine,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
+    connect(engine ,SIGNAL(BasculaStatus(bool)),
+            this   ,SLOT(on_BasculaConectada(bool)));
+    connect(engine ,SIGNAL(BasculaChanged(t_Bascula)),
+            this   ,SLOT(onBascula(t_Bascula)));
 
     /** ALPR A **/
-    connect(engine,SIGNAL(ReplyOriginalFotoA(cv::Mat)),this,SLOT(onGetOriginalMatriculaA1(cv::Mat)));
-    connect(engine,SIGNAL(ReplyOriginalFotoRojaA(cv::Mat)),this,SLOT(onGetOriginalMatriculaRojaA(cv::Mat)));
-    connect(engine,SIGNAL(ReplyOriginalFotoBlancaA(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlancaA(cv::Mat)));
+    connect(engine ,SIGNAL(ReplyOriginalFotoA(cv::Mat)),
+            this   ,SLOT(onGetOriginalMatriculaA1(cv::Mat)));
+
+    connect(engine ,SIGNAL(ReplyOriginalFotoRojaA(cv::Mat)),
+            this   ,SLOT(onGetOriginalMatriculaRojaA(cv::Mat)));
+
+    connect(engine ,SIGNAL(ReplyOriginalFotoBlancaA(cv::Mat)),
+            this   ,SLOT(onGetOriginalMatriculaBlancaA(cv::Mat)));
+
     connect(engine, SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,cv::Mat)),
             this  , SLOT(onGetMatriculaFotoA1(  QString,QString,bool,cv::Mat)));
+
     connect(engine, SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,cv::Mat)),
             this  , SLOT(onGetMatriculaFotoA2(  QString,QString,bool,cv::Mat)));
 
     /** ALPR B **/
-    connect(engine,SIGNAL(ReplyOriginalFotoB(cv::Mat)),this,SLOT(onGetOriginalMatriculaB1(cv::Mat)));
-    connect(engine,SIGNAL(ReplyOriginalFotoRojaB(cv::Mat)),this,SLOT(onGetOriginalMatriculaRojaB(cv::Mat)));
-    connect(engine,SIGNAL(ReplyOriginalFotoBlancaB(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlancaB(cv::Mat)));
-    connect(engine, SIGNAL(ReplyMatriculaFotoB1(QString,QString,bool,cv::Mat)),
-            this  , SLOT(onGetMatriculaFotoB1(  QString,QString,bool,cv::Mat)));
-    connect(engine, SIGNAL(ReplyMatriculaFotoB2(QString,QString,bool,cv::Mat)),
-            this  , SLOT(onGetMatriculaFotoB2(  QString,QString,bool,cv::Mat)));
+    connect(engine ,SIGNAL(ReplyOriginalFotoB(cv::Mat)),
+            this   ,SLOT(onGetOriginalMatriculaB1(cv::Mat)));
+
+    connect(engine ,SIGNAL(ReplyOriginalFotoRojaB(cv::Mat)),
+            this   ,SLOT(onGetOriginalMatriculaRojaB(cv::Mat)));
+
+    connect(engine ,SIGNAL(ReplyOriginalFotoBlancaB(cv::Mat)),
+            this   ,SLOT(onGetOriginalMatriculaBlancaB(cv::Mat)));
+
+    connect(engine ,SIGNAL(ReplyMatriculaFotoB1(QString,QString,bool,cv::Mat)),
+            this   ,SLOT(onGetMatriculaFotoB1(  QString,QString,bool,cv::Mat)));
+
+    connect(engine ,SIGNAL(ReplyMatriculaFotoB2(QString,QString,bool,cv::Mat)),
+            this   ,SLOT(onGetMatriculaFotoB2(  QString,QString,bool,cv::Mat)));
 
 
     loadconfig();   
@@ -309,7 +330,7 @@ void MainWindow::on_desconectarBasculaPushButton_clicked()
 }
 
 void MainWindow::onBascula(t_Bascula _bascula)
-{
+{          
     ui->BasculaLcd->display(_bascula.iBruto);
     ui->BasculaLcd2->display(_bascula.iTara);
     ui->BasculaLcd3->display(_bascula.iNeto);

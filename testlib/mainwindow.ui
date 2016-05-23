@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>960</width>
-    <height>540</height>
+    <height>543</height>
    </rect>
   </property>
   <property name="font">
@@ -957,7 +957,7 @@
               <enum>QTabWidget::East</enum>
              </property>
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <property name="elideMode">
               <enum>Qt::ElideNone</enum>

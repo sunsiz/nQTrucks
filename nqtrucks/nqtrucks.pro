@@ -74,6 +74,14 @@ unix:{
      for(FILES_EXTRA_INCLUDES,EXTRA_INCLUDES){
          QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILES_EXTRA_INCLUDES) $$quote($${DEST_BINS}/include/) $$escape_expand(\\n\\t) # copy includes for impl
      }
+
+    linux:{
+        QMAKE_LFLAGS += -Wl,--rpath=/opt/newsages/lib
+        target.path = $${NEWSAGES_LIBS}
+        extra.path = $${NEWSAGES_DIR}/nQTrucks
+        extra.files = $${EXTRA_DIRS}
+        INSTALLS += target extra
+    }
 }
 
 

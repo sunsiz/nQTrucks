@@ -39,9 +39,14 @@ nQSerialPortReader::nQSerialPortReader(QSettings *_appsettings, QObject *parent)
     , m_serialPort(new QSerialPort(this))
     , m_serialBuffer("")
     , m_settings(_appsettings)
+    , m_muestras(0)
+    , m_inicio_peso(false)
+
 {
     qRegisterMetaType<t_Bascula>("t_Bascula");
     emit BasculaStatus(false);
+
+    connect(this, SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(MuestrearBascula(t_Bascula)));
     //connectPort();
 }
 
@@ -121,10 +126,9 @@ void nQSerialPortReader::handleError(QSerialPort::SerialPortError serialPortErro
 /** Funciones de lectura segun Tipos **/
 
 void nQSerialPortReader::ReadType0()
-{
+{             
     m_serialData = m_serialPort->read(1);
     switch (charInicio) {
-
     case 0:
         m_serialBuffer="";
         if( m_serialData == QChar(2)) {
@@ -133,7 +137,8 @@ void nQSerialPortReader::ReadType0()
         }
         break;
     case 1:
-        if(m_serialData != QChar(3)){m_serialBuffer += QString::fromStdString(m_serialData.toStdString());
+        if(m_serialData != QChar(3)){
+            m_serialBuffer += QString::fromStdString(m_serialData.toStdString());
         }else{
             charInicio=0;
             m_bascula.bEstadoAnterior = m_bascula.bEstado;
@@ -149,6 +154,29 @@ void nQSerialPortReader::ReadType0()
         }
         break;
     default:
+        break;
+    }
+}
+
+
+void nQSerialPortReader::MuestrearBascula(const t_Bascula &_bascula){
+    switch (m_inicio_peso){
+    case true:
+        if((_bascula.bEstado) & (_bascula.iBruto !=0)){
+            m_muestras++;
+            if(m_muestras==10){
+                m_inicio_peso=false;
+                m_bascula_estable = _bascula;
+                emit BasculaPesoNuevo(m_bascula_estable);
+            }
+        }
+        break;
+    case false:
+        if(_bascula.iBruto==0){
+            m_inicio_peso=true;
+            m_muestras=0;
+            m_bascula_estable={};
+        }
         break;
     }
 }

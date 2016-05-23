@@ -149,8 +149,9 @@ cv::Mat NewsagesAlprTask::apply_prewarp(cv::Mat img){
     /** BLANCAS **/
 void NewsagesAlprTask::procesarBlancas()
 {
+    QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("config/openalpr.conf");
     Alpr *matricula;
-    matricula = new Alpr("truck", "config/openalpr.conf");
+    matricula = new Alpr("truck", filename.toStdString());
     matricula->setDefaultRegion("truck");
     matricula->setTopN(1);
     matricula->setPrewarp(m_prewarp.toStdString());
@@ -207,8 +208,9 @@ void NewsagesAlprTask::procesarBlancas()
     /** ROJAS **/
 void NewsagesAlprTask::procesarRojas()
 {
+    QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("config/openalpr.conf");
     Alpr *remolque;
-    remolque  = new Alpr("eur", "config/openalpr.conf");
+    remolque  = new Alpr("eur", filename.toStdString());
     remolque->setTopN(1);
     remolque->setDefaultRegion("eur");
     remolque->setPrewarp(m_prewarp.toStdString());

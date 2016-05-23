@@ -39,11 +39,14 @@ BUILD_DIR = $$PWD/../../../builds/$${QT_VERSION}
 SOURCE_GITS = $$PWD/../../../src
 #BUILD_DIR = $$PWD/build/$${QT_VERSION}
 
+
 unix{
     macx{
         ARCH_TYPE       = macx
     }
     linux{
+        NEWSAGES_DIR =  /opt/newsages
+        NEWSAGES_LIBS = /opt/newsages/lib
         !contains(QT_ARCH, x86_64){
             !contains(QT_ARCH, arm){
                 ARCH_TYPE       =  linux32

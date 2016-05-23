@@ -55,7 +55,6 @@ bucle
 */
 
 const int defwordlength = 7;
-
 void setup()
 {
   //Configurar a 7BITS
@@ -70,7 +69,6 @@ void loop()
   azero();
  }
  subiendo();
- 
 
  for(int i=0;i<=10; i++){
   estable();

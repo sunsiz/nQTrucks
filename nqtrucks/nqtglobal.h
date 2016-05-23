@@ -92,8 +92,10 @@ namespace nQTrucks
 
     #define CAMARA1 "Camara1"
     #define CAMARA2 "Camara2"
+
     #define NEWSAGESIO "NEWSAGESIO"
     #define BASCULA "BASCULA"
+
     #define ALPR1  "Alpr1"
     #define ALPR2  "Alpr2"
 
