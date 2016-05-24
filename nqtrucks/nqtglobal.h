@@ -68,6 +68,28 @@ struct s_RegistroSimple{
     QByteArray camara2={};
 }; typedef s_RegistroSimple Registro_Simple;
 
+
+struct s_RegistroSimpleMatriculas{
+    Registro_Simple registrosimple={};
+
+    QByteArray  fotomatriculaA1={};
+    QString     matriculaA1={};
+    long        precisionA1={};
+
+    QByteArray  fotomatriculaA2={};
+    QString     matriculaA2={};
+    long        precisionA2={};
+
+    QByteArray  fotomatriculaB1={};
+    QString     matriculaB1={};
+    long        precisionB1={};
+
+    QByteArray  fotomatriculaB2={};
+    QString     matriculaB2={};
+    long        precisionB2={};
+
+}; typedef s_RegistroSimpleMatriculas Registro_Simple_Matriculas;
+
 struct MatriculaResults{
     int     tipo=0;  //0 para calibracion, 1 para procesado
     int     id=0;    //id fuente de captura de foto

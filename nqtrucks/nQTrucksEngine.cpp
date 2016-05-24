@@ -385,7 +385,7 @@ void nQTrucksEngine::setInitDaemon(bool _init)
 {
     Q_D(nQTrucksEngine);
     if (_init){
-         d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara1,d->m_camara2,this);
+         d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara1,d->m_camara2, d->m_alpr1,d->m_alpr2, this);
          d->m_daemon->setInit(_init);
     } else{
         d->m_daemon->setInit(_init);
