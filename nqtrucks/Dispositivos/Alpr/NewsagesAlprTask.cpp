@@ -21,8 +21,8 @@ namespace nQTrucks {
 /** CONSTRUCTOR TAREAS **/
 NewsagesAlprTask::NewsagesAlprTask(int _nDevice, cv::Mat _fotoCamara, QSettings *_appsettings, QObject *parent)
     : QObject(parent)
-    , m_nDevice(_nDevice)
     , m_FotoCamara(_fotoCamara)
+    , m_nDevice(_nDevice)
     , m_settings(_appsettings)
 {
     qRegisterMetaType<cv::Mat>("cv::Mat");
@@ -103,9 +103,8 @@ cv::Mat NewsagesAlprTask::FotoCalibrada(int n) const
     case 1:
         return m_FotoCalibradaRojosCV;
         break;
-    default:
-        break;
     }
+    return m_FotoCalibradaBlancosCV;
 }
 
 void NewsagesAlprTask::setFotoCalibrada(int n)
@@ -157,7 +156,7 @@ void NewsagesAlprTask::procesarBlancas()
     matricula->setPrewarp(m_prewarp.toStdString());
     //Respuesta por defecto
     float confianza=0;
-    double dconfianza=0;
+    //double dconfianza=0;
     QString tconfianza="0";
     bool detectada= false;
     QString matriculadetected="";
@@ -174,13 +173,13 @@ void NewsagesAlprTask::procesarBlancas()
         // RECONOCER
         std::vector<AlprRegionOfInterest> regionsOfInterest;
         AlprResults results = matricula->recognize(img.data, img.elemSize(), img.cols, img.rows,regionsOfInterest);
-        for (int i = 0; i < results.plates.size(); i++){
+        for (uint i = 0; i < results.plates.size(); i++){
             AlprPlateResult plate = results.plates[i];
-            for (int k = 0; k < plate.topNPlates.size(); k++){
+            for (uint k = 0; k < plate.topNPlates.size(); k++){
                 AlprPlate candidate = plate.topNPlates[k];
                 if (candidate.matches_template  && confianza < candidate.overall_confidence){
                     confianza = candidate.overall_confidence;
-                    dconfianza = (double)candidate.overall_confidence;
+                    //dconfianza = (double)candidate.overall_confidence;
                     tconfianza = QString::number(confianza,'g',6);
                     detectada = candidate.matches_template;
                     matriculadetected = QString::fromStdString(candidate.characters);
@@ -216,7 +215,7 @@ void NewsagesAlprTask::procesarRojas()
     remolque->setPrewarp(m_prewarp.toStdString());
     //Respuesta por defecto
     float confianza=0;
-    double dconfianza=0;
+    //double dconfianza=0;
     QString tconfianza="0";
     bool detectada= false;
     QString matriculadetected="";
@@ -233,14 +232,14 @@ void NewsagesAlprTask::procesarRojas()
         // RECONOCER
         std::vector<AlprRegionOfInterest> regionsOfInterest;
         AlprResults results = remolque->recognize(img.data, img.elemSize(), img.cols, img.rows,regionsOfInterest);
-        for (int i = 0; i < results.plates.size(); i++){
+        for (uint i = 0; i < results.plates.size(); i++){
             AlprPlateResult plate = results.plates[i];
-            for (int k = 0; k < plate.topNPlates.size(); k++){
+            for (uint k = 0; k < plate.topNPlates.size(); k++){
                 AlprPlate candidate = plate.topNPlates[k];
                  if (candidate.matches_template  && confianza < candidate.overall_confidence){
                      float confianza = candidate.overall_confidence;
                      confianza = candidate.overall_confidence;
-                     dconfianza = (double)candidate.overall_confidence;
+                     //dconfianza = (double)candidate.overall_confidence;
                      tconfianza = QString::number(confianza,'g',6);
                      detectada = candidate.matches_template;
                      matriculadetected = QString::fromStdString(candidate.characters);

@@ -160,8 +160,7 @@ void nQSerialPortReader::ReadType0()
 
 
 void nQSerialPortReader::MuestrearBascula(const t_Bascula &_bascula){
-    switch (m_inicio_peso){
-    case true:
+    if (m_inicio_peso){
         if((_bascula.bEstado) & (_bascula.iBruto !=0)){
             m_muestras++;
             if(m_muestras==10){
@@ -170,14 +169,12 @@ void nQSerialPortReader::MuestrearBascula(const t_Bascula &_bascula){
                 emit BasculaPesoNuevo(m_bascula_estable);
             }
         }
-        break;
-    case false:
+    }else{
         if(_bascula.iBruto==0){
             m_inicio_peso=true;
             m_muestras=0;
             m_bascula_estable={};
         }
-        break;
     }
 }
 

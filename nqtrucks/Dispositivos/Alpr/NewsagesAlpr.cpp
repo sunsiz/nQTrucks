@@ -47,10 +47,10 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
     , m_nDevice(nDevice)
     , m_settings(_appsettings)
     , m_matricularesults(new t_MatriculaResults)
-    , bhilo1(false)
-    , bhilo2(false)
     , bhiloCalibrar1(false)
     , bhiloCalibrar2(false)
+    , bhilo1(false)
+    , bhilo2(false)
 {
     m_matricularesults->id=m_nDevice;
 }

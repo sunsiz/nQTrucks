@@ -121,6 +121,8 @@ MainWindow::MainWindow(QWidget *parent)
     setFixedSize(1024,768);
 
     this->showFullScreen();
+    //DEBUG
+    //isRunning(true);
             //w.setWindowFlags(Qt::Window););
 }
 
@@ -219,12 +221,17 @@ void MainWindow::loadconfig()
     /** CAMARA1 **/
 void MainWindow::onGetFotoCV1(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
 {
+    Q_UNUSED(fotorgbcv);
+    Q_UNUSED(foto);
     m_fotocamaraCVA=fotocv.clone();
     ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
 }
     /** CAMARA2 **/
 void MainWindow::onGetFotoCV2(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
 {
+    Q_UNUSED(fotorgbcv);
+    Q_UNUSED(foto);
+
     m_fotocamaraCVA=fotocv.clone();
     ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
 }
@@ -390,12 +397,14 @@ void MainWindow::onGetOriginalMatriculaBlancaA(cv::Mat foto)
 
 void MainWindow::onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto)
 {
+    Q_UNUSED(detectada);
     ui->LongMatriculaA1->setText(confianza+ "%");
     ui->MatriculaA1->setText(matricula);
     ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 void MainWindow::onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto)
 {
+    Q_UNUSED(detectada);
     ui->LongMatriculaA2->setText(confianza + "%");
     ui->MatriculaA2->setText(matricula);
     ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
@@ -418,12 +427,14 @@ void MainWindow::onGetOriginalMatriculaBlancaB(cv::Mat foto)
 
 void MainWindow::onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto)
 {
+    Q_UNUSED(detectada);
     ui->LongMatriculaA1->setText(confianza+ "%");
     ui->MatriculaA1->setText(matricula);
     ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 void MainWindow::onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto)
 {
+    Q_UNUSED(detectada);
     ui->LongMatriculaA2->setText(confianza + "%");
     ui->MatriculaA2->setText(matricula);
     ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));

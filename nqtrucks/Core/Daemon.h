@@ -81,8 +81,8 @@ private:
 private:
     int m_alpr_numero;
 private slots:
-    void onReplyMatriculaResults1(t_MatriculaResults &_registro);
-    void onReplyMatriculaResults2(t_MatriculaResults &_registro);
+    void onReplyMatriculaResults1(const t_MatriculaResults &_registro);
+    void onReplyMatriculaResults2(const t_MatriculaResults &_registro);
     /** END ALPRS **/
 
 /** BD **/

@@ -33,7 +33,6 @@
 #include <QCoreApplication>
 #include <QDir>
 
-#include "nqtglobal.h"
 
 //QSettings * nQTrucks::nQTrucksConfig::m_settings = 0;
 

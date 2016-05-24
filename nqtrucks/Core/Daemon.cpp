@@ -1,5 +1,6 @@
 #include "Daemon.h"
 #include <QtSql>
+#include <QVariant>
 
 namespace nQTrucks {
 namespace Core{
@@ -29,6 +30,18 @@ Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_news
     QObject::connect(this,SIGNAL(initChanged(bool)),this,SLOT(onStartStop(bool)));
     QObject::connect(m_bascula,SIGNAL(BasculaPesoNuevo(t_Bascula)),this,SLOT(onPesoNuevo(t_Bascula)));
     QObject::connect(m_bascula,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBasculaChanged(t_Bascula)));
+
+
+    /**DEBUG **/
+//    m_registro_simple=m_registro_simple_vacio;
+
+//    //Espero 2 Fotos
+//    m_foto_numero=0;
+//    connect(m_camara1,SIGNAL(ReplyCamaraIPFoto(QByteArray)),this,SLOT(onReplyCamaraIPFoto1(QByteArray)));
+//    connect(m_camara2,SIGNAL(ReplyCamaraIPFoto(QByteArray)),this,SLOT(onReplyCamaraIPFoto2(QByteArray)));
+//    m_camara1->sendCamaraIPFotoRequest();
+//    m_camara2->sendCamaraIPFotoRequest();
+
 
 }
 
@@ -158,8 +171,8 @@ void Daemon::onGuardarRegistroSimple(Registro_Simple &_registro)
 
             //consigue matriculas
             m_alpr_numero=0;
-            connect(m_alpr1,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(t_MatriculaResults&)));
-            connect(m_alpr2,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(t_MatriculaResults&)));
+            connect(m_alpr1,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(t_MatriculaResults)));
+            connect(m_alpr2,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(t_MatriculaResults)));
             m_alpr1->processFoto(byteArray2Mat(_registro.camara1));
             m_alpr2->processFoto(byteArray2Mat(_registro.camara2));
            qDebug() <<  "Inserted!: " << qry.lastInsertId().toInt();
@@ -194,16 +207,16 @@ void Daemon::onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_regi
         qry.bindValue(":fotocamara2",       _registro.registrosimple.camara2);
         qry.bindValue(":fotomatriculaA1",   _registro.fotomatriculaA1);
         qry.bindValue(":matriculaA1",       _registro.matriculaA1);
-        qry.bindValue(":precisionA1",       _registro.precisionA1);
+        qry.bindValue(":precisionA1",       QString::number(_registro.precisionA1,'g',6));
         qry.bindValue(":fotomatriculaA2",   _registro.fotomatriculaA2);
         qry.bindValue(":matriculaA2",       _registro.matriculaA2);
-        qry.bindValue(":precisionA2",       _registro.precisionA2);
+        qry.bindValue(":precisionA2",       QString::number(_registro.precisionA2,'g',6));
         qry.bindValue(":fotomatriculaB1",   _registro.fotomatriculaB1);
         qry.bindValue(":matriculaB1",       _registro.matriculaB1);
-        qry.bindValue(":precisionB1",       _registro.precisionB1);
+        qry.bindValue(":precisionB1",       QString::number(_registro.precisionB1,'g',6));
         qry.bindValue(":fotomatriculaB2",   _registro.fotomatriculaB2);
         qry.bindValue(":matriculaB2",       _registro.matriculaB2);
-        qry.bindValue(":precisionB2",       _registro.precisionB2);
+        qry.bindValue(":precisionB2",       QString::number(_registro.precisionB2,'g',6));
 
          if( !qry.exec() ){
            qDebug() << qry.lastError();
@@ -228,9 +241,14 @@ void Daemon::onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_regi
 
 /** ALPRS **/
 
-void Daemon::onReplyMatriculaResults1(t_MatriculaResults &_registro){
+void Daemon::onReplyMatriculaResults1(const t_MatriculaResults &_registro){
 
-    //Implementar lectura y conversion
+    m_registro_simple_matriculas.matriculaA1=_registro.MatriculaA;
+    m_registro_simple_matriculas.matriculaB1=_registro.MatriculaB;
+    m_registro_simple_matriculas.precisionA1=_registro.MatriculaPrecisionA;
+    m_registro_simple_matriculas.precisionB1=_registro.MatriculaPrecisionB;
+    m_registro_simple_matriculas.fotomatriculaA1=mat2ByteArray(_registro.MatriculaFotoA);
+    m_registro_simple_matriculas.fotomatriculaB1=mat2ByteArray(_registro.MatriculaFotoB);
 
     m_alpr_numero++;
     if(m_alpr_numero ==2){
@@ -238,9 +256,14 @@ void Daemon::onReplyMatriculaResults1(t_MatriculaResults &_registro){
     }
 }
 
-void Daemon::onReplyMatriculaResults2(t_MatriculaResults &_registro){
+void Daemon::onReplyMatriculaResults2(const t_MatriculaResults &_registro){
 
-    //Implementar lectura y conversion
+    m_registro_simple_matriculas.matriculaA2=_registro.MatriculaA;
+    m_registro_simple_matriculas.matriculaB2=_registro.MatriculaB;
+    m_registro_simple_matriculas.precisionA2=_registro.MatriculaPrecisionA;
+    m_registro_simple_matriculas.precisionB2=_registro.MatriculaPrecisionB;
+    m_registro_simple_matriculas.fotomatriculaA2=mat2ByteArray(_registro.MatriculaFotoA);
+    m_registro_simple_matriculas.fotomatriculaB2=mat2ByteArray(_registro.MatriculaFotoB);
 
     m_alpr_numero++;
     if(m_alpr_numero ==2){
