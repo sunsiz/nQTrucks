@@ -88,14 +88,14 @@ QStringList nQTrucksEnginePrivate::getCameraTypes()
 void nQTrucksEnginePrivate::setCamaraIP(int nDevice,  QString type, QString host, QString port, QString user, QString passwd)
 {
     switch (nDevice) {
-    case 1:
+    case 0:
         m_camara1->setTipoCamara(type);
         m_camara1->setCamaraHost(host);
         m_camara1->setCamaraPort(port);
         m_camara1->setCamaraUser(user);
         m_camara1->setCamaraPass(passwd);
         break;
-    case 2:
+    case 1:
         m_camara2->setTipoCamara(type);
         m_camara2->setCamaraHost(host);
         m_camara2->setCamaraPort(port);
@@ -123,16 +123,16 @@ QStringList nQTrucksEnginePrivate::getIODevices()
                     + QObject::tr("Busy: ") + (info.isBusy() ? QObject::tr("Yes") : QObject::tr("No")) + "\n";
        */
 
-        if (info.manufacturer()=="Newsages NewsTechs")
-        {
-            if(info.description()=="NewsagesIO")
-            {
+//        if (info.manufacturer()=="Newsages NewsTechs")
+//        {
+//            if(info.description()=="NewsagesIO")
+//            {
                 if (!info.isBusy())
                 {
                         listIODevices.append(info.systemLocation());
                 }
-            }
-        }
+//            }
+//        }
     }
 
 
@@ -236,6 +236,7 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
             this      ,SIGNAL(ReplyMatriculaFotoB2(QString,QString,bool,cv::Mat)));
 
     /** END NEWSAGES ALPR **/
+
 }
 
 nQTrucksEngine::nQTrucksEngine(nQTrucksEnginePrivate &dd, QObject *parent)
@@ -376,7 +377,25 @@ void nQTrucksEngine::getFotoMatricula(int _device, cv::Mat _foto)
         break;
     }
 }
+
 /** END ALRP ****************************************************************************************************************/
+
+/** CORE ****************************************************************************/
+void nQTrucksEngine::setInitDaemon(bool _init)
+{
+    Q_D(nQTrucksEngine);
+    if (_init){
+         d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara1,d->m_camara2,this);
+         d->m_daemon->setInit(_init);
+    } else{
+        d->m_daemon->setInit(_init);
+        delete d->m_daemon;
+    }
+
+
+}
+/** END CORE ************************************************************************/
+
 
 /** *****************************************************************************************
  * END PUBLIC IMPL ******************************************************************************

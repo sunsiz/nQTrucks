@@ -53,8 +53,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->runningCheckBox,SIGNAL(clicked(bool)),this,SLOT(isRunning(bool)));
     engine  = new nQTrucks::nQTrucksEngine(this);
+    connect(ui->runningCheckBox,SIGNAL(clicked(bool)),this,SLOT(isRunning(bool)));
+  //  connect(ui->runningCheckBox,SIGNAL(clicked(bool)),this,SLOT(setInitDaem(bool)));
 
     /** CAMARAS **/
     connect(engine,SIGNAL(CamaraIPFotoCV1(cv::Mat,cv::Mat,QImage)),
@@ -138,7 +139,8 @@ void MainWindow::updateOriginal(){
 void MainWindow::isRunning(bool clicked)
 {
     m_running=clicked;
-    ui->configTabWidget->setEnabled(!m_running);
+    engine->setInitDaemon(m_running);
+    //DEBUG NO BLOQUEAR ui->configTabWidget->setEnabled(!m_running);
     if (m_running){
         ui->runningCheckBox->setText("Running...");
     }else{
@@ -229,7 +231,9 @@ void MainWindow::onGetFotoCV2(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
 
 void MainWindow::on_CamaraSelect_currentIndexChanged(const QString &arg1)
 {
+
     QStringList l_Camaras = engine->getTiposCamaras();
+    ui->camaraTipo->clear();
     ui->camaraTipo->addItems(l_Camaras);
     engine->appConfig()->beginGroup(arg1);
     ui->camaraTipo->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());

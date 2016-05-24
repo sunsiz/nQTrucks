@@ -48,6 +48,9 @@
 
 #include <Dispositivos/Alpr/NewsagesAlpr.h>
 
+
+#include <Core/Daemon.h>
+
 namespace nQTrucks {
 
 class nQTrucksEnginePrivate : public QObject
@@ -96,6 +99,11 @@ private:
     Devices::NewsagesAlpr *m_alpr2= new Devices::NewsagesAlpr(2,settings(),this);//settings(),this);
     /** END ALPR **/
 
+
+    /** CORE **/
+private:
+    Core::Daemon *m_daemon;
+    /** END CORE **/
 };
 
 

@@ -62,7 +62,11 @@ struct PlanK{
     int C;
 }; typedef PlanK t_Plank;
 
-
+struct s_RegistroSimple{
+    Bascula bascula={};
+    QByteArray camara1={};
+    QByteArray camara2={};
+}; typedef s_RegistroSimple Registro_Simple;
 
 struct MatriculaResults{
     int     tipo=0;  //0 para calibracion, 1 para procesado

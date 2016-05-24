@@ -105,6 +105,7 @@ private:
 private:
     QUrl setCamaraURL();
     QNetworkAccessManager *m_netmanager;
+    QByteArray bfotoCamaraError;
     QImage fotoCamaraError;
     cv::Mat fotoCamaraErrorCV;
     cv::Mat fotoCamaraErrorRGBCV;
@@ -118,6 +119,7 @@ private slots:
 signals:
     //void ReplyCamaraIPFoto(const QImage &Reply);
     void ReplyCamaraIPFotoCV(const cv::Mat &ReplyCV ,const cv::Mat &ReplyCVRGB, const QImage &ReplyQImage);
+    void ReplyCamaraIPFoto(const QByteArray &Reply);
     void CamaraIPWeb(const QString &CamaraWeb);
     /** END REDES **/
 };

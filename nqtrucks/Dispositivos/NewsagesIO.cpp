@@ -51,7 +51,7 @@ NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
     this->setInitPins(false);
 
     /** PINS **/
-    m_OutPin10->setPin(10);
+    m_OutPin10->setPin(13);
     m_OutPin10->setOutput(true);
     m_OutPin10->setFirmata(this);
 

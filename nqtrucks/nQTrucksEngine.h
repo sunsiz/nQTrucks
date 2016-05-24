@@ -116,6 +116,13 @@ signals:
 
     /** END NEWSAGES ALPR **/
 
+    /** CORE ***************************************/
+public slots:
+    void setInitDaemon(bool _init);
+
+    /** END CORE ************************************/
+
+
     /** nQTrucksEnginePrivate **/
 protected:
     nQTrucksEnginePrivate * const d_ptr;
