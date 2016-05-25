@@ -55,6 +55,12 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
     m_matricularesults->id=m_nDevice;
 }
 
+NewsagesAlpr::~NewsagesAlpr()
+{
+ m_FotoCamara.release();
+ delete m_matricularesults;
+}
+
 
 void NewsagesAlpr::setFotoCamara(const cv::Mat &Foto) {
     m_FotoCamara = Foto.clone();

@@ -65,6 +65,14 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
     connect(m_netmanager, SIGNAL(finished(QNetworkReply*)), this , SLOT(camaraNetworkReplyFinished(QNetworkReply*)));
 }
 
+CamaraIP::~CamaraIP()
+{
+    fotoCamaraError.detach();
+    fotoCamaraErrorCV.release();
+    fotoCamaraErrorRGBCV.release();
+    bfotoCamaraError.clear();
+}
+
 void CamaraIP::loadconfig()
 {
     switch (m_nDevice) {
@@ -198,14 +206,20 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply)
         fotoCamaraCV = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
         cv::Mat fotoCamaraRGBCV;
         cv::cvtColor(fotoCamaraCV, fotoCamaraRGBCV, CV_BGR2RGB );
-        buffer.close();        
+        buffer.reset();
+        buffer.close();
         emit ReplyCamaraIPFotoCV(fotoCamaraCV,fotoCamaraRGBCV,fotoCamara);
-
+        fotoCamaraRGBCV.release();
     }else{
         emit ReplyCamaraIPFotoCV(fotoCamaraErrorCV,fotoCamaraErrorRGBCV,fotoCamaraError);
         emit ReplyCamaraIPFoto(bfotoCamaraError);
     }
     reply->deleteLater();
+
+    data.clear();
+    fotoCamara.detach();
+    fotoCamaraCV.release();
+
 }
 
 

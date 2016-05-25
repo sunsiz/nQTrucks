@@ -34,6 +34,10 @@ NewsagesAlprTask::NewsagesAlprTask(int _nDevice, cv::Mat _fotoCamara, QSettings 
 
 NewsagesAlprTask::~NewsagesAlprTask()
 {
+    m_FotoCamara.release();
+    m_FotoCalibradaBlancosCV.release();
+    m_FotoCalibradaRojosCV.release();
+    //m_settings->clear();
     this->deleteLater();
 }
 /** END CONSTRUCTOR *****************************************************************************/
@@ -120,6 +124,9 @@ void NewsagesAlprTask::setFotoCalibrada(int n)
         img = channel[2] - channel[1] -   channel[2] + channel[0];
         m_FotoCalibradaBlancosCV = img.clone();
         emit ReplyOriginalFotoBlanca(apply_prewarp(m_FotoCalibradaBlancosCV.clone()));
+        channel[0].release();
+        channel[1].release();
+        channel[2].release();
         break;
     case 1:
         loadconfig();
@@ -129,10 +136,16 @@ void NewsagesAlprTask::setFotoCalibrada(int n)
         cv::subtract(channel[2], channel[1], img);
         m_FotoCalibradaRojosCV = img.clone();
         emit ReplyOriginalFotoRoja(apply_prewarp(m_FotoCalibradaRojosCV.clone()));
+        channel[0].release();
+        channel[1].release();
+        channel[2].release();
         break;
     default:
         break;
     }
+    //Limpiar
+    img.release();
+
 }
 
 cv::Mat NewsagesAlprTask::apply_prewarp(cv::Mat img){
@@ -141,7 +154,12 @@ cv::Mat NewsagesAlprTask::apply_prewarp(cv::Mat img){
     config.prewarp = m_prewarp.toStdString();
     config.setDebug(false);
     alpr::PreWarp prewarp(&config);
-    return prewarp.warpImage(img.clone());
+    cv::Mat imgprewarp = prewarp.warpImage(img.clone());
+
+    img.release();
+    prewarp.clear();
+
+    return  imgprewarp;
 }
 
 /** PROCESAR *******************************************************************************/
@@ -187,7 +205,7 @@ void NewsagesAlprTask::procesarBlancas()
                                              plate.plate_points[2].x - plate.plate_points[0].x,
                                              plate.plate_points[2].y - plate.plate_points[0].y);
                     //image_matricula = apply_prewarp(image_matricula);
-                    image_matricula= cv::Mat(image_matricula.clone(),rect);
+                    image_matricula= cv::Mat(image_matricula,rect);
 
 
 
@@ -195,12 +213,19 @@ void NewsagesAlprTask::procesarBlancas()
                     qDebug() << "  blanca  - " << QString::fromStdString(candidate.characters) << "\t precision: " << confianza << "% " <<
                                 candidate.matches_template << endl;
                 }
+
             }
         }
+       regionsOfInterest.clear();
+       img.release();
     }
 
     emit ReplyMatriculaFoto(matriculadetected,tconfianza,detectada,image_matricula.clone());
     emit workFinished();
+
+    //limpiar
+    image_matricula.release();
+    delete matricula;
 }
 
 
@@ -257,9 +282,14 @@ void NewsagesAlprTask::procesarRojas()
                  }
             }
         }
+        regionsOfInterest.clear();
+        img.release();
     }
     emit ReplyMatriculaFotoRemolque(matriculadetected,tconfianza,detectada,image_matricula.clone());
     emit workFinished();
+    //limpiar
+    image_matricula.release();
+    delete remolque;
 }
 /** END PROCESAR ************************************************************************/
 
@@ -275,14 +305,17 @@ cv::Mat NewsagesAlprTask::convertQImage2Mat(const QImage& img){
     const char* begin = reinterpret_cast<char*>(baScene.data());
     const char* end = begin + baScene.size();
     std::vector<char> pic(begin, end);
-    cv::Mat mat = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
+    //cv::Mat mat = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
     buffer.close();
-    return mat.clone();
+    baScene.clear();
+    return cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
+    //pic.clear();
+    //return mat;
 }
 
 QImage NewsagesAlprTask::convertMat2QImage(const cv::Mat& src)
 {
-    QImage qtImg;
+    QImage qtImg= QImage();
     if( !src.empty() && src.depth() == CV_8U ){
         if(src.channels() == 1){
             qtImg = QImage( (const unsigned char *)(src.data),
@@ -299,7 +332,7 @@ QImage NewsagesAlprTask::convertMat2QImage(const cv::Mat& src)
                             QImage::Format_RGB888 );
         }
     }
-    return qtImg.copy();
+    return qtImg;
 }
 /** END CONVERSORES ***********************************************************/
 } /** END NAMESPACE Devices  **/
