@@ -181,30 +181,32 @@ void NewsagesAlpr::processFoto(const cv::Mat &Foto)
             });
 
         /** conectar respuestas con padre **/
-        connect( tarea1, SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat)),
-                 this  , SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat)));
+        connect( tarea1, SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat,QByteArray)),
+                 this  , SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat,QByteArray)));
 
         std::unique_ptr<QMetaObject::Connection> pconn3{new QMetaObject::Connection};
         QMetaObject::Connection &conn3 = *pconn3;
-        conn3=connect( tarea1, &NewsagesAlprTask::ReplyMatriculaFoto, [=](const QString &matricula, const QString &precision ,const bool &detectada,const cv::Mat &foto){
+        conn3=connect( tarea1, &NewsagesAlprTask::ReplyMatriculaFoto, [=](const QString &matricula, const QString &precision ,const bool &detectada,const cv::Mat &foto, const QByteArray &fotobyte){
             QObject::disconnect(conn3);
            m_matricularesults->MatriculaA=matricula;
            m_matricularesults->MatriculaDetectedA=detectada;
            m_matricularesults->MatriculaFotoA=foto.clone();
+           m_matricularesults->MatriculaFotoAByte=fotobyte;
            m_matricularesults->MatriculaPrecisionA=precision.toDouble();
         });
 
 
-        connect( tarea2, SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat)),
-                 this  , SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat)));
+        connect( tarea2, SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat,QByteArray)),
+                 this  , SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat,QByteArray)));
 
         std::unique_ptr<QMetaObject::Connection> pconn4{new QMetaObject::Connection};
         QMetaObject::Connection &conn4 = *pconn4;
-        conn4=connect( tarea2, &NewsagesAlprTask::ReplyMatriculaFotoRemolque, [=](const QString &matricula, const QString &precision ,const bool &detectada,const cv::Mat &foto){
+        conn4=connect( tarea2, &NewsagesAlprTask::ReplyMatriculaFotoRemolque, [=](const QString &matricula, const QString &precision ,const bool &detectada,const cv::Mat &foto, const QByteArray &fotobyte){
            QObject::disconnect(conn4);
            m_matricularesults->MatriculaB=matricula;
            m_matricularesults->MatriculaDetectedB=detectada;
            m_matricularesults->MatriculaFotoB=foto.clone();
+           m_matricularesults->MatriculaFotoBByte=fotobyte;
            m_matricularesults->MatriculaPrecisionB=precision.toDouble();
 
         });

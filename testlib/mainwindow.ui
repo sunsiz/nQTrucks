@@ -23,7 +23,10 @@
    <string>TEST LIB</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_8">
-   <item row="0" column="0">
+   <item row="0" column="0" rowspan="2" colspan="2">
+    <widget class="QStatusBar" name="statusBar"/>
+   </item>
+   <item row="1" column="1">
     <layout class="QGridLayout" name="gridLayout_9">
      <item row="0" column="0">
       <widget class="QTabWidget" name="configTabWidget">
@@ -709,6 +712,13 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="ActualizarCamara">
+             <property name="text">
+              <string>Actualizar</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="horizontalSpacer_4">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -957,7 +967,7 @@
               <enum>QTabWidget::East</enum>
              </property>
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <property name="elideMode">
               <enum>Qt::ElideNone</enum>
@@ -1371,16 +1381,6 @@
     </layout>
    </item>
   </layout>
-  <widget class="QStatusBar" name="statusBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>3</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

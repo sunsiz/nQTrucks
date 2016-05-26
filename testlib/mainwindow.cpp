@@ -87,11 +87,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(engine ,SIGNAL(ReplyOriginalFotoBlancaA(cv::Mat)),
             this   ,SLOT(onGetOriginalMatriculaBlancaA(cv::Mat)));
 
-    connect(engine, SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,cv::Mat)),
-            this  , SLOT(onGetMatriculaFotoA1(  QString,QString,bool,cv::Mat)));
+    connect(engine, SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,cv::Mat,QByteArray)),
+            this  , SLOT(onGetMatriculaFotoA1(  QString,QString,bool,cv::Mat,QByteArray)));
 
-    connect(engine, SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,cv::Mat)),
-            this  , SLOT(onGetMatriculaFotoA2(  QString,QString,bool,cv::Mat)));
+    connect(engine, SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,cv::Mat,QByteArray)),
+            this  , SLOT(onGetMatriculaFotoA2(  QString,QString,bool,cv::Mat,QByteArray)));
 
     /** ALPR B **/
     connect(engine ,SIGNAL(ReplyOriginalFotoB(cv::Mat)),
@@ -103,13 +103,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(engine ,SIGNAL(ReplyOriginalFotoBlancaB(cv::Mat)),
             this   ,SLOT(onGetOriginalMatriculaBlancaB(cv::Mat)));
 
-    connect(engine ,SIGNAL(ReplyMatriculaFotoB1(QString,QString,bool,cv::Mat)),
-            this   ,SLOT(onGetMatriculaFotoB1(  QString,QString,bool,cv::Mat)));
+    connect(engine ,SIGNAL(ReplyMatriculaFotoB1(QString,QString,bool,cv::Mat,QByteArray)),
+            this   ,SLOT(onGetMatriculaFotoB1(  QString,QString,bool,cv::Mat,QByteArray)));
 
-    connect(engine ,SIGNAL(ReplyMatriculaFotoB2(QString,QString,bool,cv::Mat)),
-            this   ,SLOT(onGetMatriculaFotoB2(  QString,QString,bool,cv::Mat)));
+    connect(engine ,SIGNAL(ReplyMatriculaFotoB2(QString,QString,bool,cv::Mat,QByteArray)),
+            this   ,SLOT(onGetMatriculaFotoB2(  QString,QString,bool,cv::Mat,QByteArray)));
 
 
+    m_fotocamaraCVA1=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    m_fotocamaraCVA2=cv::Mat::zeros( 720, 1280, CV_8UC3 );
     loadconfig();   
     //this->setWindowFlags(Qt::FramelessWindowHint);
 //    this->showMaximized();
@@ -120,7 +122,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     setFixedSize(1024,768);
 
-    this->showFullScreen();
+    this->showFullScreen();    
     //DEBUG
     //isRunning(true);
             //w.setWindowFlags(Qt::Window););
@@ -132,10 +134,18 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::updateOriginal(){
-    QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("matriculas/r3333.jpg");
-    m_fotocamaraCVA = cv::imread(filename.toStdString(), CV_LOAD_IMAGE_COLOR);
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
-    //ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
+    //QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("matriculas/r3333.jpg");
+    //m_fotocamaraCVA = cv::imread(filename.toStdString(), CV_LOAD_IMAGE_COLOR);
+    switch (ui->calibracionSelect->currentIndex()) {
+    case 0:
+        ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
+        ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
+        break;
+    case 1:
+        ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
+        ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
+        break;
+    }
 }
 
 void MainWindow::isRunning(bool clicked)
@@ -223,17 +233,18 @@ void MainWindow::onGetFotoCV1(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
 {
     Q_UNUSED(fotorgbcv);
     Q_UNUSED(foto);
-    m_fotocamaraCVA=fotocv.clone();
-    ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
+    cv::resize(fotocv,m_fotocamaraCVA1,m_fotocamaraCVA1.size());
+    //m_fotocamaraCVA1=fotocv.clone();
+    ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
 }
     /** CAMARA2 **/
 void MainWindow::onGetFotoCV2(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
 {
     Q_UNUSED(fotorgbcv);
     Q_UNUSED(foto);
-
-    m_fotocamaraCVA=fotocv.clone();
-    ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA.clone())));
+    cv::resize(fotocv,m_fotocamaraCVA2,m_fotocamaraCVA2.size());
+    //m_fotocamaraCVA2=fotocv.clone();
+    ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
 }
 
 void MainWindow::on_CamaraSelect_currentIndexChanged(const QString &arg1)
@@ -346,7 +357,7 @@ void MainWindow::onBascula(t_Bascula _bascula)
     ui->BasculaLcd2->display(_bascula.iTara);
     ui->BasculaLcd3->display(_bascula.iNeto);
 
-    if(_bascula.bEstado == _bascula.bEstado){
+    if(_bascula.bEstado){// == _bascula.bEstado){
         ui->BasculaEstable->setChecked(_bascula.bEstado);
     }
 }
@@ -395,19 +406,21 @@ void MainWindow::onGetOriginalMatriculaBlancaA(cv::Mat foto)
     ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 
-void MainWindow::onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto)
+void MainWindow::onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte)
 {
     Q_UNUSED(detectada);
+    Q_UNUSED(foto);
     ui->LongMatriculaA1->setText(confianza+ "%");
     ui->MatriculaA1->setText(matricula);
-    ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+    ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(QImage::fromData(fotoByte)));
 }
-void MainWindow::onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto)
+void MainWindow::onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte)
 {
     Q_UNUSED(detectada);
+    Q_UNUSED(foto);
     ui->LongMatriculaA2->setText(confianza + "%");
     ui->MatriculaA2->setText(matricula);
-    ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+    ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(QImage::fromData(fotoByte)));
 }
 /** ALPR B **/
 void MainWindow::onGetOriginalMatriculaB1(cv::Mat foto)
@@ -425,28 +438,31 @@ void MainWindow::onGetOriginalMatriculaBlancaB(cv::Mat foto)
     ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 
-void MainWindow::onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto)
+void MainWindow::onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte)
 {
     Q_UNUSED(detectada);
+    Q_UNUSED(foto);
     ui->LongMatriculaA1->setText(confianza+ "%");
     ui->MatriculaA1->setText(matricula);
-    ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+    ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(QImage::fromData(fotoByte)));
 }
-void MainWindow::onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto)
+void MainWindow::onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte)
 {
     Q_UNUSED(detectada);
+    Q_UNUSED(foto);
     ui->LongMatriculaA2->setText(confianza + "%");
     ui->MatriculaA2->setText(matricula);
-    ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+    ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(QImage::fromData(fotoByte)));
 }
 
 void MainWindow::on_calibracionSelect_currentIndexChanged(const QString &arg1)
 {
-    engine->appConfig()->beginGroup(arg1);
-    ui->vPlankA->setValue(engine->appConfig()->value("planka","0").toInt());
-    ui->vPlankB->setValue(engine->appConfig()->value("plankb","20").toInt());
-    ui->vPlankC->setValue(engine->appConfig()->value("plankc","40").toInt());
-    m_prewarp = engine->appConfig()->value("prewarp","").toString();
+    Q_UNUSED(arg1);
+    engine->appConfig()->beginGroup(ALPR);
+    ui->vPlankA->setValue(engine->appConfig()->value(QString("planka"+(QString::number(ui->calibracionSelect->currentIndex()+1))) ,"0").toInt());
+    ui->vPlankB->setValue(engine->appConfig()->value(QString("plankb"+(QString::number(ui->calibracionSelect->currentIndex()+1))) ,"20").toInt());
+    ui->vPlankC->setValue(engine->appConfig()->value(QString("plankc"+(QString::number(ui->calibracionSelect->currentIndex()+1))) ,"40").toInt());
+    m_prewarp = engine->appConfig()->value(QString("prewarp"+(QString::number(ui->calibracionSelect->currentIndex()+1))),"").toString();
     loadprewarp();
     engine->appConfig()->endGroup();
 }
@@ -456,7 +472,14 @@ void MainWindow::on_TestMatriculaA1_clicked()
     /** DEBUG **/
     updateOriginal();
 
-    engine->getFotoMatricula(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA.clone());
+    switch (ui->calibracionSelect->currentIndex()) {
+    case 0:
+        engine->getFotoMatricula(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA1.clone());
+        break;
+    case 1:
+        engine->getFotoMatricula(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA2.clone());
+        break;
+    }
 }
 
 /** END ALRP **/
@@ -490,12 +513,21 @@ void MainWindow::loadprewarp(){
     updateOriginal();
 
     /** PREWARP **/
-    m_fotoprewarpCVA = m_fotocamaraCVA.clone();
-    int max_width = 1280;
-    int max_height = 1024;
+    switch (ui->calibracionSelect->currentIndex()) {
+    case 0:
+        m_fotoprewarpCVA = m_fotocamaraCVA1.clone();
+        prewarp.w = m_fotocamaraCVA1.cols;
+        prewarp.h = m_fotocamaraCVA1.rows;
+        break;
+    case 1:
+        m_fotoprewarpCVA = m_fotocamaraCVA2.clone();
+        prewarp.w = m_fotocamaraCVA2.cols;
+        prewarp.h = m_fotocamaraCVA2.rows;
+        break;
+    }
+    int max_width = m_fotoprewarpCVA.cols;
+    int max_height = m_fotoprewarpCVA.rows;
 
-    prewarp.w = m_fotocamaraCVA.cols;
-    prewarp.h = m_fotocamaraCVA.rows;
 
     if (m_fotoprewarpCVA.cols > max_width)
     {
@@ -614,8 +646,8 @@ void MainWindow::on_valueDA1_valueChanged(int value)
 
 void MainWindow::on_guardarPrewarp_clicked()
 {
-    engine->appConfig()->beginGroup(ui->calibracionSelect->currentText());
-    engine->appConfig()->setValue("prewarp",get_prewarp_config());
+    engine->appConfig()->beginGroup(ALPR);
+    engine->appConfig()->setValue(QString("prewarp"+(QString::number(ui->calibracionSelect->currentIndex()+1))),get_prewarp_config());
     engine->appConfig()->endGroup();
 }
 /** END PREWARP **/
@@ -686,10 +718,32 @@ void MainWindow::on_vPlankC_sliderMoved(int position)
 
 void MainWindow::on_guardarPlanK_clicked()
 {
-    engine->appConfig()->beginGroup(ui->calibracionSelect->currentText());
-    engine->appConfig()->setValue("planka",QString::number(ui->vPlankA->value()));
-    engine->appConfig()->setValue("plankb",QString::number(ui->vPlankB->value()));
-    engine->appConfig()->setValue("plankc",QString::number(ui->vPlankC->value()));
+    engine->appConfig()->beginGroup(ALPR);
+    engine->appConfig()->setValue(QString("planka"+(QString::number(ui->calibracionSelect->currentIndex()+1))),QString::number(ui->vPlankA->value()));
+    engine->appConfig()->setValue(QString("plankb"+(QString::number(ui->calibracionSelect->currentIndex()+1))),QString::number(ui->vPlankB->value()));
+    engine->appConfig()->setValue(QString("plankc"+(QString::number(ui->calibracionSelect->currentIndex()+1))),QString::number(ui->vPlankC->value()));
     engine->appConfig()->endGroup();
-    engine->calibrarFoto(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA.clone());
+    switch (ui->calibracionSelect->currentIndex()) {
+    case 0:
+        engine->calibrarFoto(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA1.clone());
+        break;
+    case 1:
+        engine->calibrarFoto(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA2.clone());
+        break;
+    }
+}
+
+void MainWindow::on_ActualizarCamara_clicked()
+{
+       engine->getCamaraFoto(ui->calibracionSelect->currentIndex());
+
+       switch (ui->calibracionSelect->currentIndex()) {
+       case 0:
+           ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
+           break;
+       case 1:
+           ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
+           break;
+       }
+
 }

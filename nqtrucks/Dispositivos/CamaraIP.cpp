@@ -51,7 +51,7 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
     QByteArray ba;
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
-    fotoCamaraError.save(&buffer, "PNG");
+    fotoCamaraError.save(&buffer, "JPG");
     buffer.close();
     bfotoCamaraError=ba;
 
@@ -162,6 +162,9 @@ QUrl CamaraIP::setCamaraURL()
     emit CamaraIPWeb(curl.toString());
 
     switch (m_TipoCamara) {
+    case CameraType::DEBUG:
+        curl= QString("http://localhost/" + QString::number(m_nDevice)+ ".jpg");
+        break;
     case CameraType::HIKVISION :
         curl.setPath("/Streaming/channels/101/picture");
         break;

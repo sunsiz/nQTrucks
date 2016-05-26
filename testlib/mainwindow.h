@@ -60,6 +60,9 @@ private:
     /** END nQTrucks Lib **/
 
     /** CAMARAS **/
+private:
+    cv::Mat m_fotocamaraCVA1;
+    cv::Mat m_fotocamaraCVA2;
 private slots:
     void on_GuardarCamara_clicked();
     void onGetFotoCV1(cv::Mat fotocv,cv::Mat fotorgbcv, QImage foto);
@@ -101,8 +104,8 @@ private slots:
     void onGetOriginalMatriculaA1(cv::Mat foto);
     void onGetOriginalMatriculaRojaA(cv::Mat foto);
     void onGetOriginalMatriculaBlancaA(cv::Mat foto);
-    void onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto);
-    void onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto);
+    void onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
+    void onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
     /** END NEWSAGES ALPR A **/
 
     /** NEWSAGES ALPR B **/
@@ -110,8 +113,8 @@ private slots:
     void onGetOriginalMatriculaB1(cv::Mat foto);
     void onGetOriginalMatriculaRojaB(cv::Mat foto);
     void onGetOriginalMatriculaBlancaB(cv::Mat foto);
-    void onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto);
-    void onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto);
+    void onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
+    void onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
     /** END NEWSAGES ALPR B **/
 
     /** PREWARP **/
@@ -153,8 +156,10 @@ private slots:
 
 
 
+    void on_ActualizarCamara_clicked();
+
 private:
-    cv::Mat m_fotocamaraCVA;
+    //cv::Mat m_fotocamaraCVA;
     void loadconfig();
     void updateOriginal(); //*<< DEBUG
     /** END CONFIG **/

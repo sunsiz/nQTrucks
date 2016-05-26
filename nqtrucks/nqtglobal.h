@@ -57,9 +57,9 @@ struct Bascula{
 
 /** ALPR  **/
 struct PlanK{
-    int A;
-    int B;
-    int C;
+    int A=0;
+    int B=0;
+    int C=0;
 }; typedef PlanK t_Plank;
 
 struct s_RegistroSimple{
@@ -98,15 +98,17 @@ struct MatriculaResults{
     cv::Mat  OrigenFotoBlanca;  //  Imagen con calibracion de Blancos
     cv::Mat  OrigenFotoRoja;    // Imagen con calibracion de Rojos
 
-    bool    MatriculaDetectedA=false;  // Coincide con un patron de busqueda?
-    QString MatriculaA="";             // STring de la matricula
-    cv::Mat MatriculaFotoA;            // Imagen recortada de la Matricula
-    long    MatriculaPrecisionA=0;     // Precision del OCR
+    bool       MatriculaDetectedA=false;  // Coincide con un patron de busqueda?
+    QString    MatriculaA="";             // STring de la matricula
+    cv::Mat    MatriculaFotoA;            // Imagen recortada de la Matricula
+    QByteArray MatriculaFotoAByte;
+    long       MatriculaPrecisionA=0;     // Precision del OCR
 
-    bool    MatriculaDetectedB=false;  // Coincide con un patron de busqueda?
-    QString MatriculaB="";             // STring de la matricula
-    cv::Mat MatriculaFotoB;            // Imagen recortada de la Matricula
-    long    MatriculaPrecisionB=0;     // Precision del OCR
+    bool       MatriculaDetectedB=false;  // Coincide con un patron de busqueda?
+    QString    MatriculaB="";             // STring de la matricula
+    cv::Mat    MatriculaFotoB;            // Imagen recortada de la Matricula
+    QByteArray MatriculaFotoBByte;
+    long       MatriculaPrecisionB=0;     // Precision del OCR
 
 }; typedef MatriculaResults t_MatriculaResults;
 /** END ALRP **/
@@ -122,6 +124,7 @@ namespace nQTrucks
     #define NEWSAGESIO "NEWSAGESIO"
     #define BASCULA "BASCULA"
 
+    #define ALPR  "Alpr"
     #define ALPR1  "Alpr1"
     #define ALPR2  "Alpr2"
 

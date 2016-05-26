@@ -73,8 +73,7 @@ private slots:
 
     //CONVERSORES//
 private:
-    QByteArray mat2ByteArray(const cv::Mat &image);
-    cv::Mat byteArray2Mat(QByteArray &byteArray);
+    /*static*/ cv::Mat byteArray2Mat(QByteArray &byteArray);
     /** END CAMARAS **/
 
     /** ALPRS **/

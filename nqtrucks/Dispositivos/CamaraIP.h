@@ -59,7 +59,8 @@ public:
 
     enum CameraType
     {
-        HIKVISION=0,
+        DEBUG=0,
+        HIKVISION,
         CAMTRONIC
     };
 

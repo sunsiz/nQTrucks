@@ -16,6 +16,7 @@ Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_news
     , m_init(false)
     , m_registrando(false)
     , m_entrando(false)
+
 {
     qRegisterMetaType<Registro_Simple>("Registro_Simple");
     qRegisterMetaType<Registro_Simple_Matriculas>("Registro_Simple_Matriculas");
@@ -247,8 +248,8 @@ void Daemon::onReplyMatriculaResults1(const t_MatriculaResults &_registro){
     m_registro_simple_matriculas.matriculaB1=_registro.MatriculaB;
     m_registro_simple_matriculas.precisionA1=_registro.MatriculaPrecisionA;
     m_registro_simple_matriculas.precisionB1=_registro.MatriculaPrecisionB;
-    m_registro_simple_matriculas.fotomatriculaA1=mat2ByteArray(_registro.MatriculaFotoA);
-    m_registro_simple_matriculas.fotomatriculaB1=mat2ByteArray(_registro.MatriculaFotoB);
+    m_registro_simple_matriculas.fotomatriculaA1=_registro.MatriculaFotoAByte;
+    m_registro_simple_matriculas.fotomatriculaB1=_registro.MatriculaFotoBByte;
 
     m_alpr_numero++;
     if(m_alpr_numero ==2){
@@ -262,8 +263,8 @@ void Daemon::onReplyMatriculaResults2(const t_MatriculaResults &_registro){
     m_registro_simple_matriculas.matriculaB2=_registro.MatriculaB;
     m_registro_simple_matriculas.precisionA2=_registro.MatriculaPrecisionA;
     m_registro_simple_matriculas.precisionB2=_registro.MatriculaPrecisionB;
-    m_registro_simple_matriculas.fotomatriculaA2=mat2ByteArray(_registro.MatriculaFotoA);
-    m_registro_simple_matriculas.fotomatriculaB2=mat2ByteArray(_registro.MatriculaFotoB);
+    m_registro_simple_matriculas.fotomatriculaA2=_registro.MatriculaFotoAByte;
+    m_registro_simple_matriculas.fotomatriculaB2=_registro.MatriculaFotoBByte;
 
     m_alpr_numero++;
     if(m_alpr_numero ==2){
@@ -288,25 +289,6 @@ cv::Mat Daemon::byteArray2Mat(QByteArray & byteArray)
     cv::Mat mat =  cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
     return mat.clone();
 }
-
-QByteArray Daemon::mat2ByteArray(const cv::Mat &image)
-{
-    QByteArray byteArray;
-    QDataStream stream( &byteArray, QIODevice::WriteOnly );
-    stream << image.type();
-    stream << image.rows;
-    stream << image.cols;
-    const size_t data_size = image.cols * image.rows * image.elemSize();
-    QByteArray data = QByteArray::fromRawData( (const char*)image.ptr(), data_size );
-    stream << data;
-    return byteArray;
-}
-
-
-
-
-
-
 
 
 }

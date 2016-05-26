@@ -55,13 +55,14 @@ private:
     int         m_nDevice;
     cv::Mat     m_FotoCamara;
     QSettings   *m_settings;
+    //QSettings   *m_settings2; //BUG hilos QSettings begingroup simultaneo
     t_MatriculaResults *m_matricularesults;
     /** END SETTINGS **/
 
 signals:
     void ReplyOriginalFoto(const cv::Mat &Foto);
-    void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto);
-    void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto);
+    void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto, const QByteArray &FotoByte);
+    void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto, const QByteArray &FotoByte);
 
     /** CALIBRAR *****************************************************/
 private:
