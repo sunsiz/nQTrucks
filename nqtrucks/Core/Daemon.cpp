@@ -32,18 +32,6 @@ Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_news
     QObject::connect(m_bascula,SIGNAL(BasculaPesoNuevo(t_Bascula)),this,SLOT(onPesoNuevo(t_Bascula)));
     QObject::connect(m_bascula,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBasculaChanged(t_Bascula)));
 
-
-    /**DEBUG **/
-//    m_registro_simple=m_registro_simple_vacio;
-
-//    //Espero 2 Fotos
-//    m_foto_numero=0;
-//    connect(m_camara1,SIGNAL(ReplyCamaraIPFoto(QByteArray)),this,SLOT(onReplyCamaraIPFoto1(QByteArray)));
-//    connect(m_camara2,SIGNAL(ReplyCamaraIPFoto(QByteArray)),this,SLOT(onReplyCamaraIPFoto2(QByteArray)));
-//    m_camara1->sendCamaraIPFotoRequest();
-//    m_camara2->sendCamaraIPFotoRequest();
-
-
 }
 
 void Daemon::setInit(bool init)
@@ -174,8 +162,8 @@ void Daemon::onGuardarRegistroSimple(Registro_Simple &_registro)
             m_alpr_numero=0;
             connect(m_alpr1,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(t_MatriculaResults)));
             connect(m_alpr2,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(t_MatriculaResults)));
-            m_alpr1->processFoto(byteArray2Mat(_registro.camara1));
-            m_alpr2->processFoto(byteArray2Mat(_registro.camara2));
+            m_alpr1->processFoto(byteArray2Mat(m_registro_simple_matriculas.registrosimple.camara1));
+            m_alpr2->processFoto(byteArray2Mat(m_registro_simple_matriculas.registrosimple.camara2));
            qDebug() <<  "Inserted!: " << qry.lastInsertId().toInt();
          }
 
@@ -197,27 +185,42 @@ void Daemon::onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_regi
         qDebug( "Connected!" );
         db.transaction();
         QSqlQuery qry;
-        qry.prepare( "INSERT INTO registros_matriculas "
-        "(              pesobruto,  pesoneto,  pesotara,  fotocamara1,  fotocamara2,  fotomatriculaA1,  matriculaA1,  precisionA1,  fotomatriculaA2,  matriculaA2,  precisionA2,  fotomatriculaB1,  matriculaB1,  precisionB1,  fotomatriculaB2,  matriculaB2,  precisionB2) "
-        " VALUES  (    :pesobruto, :pesoneto, :pesotara, :fotocamara1, :fotocamara2, :fotomatriculaA1, :matriculaA1, :precisionA1, :fotomatriculaA2, :matriculaA2, :precisionA2, :fotomatriculaB1, :matriculaB1, :precisionB1, :fotomatriculaB2, :matriculaB2, :precisionB2);");
+        qry.prepare( "INSERT INTO registros_matriculas( "
+                     " pesobruto,  pesoneto,  pesotara, "
+                     " fotocamara1, fotomatriculaA1, fotomatriculaB1, matriculaA1,  matriculaB1, precisionA1, precisionB1,"
+                     " fotocamara2, fotomatriculaA2, fotomatriculaB2, matriculaA2,  matriculaB2, precisionA2, precisionB2 "
+                     " ) "
+                     " VALUES  ("
+                     " :pesobruto,   :pesoneto,  :pesotara, "
+                     " :fotocamara1, :fotomatriculaA1, :fotomatriculaB1, :matriculaA1,  :matriculaB1, :precisionA1, :precisionB1,"
+                     " :fotocamara2, :fotomatriculaA2, :fotomatriculaB2, :matriculaA2,  :matriculaB2, :precisionA2, :precisionB2 "
+                     " );"
+                     );
 
         qry.bindValue(":pesobruto",         _registro.registrosimple.bascula.iBruto);
         qry.bindValue(":pesoneto",          _registro.registrosimple.bascula.iNeto);
         qry.bindValue(":pesotara",          _registro.registrosimple.bascula.iTara);
+
         qry.bindValue(":fotocamara1",       _registro.registrosimple.camara1);
-        qry.bindValue(":fotocamara2",       _registro.registrosimple.camara2);
         qry.bindValue(":fotomatriculaA1",   _registro.fotomatriculaA1);
-        qry.bindValue(":matriculaA1",       _registro.matriculaA1);
-        qry.bindValue(":precisionA1",       QString::number(_registro.precisionA1,'g',6));
-        qry.bindValue(":fotomatriculaA2",   _registro.fotomatriculaA2);
-        qry.bindValue(":matriculaA2",       _registro.matriculaA2);
-        qry.bindValue(":precisionA2",       QString::number(_registro.precisionA2,'g',6));
         qry.bindValue(":fotomatriculaB1",   _registro.fotomatriculaB1);
+        qry.bindValue(":matriculaA1",       _registro.matriculaA1);
         qry.bindValue(":matriculaB1",       _registro.matriculaB1);
+        qry.bindValue(":precisionA1",       QString::number(_registro.precisionA1,'g',6));
         qry.bindValue(":precisionB1",       QString::number(_registro.precisionB1,'g',6));
+
+
+        qry.bindValue(":fotocamara2",       _registro.registrosimple.camara2);
+        qry.bindValue(":fotomatriculaA2",   _registro.fotomatriculaA2);
         qry.bindValue(":fotomatriculaB2",   _registro.fotomatriculaB2);
+        qry.bindValue(":matriculaA2",       _registro.matriculaA2);
         qry.bindValue(":matriculaB2",       _registro.matriculaB2);
+        qry.bindValue(":precisionA2",       QString::number(_registro.precisionA2,'g',6));
         qry.bindValue(":precisionB2",       QString::number(_registro.precisionB2,'g',6));
+
+
+
+
 
          if( !qry.exec() ){
            qDebug() << qry.lastError();
@@ -272,7 +275,6 @@ void Daemon::onReplyMatriculaResults2(const t_MatriculaResults &_registro){
     }
 
 }
-
 
 /** END ALPRS **/
 

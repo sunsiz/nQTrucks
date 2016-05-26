@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>960</width>
-    <height>543</height>
+    <height>549</height>
    </rect>
   </property>
   <property name="font">
@@ -31,7 +31,7 @@
      <item row="0" column="0">
       <widget class="QTabWidget" name="configTabWidget">
        <property name="currentIndex">
-        <number>3</number>
+        <number>2</number>
        </property>
        <property name="documentMode">
         <bool>false</bool>
@@ -805,7 +805,7 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QLabel" name="FotoMatriculaA1">
+                <widget class="QLabel" name="FotoMatriculaA">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                    <horstretch>0</horstretch>
@@ -847,7 +847,7 @@
                <item>
                 <layout class="QVBoxLayout" name="verticalLayout_5">
                  <item>
-                  <widget class="QLabel" name="MatriculaA1">
+                  <widget class="QLabel" name="MatriculaA">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -860,7 +860,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="LongMatriculaA1">
+                  <widget class="QLabel" name="LongMatriculaA">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -882,7 +882,7 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QLabel" name="FotoMatriculaA2">
+                <widget class="QLabel" name="FotoMatriculaB">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                    <horstretch>0</horstretch>
@@ -924,7 +924,7 @@
                <item>
                 <layout class="QVBoxLayout" name="verticalLayout_6">
                  <item>
-                  <widget class="QLabel" name="MatriculaA2">
+                  <widget class="QLabel" name="MatriculaB">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -937,7 +937,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="LongMatriculaA2">
+                  <widget class="QLabel" name="LongMatriculaB">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                      <horstretch>0</horstretch>

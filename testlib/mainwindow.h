@@ -51,6 +51,8 @@ public:
 private:
     Ui::MainWindow *ui;
     bool m_running=false;
+    void updateGui();
+
 private slots:
     void isRunning(bool clicked);
 
@@ -99,30 +101,46 @@ private slots:
     void on_BasculaConectada(bool conectada);
     /** END BASCULAS **/
 
-    /** NEWSAGES ALPR A **/
+    /** NEWSAGES ALPR 1 **/
+private:
+    cv::Mat m_fotoMatriculaA1;
+    cv::Mat m_fotoMatriculaB1;
+    QString m_MatriculaA1;
+    QString m_MatriculaB1;
+    QString m_MatriculaConfianzaA1;
+    QString m_MatriculaConfianzaB1;
 private slots:
     void onGetOriginalMatriculaA1(cv::Mat foto);
     void onGetOriginalMatriculaRojaA(cv::Mat foto);
     void onGetOriginalMatriculaBlancaA(cv::Mat foto);
     void onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
-    void onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
-    /** END NEWSAGES ALPR A **/
+    void onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
+    /** END NEWSAGES ALPR 1 **/
 
-    /** NEWSAGES ALPR B **/
+    /** NEWSAGES ALPR 2 **/
+private:
+    cv::Mat m_fotoMatriculaA2;
+    cv::Mat m_fotoMatriculaB2;
+    QString m_MatriculaA2;
+    QString m_MatriculaB2;
+    QString m_MatriculaConfianzaA2;
+    QString m_MatriculaConfianzaB2;
 private slots:
     void onGetOriginalMatriculaB1(cv::Mat foto);
     void onGetOriginalMatriculaRojaB(cv::Mat foto);
     void onGetOriginalMatriculaBlancaB(cv::Mat foto);
-    void onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
+    void onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
     void onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
-    /** END NEWSAGES ALPR B **/
+    /** END NEWSAGES ALPR 2 **/
 
     /** PREWARP **/
 private:
-    void updateprewarp(cv::Mat img);
+    cv::Mat updateprewarp(cv::Mat img);
     void loadprewarp();
     QString get_prewarp_config();
-    cv::Mat m_fotoprewarpCVA;
+    //cv::Mat m_fotoprewarpCVA;
+    cv::Mat m_fotoprewarpCVA1;
+    cv::Mat m_fotoprewarpCVA2;
     cv::Mat curWarpedImage;
     QString m_prewarp;
     nQTrucks::t_Prewarp prewarp;
@@ -138,6 +156,11 @@ private slots:
 
 
     /** PLANK **/
+private:
+    cv::Mat m_fotoRojos1;
+    cv::Mat m_fotoBlancos1;
+    cv::Mat m_fotoRojos2;
+    cv::Mat m_fotoblancos2;
 private slots:
     void on_vPlankA_valueChanged(int value);
     void on_vPlankA_sliderMoved(int position);
@@ -158,10 +181,12 @@ private slots:
 
     void on_ActualizarCamara_clicked();
 
+    void on_calibracionSelect_currentIndexChanged(int index);
+
 private:
     //cv::Mat m_fotocamaraCVA;
     void loadconfig();
-    void updateOriginal(); //*<< DEBUG
+    //void updateOriginal(); //*<< DEBUG
     /** END CONFIG **/
     static QImage convertMat2QImage(const cv::Mat &src);
 };

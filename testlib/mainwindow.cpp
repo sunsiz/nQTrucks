@@ -112,13 +112,25 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_fotocamaraCVA1=cv::Mat::zeros( 720, 1280, CV_8UC3 );
     m_fotocamaraCVA2=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-    loadconfig();   
-    //this->setWindowFlags(Qt::FramelessWindowHint);
-//    this->showMaximized();
-//    QRect rec = QApplication::desktop()->screenGeometry();
-//    int height = rec.height();
-//    int width = rec.width();
-//    setFixedSize(width,height);
+
+    m_fotoprewarpCVA1=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    m_fotoprewarpCVA2=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+
+
+    m_fotoRojos1=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    m_fotoBlancos1=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    m_fotoRojos2=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    m_fotoblancos2=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+
+    m_fotoMatriculaA1=cv::Mat::zeros( 110, 520, CV_8UC3 );
+    m_fotoMatriculaB1=cv::Mat::zeros( 110, 520, CV_8UC3 );
+    m_fotoMatriculaA2=cv::Mat::zeros( 110, 520, CV_8UC3 );
+    m_fotoMatriculaB2=cv::Mat::zeros( 110, 520, CV_8UC3 );
+
+
+
+    loadconfig();
+    updateGui();
 
     setFixedSize(1024,768);
 
@@ -133,20 +145,73 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::updateOriginal(){
-    //QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("matriculas/r3333.jpg");
-    //m_fotocamaraCVA = cv::imread(filename.toStdString(), CV_LOAD_IMAGE_COLOR);
+
+void MainWindow::updateGui(){
     switch (ui->calibracionSelect->currentIndex()) {
     case 0:
         ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
-        ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
+        ui->FotoPrewarpA->setPixmap( QPixmap::fromImage(convertMat2QImage(m_fotoprewarpCVA1.clone())));
+
+        ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoBlancos1.clone())));
+        ui->FotoRojosA->setPixmap(  QPixmap::fromImage(convertMat2QImage(m_fotoRojos1.clone())));
+
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoMatriculaA1)));
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoMatriculaB1)));
+
+        ui->MatriculaA->setText(m_MatriculaA1);
+        ui->MatriculaB->setText(m_MatriculaB1);
+
+        ui->LongMatriculaA->setText(m_MatriculaConfianzaA1);
+        ui->LongMatriculaB->setText(m_MatriculaConfianzaB1);
+
+
         break;
     case 1:
         ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
-        ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
+        ui->FotoPrewarpA->setPixmap( QPixmap::fromImage(convertMat2QImage(m_fotoprewarpCVA2.clone())));
+
+        ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoblancos2.clone())));
+        ui->FotoRojosA->setPixmap(  QPixmap::fromImage(convertMat2QImage(m_fotoRojos2.clone())));
+
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoMatriculaA2)));
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoMatriculaB2)));
+
+        ui->MatriculaA->setText(m_MatriculaA2);
+        ui->MatriculaB->setText(m_MatriculaB2);
+
+        ui->LongMatriculaA->setText(m_MatriculaConfianzaA2);
+        ui->LongMatriculaB->setText(m_MatriculaConfianzaB2);
+
+
         break;
     }
+
+    switch (ui->CamaraSelect->currentIndex()) {
+    case 0:
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
+        break;
+    case 1:
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
+        break;
+    }
+
 }
+
+
+//void MainWindow::updateOriginal(){
+//    //QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("matriculas/r3333.jpg");
+//    //m_fotocamaraCVA = cv::imread(filename.toStdString(), CV_LOAD_IMAGE_COLOR);
+//    switch (ui->calibracionSelect->currentIndex()) {
+//    case 0:
+//        ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
+//        ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
+//        break;
+//    case 1:
+//        ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
+//        ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
+//        break;
+//    }
+//}
 
 void MainWindow::isRunning(bool clicked)
 {
@@ -175,24 +240,25 @@ void MainWindow::loadconfig()
     QStringList l_IODevices = engine->getIODevices();
     ui->ioDevicesComboBox1->addItems(l_IODevices);
     ui->ioDeviceSTATUSLabel->setAutoFillBackground(true);
+    //ui->ioDevicesComboBox1->setCurrentIndex(engine->appConfig()->value(""));
 
     /** colores por defecto solo para configuracion **/
-    m_semaforoOFF_palette.setColor(QPalette::Window, Qt::black);
-    m_semaforoOFF_palette.setColor(QPalette::WindowText, Qt::black);
-    m_semaforoRED_palette.setColor(QPalette::Window, Qt::red);
-    m_semaforoRED_palette.setColor(QPalette::WindowText, Qt::red);
-    m_semaforoGREEN_palette.setColor(QPalette::Window, Qt::green);
-    m_semaforoGREEN_palette.setColor(QPalette::WindowText, Qt::green);
+//    m_semaforoOFF_palette.setColor(QPalette::Window, Qt::black);
+//    m_semaforoOFF_palette.setColor(QPalette::WindowText, Qt::black);
+//    m_semaforoRED_palette.setColor(QPalette::Window, Qt::red);
+//    m_semaforoRED_palette.setColor(QPalette::WindowText, Qt::red);
+//    m_semaforoGREEN_palette.setColor(QPalette::Window, Qt::green);
+//    m_semaforoGREEN_palette.setColor(QPalette::WindowText, Qt::green);
 
-    ui->ioDeviceREDLabel->setPalette(m_semaforoOFF_palette);
-    ui->ioDeviceGREENLabel->setPalette(m_semaforoOFF_palette);
+//    ui->ioDeviceREDLabel->setPalette(m_semaforoOFF_palette);
+//    ui->ioDeviceGREENLabel->setPalette(m_semaforoOFF_palette);
 
-    m_deviceNotReady_palette.setColor(QPalette::Window,Qt::yellow);
-    m_deviceNotReady_palette.setColor(QPalette::WindowText,Qt::red);
-    m_deviceReady_palette.setColor(QPalette::Window,Qt::blue);
-    m_deviceReady_palette.setColor(QPalette::WindowText,Qt::black);
+//    m_deviceNotReady_palette.setColor(QPalette::Window,Qt::yellow);
+//    m_deviceNotReady_palette.setColor(QPalette::WindowText,Qt::red);
+//    m_deviceReady_palette.setColor(QPalette::Window,Qt::blue);
+//    m_deviceReady_palette.setColor(QPalette::WindowText,Qt::black);
 
-    ui->ioDeviceSTATUSLabel->setPalette(m_deviceNotReady_palette);
+//    ui->ioDeviceSTATUSLabel->setPalette(m_deviceNotReady_palette);
     ui->ioDeviceSTATUSLabel->setText("Disc");
     /** IO DEVICES **/
 
@@ -209,12 +275,9 @@ void MainWindow::loadconfig()
     QStringList l_BasculaDevices = engine->getSerialDevices();
     ui->BasculaDevicesComboBox->addItems(l_BasculaDevices);
 
-
     engine->appConfig()->beginGroup(BASCULA);
-    //ui->BasculaDevicesComboBox->setCurrentIndex(engine->appConfig()->value("device","0").toInt());
     ui->BasculaTipoComboBox->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
     engine->appConfig()->endGroup();
-
     /** END BASCULAS **/
 
     /** ALPR  **/
@@ -234,8 +297,9 @@ void MainWindow::onGetFotoCV1(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
     Q_UNUSED(fotorgbcv);
     Q_UNUSED(foto);
     cv::resize(fotocv,m_fotocamaraCVA1,m_fotocamaraCVA1.size());
+    updateGui();
     //m_fotocamaraCVA1=fotocv.clone();
-    ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
+    //ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
 }
     /** CAMARA2 **/
 void MainWindow::onGetFotoCV2(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
@@ -243,13 +307,13 @@ void MainWindow::onGetFotoCV2(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
     Q_UNUSED(fotorgbcv);
     Q_UNUSED(foto);
     cv::resize(fotocv,m_fotocamaraCVA2,m_fotocamaraCVA2.size());
+    updateGui();
     //m_fotocamaraCVA2=fotocv.clone();
-    ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
+    //ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
 }
 
 void MainWindow::on_CamaraSelect_currentIndexChanged(const QString &arg1)
 {
-
     QStringList l_Camaras = engine->getTiposCamaras();
     ui->camaraTipo->clear();
     ui->camaraTipo->addItems(l_Camaras);
@@ -260,6 +324,7 @@ void MainWindow::on_CamaraSelect_currentIndexChanged(const QString &arg1)
     ui->usuarioLineEdit->setText(engine->appConfig()->value("user").toString());
     ui->passwdLineEdit->setText(engine->appConfig()->value("pass").toString());
     engine->appConfig()->endGroup();
+    updateGui();
 }
 
 
@@ -390,7 +455,8 @@ void MainWindow::on_BasculaConectada(bool conectada)
 }
 /** END BASCULAS **/
 
-/** ALRP A **/
+
+/** ALRP 1 **************************************************************************************************************************/
 void MainWindow::onGetOriginalMatriculaA1(cv::Mat foto)
 {
     ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
@@ -409,20 +475,27 @@ void MainWindow::onGetOriginalMatriculaBlancaA(cv::Mat foto)
 void MainWindow::onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte)
 {
     Q_UNUSED(detectada);
-    Q_UNUSED(foto);
-    ui->LongMatriculaA1->setText(confianza+ "%");
-    ui->MatriculaA1->setText(matricula);
-    ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(QImage::fromData(fotoByte)));
+    Q_UNUSED(fotoByte);
+    cv::resize(foto,m_fotoMatriculaA1,m_fotoMatriculaA1.size());
+    m_MatriculaA1 = matricula;
+    m_MatriculaConfianzaA1 = QString(confianza+"%");
+    updateGui();
+
 }
-void MainWindow::onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte)
+void MainWindow::onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte)
 {
     Q_UNUSED(detectada);
-    Q_UNUSED(foto);
-    ui->LongMatriculaA2->setText(confianza + "%");
-    ui->MatriculaA2->setText(matricula);
-    ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(QImage::fromData(fotoByte)));
+    Q_UNUSED(fotoByte);
+    cv::resize(foto,m_fotoMatriculaB1,m_fotoMatriculaB1.size());
+    m_MatriculaB1 = matricula;
+    m_MatriculaConfianzaB1 = QString(confianza+"%");
+    updateGui();
+
 }
-/** ALPR B **/
+
+
+
+/** ALPR 2 ***************************************************************************************************************************/
 void MainWindow::onGetOriginalMatriculaB1(cv::Mat foto)
 {
     ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
@@ -438,21 +511,23 @@ void MainWindow::onGetOriginalMatriculaBlancaB(cv::Mat foto)
     ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 
-void MainWindow::onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte)
+void MainWindow::onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte)
 {
     Q_UNUSED(detectada);
-    Q_UNUSED(foto);
-    ui->LongMatriculaA1->setText(confianza+ "%");
-    ui->MatriculaA1->setText(matricula);
-    ui->FotoMatriculaA1->setPixmap(QPixmap::fromImage(QImage::fromData(fotoByte)));
+    Q_UNUSED(fotoByte);
+    cv::resize(foto,m_fotoMatriculaA2,m_fotoMatriculaA2.size());
+    m_MatriculaA2 = matricula;
+    m_MatriculaConfianzaA2 = QString(confianza+"%");
+    updateGui();
 }
 void MainWindow::onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte)
 {
     Q_UNUSED(detectada);
-    Q_UNUSED(foto);
-    ui->LongMatriculaA2->setText(confianza + "%");
-    ui->MatriculaA2->setText(matricula);
-    ui->FotoMatriculaA2->setPixmap(QPixmap::fromImage(QImage::fromData(fotoByte)));
+    Q_UNUSED(fotoByte);
+    cv::resize(foto,m_fotoMatriculaA2,m_fotoMatriculaA2.size());
+    m_MatriculaA2 = matricula;
+    m_MatriculaConfianzaA2 = QString(confianza+"%");
+    updateGui();
 }
 
 void MainWindow::on_calibracionSelect_currentIndexChanged(const QString &arg1)
@@ -470,7 +545,7 @@ void MainWindow::on_calibracionSelect_currentIndexChanged(const QString &arg1)
 void MainWindow::on_TestMatriculaA1_clicked()
 {
     /** DEBUG **/
-    updateOriginal();
+//    updateGui();
 
     switch (ui->calibracionSelect->currentIndex()) {
     case 0:
@@ -510,78 +585,126 @@ QImage MainWindow::convertMat2QImage(const cv::Mat& src)
 /** PREWARP **/
 void MainWindow::loadprewarp(){
     /** DEBUG **/
-    updateOriginal();
-
+    //updateOriginal();
+    int max_width;
+    int max_height;
+    QStringList valores;
     /** PREWARP **/
     switch (ui->calibracionSelect->currentIndex()) {
     case 0:
-        m_fotoprewarpCVA = m_fotocamaraCVA1.clone();
-        prewarp.w = m_fotocamaraCVA1.cols;
-        prewarp.h = m_fotocamaraCVA1.rows;
+        m_fotoprewarpCVA1 = m_fotocamaraCVA1.clone();
+        prewarp.w = m_fotoprewarpCVA1.cols;
+        prewarp.h = m_fotoprewarpCVA1.rows;
+        max_width = m_fotoprewarpCVA1.cols;
+        max_height = m_fotoprewarpCVA1.rows;
+
+        if (m_fotoprewarpCVA1.cols > max_width){
+          float aspect = max_width / ((float)m_fotoprewarpCVA1.cols);
+          float y = ((float)m_fotoprewarpCVA1.rows) * aspect;
+          cv::resize(m_fotoprewarpCVA1, m_fotoprewarpCVA1, cv::Size((int) max_width, (int) y));
+        }
+        if (m_fotoprewarpCVA1.rows > max_height){
+          float aspect = max_height / ((float)m_fotoprewarpCVA1.rows);
+          float x = ((float)m_fotoprewarpCVA1.cols) * aspect;
+          cv::resize(m_fotoprewarpCVA1, m_fotoprewarpCVA1, cv::Size((int) x, (int) max_height));
+        }
+        valores = m_prewarp.split(",");
+        if (valores.count()==10){
+            prewarp.w = m_fotoprewarpCVA1.cols;
+            prewarp.h = m_fotoprewarpCVA1.rows;
+            prewarp.rotationx   = QString(valores.value(3)).toFloat();
+            prewarp.rotationy   = QString(valores.value(4)).toFloat();
+            prewarp.rotationz   = QString(valores.value(5)).toFloat();
+            prewarp.stretchX    = QString(valores.value(6)).toFloat();
+            prewarp.dist        = QString(valores.value(7)).toFloat();
+            prewarp.panX        = QString(valores.value(8)).toFloat();
+            prewarp.panY        = QString(valores.value(9)).toFloat();
+
+            //set bars
+            ui->valueXA1->setValue(-(prewarp.rotationx*20000.0)+100);
+            ui->valueYA1->setValue((prewarp.rotationy*20000.0)+100);
+            ui->valueZA1->setValue(-(prewarp.rotationz*100.0)+100);
+            ui->valueWA1->setValue(-(1-prewarp.stretchX)*-200+100);
+            ui->valueDA1->setValue((1-prewarp.dist)*200+100);
+        }
+        else{
+            //DEFAULT
+            ui->valueXA1->setValue(100);
+            ui->valueYA1->setValue(100);
+            ui->valueZA1->setValue(100);
+            ui->valueWA1->setValue(100);
+            ui->valueDA1->setValue(100);
+        }
+        m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
         break;
+
     case 1:
-        m_fotoprewarpCVA = m_fotocamaraCVA2.clone();
-        prewarp.w = m_fotocamaraCVA2.cols;
-        prewarp.h = m_fotocamaraCVA2.rows;
+        m_fotoprewarpCVA2 = m_fotocamaraCVA2.clone();
+        prewarp.w = m_fotoprewarpCVA2.cols;
+        prewarp.h = m_fotoprewarpCVA2.rows;
+        max_width = m_fotoprewarpCVA2.cols;
+        max_height = m_fotoprewarpCVA2.rows;
+        break;
+        if (m_fotoprewarpCVA2.cols > max_width){
+          float aspect = max_width / ((float)m_fotoprewarpCVA2.cols);
+          float y = ((float)m_fotoprewarpCVA2.rows) * aspect;
+          cv::resize(m_fotoprewarpCVA2, m_fotoprewarpCVA2, cv::Size((int) max_width, (int) y));
+        }
+        if (m_fotoprewarpCVA2.rows > max_height){
+          float aspect = max_height / ((float)m_fotoprewarpCVA2.rows);
+          float x = ((float)m_fotoprewarpCVA2.cols) * aspect;
+          cv::resize(m_fotoprewarpCVA2, m_fotoprewarpCVA2, cv::Size((int) x, (int) max_height));
+        }
+        valores = m_prewarp.split(",");
+        if (valores.count()==10){
+            prewarp.w = m_fotoprewarpCVA2.cols;
+            prewarp.h = m_fotoprewarpCVA2.rows;
+            prewarp.rotationx   = QString(valores.value(3)).toFloat();
+            prewarp.rotationy   = QString(valores.value(4)).toFloat();
+            prewarp.rotationz   = QString(valores.value(5)).toFloat();
+            prewarp.stretchX    = QString(valores.value(6)).toFloat();
+            prewarp.dist        = QString(valores.value(7)).toFloat();
+            prewarp.panX        = QString(valores.value(8)).toFloat();
+            prewarp.panY        = QString(valores.value(9)).toFloat();
+
+            //set bars
+            ui->valueXA1->setValue(-(prewarp.rotationx*20000.0)+100);
+            ui->valueYA1->setValue((prewarp.rotationy*20000.0)+100);
+            ui->valueZA1->setValue(-(prewarp.rotationz*100.0)+100);
+            ui->valueWA1->setValue(-(1-prewarp.stretchX)*-200+100);
+            ui->valueDA1->setValue((1-prewarp.dist)*200+100);
+        }
+        else{
+            //DEFAULT
+            ui->valueXA1->setValue(100);
+            ui->valueYA1->setValue(100);
+            ui->valueZA1->setValue(100);
+            ui->valueWA1->setValue(100);
+            ui->valueDA1->setValue(100);
+        }
+        m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
         break;
     }
-    int max_width = m_fotoprewarpCVA.cols;
-    int max_height = m_fotoprewarpCVA.rows;
-
-
-    if (m_fotoprewarpCVA.cols > max_width)
-    {
-      float aspect = max_width / ((float)m_fotoprewarpCVA.cols);
-      float y = ((float)m_fotoprewarpCVA.rows) * aspect;
-      cv::resize(m_fotoprewarpCVA, m_fotoprewarpCVA, cv::Size((int) max_width, (int) y));
-    }
-    if (m_fotoprewarpCVA.rows > max_height)
-    {
-      float aspect = max_height / ((float)m_fotoprewarpCVA.rows);
-      float x = ((float)m_fotoprewarpCVA.cols) * aspect;
-
-      cv::resize(m_fotoprewarpCVA, m_fotoprewarpCVA, cv::Size((int) x, (int) max_height));
-    }
-
-
-    QStringList valores = m_prewarp.split(",");
-
-    if (valores.count()==10){
-        prewarp.w = m_fotoprewarpCVA.cols;
-        prewarp.h = m_fotoprewarpCVA.rows;
-        prewarp.rotationx   = QString(valores.value(3)).toFloat();
-        prewarp.rotationy   = QString(valores.value(4)).toFloat();
-        prewarp.rotationz   = QString(valores.value(5)).toFloat();
-        prewarp.stretchX    = QString(valores.value(6)).toFloat();
-        prewarp.dist        = QString(valores.value(7)).toFloat();
-        prewarp.panX        = QString(valores.value(8)).toFloat();
-        prewarp.panY        = QString(valores.value(9)).toFloat();
-
-        //set bars
-        ui->valueXA1->setValue(-(prewarp.rotationx*20000.0)+100);
-        ui->valueYA1->setValue((prewarp.rotationy*20000.0)+100);
-        ui->valueZA1->setValue(-(prewarp.rotationz*100.0)+100);
-        ui->valueWA1->setValue(-(1-prewarp.stretchX)*-200+100);
-        ui->valueDA1->setValue((1-prewarp.dist)*200+100);
-
-    }
-    else{
-        //DEFAULT
-        ui->valueXA1->setValue(100);
-        ui->valueYA1->setValue(100);
-        ui->valueZA1->setValue(100);
-        ui->valueWA1->setValue(100);
-        ui->valueDA1->setValue(100);
-    }
-
-    updateprewarp(m_fotoprewarpCVA);
-
+    updateGui();
 }
 
 QString MainWindow::get_prewarp_config()
 {
-    float width_ratio = prewarp.w / ((float)m_fotoprewarpCVA.cols);
-    float height_ratio = prewarp.h / ((float)m_fotoprewarpCVA.rows);
+    float width_ratio;
+    float height_ratio;
+
+    switch (ui->calibracionSelect->currentIndex()) {
+    case 0:
+        width_ratio = prewarp.w / ((float)m_fotoprewarpCVA1.cols);
+        height_ratio = prewarp.h / ((float)m_fotoprewarpCVA1.rows);
+        break;
+    case 1:
+        width_ratio = prewarp.w / ((float)m_fotoprewarpCVA2.cols);
+        height_ratio = prewarp.h / ((float)m_fotoprewarpCVA2.rows);
+        break;
+    }
+//    updateGui();
+
     prewarp.rotationx *=width_ratio;
     prewarp.rotationy *=width_ratio;
     prewarp.panX /= width_ratio;
@@ -599,49 +722,82 @@ QString MainWindow::get_prewarp_config()
 
 }
 
-void MainWindow::updateprewarp(cv::Mat img){
+cv::Mat MainWindow::updateprewarp(cv::Mat img){
     alpr::Config config("truck");
     config.prewarp = get_prewarp_config().toStdString();
     config.setDebug(false);
     alpr::PreWarp prewarp(&config);
-    curWarpedImage = prewarp.warpImage(img);
-    
-    //Area Matricula
-//    cv::Point start = 400;
-//    cv::Point end = 400;
-//    cv::rectangle(curWarpedImage, start, end, cv::Scalar(255,0,255), 2);
-
-    ui->FotoPrewarpA->setPixmap(QPixmap::fromImage(convertMat2QImage(curWarpedImage)));
+    return prewarp.warpImage(img);
 }
 
 void MainWindow::on_valueXA1_valueChanged(int value)
 {
     prewarp.rotationx = -((float)value - 100) / 20000.0;
-    updateprewarp(m_fotoprewarpCVA);
+    switch (ui->calibracionSelect->currentIndex()) {
+    case 0:
+        m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+        break;
+    case 1:
+        m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+        break;
+    }
+    updateGui();
 }
 
 void MainWindow::on_valueYA1_valueChanged(int value)
 {
       prewarp.rotationy = ((float)value - 100) / 20000.0;
-      updateprewarp(m_fotoprewarpCVA);
+      switch (ui->calibracionSelect->currentIndex()) {
+      case 0:
+          m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+          break;
+      case 1:
+          m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+          break;
+      }
+      updateGui();
 }
 
 void MainWindow::on_valueZA1_valueChanged(int value)
 {
   prewarp.rotationz = -((float)value - 100) / 100.0;
-   updateprewarp(m_fotoprewarpCVA);
+  switch (ui->calibracionSelect->currentIndex()) {
+  case 0:
+      m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+      break;
+  case 1:
+      m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+      break;
+  }
+  updateGui();
 }
 
 void MainWindow::on_valueWA1_valueChanged(int value)
 {
     prewarp.stretchX = 1.0 + ((float)value - 100) / -200.0;
-    updateprewarp(m_fotoprewarpCVA);
+    switch (ui->calibracionSelect->currentIndex()) {
+    case 0:
+        m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+        break;
+    case 1:
+        m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+        break;
+    }
+    updateGui();
 }
 
 void MainWindow::on_valueDA1_valueChanged(int value)
 {
     prewarp.dist = 1.0 - ((float)value - 100) / 200.0;
-    updateprewarp(m_fotoprewarpCVA);
+    switch (ui->calibracionSelect->currentIndex()) {
+    case 0:
+        m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+        break;
+    case 1:
+        m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+        break;
+    }
+    updateGui();
 }
 
 void MainWindow::on_guardarPrewarp_clicked()
@@ -745,5 +901,10 @@ void MainWindow::on_ActualizarCamara_clicked()
            ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
            break;
        }
+
+}
+
+void MainWindow::on_calibracionSelect_currentIndexChanged(int index)
+{
 
 }
