@@ -164,6 +164,7 @@ QUrl CamaraIP::setCamaraURL()
     switch (m_TipoCamara) {
     case CameraType::DEBUG:
         curl= QString("http://localhost/" + QString::number(m_nDevice)+ ".jpg");
+        qDebug() << "Camara: " << m_nDevice << " url: " << curl.toString();
         break;
     case CameraType::HIKVISION :
         curl.setPath("/Streaming/channels/101/picture");

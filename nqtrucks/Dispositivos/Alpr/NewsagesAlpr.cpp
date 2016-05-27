@@ -181,34 +181,43 @@ void NewsagesAlpr::processFoto(const cv::Mat &Foto)
             });
 
         /** conectar respuestas con padre **/
-        connect( tarea1, SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat,QByteArray)),
-                 this  , SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat,QByteArray)));
+        connect( tarea1, SIGNAL(ReplyMatriculaFoto(t_MatriculaResults)),
+                 this  , SIGNAL(ReplyMatriculaFoto(t_MatriculaResults)));
 
         std::unique_ptr<QMetaObject::Connection> pconn3{new QMetaObject::Connection};
         QMetaObject::Connection &conn3 = *pconn3;
-        conn3=connect( tarea1, &NewsagesAlprTask::ReplyMatriculaFoto, [=](const QString &matricula, const QString &precision ,const bool &detectada,const cv::Mat &foto, const QByteArray &fotobyte){
+        conn3=connect( tarea1, &NewsagesAlprTask::ReplyMatriculaFoto, [=](const t_MatriculaResults &_tempResults){
             QObject::disconnect(conn3);
-           m_matricularesults->MatriculaA=matricula;
-           m_matricularesults->MatriculaDetectedA=detectada;
-           m_matricularesults->MatriculaFotoA=foto.clone();
-           m_matricularesults->MatriculaFotoAByte=fotobyte;
-           m_matricularesults->MatriculaPrecisionA=precision.toDouble();
+            m_matricularesults->MatriculaA              = _tempResults.MatriculaA;
+            m_matricularesults->MatriculaDetectedA      = _tempResults.MatriculaDetectedA;
+            m_matricularesults->MatriculaFotoA          = _tempResults.MatriculaFotoA;
+            m_matricularesults->MatriculaFotoAByte      = _tempResults.MatriculaFotoAByte;
+            m_matricularesults->MatriculaPrecisionA     = _tempResults.MatriculaPrecisionA;
+            m_matricularesults->MatriculaPrecisionAs    = _tempResults.MatriculaPrecisionAs;
+            m_matricularesults->OrigenFoto              = _tempResults.OrigenFoto;
+            m_matricularesults->OrigenFotoBlanca        = _tempResults.OrigenFotoBlanca;
+            m_matricularesults->OrigenFotoPrewarp       = _tempResults.OrigenFotoPrewarp;
+
+
         });
 
 
-        connect( tarea2, SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat,QByteArray)),
-                 this  , SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat,QByteArray)));
+        connect( tarea2, SIGNAL(ReplyMatriculaFotoRemolque(t_MatriculaResults)),
+                 this  , SIGNAL(ReplyMatriculaFotoRemolque(t_MatriculaResults)));
 
         std::unique_ptr<QMetaObject::Connection> pconn4{new QMetaObject::Connection};
         QMetaObject::Connection &conn4 = *pconn4;
-        conn4=connect( tarea2, &NewsagesAlprTask::ReplyMatriculaFotoRemolque, [=](const QString &matricula, const QString &precision ,const bool &detectada,const cv::Mat &foto, const QByteArray &fotobyte){
+        conn4=connect( tarea2, &NewsagesAlprTask::ReplyMatriculaFotoRemolque, [=](const t_MatriculaResults &_tempResultRemolque){
            QObject::disconnect(conn4);
-           m_matricularesults->MatriculaB=matricula;
-           m_matricularesults->MatriculaDetectedB=detectada;
-           m_matricularesults->MatriculaFotoB=foto.clone();
-           m_matricularesults->MatriculaFotoBByte=fotobyte;
-           m_matricularesults->MatriculaPrecisionB=precision.toDouble();
-
+           m_matricularesults->MatriculaB              = _tempResultRemolque.MatriculaB;
+           m_matricularesults->MatriculaDetectedB      = _tempResultRemolque.MatriculaDetectedB;
+           m_matricularesults->MatriculaFotoB          = _tempResultRemolque.MatriculaFotoB;
+           m_matricularesults->MatriculaFotoBByte      = _tempResultRemolque.MatriculaFotoBByte;
+           m_matricularesults->MatriculaPrecisionB     = _tempResultRemolque.MatriculaPrecisionB;
+           m_matricularesults->MatriculaPrecisionBs    = _tempResultRemolque.MatriculaPrecisionBs;
+           m_matricularesults->OrigenFoto              = _tempResultRemolque.OrigenFoto;
+           m_matricularesults->OrigenFotoRoja          = _tempResultRemolque.OrigenFotoRoja;
+           m_matricularesults->OrigenFotoPrewarp       = _tempResultRemolque.OrigenFotoPrewarp;
         });
 
         /** Ejecutar Procesos **/

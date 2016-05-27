@@ -110,11 +110,12 @@ private:
     QString m_MatriculaConfianzaA1;
     QString m_MatriculaConfianzaB1;
 private slots:
+    void onReplyMatriculaResults1(t_MatriculaResults _result);
     void onGetOriginalMatriculaA1(cv::Mat foto);
     void onGetOriginalMatriculaRojaA(cv::Mat foto);
     void onGetOriginalMatriculaBlancaA(cv::Mat foto);
-    void onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
-    void onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
+//    void onGetMatriculaFotoA1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
+//    void onGetMatriculaFotoB1(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
     /** END NEWSAGES ALPR 1 **/
 
     /** NEWSAGES ALPR 2 **/
@@ -126,11 +127,12 @@ private:
     QString m_MatriculaConfianzaA2;
     QString m_MatriculaConfianzaB2;
 private slots:
+    void onReplyMatriculaResults2(t_MatriculaResults _result);
     void onGetOriginalMatriculaB1(cv::Mat foto);
     void onGetOriginalMatriculaRojaB(cv::Mat foto);
     void onGetOriginalMatriculaBlancaB(cv::Mat foto);
-    void onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
-    void onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
+//    void onGetMatriculaFotoA2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
+//    void onGetMatriculaFotoB2(QString matricula, QString confianza, bool detectada, cv::Mat foto, QByteArray fotoByte);
     /** END NEWSAGES ALPR 2 **/
 
     /** PREWARP **/
@@ -176,12 +178,7 @@ private slots:
     void on_TestMatriculaA1_clicked();
     void on_CamaraSelect_currentIndexChanged(const QString &arg1);
     void on_calibracionSelect_currentIndexChanged(const QString &arg1);
-
-
-
     void on_ActualizarCamara_clicked();
-
-    void on_calibracionSelect_currentIndexChanged(int index);
 
 private:
     //cv::Mat m_fotocamaraCVA;

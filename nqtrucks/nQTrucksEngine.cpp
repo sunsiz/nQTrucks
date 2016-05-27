@@ -222,24 +222,13 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFotoA(cv::Mat)));
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlancaA(cv::Mat)));
     connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRojaA(cv::Mat)));
-
-    connect(d->m_alpr1,SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat,QByteArray)),
-            this      ,SIGNAL(ReplyMatriculaFotoA1(QString,QString,bool,cv::Mat,QByteArray)));
-
-    connect(d->m_alpr1,SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat,QByteArray)),
-            this      ,SIGNAL(ReplyMatriculaFotoB1(QString,QString,bool,cv::Mat,QByteArray)));
+    connect(d->m_alpr1,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults1(t_MatriculaResults)));
 
     /** 2 **/
     connect(d->m_alpr2,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFotoB(cv::Mat)));
     connect(d->m_alpr2,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlancaB(cv::Mat)));
     connect(d->m_alpr2,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRojaB(cv::Mat)));
-
-    connect(d->m_alpr2,SIGNAL(ReplyMatriculaFoto(QString,QString,bool,cv::Mat,QByteArray)),
-            this      ,SIGNAL(ReplyMatriculaFotoA2(QString,QString,bool,cv::Mat,QByteArray)));
-
-    connect(d->m_alpr2,SIGNAL(ReplyMatriculaFotoRemolque(QString,QString,bool,cv::Mat,QByteArray)),
-            this      ,SIGNAL(ReplyMatriculaFotoB2(QString,QString,bool,cv::Mat,QByteArray)));
-
+    connect(d->m_alpr2,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(t_MatriculaResults)));
     /** END NEWSAGES ALPR **/
 
 }

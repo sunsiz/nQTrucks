@@ -32,16 +32,19 @@ private:
     /** SETTINGS *******************************************************/
 public:
     t_Plank Plank() const;
-    QString prewarp() const;
+    QString Prewarp1() const;
+    QString Prewarp2() const;
 private:
     QString   m_configroot;
     int       m_nDevice;
     void      loadconfig();
     QSettings *m_settings;
     t_Plank    m_Plank;    
-    void setPlank(const QString &A, const QString &B, const QString &C);
-    QString  m_prewarp;
-    void setPrewarp(QString prewarp);
+    void setPlank(const QString &A1, const QString &B1, const QString &C1,
+                  const QString &A2, const QString &B2, const QString &C2);
+    QString  m_prewarp1;
+    QString  m_prewarp2;
+    void setPrewarp(const QString &prewarp1, const QString &prewarp2);
     /** END SETTINGS ****************************************************/
 
 
@@ -49,7 +52,8 @@ private:
 private:
     cv::Mat m_FotoCalibradaBlancosCV;
     cv::Mat m_FotoCalibradaRojosCV;
-    cv::Mat apply_prewarp(const cv::Mat &img);
+    cv::Mat apply_prewarp1(const cv::Mat &img);
+    cv::Mat apply_prewarp2(const cv::Mat &img);
     int m_count_pankb;
     int m_count_pankc;
 public slots:
@@ -66,9 +70,12 @@ signals:
 public slots:
     void procesarBlancas();
     void procesarRojas();
+private:
+   t_MatriculaResults *m_matricularesult;
+    /** TODO PASAR A ESTRUCTURA t_MatriculaResults **/
 signals:
-    void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto, const QByteArray &FotoByte);
-    void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto, const QByteArray &FotoByte);
+    void ReplyMatriculaFoto        (const t_MatriculaResults &tempResults);
+    void ReplyMatriculaFotoRemolque(const t_MatriculaResults &tempResultsRemolque);
     /** END PROCESAR **************************************************************/
 
 };

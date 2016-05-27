@@ -61,8 +61,8 @@ private:
 
 signals:
     void ReplyOriginalFoto(const cv::Mat &Foto);
-    void ReplyMatriculaFoto        (const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto, const QByteArray &FotoByte);
-    void ReplyMatriculaFotoRemolque(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto, const QByteArray &FotoByte);
+    void ReplyMatriculaFoto        (const t_MatriculaResults &_tempResults);
+    void ReplyMatriculaFotoRemolque(const t_MatriculaResults &_tempResultsRemolque);
 
     /** CALIBRAR *****************************************************/
 private:

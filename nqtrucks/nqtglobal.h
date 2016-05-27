@@ -57,9 +57,12 @@ struct Bascula{
 
 /** ALPR  **/
 struct PlanK{
-    int A=0;
-    int B=0;
-    int C=0;
+    int A1=0;
+    int B1=0;
+    int C1=0;
+    int A2=0;
+    int B2=0;
+    int C2=0;
 }; typedef PlanK t_Plank;
 
 struct s_RegistroSimple{
@@ -102,13 +105,15 @@ struct MatriculaResults{
     QString    MatriculaA="";             // STring de la matricula
     cv::Mat    MatriculaFotoA;            // Imagen recortada de la Matricula
     QByteArray MatriculaFotoAByte;
-    long       MatriculaPrecisionA=0;     // Precision del OCR
+    float       MatriculaPrecisionA=0;     // Precision del OCR
+    QString    MatriculaPrecisionAs="";
 
     bool       MatriculaDetectedB=false;  // Coincide con un patron de busqueda?
     QString    MatriculaB="";             // STring de la matricula
     cv::Mat    MatriculaFotoB;            // Imagen recortada de la Matricula
     QByteArray MatriculaFotoBByte;
-    long       MatriculaPrecisionB=0;     // Precision del OCR
+    float      MatriculaPrecisionB=0;     // Precision del OCR
+    QString    MatriculaPrecisionBs="";
 
 }; typedef MatriculaResults t_MatriculaResults;
 /** END ALRP **/
