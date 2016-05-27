@@ -44,10 +44,10 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
 {
     QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
 
-    fotoCamaraError = QImage(1280,720, QImage::Format_RGB32);
+    /** CAMARA ERROR ByteArray **/
+    QImage fotoCamaraError = QImage(1280,720, QImage::Format_RGB32);
     fotoCamaraError.fill(Qt::red);
     fotoCamaraError.text("ERROR DE CONEXION");
-
     QByteArray ba;
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
@@ -55,21 +55,22 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
     buffer.close();
     bfotoCamaraError=ba;
 
-
-
+    /** CAMARA ERROR CV::MAT **/
     fotoCamaraErrorCV = cv::Mat::zeros( 720, 1280, CV_8UC3 );
     fotoCamaraErrorCV = cv::Scalar( 0, 0, 255 );
-    cv::cvtColor(fotoCamaraErrorCV,fotoCamaraErrorRGBCV,CV_BGR2RGB);
+
+    /** CONFIG **/
     loadconfig();
 
+    /** CONECTIONS **/
     connect(m_netmanager, SIGNAL(finished(QNetworkReply*)), this , SLOT(camaraNetworkReplyFinished(QNetworkReply*)));
 }
 
 CamaraIP::~CamaraIP()
 {
-    fotoCamaraError.detach();
+//    fotoCamaraError.detach();
     fotoCamaraErrorCV.release();
-    fotoCamaraErrorRGBCV.release();
+//    fotoCamaraErrorRGBCV.release();
     bfotoCamaraError.clear();
 }
 
@@ -212,10 +213,10 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply)
         cv::cvtColor(fotoCamaraCV, fotoCamaraRGBCV, CV_BGR2RGB );
         buffer.reset();
         buffer.close();
-        emit ReplyCamaraIPFotoCV(fotoCamaraCV,fotoCamaraRGBCV,fotoCamara);
+        emit ReplyCamaraIPFotoCV(fotoCamaraCV);
         fotoCamaraRGBCV.release();
     }else{
-        emit ReplyCamaraIPFotoCV(fotoCamaraErrorCV,fotoCamaraErrorRGBCV,fotoCamaraError);
+        emit ReplyCamaraIPFotoCV(fotoCamaraErrorCV);
         emit ReplyCamaraIPFoto(bfotoCamaraError);
     }
     reply->deleteLater();

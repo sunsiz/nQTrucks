@@ -68,6 +68,7 @@ void NewsagesIO::setIODeviceConnect(const bool &value){
             emit ValuePin10Changed(m_OutPin10->value());
         }else{
             m_conectado=false;
+            // SIN SEMAFOROOOO
             QMessageBox::information(nullptr,"Info",statusText() + ":" + m_IODevice);
         }
     }else{

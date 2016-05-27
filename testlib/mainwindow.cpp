@@ -55,78 +55,34 @@ MainWindow::MainWindow(QWidget *parent)
 
     engine  = new nQTrucks::nQTrucksEngine(this);
     connect(ui->runningCheckBox,SIGNAL(clicked(bool)),this,SLOT(isRunning(bool)));
-  //  connect(ui->runningCheckBox,SIGNAL(clicked(bool)),this,SLOT(setInitDaem(bool)));
 
     /** CAMARAS **/
-    connect(engine,SIGNAL(CamaraIPFotoCV1(cv::Mat,cv::Mat,QImage)),
-            this  ,SLOT(onGetFotoCV1(cv::Mat,cv::Mat,QImage)));
-
-    connect(engine,SIGNAL(CamaraIPFotoCV2(cv::Mat,cv::Mat,QImage)),
-            this  ,SLOT(onGetFotoCV2(cv::Mat,cv::Mat,QImage)));
+    connect(engine,SIGNAL(CamaraIPFotoCV1(cv::Mat)),this,SLOT(onGetFotoCV1(cv::Mat)));
+    connect(engine,SIGNAL(CamaraIPFotoCV2(cv::Mat)),this,SLOT(onGetFotoCV2(cv::Mat)));
 
     /** IO **/
-    connect(engine  ,SIGNAL(IODevicesStatusChanged(bool)),
-            this    ,SLOT(on_ioDeviceSTATUS(bool)));
-
-    connect(engine  ,SIGNAL(IODevicesPIN10Changed(bool)),
-            this    ,SLOT(on_ioDevicePIN10(bool)));
+    connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
+    connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
 
     /** BASCULAS **/
-    connect(engine ,SIGNAL(BasculaStatus(bool)),
-            this   ,SLOT(on_BasculaConectada(bool)));
-    connect(engine ,SIGNAL(BasculaChanged(t_Bascula)),
-            this   ,SLOT(onBascula(t_Bascula)));
+    connect(engine ,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
+    connect(engine ,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
 
     /** ALPR 1 **/
-    connect(engine, SIGNAL(ReplyMatriculaResults1(t_MatriculaResults)),
-            this,   SLOT(onReplyMatriculaResults1(t_MatriculaResults)));
-
-    connect(engine ,SIGNAL(ReplyOriginalFotoA(cv::Mat)),
-            this   ,SLOT(onGetOriginalMatriculaA1(cv::Mat)));
-
-    connect(engine ,SIGNAL(ReplyOriginalFotoRojaA(cv::Mat)),
-            this   ,SLOT(onGetOriginalMatriculaRojaA(cv::Mat)));
-
-    connect(engine ,SIGNAL(ReplyOriginalFotoBlancaA(cv::Mat)),
-            this   ,SLOT(onGetOriginalMatriculaBlancaA(cv::Mat)));
+    connect(engine, SIGNAL(ReplyMatriculaResults1(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(t_MatriculaResults)));
+    connect(engine ,SIGNAL(ReplyOriginalFoto1(cv::Mat)),this,SLOT(onGetOriginalMatricula1(cv::Mat)));
+    connect(engine ,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja1(cv::Mat)));
+    connect(engine ,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca1(cv::Mat)));
 
     /** ALPR 2 **/
-    connect(engine, SIGNAL(ReplyMatriculaResults2(t_MatriculaResults)),
-            this,   SLOT(onReplyMatriculaResults2(t_MatriculaResults)));
-
-    connect(engine ,SIGNAL(ReplyOriginalFotoB(cv::Mat)),
-            this   ,SLOT(onGetOriginalMatriculaB1(cv::Mat)));
-
-    connect(engine ,SIGNAL(ReplyOriginalFotoRojaB(cv::Mat)),
-            this   ,SLOT(onGetOriginalMatriculaRojaB(cv::Mat)));
-
-    connect(engine ,SIGNAL(ReplyOriginalFotoBlancaB(cv::Mat)),
-            this   ,SLOT(onGetOriginalMatriculaBlancaB(cv::Mat)));
-
-    m_fotocamaraCVA1=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-    m_fotocamaraCVA2=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-
-    m_fotoprewarpCVA1=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-    m_fotoprewarpCVA2=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-
-
-    m_fotoRojos1=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-    m_fotoBlancos1=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-    m_fotoRojos2=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-    m_fotoblancos2=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-
-    m_fotoMatriculaA1=cv::Mat::zeros( 110, 520, CV_8UC3 );
-    m_fotoMatriculaB1=cv::Mat::zeros( 110, 520, CV_8UC3 );
-    m_fotoMatriculaA2=cv::Mat::zeros( 110, 520, CV_8UC3 );
-    m_fotoMatriculaB2=cv::Mat::zeros( 110, 520, CV_8UC3 );
-
-
+    connect(engine, SIGNAL(ReplyMatriculaResults2(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(t_MatriculaResults)));
+    connect(engine ,SIGNAL(ReplyOriginalFoto2(cv::Mat)),this,SLOT(onGetOriginalMatricula2(cv::Mat)));
+    connect(engine ,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja2(cv::Mat)));
+    connect(engine ,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca2(cv::Mat)));
 
     loadconfig();
     updateGui();
-
     setFixedSize(1024,768);
-
     this->showFullScreen();    
 }
 
@@ -137,53 +93,38 @@ MainWindow::~MainWindow()
 
 
 void MainWindow::updateGui(){
+    //on_guardarPlanK_clicked();
     switch (ui->calibracionSelect->currentIndex()) {
     case 0:
-        ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));        
-        //ui->FotoPrewarpA->setPixmap( QPixmap::fromImage(convertMat2QImage(m_fotoprewarpCVA1.clone())));
-
-        on_guardarPlanK_clicked();
-        //ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoBlancos1.clone())));
-        //ui->FotoRojosA->setPixmap(  QPixmap::fromImage(convertMat2QImage(m_fotoRojos1.clone())));
-
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoMatriculaA1)));
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoMatriculaB1)));
-
-        ui->MatriculaA->setText(m_MatriculaA1);
-        ui->MatriculaB->setText(m_MatriculaB1);
-
-        ui->LongMatriculaA->setText(m_MatriculaConfianzaA1);
-        ui->LongMatriculaB->setText(m_MatriculaConfianzaB1);
-
-
+        ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults1.OrigenFoto.clone())));
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults1.MatriculaFotoA)));
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults1.MatriculaFotoB)));
+        ui->MatriculaA->setText(m_matricularesults1.MatriculaA);
+        ui->MatriculaB->setText(m_matricularesults1.MatriculaB);
+        ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults1.OrigenFotoBlanca.clone())));
+        ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults1.OrigenFotoRoja.clone())));
+        ui->LongMatriculaA->setText(m_matricularesults1.MatriculaPrecisionAs);
+        ui->LongMatriculaB->setText(m_matricularesults1.MatriculaPrecisionBs);
         break;
     case 1:
-        ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
-        //ui->FotoPrewarpA->setPixmap( QPixmap::fromImage(convertMat2QImage(m_fotoprewarpCVA2.clone())));
-
-        on_guardarPlanK_clicked();
-        //ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoblancos2.clone())));
-        //ui->FotoRojosA->setPixmap(  QPixmap::fromImage(convertMat2QImage(m_fotoRojos2.clone())));
-
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoMatriculaA2)));
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotoMatriculaB2)));
-
-        ui->MatriculaA->setText(m_MatriculaA2);
-        ui->MatriculaB->setText(m_MatriculaB2);
-
-        ui->LongMatriculaA->setText(m_MatriculaConfianzaA2);
-        ui->LongMatriculaB->setText(m_MatriculaConfianzaB2);
-
-
+        ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults2.OrigenFoto.clone())));
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults2.MatriculaFotoA)));
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults2.MatriculaFotoB)));
+        ui->MatriculaA->setText(m_matricularesults2.MatriculaA);
+        ui->MatriculaB->setText(m_matricularesults2.MatriculaB);
+        ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults2.OrigenFotoBlanca.clone())));
+        ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults2.OrigenFotoRoja.clone())));
+        ui->LongMatriculaA->setText(m_matricularesults2.MatriculaPrecisionAs);
+        ui->LongMatriculaB->setText(m_matricularesults2.MatriculaPrecisionBs);
         break;
     }
 
     switch (ui->CamaraSelect->currentIndex()) {
     case 0:
-        ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults1.OrigenFoto.clone())));
         break;
     case 1:
-        ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults2.OrigenFoto.clone())));
         break;
     }
 
@@ -204,6 +145,27 @@ void MainWindow::isRunning(bool clicked)
 /** SETTINGS **/
 void MainWindow::loadconfig()
 {
+
+    /** DEFAULTS UI **/
+    m_matricularesults1.OrigenFoto=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    m_matricularesults2.OrigenFoto=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+
+    m_matricularesults1.OrigenFotoPrewarp=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    m_matricularesults2.OrigenFotoPrewarp=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+
+
+    m_matricularesults1.OrigenFotoRoja=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    m_matricularesults1.OrigenFotoBlanca=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    m_matricularesults2.OrigenFotoRoja=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    m_matricularesults2.OrigenFotoBlanca=cv::Mat::zeros( 720, 1280, CV_8UC3 );
+
+    m_matricularesults1.MatriculaFotoA=cv::Mat::zeros( 110, 520, CV_8UC3 );
+    m_matricularesults1.MatriculaFotoB=cv::Mat::zeros( 110, 520, CV_8UC3 );
+
+    m_matricularesults2.MatriculaFotoA=cv::Mat::zeros( 110, 520, CV_8UC3 );
+    m_matricularesults2.MatriculaFotoB=cv::Mat::zeros( 110, 520, CV_8UC3 );
+
+
     /** INTERFACE **/
     ui->configTabWidget->setEnabled(!m_running);
 
@@ -216,25 +178,6 @@ void MainWindow::loadconfig()
     QStringList l_IODevices = engine->getIODevices();
     ui->ioDevicesComboBox1->addItems(l_IODevices);
     ui->ioDeviceSTATUSLabel->setAutoFillBackground(true);
-    //ui->ioDevicesComboBox1->setCurrentIndex(engine->appConfig()->value(""));
-
-    /** colores por defecto solo para configuracion **/
-//    m_semaforoOFF_palette.setColor(QPalette::Window, Qt::black);
-//    m_semaforoOFF_palette.setColor(QPalette::WindowText, Qt::black);
-//    m_semaforoRED_palette.setColor(QPalette::Window, Qt::red);
-//    m_semaforoRED_palette.setColor(QPalette::WindowText, Qt::red);
-//    m_semaforoGREEN_palette.setColor(QPalette::Window, Qt::green);
-//    m_semaforoGREEN_palette.setColor(QPalette::WindowText, Qt::green);
-
-//    ui->ioDeviceREDLabel->setPalette(m_semaforoOFF_palette);
-//    ui->ioDeviceGREENLabel->setPalette(m_semaforoOFF_palette);
-
-//    m_deviceNotReady_palette.setColor(QPalette::Window,Qt::yellow);
-//    m_deviceNotReady_palette.setColor(QPalette::WindowText,Qt::red);
-//    m_deviceReady_palette.setColor(QPalette::Window,Qt::blue);
-//    m_deviceReady_palette.setColor(QPalette::WindowText,Qt::black);
-
-//    ui->ioDeviceSTATUSLabel->setPalette(m_deviceNotReady_palette);
     ui->ioDeviceSTATUSLabel->setText("Disc");
     /** IO DEVICES **/
 
@@ -268,53 +211,74 @@ void MainWindow::loadconfig()
 
 /** CAMARAS *************************************************************************/
     /** CAMARA1 **/
-void MainWindow::onGetFotoCV1(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
+void MainWindow::onGetFotoCV1(const cv::Mat &fotocv)
 {
-    Q_UNUSED(fotorgbcv);
-    Q_UNUSED(foto);
-    cv::resize(fotocv,m_fotocamaraCVA1,m_fotocamaraCVA1.size());
-    //m_fotocamaraCVA1=fotocv.clone();
+    cv::resize(fotocv,m_matricularesults1.OrigenFoto,m_matricularesults1.OrigenFoto.size());
     updateGui();
-    //ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA1.clone())));
 }
     /** CAMARA2 **/
-void MainWindow::onGetFotoCV2(cv::Mat fotocv, cv::Mat fotorgbcv, QImage foto)
+void MainWindow::onGetFotoCV2(const cv::Mat &fotocv)
 {
-    Q_UNUSED(fotorgbcv);
-    Q_UNUSED(foto);
-    cv::resize(fotocv,m_fotocamaraCVA2,m_fotocamaraCVA2.size());
-    //m_fotocamaraCVA2=fotocv.clone();
+    cv::resize(fotocv,m_matricularesults2.OrigenFoto,m_matricularesults2.OrigenFoto.size());
     updateGui();
-    //ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_fotocamaraCVA2.clone())));
 }
 
-void MainWindow::on_CamaraSelect_currentIndexChanged(const QString &arg1)
+void MainWindow::on_CamaraSelect_currentIndexChanged(int index)
 {
     QStringList l_Camaras = engine->getTiposCamaras();
     ui->camaraTipo->clear();
     ui->camaraTipo->addItems(l_Camaras);
 
-    engine->appConfig()->beginGroup(arg1);
-    ui->camaraTipo->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
-    ui->hostLineEdit->setText(engine->appConfig()->value("host").toString());
-    ui->puertoLineEdit->setText(engine->appConfig()->value("port").toString());
-    ui->usuarioLineEdit->setText(engine->appConfig()->value("user").toString());
-    ui->passwdLineEdit->setText(engine->appConfig()->value("pass").toString());
-    engine->appConfig()->endGroup();
+    switch (index) {
+    case 0:
+        engine->appConfig()->beginGroup(CAMARA1);
+        ui->camaraTipo->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
+        ui->hostLineEdit->setText(engine->appConfig()->value("host").toString());
+        ui->puertoLineEdit->setText(engine->appConfig()->value("port").toString());
+        ui->usuarioLineEdit->setText(engine->appConfig()->value("user").toString());
+        ui->passwdLineEdit->setText(engine->appConfig()->value("pass").toString());
+        engine->appConfig()->endGroup();
+        break;
+    case 1:
+        engine->appConfig()->beginGroup(CAMARA2);
+        ui->camaraTipo->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
+        ui->hostLineEdit->setText(engine->appConfig()->value("host").toString());
+        ui->puertoLineEdit->setText(engine->appConfig()->value("port").toString());
+        ui->usuarioLineEdit->setText(engine->appConfig()->value("user").toString());
+        ui->passwdLineEdit->setText(engine->appConfig()->value("pass").toString());
+        engine->appConfig()->endGroup();
+        break;
+    }
     updateGui();
 }
 
 
+
 void MainWindow::on_GuardarCamara_clicked()
 {
-    engine->appConfig()->beginGroup(ui->CamaraSelect->currentText());
-    engine->appConfig()->setValue("tipo",QString::number(ui->camaraTipo->currentIndex()));
-    engine->appConfig()->setValue("host",ui->hostLineEdit->text());
-    engine->appConfig()->setValue("port",ui->puertoLineEdit->text());
-    engine->appConfig()->setValue("user",ui->usuarioLineEdit->text());
-    engine->appConfig()->setValue("pass",ui->passwdLineEdit->text());
-    engine->appConfig()->endGroup();
-    engine->getCamaraFoto(ui->CamaraSelect->currentIndex());
+    switch (ui->CamaraSelect->currentIndex()) {
+    case 0:
+        engine->appConfig()->beginGroup(CAMARA1);
+        engine->appConfig()->setValue("tipo",QString::number(ui->camaraTipo->currentIndex()));
+        engine->appConfig()->setValue("host",ui->hostLineEdit->text());
+        engine->appConfig()->setValue("port",ui->puertoLineEdit->text());
+        engine->appConfig()->setValue("user",ui->usuarioLineEdit->text());
+        engine->appConfig()->setValue("pass",ui->passwdLineEdit->text());
+        engine->appConfig()->endGroup();
+        engine->getCamaraFoto(0);
+        break;
+    case 1:
+        engine->appConfig()->beginGroup(CAMARA2);
+        engine->appConfig()->setValue("tipo",QString::number(ui->camaraTipo->currentIndex()));
+        engine->appConfig()->setValue("host",ui->hostLineEdit->text());
+        engine->appConfig()->setValue("port",ui->puertoLineEdit->text());
+        engine->appConfig()->setValue("user",ui->usuarioLineEdit->text());
+        engine->appConfig()->setValue("pass",ui->passwdLineEdit->text());
+        engine->appConfig()->endGroup();
+        engine->getCamaraFoto(1);
+        break;
+    }
+
 }
 /** END CAMARAS ************************************************************************/
 
@@ -437,62 +401,60 @@ void MainWindow::on_BasculaConectada(bool conectada)
 /** CALIBRACION ***********************************/
 /** ALRP 1 *******/
 void MainWindow::onReplyMatriculaResults1(t_MatriculaResults _result){
-    m_MatriculaA1=_result.MatriculaA;
-    m_MatriculaB1=_result.MatriculaB;
-    m_fotoMatriculaA1=_result.MatriculaFotoA;
-    m_fotoMatriculaB1=_result.MatriculaFotoB;
-    m_MatriculaConfianzaA1=_result.MatriculaPrecisionAs;
-    m_MatriculaConfianzaB1=_result.MatriculaPrecisionBs;
+
+    m_matricularesults1 = _result;
     updateGui();
 }
 
-
-void MainWindow::onGetOriginalMatriculaA1(cv::Mat foto)
+void MainWindow::onGetOriginalMatricula1(cv::Mat foto)
 {
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+    m_matricularesults1.OrigenFoto = foto;
+    updateGui();
+    //ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 
-void MainWindow::onGetOriginalMatriculaRojaA(cv::Mat foto)
+void MainWindow::onGetOriginalMatriculaRoja1(cv::Mat foto)
 {
-    ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+    m_matricularesults1.OrigenFotoRoja = foto;
+    updateGui();
+//    ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
 }
 
-void MainWindow::onGetOriginalMatriculaBlancaA(cv::Mat foto)
-{
-    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+void MainWindow::onGetOriginalMatriculaBlanca1(cv::Mat foto)
+{    
+  //  ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+    m_matricularesults1.OrigenFotoBlanca = foto;
+    updateGui();
 }
 
 /** ALPR 2 ***************************************************************************************************************************/
 void MainWindow::onReplyMatriculaResults2(t_MatriculaResults _result){
-    m_MatriculaA2=_result.MatriculaA;
-    m_MatriculaB2=_result.MatriculaB;
-    m_fotoMatriculaA2=_result.MatriculaFotoA;
-    m_fotoMatriculaB2=_result.MatriculaFotoB;
-    m_MatriculaConfianzaA2=_result.MatriculaPrecisionA;
-    m_MatriculaConfianzaB2=_result.MatriculaPrecisionB;
+    m_matricularesults2 = _result;
     updateGui();
 }
 
-
-void MainWindow::onGetOriginalMatriculaB1(cv::Mat foto)
+void MainWindow::onGetOriginalMatricula2(cv::Mat foto)
 {
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+    m_matricularesults2.OrigenFoto = foto;
+    updateGui();
 }
 
-void MainWindow::onGetOriginalMatriculaRojaB(cv::Mat foto)
+void MainWindow::onGetOriginalMatriculaRoja2(cv::Mat foto)
 {
-    ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+    m_matricularesults2.OrigenFotoRoja = foto;
+    updateGui();
 }
 
-void MainWindow::onGetOriginalMatriculaBlancaB(cv::Mat foto)
+void MainWindow::onGetOriginalMatriculaBlanca2(cv::Mat foto)
 {
-    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(foto)));
+    m_matricularesults2.OrigenFotoBlanca = foto;
+    updateGui();
 }
 
 void MainWindow::on_calibracionSelect_currentIndexChanged(const QString &arg1)
 {
     Q_UNUSED(arg1);
-    on_guardarPlanK_clicked();
+//    on_guardarPlanK_clicked();
 //    switch (ui->calibracionSelect->currentIndex()) {
 //    case 0:
 //        engine->appConfig()->beginGroup("Alpr");
@@ -515,17 +477,17 @@ void MainWindow::on_calibracionSelect_currentIndexChanged(const QString &arg1)
 //    }
 }
 
-void MainWindow::on_TestMatriculaA1_clicked()
+void MainWindow::on_TestMatricula_clicked()
 {
     /** DEBUG **/
 //    updateGui();
 
     switch (ui->calibracionSelect->currentIndex()) {
     case 0:
-        engine->getFotoMatricula(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA1.clone());
+        engine->getFotoMatricula(ui->calibracionSelect->currentIndex(),m_matricularesults1.OrigenFoto.clone());
         break;
     case 1:
-        engine->getFotoMatricula(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA2.clone());
+        engine->getFotoMatricula(ui->calibracionSelect->currentIndex(),m_matricularesults2.OrigenFoto.clone());
         break;
     }
 }
@@ -559,105 +521,105 @@ QImage MainWindow::convertMat2QImage(const cv::Mat& src)
 void MainWindow::loadprewarp(){
     /** DEBUG **/
     //updateOriginal();
-    int max_width;
-    int max_height;
-    QStringList valores;
-    /** PREWARP **/
-    switch (ui->calibracionSelect->currentIndex()) {
-    case 0:
-        m_fotoprewarpCVA1 = m_fotocamaraCVA1.clone();
-        prewarp.w = m_fotoprewarpCVA1.cols;
-        prewarp.h = m_fotoprewarpCVA1.rows;
-        max_width = m_fotoprewarpCVA1.cols;
-        max_height = m_fotoprewarpCVA1.rows;
+//    int max_width;
+//    int max_height;
+//    QStringList valores;
+//    /** PREWARP **/
+//    switch (ui->calibracionSelect->currentIndex()) {
+//    case 0:
+//        m_fotoprewarpCVA1 = m_fotocamaraCVA1.clone();
+//        prewarp.w = m_fotoprewarpCVA1.cols;
+//        prewarp.h = m_fotoprewarpCVA1.rows;
+//        max_width = m_fotoprewarpCVA1.cols;
+//        max_height = m_fotoprewarpCVA1.rows;
 
-        if (m_fotoprewarpCVA1.cols > max_width){
-          float aspect = max_width / ((float)m_fotoprewarpCVA1.cols);
-          float y = ((float)m_fotoprewarpCVA1.rows) * aspect;
-          cv::resize(m_fotoprewarpCVA1, m_fotoprewarpCVA1, cv::Size((int) max_width, (int) y));
-        }
-        if (m_fotoprewarpCVA1.rows > max_height){
-          float aspect = max_height / ((float)m_fotoprewarpCVA1.rows);
-          float x = ((float)m_fotoprewarpCVA1.cols) * aspect;
-          cv::resize(m_fotoprewarpCVA1, m_fotoprewarpCVA1, cv::Size((int) x, (int) max_height));
-        }
-        valores = m_prewarp.split(",");
-        if (valores.count()==10){
-            prewarp.w = m_fotoprewarpCVA1.cols;
-            prewarp.h = m_fotoprewarpCVA1.rows;
-            prewarp.rotationx   = QString(valores.value(3)).toFloat();
-            prewarp.rotationy   = QString(valores.value(4)).toFloat();
-            prewarp.rotationz   = QString(valores.value(5)).toFloat();
-            prewarp.stretchX    = QString(valores.value(6)).toFloat();
-            prewarp.dist        = QString(valores.value(7)).toFloat();
-            prewarp.panX        = QString(valores.value(8)).toFloat();
-            prewarp.panY        = QString(valores.value(9)).toFloat();
+//        if (m_fotoprewarpCVA1.cols > max_width){
+//          float aspect = max_width / ((float)m_fotoprewarpCVA1.cols);
+//          float y = ((float)m_fotoprewarpCVA1.rows) * aspect;
+//          cv::resize(m_fotoprewarpCVA1, m_fotoprewarpCVA1, cv::Size((int) max_width, (int) y));
+//        }
+//        if (m_fotoprewarpCVA1.rows > max_height){
+//          float aspect = max_height / ((float)m_fotoprewarpCVA1.rows);
+//          float x = ((float)m_fotoprewarpCVA1.cols) * aspect;
+//          cv::resize(m_fotoprewarpCVA1, m_fotoprewarpCVA1, cv::Size((int) x, (int) max_height));
+//        }
+//        valores = m_prewarp.split(",");
+//        if (valores.count()==10){
+//            prewarp.w = m_fotoprewarpCVA1.cols;
+//            prewarp.h = m_fotoprewarpCVA1.rows;
+//            prewarp.rotationx   = QString(valores.value(3)).toFloat();
+//            prewarp.rotationy   = QString(valores.value(4)).toFloat();
+//            prewarp.rotationz   = QString(valores.value(5)).toFloat();
+//            prewarp.stretchX    = QString(valores.value(6)).toFloat();
+//            prewarp.dist        = QString(valores.value(7)).toFloat();
+//            prewarp.panX        = QString(valores.value(8)).toFloat();
+//            prewarp.panY        = QString(valores.value(9)).toFloat();
 
-            //set bars
-            ui->valueXA1->setValue(-(prewarp.rotationx*20000.0)+100);
-            ui->valueYA1->setValue((prewarp.rotationy*20000.0)+100);
-            ui->valueZA1->setValue(-(prewarp.rotationz*100.0)+100);
-            ui->valueWA1->setValue(-(1-prewarp.stretchX)*-200+100);
-            ui->valueDA1->setValue((1-prewarp.dist)*200+100);
-        }
-        else{
-            //DEFAULT
-            ui->valueXA1->setValue(100);
-            ui->valueYA1->setValue(100);
-            ui->valueZA1->setValue(100);
-            ui->valueWA1->setValue(100);
-            ui->valueDA1->setValue(100);
-        }
-        m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
-        break;
+//            //set bars
+//            ui->valueXA1->setValue(-(prewarp.rotationx*20000.0)+100);
+//            ui->valueYA1->setValue((prewarp.rotationy*20000.0)+100);
+//            ui->valueZA1->setValue(-(prewarp.rotationz*100.0)+100);
+//            ui->valueWA1->setValue(-(1-prewarp.stretchX)*-200+100);
+//            ui->valueDA1->setValue((1-prewarp.dist)*200+100);
+//        }
+//        else{
+//            //DEFAULT
+//            ui->valueXA1->setValue(100);
+//            ui->valueYA1->setValue(100);
+//            ui->valueZA1->setValue(100);
+//            ui->valueWA1->setValue(100);
+//            ui->valueDA1->setValue(100);
+//        }
+//        m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+//        break;
 
-    case 1:
-        m_fotoprewarpCVA2 = m_fotocamaraCVA2.clone();
-        prewarp.w = m_fotoprewarpCVA2.cols;
-        prewarp.h = m_fotoprewarpCVA2.rows;
-        max_width = m_fotoprewarpCVA2.cols;
-        max_height = m_fotoprewarpCVA2.rows;
-        break;
-        if (m_fotoprewarpCVA2.cols > max_width){
-          float aspect = max_width / ((float)m_fotoprewarpCVA2.cols);
-          float y = ((float)m_fotoprewarpCVA2.rows) * aspect;
-          cv::resize(m_fotoprewarpCVA2, m_fotoprewarpCVA2, cv::Size((int) max_width, (int) y));
-        }
-        if (m_fotoprewarpCVA2.rows > max_height){
-          float aspect = max_height / ((float)m_fotoprewarpCVA2.rows);
-          float x = ((float)m_fotoprewarpCVA2.cols) * aspect;
-          cv::resize(m_fotoprewarpCVA2, m_fotoprewarpCVA2, cv::Size((int) x, (int) max_height));
-        }
-        valores = m_prewarp.split(",");
-        if (valores.count()==10){
-            prewarp.w = m_fotoprewarpCVA2.cols;
-            prewarp.h = m_fotoprewarpCVA2.rows;
-            prewarp.rotationx   = QString(valores.value(3)).toFloat();
-            prewarp.rotationy   = QString(valores.value(4)).toFloat();
-            prewarp.rotationz   = QString(valores.value(5)).toFloat();
-            prewarp.stretchX    = QString(valores.value(6)).toFloat();
-            prewarp.dist        = QString(valores.value(7)).toFloat();
-            prewarp.panX        = QString(valores.value(8)).toFloat();
-            prewarp.panY        = QString(valores.value(9)).toFloat();
+//    case 1:
+//        m_fotoprewarpCVA2 = m_fotocamaraCVA2.clone();
+//        prewarp.w = m_fotoprewarpCVA2.cols;
+//        prewarp.h = m_fotoprewarpCVA2.rows;
+//        max_width = m_fotoprewarpCVA2.cols;
+//        max_height = m_fotoprewarpCVA2.rows;
+//        break;
+//        if (m_fotoprewarpCVA2.cols > max_width){
+//          float aspect = max_width / ((float)m_fotoprewarpCVA2.cols);
+//          float y = ((float)m_fotoprewarpCVA2.rows) * aspect;
+//          cv::resize(m_fotoprewarpCVA2, m_fotoprewarpCVA2, cv::Size((int) max_width, (int) y));
+//        }
+//        if (m_fotoprewarpCVA2.rows > max_height){
+//          float aspect = max_height / ((float)m_fotoprewarpCVA2.rows);
+//          float x = ((float)m_fotoprewarpCVA2.cols) * aspect;
+//          cv::resize(m_fotoprewarpCVA2, m_fotoprewarpCVA2, cv::Size((int) x, (int) max_height));
+//        }
+//        valores = m_prewarp.split(",");
+//        if (valores.count()==10){
+//            prewarp.w = m_fotoprewarpCVA2.cols;
+//            prewarp.h = m_fotoprewarpCVA2.rows;
+//            prewarp.rotationx   = QString(valores.value(3)).toFloat();
+//            prewarp.rotationy   = QString(valores.value(4)).toFloat();
+//            prewarp.rotationz   = QString(valores.value(5)).toFloat();
+//            prewarp.stretchX    = QString(valores.value(6)).toFloat();
+//            prewarp.dist        = QString(valores.value(7)).toFloat();
+//            prewarp.panX        = QString(valores.value(8)).toFloat();
+//            prewarp.panY        = QString(valores.value(9)).toFloat();
 
-            //set bars
-            ui->valueXA1->setValue(-(prewarp.rotationx*20000.0)+100);
-            ui->valueYA1->setValue((prewarp.rotationy*20000.0)+100);
-            ui->valueZA1->setValue(-(prewarp.rotationz*100.0)+100);
-            ui->valueWA1->setValue(-(1-prewarp.stretchX)*-200+100);
-            ui->valueDA1->setValue((1-prewarp.dist)*200+100);
-        }
-        else{
-            //DEFAULT
-            ui->valueXA1->setValue(100);
-            ui->valueYA1->setValue(100);
-            ui->valueZA1->setValue(100);
-            ui->valueWA1->setValue(100);
-            ui->valueDA1->setValue(100);
-        }
-        m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
-        break;
-    }
+//            //set bars
+//            ui->valueXA1->setValue(-(prewarp.rotationx*20000.0)+100);
+//            ui->valueYA1->setValue((prewarp.rotationy*20000.0)+100);
+//            ui->valueZA1->setValue(-(prewarp.rotationz*100.0)+100);
+//            ui->valueWA1->setValue(-(1-prewarp.stretchX)*-200+100);
+//            ui->valueDA1->setValue((1-prewarp.dist)*200+100);
+//        }
+//        else{
+//            //DEFAULT
+//            ui->valueXA1->setValue(100);
+//            ui->valueYA1->setValue(100);
+//            ui->valueZA1->setValue(100);
+//            ui->valueWA1->setValue(100);
+//            ui->valueDA1->setValue(100);
+//        }
+//        m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+//        break;
+//    }
     updateGui();
 }
 
@@ -668,29 +630,29 @@ QString MainWindow::get_prewarp_config()
 
     switch (ui->calibracionSelect->currentIndex()) {
     case 0:
-        width_ratio = prewarp.w / ((float)m_fotoprewarpCVA1.cols);
-        height_ratio = prewarp.h / ((float)m_fotoprewarpCVA1.rows);
+//        width_ratio = prewarp.w / ((float)m_fotoprewarpCVA1.cols);
+//        height_ratio = prewarp.h / ((float)m_fotoprewarpCVA1.rows);
         break;
     case 1:
-        width_ratio = prewarp.w / ((float)m_fotoprewarpCVA2.cols);
-        height_ratio = prewarp.h / ((float)m_fotoprewarpCVA2.rows);
+//        width_ratio = prewarp.w / ((float)m_fotoprewarpCVA2.cols);
+//        height_ratio = prewarp.h / ((float)m_fotoprewarpCVA2.rows);
         break;
     }
 //    updateGui();
 
-    prewarp.rotationx *=width_ratio;
-    prewarp.rotationy *=width_ratio;
-    prewarp.panX /= width_ratio;
-    prewarp.panY /= height_ratio;
+//    prewarp.rotationx *=width_ratio;
+//    prewarp.rotationy *=width_ratio;
+//    prewarp.panX /= width_ratio;
+//    prewarp.panY /= height_ratio;
 
-    std::stringstream output;
-    output << "planar," << std::fixed;
-    output << prewarp.w << "," << prewarp.h << ",";
-    output << prewarp.rotationx << "," << prewarp.rotationy << "," << prewarp.rotationz << ",";
-    output << prewarp.stretchX << "," << prewarp.dist << ",";
-    output << prewarp.panX << "," << prewarp.panY;
-    m_prewarp= QString::fromStdString(output.str());
-    qDebug() << m_prewarp;
+//    std::stringstream output;
+//    output << "planar," << std::fixed;
+//    output << prewarp.w << "," << prewarp.h << ",";
+//    output << prewarp.rotationx << "," << prewarp.rotationy << "," << prewarp.rotationz << ",";
+//    output << prewarp.stretchX << "," << prewarp.dist << ",";
+//    output << prewarp.panX << "," << prewarp.panY;
+//    m_prewarp= QString::fromStdString(output.str());
+    //qDebug() << m_prewarp;
     return m_prewarp;
 
 }
@@ -708,10 +670,10 @@ void MainWindow::on_valueXA1_valueChanged(int value)
     prewarp.rotationx = -((float)value - 100) / 20000.0;
     switch (ui->calibracionSelect->currentIndex()) {
     case 0:
-        m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+        m_matricularesults1.OrigenFotoPrewarp=updateprewarp(m_matricularesults1.OrigenFotoPrewarp);
         break;
     case 1:
-        m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+        m_matricularesults2.OrigenFotoPrewarp=updateprewarp(m_matricularesults2.OrigenFotoPrewarp);
         break;
     }
 }
@@ -721,10 +683,10 @@ void MainWindow::on_valueYA1_valueChanged(int value)
       prewarp.rotationy = ((float)value - 100) / 20000.0;
       switch (ui->calibracionSelect->currentIndex()) {
       case 0:
-          m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+          m_matricularesults1.OrigenFotoPrewarp=updateprewarp(m_matricularesults1.OrigenFotoPrewarp);
           break;
       case 1:
-          m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+          m_matricularesults2.OrigenFotoPrewarp=updateprewarp(m_matricularesults2.OrigenFotoPrewarp);
           break;
       }
 }
@@ -734,10 +696,10 @@ void MainWindow::on_valueZA1_valueChanged(int value)
   prewarp.rotationz = -((float)value - 100) / 100.0;
   switch (ui->calibracionSelect->currentIndex()) {
   case 0:
-      m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+      m_matricularesults1.OrigenFotoPrewarp=updateprewarp(m_matricularesults1.OrigenFotoPrewarp);
       break;
   case 1:
-      m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+      m_matricularesults2.OrigenFotoPrewarp=updateprewarp(m_matricularesults2.OrigenFotoPrewarp);
       break;
   }
 }
@@ -747,10 +709,10 @@ void MainWindow::on_valueWA1_valueChanged(int value)
     prewarp.stretchX = 1.0 + ((float)value - 100) / -200.0;
     switch (ui->calibracionSelect->currentIndex()) {
     case 0:
-        m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+        m_matricularesults1.OrigenFotoPrewarp=updateprewarp(m_matricularesults1.OrigenFotoPrewarp);
         break;
     case 1:
-        m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+        m_matricularesults2.OrigenFotoPrewarp=updateprewarp(m_matricularesults2.OrigenFotoPrewarp);
         break;
     }
 }
@@ -760,19 +722,19 @@ void MainWindow::on_valueDA1_valueChanged(int value)
     prewarp.dist = 1.0 - ((float)value - 100) / 200.0;
     switch (ui->calibracionSelect->currentIndex()) {
     case 0:
-        m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
+        m_matricularesults1.OrigenFotoPrewarp=updateprewarp(m_matricularesults1.OrigenFotoPrewarp);
         break;
     case 1:
-        m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
+        m_matricularesults2.OrigenFotoPrewarp=updateprewarp(m_matricularesults2.OrigenFotoPrewarp);
         break;
     }
 }
 
 void MainWindow::on_guardarPrewarp_clicked()
 {
-    engine->appConfig()->beginGroup(ALPR);
-    engine->appConfig()->setValue(QString("prewarp"+(QString::number(ui->calibracionSelect->currentIndex()+1))),get_prewarp_config());
-    engine->appConfig()->endGroup();
+//    engine->appConfig()->beginGroup(ALPR);
+//    engine->appConfig()->setValue(QString("prewarp"+(QString::number(ui->calibracionSelect->currentIndex()+1))),get_prewarp_config());
+//    engine->appConfig()->endGroup();
 
 }
 /** END PREWARP **/
@@ -845,20 +807,20 @@ void MainWindow::on_guardarPlanK_clicked()
 {
     switch (ui->calibracionSelect->currentIndex()) {
     case 0:
-        engine->appConfig()->beginGroup("Alpr");
+        engine->appConfig()->beginGroup(ALPR);
         engine->appConfig()->setValue("planka1",QString::number(ui->vPlankA->value()));
         engine->appConfig()->setValue("plankb1",QString::number(ui->vPlankB->value()));
         engine->appConfig()->setValue("plankc1",QString::number(ui->vPlankC->value()));
         engine->appConfig()->endGroup();
-        engine->calibrarFoto(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA1.clone());
+        engine->calibrarFoto(ui->calibracionSelect->currentIndex(),m_matricularesults1.OrigenFoto.clone());
         break;
     case 1:
-        engine->appConfig()->beginGroup("Alpr");
+        engine->appConfig()->beginGroup(ALPR);
         engine->appConfig()->setValue("planka2",QString::number(ui->vPlankA->value()));
         engine->appConfig()->setValue("plankb2",QString::number(ui->vPlankB->value()));
         engine->appConfig()->setValue("plankc2",QString::number(ui->vPlankC->value()));
         engine->appConfig()->endGroup();
-        engine->calibrarFoto(ui->calibracionSelect->currentIndex(),m_fotocamaraCVA2.clone());
+        engine->calibrarFoto(ui->calibracionSelect->currentIndex(),m_matricularesults2.OrigenFoto.clone());
         break;
     default:
         break;
@@ -869,4 +831,10 @@ void MainWindow::on_ActualizarCamara_clicked()
 {
     engine->getCamaraFoto(ui->calibracionSelect->currentIndex());
     //loadprewarp();
+}
+
+
+void MainWindow::on_calibracionSelect_currentIndexChanged(int index)
+{
+    updateGui();
 }

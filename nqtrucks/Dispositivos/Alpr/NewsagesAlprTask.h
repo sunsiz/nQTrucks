@@ -39,10 +39,13 @@ private:
     int       m_nDevice;
     void      loadconfig();
     QSettings *m_settings;
+    QString m_config_file;
+
     t_Plank    m_Plank;    
     void setPlank(const QString &A1, const QString &B1, const QString &C1,
                   const QString &A2, const QString &B2, const QString &C2);
-    QString  m_prewarp1;
+
+    QString  m_prewarp1;    
     QString  m_prewarp2;
     void setPrewarp(const QString &prewarp1, const QString &prewarp2);
     /** END SETTINGS ****************************************************/

@@ -51,8 +51,6 @@ public:
     static void setSettings(QSettings *value){m_settings=value;}
     void setAppConfig(QSettings *value);
     QSettings *appConfig();
-private:
-    //QSettings *m_config;
     /** END CONFIG **/
 
     /** Camaras **/
@@ -61,12 +59,10 @@ public:
     void setCamaraIP(int nCamara, QString type,QString host, QString port, QString user, QString passwd);
     void getCamaraFoto(int _ncamara);
 signals:
-    //void CamaraIPFoto1(const QImage &foto);
-    void CamaraIPFotoCV1(const cv::Mat &fotocv,const cv::Mat &fotorgbcv,const QImage &foto);
-    void CamaraIPWeb1(const QString &url);
 
-    //void CamaraIPFoto2(const QImage &foto);
-    void CamaraIPFotoCV2(const cv::Mat &fotocv,const cv::Mat &fotorgbcv,const QImage &foto);
+    void CamaraIPFotoCV1(const cv::Mat &fotocv);
+    void CamaraIPWeb1(const QString &url);
+    void CamaraIPFotoCV2(const cv::Mat &fotocv);
     void CamaraIPWeb2(const QString &url);
     /** END Camaras **/
 
@@ -98,22 +94,18 @@ public:
     void calibrarFoto(int _device, cv::Mat _foto);
     void getFotoMatricula(int _device, cv::Mat _foto);
 
-    /** ALPR A **/
+    /** ALPR 1 **/
 signals:
-    void ReplyOriginalFotoA(const cv::Mat &Foto);
-    void ReplyOriginalFotoBlancaA(const cv::Mat &Foto);
-    void ReplyOriginalFotoRojaA(const cv::Mat &Foto);
-//    void ReplyMatriculaFotoA1(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto, const QByteArray &FotoByte);
-//    void ReplyMatriculaFotoB1(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto, const QByteArray &FotoByte);
+    void ReplyOriginalFoto1(const cv::Mat &Foto);
+    void ReplyOriginalFotoBlanca1(const cv::Mat &Foto);
+    void ReplyOriginalFotoRoja1(const cv::Mat &Foto);
     void ReplyMatriculaResults1(const t_MatriculaResults &_results);
 
-    /** ALPR B **/
+    /** ALPR 2 **/
 signals:
-    void ReplyOriginalFotoB(const cv::Mat &Foto);
-    void ReplyOriginalFotoBlancaB(const cv::Mat &Foto);
-    void ReplyOriginalFotoRojaB(const cv::Mat &Foto);
-//    void ReplyMatriculaFotoA2(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto, const QByteArray &FotoByte);
-//    void ReplyMatriculaFotoB2(const QString &matricula, const QString &confianza, const bool &detectada ,const cv::Mat &Foto, const QByteArray &FotoByte);
+    void ReplyOriginalFoto2(const cv::Mat &Foto);
+    void ReplyOriginalFotoBlanca2(const cv::Mat &Foto);
+    void ReplyOriginalFotoRoja2(const cv::Mat &Foto);
     void ReplyMatriculaResults2(const t_MatriculaResults &_results);
 
     /** END NEWSAGES ALPR **/

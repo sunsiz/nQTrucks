@@ -732,7 +732,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="TestMatriculaA1">
+            <widget class="QPushButton" name="TestMatricula">
              <property name="minimumSize">
               <size>
                <width>20</width>

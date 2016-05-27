@@ -44,7 +44,6 @@ NewsagesAlprTask::~NewsagesAlprTask()
     m_FotoCamara.release();
     m_FotoCalibradaBlancosCV.release();
     m_FotoCalibradaRojosCV.release();
-    //m_settings->clear();
     this->deleteLater();
 }
 /** END CONSTRUCTOR *****************************************************************************/
@@ -53,19 +52,25 @@ NewsagesAlprTask::~NewsagesAlprTask()
 /** SETTINGS **/
 void NewsagesAlprTask::loadconfig()
 {
+    m_config_file = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("config/openalpr.conf");
 
-    m_configroot = "Alpr";
+    m_configroot = ALPR;
     m_settings->beginGroup(m_configroot);
 
-    setPlank(m_settings->value("planka1").toString(),
-             m_settings->value("plankb1").toString(),
-             m_settings->value("plankc1").toString(),
-             m_settings->value("planka2").toString(),
-             m_settings->value("plankb2").toString(),
-             m_settings->value("plankc2").toString() );
+    setPlank(
+                m_settings->value("planka1","0").toString(),
+                m_settings->value("plankb1","0").toString(),
+                m_settings->value("plankc1","0").toString(),
 
-    setPrewarp( m_settings->value("prewarp2").toString(),
-                m_settings->value("prewarp1").toString() );
+                m_settings->value("planka2","0").toString(),
+                m_settings->value("plankb2","0").toString(),
+                m_settings->value("plankc2","0").toString()
+             );
+
+    setPrewarp(
+                m_settings->value("prewarp2","").toString(),
+                m_settings->value("prewarp1","").toString()
+                );
 
    m_settings->endGroup();
 
@@ -128,7 +133,6 @@ void NewsagesAlprTask::setFotoCalibrada(int n)
     cv::Mat channel[3];
     switch (n) {
     case 0:
-        loadconfig();
         cv::add(img.clone(),cv::Scalar(Plank().C1,Plank().B1,Plank().A1),img);
         cv::split(img, channel);
         img = channel[2] - channel[1] -   channel[2] + channel[0];
@@ -140,7 +144,6 @@ void NewsagesAlprTask::setFotoCalibrada(int n)
         channel[2].release();
         break;
     case 1:
-        loadconfig();
         cv::add(img.clone(),cv::Scalar(Plank().A2,Plank().B2,Plank().C2),img);
         cv::split(img, channel);
         cv::add(channel[0], channel[1], img);
@@ -161,8 +164,7 @@ void NewsagesAlprTask::setFotoCalibrada(int n)
 }
 
 cv::Mat NewsagesAlprTask::apply_prewarp1(const cv::Mat &img){
-    loadconfig();
-    alpr::Config config("truck");
+    alpr::Config config("truck",m_config_file.toStdString());
     config.prewarp = Prewarp1().toStdString();
     config.setDebug(false);
     alpr::PreWarp prewarp(&config);
@@ -172,8 +174,7 @@ cv::Mat NewsagesAlprTask::apply_prewarp1(const cv::Mat &img){
 }
 
 cv::Mat NewsagesAlprTask::apply_prewarp2(const cv::Mat &img){
-    loadconfig();
-    alpr::Config config("eur");
+    alpr::Config config("eur",m_config_file.toStdString());
     config.prewarp = Prewarp2().toStdString();
     config.setDebug(false);
     alpr::PreWarp prewarp(&config);
@@ -187,9 +188,9 @@ cv::Mat NewsagesAlprTask::apply_prewarp2(const cv::Mat &img){
     /** BLANCAS **/
 void NewsagesAlprTask::procesarBlancas()
 {
-    QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("config/openalpr.conf");
+
     Alpr *matricula;
-    matricula = new Alpr("truck", filename.toStdString());
+    matricula = new Alpr("truck", m_config_file.toStdString());
     matricula->setDefaultRegion("truck");
     matricula->setTopN(1);
     matricula->setPrewarp(Prewarp1().toStdString());
@@ -256,9 +257,8 @@ void NewsagesAlprTask::procesarBlancas()
     /** ROJAS **/
 void NewsagesAlprTask::procesarRojas()
 {
-    QString filename = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("config/openalpr.conf");
     Alpr *remolque;
-    remolque  = new Alpr("eur", filename.toStdString());
+    remolque  = new Alpr("eur", m_config_file.toStdString());
     remolque->setTopN(1);
     remolque->setDefaultRegion("eur");
     remolque->setPrewarp(Prewarp2().toStdString());
@@ -309,7 +309,7 @@ void NewsagesAlprTask::procesarRojas()
             }
         }else{
             //Algoritmo PlankC ROJAS
-            qDebug() << "plank=" << m_Plank.A2 << "," << m_Plank.B2 << "," << m_Plank.C2;
+            //qDebug() << "plank=" << m_Plank.A2 << "," << m_Plank.B2 << "," << m_Plank.C2;
         }
 
         regionsOfInterest.clear();
@@ -333,12 +333,9 @@ cv::Mat NewsagesAlprTask::convertQImage2Mat(const QImage &img){
     const char* begin = reinterpret_cast<char*>(baScene.data());
     const char* end = begin + baScene.size();
     std::vector<char> pic(begin, end);
-    //cv::Mat mat = cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
     buffer.close();
     baScene.clear();
     return cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
-    //pic.clear();
-    //return mat;
 }
 
 QImage NewsagesAlprTask::convertMat2QImage(const cv::Mat &src)

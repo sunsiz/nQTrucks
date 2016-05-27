@@ -201,33 +201,38 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 {
     Q_D(nQTrucksEngine);
     d->q_ptr=this;
-    connect(d->m_camara1,SIGNAL(ReplyCamaraIPFotoCV(cv::Mat,cv::Mat,QImage)),
-            this,        SIGNAL(CamaraIPFotoCV1(cv::Mat,cv::Mat,QImage)));
+
+    /** CAMARAS IP **/
+    /** 1 **/
+    connect(d->m_camara1,SIGNAL(ReplyCamaraIPFotoCV(cv::Mat)),this,SIGNAL(CamaraIPFotoCV1(cv::Mat)));
     connect(d->m_camara1,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb1(QString)));
-
-    connect(d->m_camara2,SIGNAL(ReplyCamaraIPFotoCV(cv::Mat,cv::Mat,QImage)),
-            this,        SIGNAL(CamaraIPFotoCV2(cv::Mat,cv::Mat,QImage)));
+    /** 2 **/
+    connect(d->m_camara2,SIGNAL(ReplyCamaraIPFotoCV(cv::Mat)),this,SIGNAL(CamaraIPFotoCV2(cv::Mat)));
     connect(d->m_camara2,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb2(QString)));
+    /** END CAMARAS IP **/
 
+    /** NEWSAGES IO **/
     connect(d->m_newsagesIO,SIGNAL(IODeviceConnectChanged(bool)),this,SIGNAL(IODevicesStatusChanged(bool)));
     connect(d->m_newsagesIO,SIGNAL(readyChanged(bool)),this,SIGNAL(IODevicesStatusChanged(bool)));
     connect(d->m_newsagesIO,SIGNAL(ValuePin10Changed(bool)),this,SIGNAL(IODevicesPIN10Changed(bool)));
+    /** END NEWSAGES IO **/
 
+    /** BASCULAS **/
     connect(d->m_basculaReader1,SIGNAL(BasculaStatus(bool)),this,SIGNAL(BasculaStatus(bool)));
-    connect(d->m_basculaReader1,SIGNAL(BasculaChanged(t_Bascula)),
-            this,SIGNAL(BasculaChanged(t_Bascula)));
+    connect(d->m_basculaReader1,SIGNAL(BasculaChanged(t_Bascula)),this,SIGNAL(BasculaChanged(t_Bascula)));
+    /** END BASCULAS **/
 
     /** NEWSAGES ALPR **/
     /** 1 **/
-    connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFotoA(cv::Mat)));
-    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlancaA(cv::Mat)));
-    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRojaA(cv::Mat)));
+    connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto1(cv::Mat)));
+    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)));
+    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)));
     connect(d->m_alpr1,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults1(t_MatriculaResults)));
 
     /** 2 **/
-    connect(d->m_alpr2,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFotoB(cv::Mat)));
-    connect(d->m_alpr2,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlancaB(cv::Mat)));
-    connect(d->m_alpr2,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRojaB(cv::Mat)));
+    connect(d->m_alpr2,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto2(cv::Mat)));
+    connect(d->m_alpr2,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)));
+    connect(d->m_alpr2,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)));
     connect(d->m_alpr2,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(t_MatriculaResults)));
     /** END NEWSAGES ALPR **/
 
