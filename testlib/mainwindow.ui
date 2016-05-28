@@ -1189,34 +1189,40 @@
                   <widget class="QLabel" name="lvPlankA">
                    <property name="minimumSize">
                     <size>
-                     <width>18</width>
+                     <width>25</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>18</width>
+                     <width>30</width>
                      <height>30</height>
                     </size>
                    </property>
+                   <property name="layoutDirection">
+                    <enum>Qt::LeftToRight</enum>
+                   </property>
                    <property name="text">
-                    <string>0</string>
+                    <string>111</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                    </property>
                   </widget>
                  </item>
                  <item>
                   <widget class="QSlider" name="vPlankA">
                    <property name="maximum">
-                    <number>90</number>
+                    <number>254</number>
                    </property>
                    <property name="singleStep">
-                    <number>2</number>
+                    <number>1</number>
                    </property>
                    <property name="pageStep">
-                    <number>2</number>
+                    <number>1</number>
                    </property>
                    <property name="value">
-                    <number>0</number>
+                    <number>254</number>
                    </property>
                    <property name="tracking">
                     <bool>true</bool>
@@ -1239,37 +1245,40 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="lvPlankC">
+                  <widget class="QLabel" name="lvPlankB">
                    <property name="minimumSize">
                     <size>
-                     <width>18</width>
+                     <width>25</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>18</width>
+                     <width>30</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="text">
                     <string>0</string>
                    </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QSlider" name="vPlankC">
+                  <widget class="QSlider" name="vPlankB">
                    <property name="maximum">
-                    <number>90</number>
+                    <number>254</number>
                    </property>
                    <property name="singleStep">
-                    <number>2</number>
+                    <number>1</number>
                    </property>
                    <property name="pageStep">
-                    <number>2</number>
+                    <number>1</number>
                    </property>
                    <property name="value">
-                    <number>40</number>
+                    <number>20</number>
                    </property>
                    <property name="tracking">
                     <bool>true</bool>
@@ -1286,37 +1295,40 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="lvPlankB">
+                  <widget class="QLabel" name="lvPlankC">
                    <property name="minimumSize">
                     <size>
-                     <width>18</width>
+                     <width>25</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>18</width>
+                     <width>30</width>
                      <height>30</height>
                     </size>
                    </property>
                    <property name="text">
                     <string>0</string>
                    </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QSlider" name="vPlankB">
+                  <widget class="QSlider" name="vPlankC">
                    <property name="maximum">
-                    <number>90</number>
+                    <number>254</number>
                    </property>
                    <property name="singleStep">
-                    <number>2</number>
+                    <number>1</number>
                    </property>
                    <property name="pageStep">
                     <number>1</number>
                    </property>
                    <property name="value">
-                    <number>20</number>
+                    <number>40</number>
                    </property>
                    <property name="tracking">
                     <bool>true</bool>
@@ -1356,6 +1368,13 @@
                   <widget class="QPushButton" name="guardarPlanK">
                    <property name="text">
                     <string>Guardar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="resetPlanK">
+                   <property name="text">
+                    <string>Reset</string>
                    </property>
                   </widget>
                  </item>

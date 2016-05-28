@@ -11,7 +11,7 @@ namespace Devices {
 class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
-    explicit NewsagesAlprTask(int _nDevice=1, cv::Mat _fotoCamara=cv::Mat(), QSettings *_appsettings=0, QObject *parent = 0);
+    explicit NewsagesAlprTask(int _nDevice=0, cv::Mat _fotoCamara=cv::Mat(), QSettings *_appsettings=0, QObject *parent = 0);
     ~NewsagesAlprTask();
 
 
@@ -31,23 +31,19 @@ private:
 
     /** SETTINGS *******************************************************/
 public:
-    t_Plank Plank() const;
-    QString Prewarp1() const;
-    QString Prewarp2() const;
+    t_Plank getPlank() const;
+    QString getPrewarp() const;
 private:
-    QString   m_configroot;
     int       m_nDevice;
     void      loadconfig();
     QSettings *m_settings;
     QString m_config_file;
 
-    t_Plank    m_Plank;    
-    void setPlank(const QString &A1, const QString &B1, const QString &C1,
-                  const QString &A2, const QString &B2, const QString &C2);
+    t_Plank    m_plank;
+    void setPlank(const QString &A, const QString &B, const QString &C);
 
-    QString  m_prewarp1;    
-    QString  m_prewarp2;
-    void setPrewarp(const QString &prewarp1, const QString &prewarp2);
+    QString  m_prewarp;
+    void setPrewarp(const QString &prewarp);
     /** END SETTINGS ****************************************************/
 
 
@@ -55,10 +51,12 @@ private:
 private:
     cv::Mat m_FotoCalibradaBlancosCV;
     cv::Mat m_FotoCalibradaRojosCV;
-    cv::Mat apply_prewarp1(const cv::Mat &img);
-    cv::Mat apply_prewarp2(const cv::Mat &img);
-    int m_count_pankb;
-    int m_count_pankc;
+    cv::Mat apply_prewarp(const cv::Mat &img);
+    /** Algoritmo AUTOCALIBRACION **/
+    int m_retry_panks=5;
+    void guardarPlanK();
+    /** END ALGORITMO AUTOCALIBRACION**/
+
 public slots:
     void calibrarBlanco();
     void calibrarRojo();

@@ -83,8 +83,10 @@ void NewsagesAlpr::calibrarFoto(const cv::Mat &Foto){
         hiloCalibrar2 = new QThread;
 
         /** Crear tareas **/
+        m_settings->beginGroup(ALPR);
         tareaCalibrar1 = new NewsagesAlprTask(m_nDevice,m_matricularesults->OrigenFotoPrewarp,m_settings);
         tareaCalibrar2 = new NewsagesAlprTask(m_nDevice,m_matricularesults->OrigenFotoPrewarp,m_settings);
+        m_settings->endGroup();
 
         /** Asignar tareas a hilos **/
         tareaCalibrar1->moveToThread(hiloCalibrar1);
@@ -135,8 +137,10 @@ void NewsagesAlpr::processFoto(const cv::Mat &Foto)
         hilo2 = new QThread;
 
         /** Crear tareas **/
+        m_settings->beginGroup(ALPR);
         tarea1 = new NewsagesAlprTask(m_nDevice,m_matricularesults->OrigenFotoPrewarp,m_settings);
         tarea2 = new NewsagesAlprTask(m_nDevice,m_matricularesults->OrigenFotoPrewarp,m_settings);
+        m_settings->endGroup();
 
         /** Asignar tareas a hilos **/
         tarea1->moveToThread(hilo1);

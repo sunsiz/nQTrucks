@@ -123,6 +123,9 @@ signals:
     void ReplyCamaraIPFotoCV(const cv::Mat &ReplyCV);
     void ReplyCamaraIPFoto(const QByteArray &Reply);
     void CamaraIPWeb(const QString &CamaraWeb);
+    void CamaraError(const QString &errorCamaraIP);
+private:
+    QString m_errorCamaraIP;
     /** END REDES **/
 };
 

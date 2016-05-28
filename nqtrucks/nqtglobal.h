@@ -57,12 +57,9 @@ struct Bascula{
 
 /** ALPR  **/
 struct PlanK{
-    int A1=0;
-    int B1=0;
-    int C1=0;
-    int A2=0;
-    int B2=0;
-    int C2=0;
+    int A=0;
+    int B=0;
+    int C=0;
 }; typedef PlanK t_Plank;
 
 struct s_RegistroSimple{

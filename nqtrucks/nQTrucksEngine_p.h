@@ -75,8 +75,8 @@ private:
 public:
     QStringList getCameraTypes();
     void setCamaraIP(int nDevice, QString type, QString host, QString port, QString user, QString passwd);
-    Devices::CamaraIP *m_camara1 = new Devices::CamaraIP(1,settings(), this);
-    Devices::CamaraIP *m_camara2 = new Devices::CamaraIP(2,settings(), this);
+    Devices::CamaraIP *m_camara1 = new Devices::CamaraIP(0,settings(), this);
+    Devices::CamaraIP *m_camara2 = new Devices::CamaraIP(1,settings(), this);
     /** FIN CAMARAS **/
 
     /** NEWSAGES I/O **/
@@ -95,8 +95,8 @@ private:
     /** END BASCULAS **/
 
     /** ALPR **/
-    Devices::NewsagesAlpr *m_alpr1= new Devices::NewsagesAlpr(1,settings(),this);//settings(),this);
-    Devices::NewsagesAlpr *m_alpr2= new Devices::NewsagesAlpr(2,settings(),this);//settings(),this);
+    Devices::NewsagesAlpr *m_alpr1= new Devices::NewsagesAlpr(0,settings(),this);//settings(),this);
+    Devices::NewsagesAlpr *m_alpr2= new Devices::NewsagesAlpr(1,settings(),this);//settings(),this);
     /** END ALPR **/
 
 

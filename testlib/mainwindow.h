@@ -48,6 +48,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+
+
 private:
     Ui::MainWindow *ui;
     bool m_running=false;
@@ -62,9 +64,6 @@ private:
     /** END nQTrucks Lib **/
 
     /** CAMARAS **/
-private:
-//    cv::Mat m_fotocamaraCVA1;
-//    cv::Mat m_fotocamaraCVA2;
 private slots:
     void on_CamaraSelect_currentIndexChanged(int index);
     void on_GuardarCamara_clicked();
@@ -102,38 +101,57 @@ private slots:
     void on_BasculaConectada(bool conectada);
     /** END BASCULAS **/
 
+
+    /** CALIBRACION ***************************************/
+    /** GUI **/
+private slots:
+    void on_calibracionSelect_currentIndexChanged(int index);
+    void loadPlanks(const int &index);
+    void on_TestMatricula_clicked();
+    void on_ActualizarCamara_clicked();
+    /** END GUI **/
     /** ALPR **/
-    /** NEWSAGES ALPR 1 **/
+public:
+    int getAlprIndex()const {return m_AlprIndex;}
+    void setAlprIndex(int _AlprIndex){ m_AlprIndex = _AlprIndex;}
 private:
-    t_MatriculaResults m_matricularesults1;
-private slots:
-    void onReplyMatriculaResults1(t_MatriculaResults _result);
-    void onGetOriginalMatricula1(cv::Mat foto);
-    void onGetOriginalMatriculaRoja1(cv::Mat foto);
-    void onGetOriginalMatriculaBlanca1(cv::Mat foto);
-    /** END NEWSAGES ALPR 1 **/
+    int m_AlprIndex=0;
+    QVector<t_MatriculaResults> m_matricularesults={};
+    QVector<t_MatriculaResults>::iterator m_matricularesults_iterator;
+    void updateCalibracionGui();
 
-    /** NEWSAGES ALPR 2 **/
-private:
-    t_MatriculaResults m_matricularesults2;
+    /** ALPR1 **/
 private slots:
-    void onReplyMatriculaResults2(t_MatriculaResults _result);
-    void onGetOriginalMatricula2(cv::Mat foto);
-    void onGetOriginalMatriculaRoja2(cv::Mat foto);
-    void onGetOriginalMatriculaBlanca2(cv::Mat foto);
+    void onReplyMatriculaResults1(const t_MatriculaResults &_result);
+    void onGetOriginalMatricula1(const cv::Mat &foto);
+    void onGetOriginalMatriculaRoja1(const cv::Mat &foto);
+    void onGetOriginalMatriculaBlanca1(const cv::Mat &foto);
+    /** END ALPR1 **/
+
+    /** ALPR2 **/
+private slots:
+    void onReplyMatriculaResults2(const t_MatriculaResults &_result);
+    void onGetOriginalMatricula2(const cv::Mat &foto);
+    void onGetOriginalMatriculaRoja2(const cv::Mat &foto);
+    void onGetOriginalMatriculaBlanca2(const cv::Mat &foto);
     /** END NEWSAGES ALPR 2 **/
+    /** PLANKs **/
+private slots:
+    void on_vPlankA_valueChanged(int value);
+    void on_vPlankB_valueChanged(int value);
+    void on_vPlankC_valueChanged(int value);
+    void on_guardarPlanK_clicked();
+    /** END PLANKS **/
 
-
+/** END CALIBRACION ************************************************/
 
     /** PREWARP **/
 private:
     cv::Mat updateprewarp(cv::Mat img);
     void loadprewarp();
     QString get_prewarp_config();
-//    cv::Mat m_fotoprewarpCVA1;
-//    cv::Mat m_fotoprewarpCVA2;
-    cv::Mat curWarpedImage1;
-    cv::Mat curWarpedImage2;
+//    cv::Mat curWarpedImage1;
+//    cv::Mat curWarpedImage2;
     QString m_prewarp;
     nQTrucks::t_Prewarp prewarp;
 private slots:
@@ -147,36 +165,17 @@ private slots:
 
 
 
-    /** PLANK **/
-private:
-//    cv::Mat m_fotoRojos1;
-//    cv::Mat m_fotoBlancos1;
-//    cv::Mat m_fotoRojos2;
-//    cv::Mat m_fotoblancos2;
-private slots:
-    void on_vPlankA_valueChanged(int value);
-    void on_vPlankA_sliderMoved(int position);
-    void on_vPlankB_sliderMoved(int position);
-    void on_vPlankB_valueChanged(int value);
-    void on_vPlankC_valueChanged(int value);
-    void on_vPlankC_sliderMoved(int position);
-    void on_guardarPlanK_clicked();
 
 
     /** CONFIG **/
 private slots:
-    void on_TestMatricula_clicked();
-    void on_calibracionSelect_currentIndexChanged(const QString &arg1);
-    void on_ActualizarCamara_clicked();
 
 
 
-    void on_calibracionSelect_currentIndexChanged(int index);
+    void on_resetPlanK_clicked();
 
 private:
-    //cv::Mat m_fotocamaraCVA;
     void loadconfig();
-    //void updateOriginal(); //*<< DEBUG
     /** END CONFIG **/
     static QImage convertMat2QImage(const cv::Mat &src);
 };

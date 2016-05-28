@@ -55,6 +55,7 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
     buffer.close();
     bfotoCamaraError=ba;
 
+
     /** CAMARA ERROR CV::MAT **/
     fotoCamaraErrorCV = cv::Mat::zeros( 720, 1280, CV_8UC3 );
     fotoCamaraErrorCV = cv::Scalar( 0, 0, 255 );
@@ -62,6 +63,10 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
     /** CONFIG **/
     loadconfig();
 
+    m_errorCamaraIP = " Camara numero: "+
+                      QString::number(m_nDevice+1)+
+                      " Host: "+
+                      CamaraHost();
     /** CONECTIONS **/
     connect(m_netmanager, SIGNAL(finished(QNetworkReply*)), this , SLOT(camaraNetworkReplyFinished(QNetworkReply*)));
 }
@@ -77,7 +82,7 @@ CamaraIP::~CamaraIP()
 void CamaraIP::loadconfig()
 {
     switch (m_nDevice) {
-    case 1:
+    case 0:
         m_configroot = (QString(CAMARA1));
         m_settings->beginGroup(m_configroot);
         setCamaraHost(m_settings->value("host","10.42.0.251").toString());
@@ -87,7 +92,7 @@ void CamaraIP::loadconfig()
         setTipoCamara(m_settings->value("tipo","0").toString());
         m_settings->endGroup();
         break;
-    case 2:
+    case 1:
         m_configroot = (QString(CAMARA2));
         m_settings->beginGroup(m_configroot);
         setCamaraHost(m_settings->value("host","10.42.0.251").toString());
@@ -160,11 +165,11 @@ QUrl CamaraIP::setCamaraURL()
     curl.setUserName(CamaraUser());
     curl.setPassword(CamaraPass());
 
-    emit CamaraIPWeb(curl.toString());
+    int jpgnumber = m_nDevice +1;
 
     switch (m_TipoCamara) {
     case CameraType::DEBUG:
-        curl= QString("http://localhost/" + QString::number(m_nDevice)+ ".jpg");
+        curl= QString("http://localhost/" + QString::number(jpgnumber)+ ".jpg");
         qDebug() << "Camara: " << m_nDevice << " url: " << curl.toString();
         break;
     case CameraType::HIKVISION :
@@ -176,6 +181,7 @@ QUrl CamaraIP::setCamaraURL()
     default:
         break;
     }
+    emit CamaraIPWeb(curl.toString());
     return curl;
 }
 
@@ -218,6 +224,7 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply)
     }else{
         emit ReplyCamaraIPFotoCV(fotoCamaraErrorCV);
         emit ReplyCamaraIPFoto(bfotoCamaraError);
+        emit CamaraError(m_errorCamaraIP);
     }
     reply->deleteLater();
 
