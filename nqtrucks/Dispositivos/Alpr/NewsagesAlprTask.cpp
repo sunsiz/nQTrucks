@@ -76,19 +76,28 @@ NewsagesAlprTask::~NewsagesAlprTask()
 /** SETTINGS **/
 void NewsagesAlprTask::loadconfig()
 {
+    /** resize foto **/
+    cv::Mat _FotoCamara = cv::Mat::zeros( 720, 1280, CV_8UC3 );
+    cv::resize(m_FotoCamara,m_FotoCamara,_FotoCamara.size());
+
     m_config_file = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("config/openalpr.conf");
+    QString default_prewarp =  "planar," +
+                               QString::number(m_FotoCamara.cols) + ","  +
+                               QString::number(m_FotoCamara.rows) + ","  +
+                               "0,0,0,1.0,1.0,0,0";
     switch (m_nDevice) {
     case 0:
         setPlank(m_settings->value("planka1","0").toString(),
                  m_settings->value("plankb1","0").toString(),
                  m_settings->value("plankc1","0").toString());
-        setPrewarp(m_settings->value("prewarp1","").toString());
+        setPrewarp(m_settings->value("prewarp1",default_prewarp).toString());
+
         break;
     case 1:
         setPlank(m_settings->value("planka2","0").toString(),
                  m_settings->value("plankb2","0").toString(),
                  m_settings->value("plankc2","0").toString());
-        setPrewarp(m_settings->value("prewarp2","").toString());
+        setPrewarp(m_settings->value("prewarp2",default_prewarp).toString());
         break;
     }
 }
@@ -247,6 +256,7 @@ void NewsagesAlprTask::procesarBlancas()
                                        ,m_matricularesult->MatriculaFotoA,
                                        matriculaSize);
 
+                            m_matricularesult->MatriculaFotoAByte = convertMat2Bytearray(m_matricularesult->MatriculaFotoA.clone());
                             m_matricularesult->MatriculaDetectedA   = candidate.matches_template;
                             m_matricularesult->MatriculaA           = QString::fromStdString(candidate.characters);
                             m_matricularesult->MatriculaPrecisionA  = candidate.overall_confidence;
@@ -330,7 +340,7 @@ void NewsagesAlprTask::procesarRojas()
 
                                 cv::resize(cv::Mat(m_matricularesult->OrigenFoto,rect),
                                            m_matricularesult->MatriculaFotoB,matriculaSize);
-
+                                m_matricularesult->MatriculaFotoBByte = convertMat2Bytearray(m_matricularesult->MatriculaFotoB.clone());
                                 m_matricularesult->MatriculaDetectedB   = candidate.matches_template;
                                 m_matricularesult->MatriculaB           = QString::fromStdString(candidate.characters);
                                 m_matricularesult->MatriculaPrecisionB  = candidate.overall_confidence;

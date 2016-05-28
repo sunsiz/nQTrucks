@@ -70,8 +70,8 @@ void Daemon::onPesoNuevo(const t_Bascula &_nuevaPesada)
 
       //Espero 2 Fotos
       m_foto_numero=0;
-      connect(m_camara1,SIGNAL(ReplyCamaraIPFoto(QByteArray)),this,SLOT(onReplyCamaraIPFoto1(QByteArray)));
-      connect(m_camara2,SIGNAL(ReplyCamaraIPFoto(QByteArray)),this,SLOT(onReplyCamaraIPFoto2(QByteArray)));
+      camaraconn1 = connect(m_camara1,SIGNAL(ReplyCamaraIPFoto(QByteArray)),this,SLOT(onReplyCamaraIPFoto1(QByteArray)));
+      camaraconn2 = connect(m_camara2,SIGNAL(ReplyCamaraIPFoto(QByteArray)),this,SLOT(onReplyCamaraIPFoto2(QByteArray)));
       m_camara1->sendCamaraIPFotoRequest();
       m_camara2->sendCamaraIPFotoRequest();
   }
@@ -98,7 +98,7 @@ void Daemon::onBasculaChanged(const t_Bascula &_pesoRT){
 /** FOTOS   ******************************/
 void Daemon::onReplyCamaraIPFoto1(const QByteArray &_Reply)
 {
-    m_camara1->disconnect();
+    QObject::disconnect(camaraconn1);
     m_registro_simple.camara1=_Reply;
     m_foto_numero++;
     //Tengo las dos fotos semaforo GO! y Registro linea
@@ -111,7 +111,7 @@ void Daemon::onReplyCamaraIPFoto1(const QByteArray &_Reply)
 
 void Daemon::onReplyCamaraIPFoto2(const QByteArray &_Reply)
 {
-    m_camara2->disconnect();
+    QObject::disconnect(camaraconn2);
     m_registro_simple.camara2=_Reply;
     m_foto_numero++;
     //Tengo las dos fotos semaforo GO! y Registro linea
@@ -160,8 +160,8 @@ void Daemon::onGuardarRegistroSimple(Registro_Simple &_registro)
 
             //consigue matriculas
             m_alpr_numero=0;
-            connect(m_alpr1,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(t_MatriculaResults)));
-            connect(m_alpr2,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(t_MatriculaResults)));
+            alprconn1 = connect(m_alpr1,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(t_MatriculaResults)));
+            alprconn2 = connect(m_alpr2,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(t_MatriculaResults)));
             m_alpr1->processFoto(byteArray2Mat(m_registro_simple_matriculas.registrosimple.camara1));
             m_alpr2->processFoto(byteArray2Mat(m_registro_simple_matriculas.registrosimple.camara2));
            qDebug() <<  "Inserted!: " << qry.lastInsertId().toInt();
@@ -227,9 +227,6 @@ void Daemon::onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_regi
             db.rollback();
          }else{
             db.commit();
-            //desconecta
-            m_alpr1->disconnect();
-            m_alpr2->disconnect();
            qDebug() <<  "Inserted!: " << qry.lastInsertId().toInt();
          }
         db.close();
@@ -246,7 +243,7 @@ void Daemon::onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_regi
 /** ALPRS **/
 
 void Daemon::onReplyMatriculaResults1(const t_MatriculaResults &_registro){
-
+    QObject::disconnect(alprconn1);
     m_registro_simple_matriculas.matriculaA1=_registro.MatriculaA;
     m_registro_simple_matriculas.matriculaB1=_registro.MatriculaB;
     m_registro_simple_matriculas.precisionA1=_registro.MatriculaPrecisionA;
@@ -261,7 +258,7 @@ void Daemon::onReplyMatriculaResults1(const t_MatriculaResults &_registro){
 }
 
 void Daemon::onReplyMatriculaResults2(const t_MatriculaResults &_registro){
-
+    QObject::disconnect(alprconn2);
     m_registro_simple_matriculas.matriculaA2=_registro.MatriculaA;
     m_registro_simple_matriculas.matriculaB2=_registro.MatriculaB;
     m_registro_simple_matriculas.precisionA2=_registro.MatriculaPrecisionA;

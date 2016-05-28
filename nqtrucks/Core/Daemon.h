@@ -13,6 +13,10 @@
 
 #include <QSqlDatabase>
 
+/* PUNTEROS **/
+
+#include <memory>
+
 namespace nQTrucks{
 namespace Core{
 
@@ -66,6 +70,11 @@ private slots:
     /** CAMARAS **/
 private:
     int m_foto_numero;    
+    std::unique_ptr<QMetaObject::Connection> pcamaraconn1{new QMetaObject::Connection};
+    std::unique_ptr<QMetaObject::Connection> pcamaraconn2{new QMetaObject::Connection};
+    QMetaObject::Connection &camaraconn1 = *pcamaraconn1;
+    QMetaObject::Connection &camaraconn2 = *pcamaraconn2;
+
 private slots:
     void onReplyCamaraIPFoto1(const QByteArray &_Reply);
     void onReplyCamaraIPFoto2(const QByteArray &_Reply);
@@ -79,6 +88,10 @@ private:
     /** ALPRS **/
 private:
     int m_alpr_numero;
+    std::unique_ptr<QMetaObject::Connection> palprconn1{new QMetaObject::Connection};
+    std::unique_ptr<QMetaObject::Connection> palprconn2{new QMetaObject::Connection};
+    QMetaObject::Connection &alprconn1 = *palprconn1;
+    QMetaObject::Connection &alprconn2 = *palprconn2;
 private slots:
     void onReplyMatriculaResults1(const t_MatriculaResults &_registro);
     void onReplyMatriculaResults2(const t_MatriculaResults &_registro);
