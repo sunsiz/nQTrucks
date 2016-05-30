@@ -24,10 +24,9 @@ class Daemon : public QObject
 {
     Q_OBJECT
 public:
-    explicit Daemon(Devices::nQSerialPortReader *_bascula=nullptr,
-                    Devices::NewsagesIO         *_newsagesIO=nullptr,
-                    Devices::CamaraIP           *_camara1=nullptr,
-                    Devices::CamaraIP           *_camara2=nullptr,
+    explicit Daemon(Devices::nQSerialPortReader *_bascula,
+                    Devices::NewsagesIO         *_newsagesIO,
+                    QVector<Devices::CamaraIP*> _camara,
                     Devices::NewsagesAlpr       *_alpr1=nullptr,
                     Devices::NewsagesAlpr       *_alpr2=nullptr,
                     QObject *parent=nullptr);
@@ -35,8 +34,7 @@ public:
 private:
     Devices::nQSerialPortReader *m_bascula;
     Devices::NewsagesIO *m_newsagesIO;
-    Devices::CamaraIP  *m_camara1;
-    Devices::CamaraIP  *m_camara2;
+    QVector<Devices::CamaraIP*> m_camara;
     Devices::NewsagesAlpr *m_alpr1;
     Devices::NewsagesAlpr *m_alpr2;
 
@@ -50,7 +48,7 @@ private:
     bool m_init;
     bool m_registrando;
     bool m_saliendo;
-    bool m_entrando;
+    //bool m_entrando;
 
 /** REGRISTRO **/
 private:
@@ -71,18 +69,25 @@ private slots:
 private:
     int m_foto_numero;    
     std::unique_ptr<QMetaObject::Connection> pcamaraconn1{new QMetaObject::Connection};
-    std::unique_ptr<QMetaObject::Connection> pcamaraconn2{new QMetaObject::Connection};
     QMetaObject::Connection &camaraconn1 = *pcamaraconn1;
+    std::unique_ptr<QMetaObject::Connection> pcamaraconn2{new QMetaObject::Connection};
     QMetaObject::Connection &camaraconn2 = *pcamaraconn2;
+    std::unique_ptr<QMetaObject::Connection> pcamaraconncv1{new QMetaObject::Connection};
+    QMetaObject::Connection &camaraconncv1 = *pcamaraconncv1;
+    std::unique_ptr<QMetaObject::Connection> pcamaraconncv2{new QMetaObject::Connection};
+    QMetaObject::Connection &camaraconncv2 = *pcamaraconncv2;
+
 
 private slots:
     void onReplyCamaraIPFoto1(const QByteArray &_Reply);
+    void onReplyCamaraIPFotoCV1(const cv::Mat &_cvimage);
     void onReplyCamaraIPFoto2(const QByteArray &_Reply);
+    void onReplyCamaraIPFotoCV2(const cv::Mat &_cvimage);
 
 
-    //CONVERSORES//
+    /** TOOLS **/
 private:
-    /*static*/ cv::Mat byteArray2Mat(QByteArray &byteArray);
+    nQTrucks::Tools m_tools;
     /** END CAMARAS **/
 
     /** ALPRS **/
@@ -100,6 +105,10 @@ private slots:
 /** BD **/
 private:
     QSqlDatabase db;
+    QByteArray resizeFoto(QByteArray _ByteArray);
+    cv::Mat byteArray2Mat(QByteArray &byteArray);
+    QImage convertMat2QImage(const cv::Mat &src);
+    QByteArray convertMat2ByteArray(const cv::Mat &img);
 private slots:
     void onGuardarRegistroSimple(Registro_Simple &_registro);
     void onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_registro);

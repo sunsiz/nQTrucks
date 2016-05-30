@@ -45,6 +45,17 @@
 #  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
+
+const int matriculaNewWidth = 520;
+const int matriculaNewHeight = 110;
+const cv::Size matriculaSize(matriculaNewWidth,matriculaNewHeight);
+
+const int fotoWidth = 1280;
+const int fotoHeight = 720;
+const cv::Size fotoSize(fotoWidth,fotoHeight);
+
+const QString default_prewarp ="";//  "planar,1280,720,0,0,0,1.0,1.0,0,0";
+
 /** BASCULAS **/
 struct Bascula{
     bool bEstado=false;
@@ -65,7 +76,10 @@ struct PlanK{
 struct s_RegistroSimple{
     Bascula bascula={};
     QByteArray camara1={};
+    QByteArray camara1resize={};
     QByteArray camara2={};
+    QByteArray camara2resize={};
+
 }; typedef s_RegistroSimple Registro_Simple;
 
 
@@ -91,26 +105,28 @@ struct s_RegistroSimpleMatriculas{
 }; typedef s_RegistroSimpleMatriculas Registro_Simple_Matriculas;
 
 struct MatriculaResults{
-    int     tipo=0;  //0 para calibracion, 1 para procesado
-    int     id=0;    //id fuente de captura de foto
-    cv::Mat  OrigenFoto; //Imagen Original
-    cv::Mat  OrigenFotoPrewarp; // Imagen con calibracion prewarp
-    cv::Mat  OrigenFotoBlanca;  //  Imagen con calibracion de Blancos
-    cv::Mat  OrigenFotoRoja;    // Imagen con calibracion de Rojos
+    int        tipo                 =0;  //0 para calibracion, 1 para procesado
+    int        id                   =0;    //id fuente de captura de foto
+    cv::Mat    OrigenFoto           =cv::Mat::zeros(fotoSize, CV_8UC3 ); //Imagen Original
+    cv::Mat    OrigenFotoResize     =cv::Mat::zeros(fotoSize, CV_8UC3 ); //Imagen Original
+    cv::Mat    OrigenFotoPrewarp    =cv::Mat::zeros(fotoSize, CV_8UC3 ); // Imagen con calibracion prewarp
+    cv::Mat    OrigenFotoBlanca     =cv::Mat::zeros(fotoSize, CV_8UC3 );  //  Imagen con calibracion de Blancos
+    cv::Mat    OrigenFotoRoja       =cv::Mat::zeros(fotoSize, CV_8UC3 );    // Imagen con calibracion de Rojos
+    QByteArray OrigenFotoResizeByte ={};
 
-    bool       MatriculaDetectedA=false;  // Coincide con un patron de busqueda?
-    QString    MatriculaA="";             // STring de la matricula
-    cv::Mat    MatriculaFotoA;            // Imagen recortada de la Matricula
-    QByteArray MatriculaFotoAByte;
-    float       MatriculaPrecisionA=0;     // Precision del OCR
-    QString    MatriculaPrecisionAs="";
+    bool       MatriculaDetectedA   =false;  // Coincide con un patron de busqueda?
+    QString    MatriculaA           ="";             // STring de la matricula
+    cv::Mat    MatriculaFotoA       =cv::Mat::zeros( matriculaSize, CV_8UC3 );            // Imagen recortada de la Matricula
+    QByteArray MatriculaFotoAByte   ={};
+    float      MatriculaPrecisionA  =0;     // Precision del OCR
+    QString    MatriculaPrecisionAs ="0%";
 
-    bool       MatriculaDetectedB=false;  // Coincide con un patron de busqueda?
-    QString    MatriculaB="";             // STring de la matricula
-    cv::Mat    MatriculaFotoB;            // Imagen recortada de la Matricula
-    QByteArray MatriculaFotoBByte;
-    float      MatriculaPrecisionB=0;     // Precision del OCR
-    QString    MatriculaPrecisionBs="";
+    bool       MatriculaDetectedB   =false;  // Coincide con un patron de busqueda?
+    QString    MatriculaB           ="";             // STring de la matricula
+    cv::Mat    MatriculaFotoB       =cv::Mat::zeros( matriculaSize, CV_8UC3 );            // Imagen recortada de la Matricula
+    QByteArray MatriculaFotoBByte   ={};
+    float      MatriculaPrecisionB  =0;     // Precision del OCR
+    QString    MatriculaPrecisionBs ="0%";
 
 }; typedef MatriculaResults t_MatriculaResults;
 /** END ALRP **/
@@ -119,6 +135,12 @@ struct MatriculaResults{
 /** SETTINGS **/
 namespace nQTrucks
 {
+    #define ALPR_PLANCK_BLANCO 0
+    #define ALPR_PLANCK_ROJO   1
+
+    #define SEMAFORO_VERDE 0
+    #define SEMAFORO_AMARILLO 1
+    #define SEMAFORO_ROJO 2
 
     #define CAMARA1 "Camara1"
     #define CAMARA2 "Camara2"
@@ -130,10 +152,24 @@ namespace nQTrucks
     #define ALPR1  "Alpr1"
     #define ALPR2  "Alpr2"
 
+    /** CONVERSORES ********************************************************/
+    class Tools{
+    public:
+        explicit Tools(){;}
+        /*static*/ QImage     convertMat2QImage(   const cv::Mat    &_cvimage);
+        /*static*/ cv::Mat    convertQImage2Mat(   const QImage     &_qimage);
+        /*static*/ QByteArray convertMat2ByteArray(const cv::Mat    &_cvimage);
+        /*static*/ cv::Mat    convertByteArray2Mat(QByteArray _Bytearray);
+        /*static*/ QByteArray resizeByteArray2ByteArray(QByteArray _ByteArray, const int &_w, const int &_h);
+    };
+    /** END CONVERSORES **********************************************************/
+
+
+
 struct Prewarp{
     QString type="planar";  
-    float w=1208;
-    float h=1024;
+    float w=1280;
+    float h=720;
     float panX = 0;
     float panY = 0;
     float rotationx = 0;

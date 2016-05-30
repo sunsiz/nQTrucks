@@ -36,6 +36,8 @@
 #include <QCoreApplication>
 #include <QDir>
 
+#include<QVector>
+
 #include "nqtglobal.h"
 #include "nQTrucksEngine.h"
 
@@ -65,8 +67,8 @@ public:
     nQTrucksEngine * q_ptr;
 
     /** SETTINGS **/
-    void    setSettings(QSettings* value);
-    QSettings*  settings();
+    void       setSettings(QSettings* value);
+    QSettings  *settings();
 private:
     QSettings* m_settings;
     /** FIN SETTINGS **/
@@ -74,9 +76,9 @@ private:
     /** CAMARAS **/
 public:
     QStringList getCameraTypes();
-    void setCamaraIP(int nDevice, QString type, QString host, QString port, QString user, QString passwd);
-    Devices::CamaraIP *m_camara1 = new Devices::CamaraIP(0,settings(), this);
-    Devices::CamaraIP *m_camara2 = new Devices::CamaraIP(1,settings(), this);
+//    Devices::CamaraIP *m_camara1 = new Devices::CamaraIP(0,settings(), this);
+//    Devices::CamaraIP *m_camara2 = new Devices::CamaraIP(1,settings(), this);
+    QVector<Devices::CamaraIP*> m_camara;// = new Devices::CamaraIP(0,settings(), this);
     /** FIN CAMARAS **/
 
     /** NEWSAGES I/O **/

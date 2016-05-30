@@ -56,7 +56,7 @@ public:
     /** Camaras **/
 public:
     QStringList getTiposCamaras();
-    void setCamaraIP(int nCamara, QString type,QString host, QString port, QString user, QString passwd);
+    //void setCamaraIP(int nCamara, QString type,QString host, QString port, QString user, QString passwd);
     void getCamaraFoto(int _ncamara);
 signals:
 
@@ -70,12 +70,12 @@ signals:
 public:
     QStringList getIODevices();
 public slots:
-    void setIODevicesConnect(bool _value);
-    void setIODevicesPin10(bool _value);
+    void setIODevicesConnect(const bool &_value);
+    void setSemaforoStatus(const int &_color);
     void setIODevicesConfig();
 signals:
-    void IODevicesStatusChanged(const bool &status);
-    void IODevicesPIN10Changed(const bool &value);
+    void IODevicesSemaforoChanged(const int &color);
+    void IODeviceConnectChanged(const bool &_value);
     /** END NEWSAGES I/O **/
 
     /** BASCULAS **/
@@ -91,8 +91,8 @@ signals:
 
     /** NEWSAGES ALPR **/
 public:
-    void calibrarFoto(int _device, cv::Mat _foto);
-    void getFotoMatricula(int _device, cv::Mat _foto);
+    void calibrarFoto(const int &_device, const cv::Mat &_foto);
+    void getFotoMatricula(const int &_device, const cv::Mat &_foto);
 
     /** ALPR 1 **/
 signals:
@@ -112,7 +112,7 @@ signals:
 
     /** CORE ***************************************/
 public slots:
-    void setInitDaemon(bool _init);
+    void setInitDaemon(const bool &_init);
 
     /** END CORE ************************************/
 

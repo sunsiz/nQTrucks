@@ -86,7 +86,7 @@ private slots:
     void on_ioDeviceONpushButton_clicked();
     void on_ioDeviceOFFpushButton_clicked();
     void on_ioDeviceSTATUS(bool status);
-    void on_ioDevicePIN10(bool value);
+    void on_ioDeviceSemaforoChanged(int _color);
     void on_conectarIODevicesPushButton_clicked();
     void on_desconectarIODevicesPushButton_clicked();
     /** END NEWSAGES I/O  **/

@@ -63,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     /** IO **/
     connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
-    connect(engine,SIGNAL(IODevicesPIN10Changed(bool)),this,SLOT(on_ioDevicePIN10(bool)));
+    connect(engine,SIGNAL(IODevicesSemaforoChanged(int)),this,SLOT(on_ioDeviceSemaforoChanged(int)));
 
     /** BASCULAS **/
     connect(engine ,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
@@ -270,12 +270,12 @@ void MainWindow::on_guardarIODevicesPushButton1_clicked()
 
 void MainWindow::on_ioDeviceONpushButton_clicked()
 {
-    engine->setIODevicesPin10(false);
+    engine->setSemaforoStatus(SEMAFORO_VERDE);
 }
 
 void MainWindow::on_ioDeviceOFFpushButton_clicked()
 {
-    engine->setIODevicesPin10(true);
+        engine->setSemaforoStatus(SEMAFORO_ROJO);
 }
 
 void MainWindow::on_ioDeviceSTATUS(bool status)
@@ -289,15 +289,29 @@ void MainWindow::on_ioDeviceSTATUS(bool status)
   }
 }
 
-void MainWindow::on_ioDevicePIN10(bool value)
+void MainWindow::on_ioDeviceSemaforoChanged(int _color)
 {
-    if (value){
-        ui->ioDeviceGREENLabel->setPalette(m_semaforoOFF_palette);
-        ui->ioDeviceREDLabel->setPalette(m_semaforoRED_palette);
-    }else{
-        ui->ioDeviceGREENLabel->setPalette(m_semaforoGREEN_palette);
-        ui->ioDeviceREDLabel->setPalette(m_semaforoOFF_palette);
+    switch (_color) {
+    case SEMAFORO_VERDE:
+        qDebug() << "SEMAFORO VERDE";
+        break;
+    case SEMAFORO_AMARILLO:
+        //qDebug() << "SEMAFORO AMARILLO";
+        break;
+    case SEMAFORO_ROJO:
+        qDebug() << "SEMAFORO ROJO";
+        break;
+    default:
+        qDebug() << "SEMAFORO VERDE INDETERMINADO";
+        break;
     }
+
+
+//    ui->ioDeviceGREENLabel->setPalette(m_semaforoOFF_palette);
+//    ui->ioDeviceREDLabel->setPalette(m_semaforoRED_palette);
+//    ui->ioDeviceGREENLabel->setPalette(m_semaforoGREEN_palette);
+//    ui->ioDeviceREDLabel->setPalette(m_semaforoOFF_palette);
+
 }
 
 void MainWindow::on_conectarIODevicesPushButton_clicked()

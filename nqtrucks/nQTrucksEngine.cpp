@@ -44,6 +44,9 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
 , m_settings(0)
 {
     qRegisterMetaType<nQTrucks::t_Prewarp>("nQTrucks::t_Prewarp");
+    m_camara.resize(2);
+    m_camara[0] = new Devices::CamaraIP(0,settings(), this);
+    m_camara[1] = new Devices::CamaraIP(1,settings(), this);
 }
 
 nQTrucksEnginePrivate::~nQTrucksEnginePrivate()
@@ -83,28 +86,6 @@ QStringList nQTrucksEnginePrivate::getCameraTypes()
         listCameraTypes.insert(MetaEnum.value(i), MetaEnum.key(i));
     }
     return listCameraTypes;
-}
-
-void nQTrucksEnginePrivate::setCamaraIP(int nDevice,  QString type, QString host, QString port, QString user, QString passwd)
-{
-    switch (nDevice) {
-    case 0:
-        m_camara1->setTipoCamara(type);
-        m_camara1->setCamaraHost(host);
-        m_camara1->setCamaraPort(port);
-        m_camara1->setCamaraUser(user);
-        m_camara1->setCamaraPass(passwd);
-        break;
-    case 1:
-        m_camara2->setTipoCamara(type);
-        m_camara2->setCamaraHost(host);
-        m_camara2->setCamaraPort(port);
-        m_camara2->setCamaraUser(user);
-        m_camara2->setCamaraPass(passwd);
-        break;
-    default:
-        break;
-    }
 }
 /** END CAMARAS **************************************************************************************************/
 
@@ -204,17 +185,17 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** CAMARAS IP **/
     /** 1 **/
-    connect(d->m_camara1,SIGNAL(ReplyCamaraIPFotoCV(cv::Mat)),this,SIGNAL(CamaraIPFotoCV1(cv::Mat)));
-    connect(d->m_camara1,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb1(QString)));
+    connect(d->m_camara[0],SIGNAL(ReplyCamaraIPFotoCV(cv::Mat)),this,SIGNAL(CamaraIPFotoCV1(cv::Mat)));
+    connect(d->m_camara[0],SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb1(QString)));
     /** 2 **/
-    connect(d->m_camara2,SIGNAL(ReplyCamaraIPFotoCV(cv::Mat)),this,SIGNAL(CamaraIPFotoCV2(cv::Mat)));
-    connect(d->m_camara2,SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb2(QString)));
+    connect(d->m_camara[1],SIGNAL(ReplyCamaraIPFotoCV(cv::Mat)),this,SIGNAL(CamaraIPFotoCV2(cv::Mat)));
+    connect(d->m_camara[1],SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb2(QString)));
     /** END CAMARAS IP **/
 
     /** NEWSAGES IO **/
-    connect(d->m_newsagesIO,SIGNAL(IODeviceConnectChanged(bool)),this,SIGNAL(IODevicesStatusChanged(bool)));
-    connect(d->m_newsagesIO,SIGNAL(readyChanged(bool)),this,SIGNAL(IODevicesStatusChanged(bool)));
-    connect(d->m_newsagesIO,SIGNAL(ValuePin10Changed(bool)),this,SIGNAL(IODevicesPIN10Changed(bool)));
+    connect(d->m_newsagesIO,SIGNAL(IODeviceConnectChanged(bool)),this,SIGNAL(IODeviceConnectChanged(bool)));
+    connect(d->m_newsagesIO,SIGNAL(readyChanged(bool)),this,SIGNAL(IODeviceReadyChanged(bool)));
+    connect(d->m_newsagesIO,SIGNAL(EstadoSemaforoChanged(int)),this,SIGNAL(IODevicesSemaforoChanged(int)));
     /** END NEWSAGES IO **/
 
     /** BASCULAS **/
@@ -282,21 +263,21 @@ void nQTrucksEngine::getCamaraFoto(int _ncamara)
     Q_D(nQTrucksEngine);
     switch (_ncamara) {
     case 0:
-        d->m_camara1->sendCamaraIPFotoRequest();
+        d->m_camara[0]->sendCamaraIPFotoRequest();
         break;
     case 1:
-        d->m_camara2->sendCamaraIPFotoRequest();
+        d->m_camara[1]->sendCamaraIPFotoRequest();
         break;
     default:
         break;
     }
 }
 
-void nQTrucksEngine::setCamaraIP(int nCamara, QString type, QString host, QString port, QString user, QString passwd)
-{
-    Q_D(nQTrucksEngine);
-    d->setCamaraIP(nCamara,type,host,port,user,passwd);
-}
+//void nQTrucksEngine::setCamaraIP(int nCamara, QString type, QString host, QString port, QString user, QString passwd)
+//{
+//    Q_D(nQTrucksEngine);
+//    d->setCamaraIP(nCamara,type,host,port,user,passwd);
+//}
 /** END CAMARAS ***********************************************************************************************************/
 
 /** NEWSAGES I/O **********************************************************************************************************/
@@ -306,17 +287,23 @@ QStringList nQTrucksEngine::getIODevices()
     return d->getIODevices();
 }
 
-void nQTrucksEngine::setIODevicesConnect(bool _value)
+void nQTrucksEngine::setIODevicesConnect(const bool &_value)
 {
     Q_D(nQTrucksEngine);
     d->m_newsagesIO->setIODeviceConnect(_value);
 }
 
-void nQTrucksEngine::setIODevicesPin10(bool _value)
+void nQTrucksEngine::setSemaforoStatus(const int &_color)
 {
     Q_D(nQTrucksEngine);
-    d->m_newsagesIO->setValuePin10(_value);
+    d->m_newsagesIO->setSemaforo(_color);
 }
+
+//void nQTrucksEngine::setIODevicesPin10(bool _value)
+//{
+//    Q_D(nQTrucksEngine);
+//    d->m_newsagesIO->setValuePin10(_value);
+//}
 
 void nQTrucksEngine::setIODevicesConfig()
 {
@@ -347,30 +334,30 @@ QStringList nQTrucksEngine::getSerialDevices()
 
 
 /** ALRP ********************************************************************************************************************/
-void nQTrucksEngine::calibrarFoto(int _device, cv::Mat _foto)
+void nQTrucksEngine::calibrarFoto(const int &_device, const cv::Mat &_foto)
 {
     Q_D(nQTrucksEngine);
     switch (_device) {
     case 0:
-        d->m_alpr1->calibrarFoto(_foto);
+        d->m_alpr1->calibrarFoto(_foto.clone());
         break;
     case 1:
-        d->m_alpr2->calibrarFoto(_foto);
+        d->m_alpr2->calibrarFoto(_foto.clone());
         break;
     default:
         break;
     }
 }
 
-void nQTrucksEngine::getFotoMatricula(int _device, cv::Mat _foto)
+void nQTrucksEngine::getFotoMatricula(const int &_device, const cv::Mat &_foto)
 {
      Q_D(nQTrucksEngine);
     switch (_device) {
     case 0:
-         d->m_alpr1->processFoto(_foto);
+         d->m_alpr1->processFoto(_foto.clone());
         break;
     case 1:
-         d->m_alpr2->processFoto(_foto);
+         d->m_alpr2->processFoto(_foto.clone());
         break;
     default:
         break;
@@ -380,14 +367,14 @@ void nQTrucksEngine::getFotoMatricula(int _device, cv::Mat _foto)
 /** END ALRP ****************************************************************************************************************/
 
 /** CORE ****************************************************************************/
-void nQTrucksEngine::setInitDaemon(bool _init)
+void nQTrucksEngine::setInitDaemon(const bool &_init)
 {
     Q_D(nQTrucksEngine);
     if (_init){
-         d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara1,d->m_camara2, d->m_alpr1,d->m_alpr2, this);
+         d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara,d->m_alpr1,d->m_alpr2, this);
          d->m_daemon->setInit(_init);
     } else{
-        d->m_daemon->setInit(_init);
+        //d->m_daemon->setInit(_init);
         delete d->m_daemon;
     }
 

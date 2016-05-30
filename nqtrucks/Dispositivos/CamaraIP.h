@@ -46,12 +46,6 @@ class CamaraIP : public QObject
 {
     Q_OBJECT
     Q_ENUMS(CameraType)
-    Q_PROPERTY(QString TipoCamara READ TipoCamara WRITE setTipoCamara NOTIFY TipoCamaraChanged)
-    Q_PROPERTY(QString CamaraHost READ CamaraHost WRITE setCamaraHost NOTIFY CamaraHostChanged)
-    Q_PROPERTY(QString CamaraPort READ CamaraPort WRITE setCamaraPort NOTIFY CamaraPortChanged)
-    Q_PROPERTY(QString CamaraUser READ CamaraUser WRITE setCamaraUser NOTIFY CamaraUserChanged)
-    Q_PROPERTY(QString CamaraPass READ CamaraPass WRITE setCamaraPass NOTIFY CamaraPassChanged)
-
 
 public:
     explicit CamaraIP(int nDevice=0, QSettings *_appsettings=0, QObject *parent = 0);
@@ -64,27 +58,6 @@ public:
         CAMTRONIC
     };
 
-    /** PROPIEDADES **/
-    QString TipoCamara() const{return QString(m_TipoCamara);}
-    QString CamaraHost() const{return m_CamaraHost;}
-    QString CamaraPort() const{return m_CamaraPort;}
-    QString CamaraUser() const{return m_CamaraUser;}
-    QString CamaraPass() const{return m_CamaraPass;}
-
-public slots:
-    void setTipoCamara(const QString &_TipoCamara);
-    void setCamaraHost(const QString &_CamaraHost);
-    void setCamaraPort(const QString &_CamaraPort);
-    void setCamaraUser(const QString &_CamaraUser);
-    void setCamaraPass(const QString &_CamaraPass);
-
-signals:
-    void TipoCamaraChanged();
-    void CamaraHostChanged();
-    void CamaraPortChanged();
-    void CamaraUserChanged();
-    void CamaraPassChanged();
-
 private:
     CameraType  m_TipoCamara = CameraType::HIKVISION;
     QString     m_CamaraHost;
@@ -92,8 +65,6 @@ private:
     QString     m_CamaraUser;
     QString     m_CamaraPass;
     /** FIN PROPIEDADES **/
-
-
 
     /** SETTINGS **/
 private:
@@ -107,10 +78,6 @@ private:
 private:
     QUrl setCamaraURL();
     QNetworkAccessManager *m_netmanager;
-    QByteArray bfotoCamaraError;
-    //QImage fotoCamaraError;
-    cv::Mat fotoCamaraErrorCV;
-    //cv::Mat fotoCamaraErrorRGBCV;
 
 public slots:
     void sendCamaraIPFotoRequest();
@@ -119,7 +86,6 @@ private slots:
     void camaraNetworkReplyFinished(QNetworkReply *reply);
 
 signals:
-    //void ReplyCamaraIPFoto(const QImage &Reply);
     void ReplyCamaraIPFotoCV(const cv::Mat &ReplyCV);
     void ReplyCamaraIPFoto(const QByteArray &Reply);
     void CamaraIPWeb(const QString &CamaraWeb);

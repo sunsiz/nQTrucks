@@ -47,31 +47,33 @@ namespace Devices {
 class NewsagesIO : public Firmata
 {
     Q_OBJECT
-    Q_PROPERTY(QString IODevice   READ IODevice   WRITE setIODevice   NOTIFY IODeviceChanged)
-    Q_PROPERTY(bool    ValuePin10 READ ValuePin10 WRITE setValuePin10 NOTIFY ValuePin10Changed)
 
 public:
     explicit NewsagesIO(QSettings *_appsettings=0,QObject *parent = 0);
 
     /** PROPIEDADES **/
-    QString IODevice()   const{return m_IODevice;}
-    bool    ValuePin10() const{return m_ValuePin10;}
+    enum EstadoSemaforo{
+        verde=SEMAFORO_VERDE,
+        amarillo=SEMAFORO_AMARILLO,
+        rojo=SEMAFORO_ROJO,
+    };
 
 signals:
     void IODeviceConnectChanged(const bool &value);
     void IODeviceChanged();
     void ValuePin10Changed(const bool &value);
+    void ValuePin13Changed(const bool &value);
 
 public slots:
     void setIODevice  (const QString &_IODevice);
-    void setValuePin10(const bool &value);
     void setIODeviceConfig();
     void setIODeviceConnect(const bool &value);
 
 private:
     QString m_IODevice;
     bool    m_ValuePin10;
-    bool    m_conectado;//Guardar el valor del pin para controlar reset y ultimo estado
+    bool    m_ValuePin13;
+    bool    m_conectado;//Guardar el valor del pin para controlar reset y ultimo estado    
     /** FIN PROPIEDADES **/
 
 
@@ -81,6 +83,8 @@ private:
 private slots:
     void onIOConectado();
     void onIOReset(int r, int v);
+    void setValuePin10(const bool &value);
+    void setValuePin13(const bool &value);
     /** END FTDI **/
 
     /** SETTINGS **/
@@ -90,13 +94,23 @@ private:
     QSettings *m_settings;
     /** END SETTINGS **/
 
-    /**     PINS      **/
     /** RELE SEMAFORO **/
-public:
+private:
     DigitalPin *m_OutPin10;
+    DigitalPin *m_OutPin13;
     /** END RELE SEMAFORO **/
-    /**      END PINS     **/
 
+    /** SEMAFORO **/
+public:
+    int semaforo() const;
+    void setSemaforo(int semaforo);
+private:
+    int     m_semaforo;
+public slots:
+    void setEstadoSemaforo(const int &_color);
+signals:
+    void EstadoSemaforoChanged(const int &_color);
+    /** END SEMAFORO **/
 
 };
 

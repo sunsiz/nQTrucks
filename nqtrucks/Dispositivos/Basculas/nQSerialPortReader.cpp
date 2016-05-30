@@ -163,7 +163,7 @@ void nQSerialPortReader::MuestrearBascula(const t_Bascula &_bascula){
     if (m_inicio_peso){
         if((_bascula.bEstado) & (_bascula.iBruto !=0)){
             m_muestras++;
-            if(m_muestras==10){
+            if(m_muestras==100){
                 m_inicio_peso=false;
                 m_bascula_estable = _bascula;
                 emit BasculaPesoNuevo(m_bascula_estable);

@@ -78,6 +78,8 @@ public slots:
 signals:
     void ReplyOriginalFotoRoja(const cv::Mat &Foto);
     void ReplyOriginalFotoBlanca(const cv::Mat &Foto);
+private slots:
+    void onCalibrarFotoFinished();
     /** END CALIBRAR *******************************************************/
 
 
@@ -86,6 +88,8 @@ public slots:
     void processFoto(const cv::Mat &Foto);
 signals:
     void ReplyMatriculaResults(const t_MatriculaResults &_MatriculaResults);
+protected slots:
+    void onProcesarFotoFinished();
 private:
     QThread *hilo1;
     NewsagesAlprTask *tarea1;

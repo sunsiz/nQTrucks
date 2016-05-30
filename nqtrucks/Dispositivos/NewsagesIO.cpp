@@ -39,23 +39,31 @@ namespace Devices {
 
 NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
     : Firmata(parent)
-    , m_ValuePin10(false)
-    , m_conectado(false)
-    , m_ioPortList(new SerialPortList)
-    , m_ioFtdi(new SerialFirmata)
     , m_settings(_appsettings)
-    , m_OutPin10(new DigitalPin)
 {
+    m_ValuePin10=false;
+    m_ValuePin13=false;
+    m_conectado=false;
+    m_ioPortList= new SerialPortList(this);
+    m_ioFtdi = new SerialFirmata(this);
+    m_OutPin10 = new DigitalPin(this);
+    m_OutPin13 = new DigitalPin(this);
+    m_semaforo = SEMAFORO_VERDE;
+
     /** FIRMATA **/
     this->setBackend(m_ioFtdi);
     this->setInitPins(false);
 
     /** PINS **/
-    m_OutPin10->setPin(13);
+    m_OutPin10->setPin(10);
     m_OutPin10->setOutput(true);
     m_OutPin10->setFirmata(this);
+    m_OutPin13->setPin(13);
+    m_OutPin13->setOutput(true);
+    m_OutPin13->setFirmata(this);
 
     connect(m_OutPin10,SIGNAL(valueChanged(bool)),this,SLOT(setValuePin10(bool)));
+    connect(m_OutPin13,SIGNAL(valueChanged(bool)),this,SLOT(setValuePin13(bool)));
     connect(this->m_ioFtdi, &FirmataBackend::protocolVersion ,this, &NewsagesIO::onIOConectado);
 }
 
@@ -76,6 +84,45 @@ void NewsagesIO::setIODeviceConnect(const bool &value){
     }
 
     emit IODeviceConnectChanged(m_conectado);
+}
+
+void NewsagesIO::setEstadoSemaforo(const int &_color)
+{
+    if(semaforo()!=_color){
+        setSemaforo(_color);
+    }
+}
+
+int NewsagesIO::semaforo() const
+{
+    return m_semaforo;
+}
+
+void NewsagesIO::setSemaforo(int semaforo)
+{
+    switch (semaforo) {
+    case SEMAFORO_VERDE:
+        m_semaforo = SEMAFORO_VERDE;
+        setValuePin10(false);
+        setValuePin13(false);
+        break;
+    case SEMAFORO_AMARILLO:
+        m_semaforo = SEMAFORO_AMARILLO;
+        setValuePin10(true);
+        setValuePin13(false);
+        break;
+    case SEMAFORO_ROJO:
+        m_semaforo = SEMAFORO_ROJO;
+        setValuePin10(true);
+        setValuePin13(true);
+        break;
+    default:
+        m_semaforo = SEMAFORO_VERDE;
+        setValuePin10(false);
+        setValuePin13(false);
+        break;
+    }
+    emit EstadoSemaforoChanged(m_semaforo);
 }
 
 
@@ -112,7 +159,14 @@ void NewsagesIO::onIOConectado()
     /** PINS **/
     m_OutPin10->initialize();
     m_OutPin10->setValue(m_ValuePin10);
+    m_OutPin13->initialize();
+    m_OutPin13->setValue(m_ValuePin13);
+    /**
     emit ValuePin10Changed(m_OutPin10->value());
+    emit ValuePin13Changed(m_OutPin13->value());
+    **/
+    int last_status = (int)m_ValuePin10 + (int)m_ValuePin10;
+    setSemaforo(last_status);
 
 }
 
@@ -131,96 +185,21 @@ void NewsagesIO::setValuePin10(const bool &value)
     }
 }
 
-} /** END NAMESPACE Devices  **/
-} /** END NAMESPACE nQTrucks **/
+void NewsagesIO::setValuePin13(const bool &value)
+{
+    qDebug() << "valor: " << value;
 
-
-/*
-void NewsagesIO::getIOPorts(){
-    m_ioPortList->refresh();
-    //emit ioPortsChanged(m_portlist);
-    QStringList _ioPortList;
-
-    if (m_ioPortList->rowCount() > 0)
-      {
-         for (int row = 0; row < m_ioPortList->rowCount(); row++)
-         {
-           QModelIndex idx = (m_ioPortList->index(row, 0));
-           qDebug() << m_ioPortList->data(idx,SerialPortList::SerialPortRoles::NameRole).toString();
-         }
-      }
-
-
-
-    //emit ioPortsChanged((QAbstractListModel)m_ioPortList);
-}
-*/
-/*
-
-    ftdi_is_available = false;
-    ftdi_port_name = "";
-    ftdi = new QSerialPort;
-
-    qDebug() << "Number of available ports: " << QSerialPortInfo::availablePorts().length();
-    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
-        qDebug() << "Has vendor ID: " << serialPortInfo.hasVendorIdentifier();
-        if(serialPortInfo.hasVendorIdentifier()){
-            qDebug() << "Vendor ID: " << serialPortInfo.vendorIdentifier();
-        }
-        qDebug() << "Has Product ID: " << serialPortInfo.hasProductIdentifier();
-        if(serialPortInfo.hasProductIdentifier()){
-            qDebug() << "Product ID: " << serialPortInfo.productIdentifier();
-        }
-    }
-
-  foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
-        if(serialPortInfo.hasVendorIdentifier() && serialPortInfo.hasProductIdentifier()){
-            if(serialPortInfo.vendorIdentifier() == ftdi_vendor_id){
-                if(serialPortInfo.productIdentifier() == ftdi_product_id){
-                   ftdi_port_name = serialPortInfo.portName();
-                    ftdi_is_available = true;
-                }
+    if(m_ValuePin13!=value){
+        if(m_conectado){
+            if(m_ioFtdi->isAvailable()){
+                m_ValuePin13=value;
+                m_OutPin13->setValue(m_ValuePin13);
+                emit ValuePin13Changed(m_OutPin13->value());
             }
         }
     }
-
-    if(ftdi_is_available){
-        // open and configure the serialport
-        ftdi->setPortName(ftdi_port_name);
-        ftdi->open(QSerialPort::WriteOnly);
-        ftdi->setBaudRate(QSerialPort::Baud9600);
-        ftdi->setDataBits(QSerialPort::Data8);
-        ftdi->setParity(QSerialPort::NoParity);
-        ftdi->setStopBits(QSerialPort::OneStop);
-        ftdi->setFlowControl(QSerialPort::NoFlowControl);
-        sendCommand(QString("w1"));
-    }else{
-        // give error message if not available
-        qDebug() << "No encuentro ningun FTDI!";
-    }
-
-    //qDebug() << value;
-
-
 }
 
-NewsagesIO::~NewsagesIO()
-{
-    if (ftdi->isOpen()){
-        sendCommand(QString("w0"));
-        ftdi->close();
-    }
-}
 
-void NewsagesIO::sendCommand(QString command)
-{
-    if(ftdi->isWritable()){
-        ftdi->write(command.toStdString().c_str());
-    }else{
-        qDebug() << "error: Puerto serie solo lectura?";
-    }
-    */
-
-
-
-
+} /** END NAMESPACE Devices  **/
+} /** END NAMESPACE nQTrucks **/
