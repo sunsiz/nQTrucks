@@ -11,7 +11,7 @@ namespace Devices {
 class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
-    explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, cv::Mat _fotoCamara=cv::Mat(), QSettings *_appsettings=0, QObject *parent = 0);
+    explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, cv::Mat _fotoCamara=cv::Mat(), t_MatriculaResults *_results={},  QSettings *_appsettings=0, QObject *parent = 0);
     ~NewsagesAlprTask();
 signals:
     void workFinished();
@@ -69,7 +69,9 @@ private:
    void procesarBlancas();
    void procesarRojas();
 signals:
-   void ReplyMatriculaFoto(const t_MatriculaResults &_tempResults);
+   //void ReplyMatriculaFoto(const t_MatriculaResults &_tempResults);
+   //void ReplyMatriculaFoto(t_MatriculaResults _tempResults);
+   void ReplyMatriculaFoto();
     /** END PROCESAR **************************************************************/
 
     /** TOOLS **/

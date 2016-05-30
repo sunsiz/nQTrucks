@@ -172,7 +172,7 @@ void NewsagesIO::onIOConectado()
 
 void NewsagesIO::setValuePin10(const bool &value)
 {
-    qDebug() << "valor: " << value;
+    //qDebug() << "valor: " << value;
 
     if(m_ValuePin10!=value){
         if(m_conectado){
@@ -187,7 +187,7 @@ void NewsagesIO::setValuePin10(const bool &value)
 
 void NewsagesIO::setValuePin13(const bool &value)
 {
-    qDebug() << "valor: " << value;
+    //qDebug() << "valor: " << value;
 
     if(m_ValuePin13!=value){
         if(m_conectado){

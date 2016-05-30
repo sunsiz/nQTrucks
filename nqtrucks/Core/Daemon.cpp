@@ -7,14 +7,6 @@
 namespace nQTrucks {
 namespace Core{
 
-const int max_db_image_width = 1280;
-const int max_db_image_height = 720;
-const cv::Size fotoSize(max_db_image_width,max_db_image_height);
-
-const int max_db_image_matricula_width = 55;
-const int max_db_image_matricula_height = 11;
-
-
 Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_newsagesIO, QVector<Devices::CamaraIP *> _camara, Devices::NewsagesAlpr *_alpr1, Devices::NewsagesAlpr *_alpr2, QObject *parent)
     : QObject(parent)
     , m_bascula(_bascula)
@@ -181,30 +173,33 @@ void Daemon::onReplyCamaraIPFotoCV2(const cv::Mat &_Reply)
 /** DB **/
 void Daemon::onGuardarRegistroSimple(Registro_Simple &_registro)
 {
-    if( !db.open() )
-    {
-      qDebug() << db.lastError();
-      //qFatal( "Failed to connect." );
-      qDebug() << "Failed to connect." ;
-    }else{
-        qDebug( "Connected!" );
 
-        db.transaction();
-        QSqlQuery qry;
-        qry.prepare( "INSERT INTO registros( pesobruto,  pesoneto,  pesotara,  fotocamara1,  fotocamara2)"
-                     "               VALUES(:pesobruto, :pesoneto, :pesotara, :fotocamara1, :fotocamara2)" );
+if (m_registrando){
 
-        qry.bindValue(":pesobruto",   _registro.bascula.iBruto);
-        qry.bindValue(":pesoneto",    _registro.bascula.iNeto);
-        qry.bindValue(":pesotara",    _registro.bascula.iTara);
-        qry.bindValue(":fotocamara1", _registro.camara1resize);
-        qry.bindValue(":fotocamara2", _registro.camara2resize);
+//    if( !db.open() )
+//    {
+//      qDebug() << db.lastError();
+//      //qFatal( "Failed to connect." );
+//      qDebug() << "Failed to connect." ;
+//    }else{
+//        qDebug( "Connected!" );
 
-         if( !qry.exec() ){
-           qDebug() << qry.lastError();
-            db.rollback();
-         }else{
-            db.commit();
+//        db.transaction();
+//        QSqlQuery qry;
+//        qry.prepare( "INSERT INTO registros( pesobruto,  pesoneto,  pesotara,  fotocamara1,  fotocamara2)"
+//                     "               VALUES(:pesobruto, :pesoneto, :pesotara, :fotocamara1, :fotocamara2)" );
+
+//        qry.bindValue(":pesobruto",   _registro.bascula.iBruto);
+//        qry.bindValue(":pesoneto",    _registro.bascula.iNeto);
+//        qry.bindValue(":pesotara",    _registro.bascula.iTara);
+//        qry.bindValue(":fotocamara1", _registro.camara1resize);
+//        qry.bindValue(":fotocamara2", _registro.camara2resize);
+
+//         if( !qry.exec() ){
+//           qDebug() << qry.lastError();
+//            db.rollback();
+//         }else{
+//            db.commit();
 
 
             //Pilla el registro simple
@@ -216,12 +211,13 @@ void Daemon::onGuardarRegistroSimple(Registro_Simple &_registro)
             alprconn2 = connect(m_alpr2,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(t_MatriculaResults)));
             m_alpr1->processFoto(byteArray2Mat(_registro.camara1));
             m_alpr2->processFoto(byteArray2Mat(_registro.camara2));
-           qDebug() <<  "Inserted!: " << qry.lastInsertId().toInt();
-         }
+//           qDebug() <<  "Inserted!: " << qry.lastInsertId().toInt();
+//         }
 
-        db.close();
-    }
+//        db.close();
+//    }
     m_registrando=false;
+}
 
 }
 
@@ -234,6 +230,18 @@ void Daemon::onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_regi
       qDebug() << "Failed to connect." ;
     }else{
         qDebug( "Connected!" );
+
+
+        /** No Guardar Si Cualquiera de las 4 Matriculas es detectada **/
+        if ( _registro.precisionA1>80 ||
+             _registro.precisionB1>80 ||
+             _registro.precisionA2>80 ||
+             _registro.precisionB2>80 ){
+            m_registro_simple_matriculas.registrosimple.camara1.clear();
+            m_registro_simple_matriculas.registrosimple.camara1resize.clear();
+            m_registro_simple_matriculas.registrosimple.camara2.clear();
+            m_registro_simple_matriculas.registrosimple.camara2resize.clear();
+        }
 
         db.transaction();
         QSqlQuery qry;
@@ -280,18 +288,6 @@ void Daemon::onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_regi
         db.close();
     }
 
-//    m_registro_simple_matriculas.fotomatriculaA1.clear();
-//    m_registro_simple_matriculas.fotomatriculaB1.clear();
-//    m_registro_simple_matriculas.fotomatriculaA2.clear();
-//    m_registro_simple_matriculas.fotomatriculaB2.clear();
-//    m_registro_simple_matriculas.matriculaA1.clear();
-//    m_registro_simple_matriculas.matriculaA2.clear();
-//    m_registro_simple_matriculas.matriculaB1.clear();
-//    m_registro_simple_matriculas.matriculaB2.clear();
-//    m_registro_simple_matriculas.registrosimple.camara1.clear();
-//    m_registro_simple_matriculas.registrosimple.camara1resize.clear();
-//    m_registro_simple_matriculas.registrosimple.camara2.clear();
-//    m_registro_simple_matriculas.registrosimple.camara2resize.clear();
 }
 
 /** END DB **/
@@ -308,7 +304,7 @@ void Daemon::onReplyMatriculaResults1(const t_MatriculaResults &_registro){
     m_registro_simple_matriculas.precisionA1=_registro.MatriculaPrecisionA;
     m_registro_simple_matriculas.precisionB1=_registro.MatriculaPrecisionB;
     m_registro_simple_matriculas.fotomatriculaA1= _registro.MatriculaFotoAByte;
-    m_registro_simple_matriculas.fotomatriculaB1= _registro.MatriculaFotoBByte;
+    m_registro_simple_matriculas.fotomatriculaB1= _registro.MatriculaFotoBByte;    
 
     m_alpr_numero++;
     if(m_alpr_numero ==2){
@@ -324,6 +320,7 @@ void Daemon::onReplyMatriculaResults2(const t_MatriculaResults &_registro){
     m_registro_simple_matriculas.precisionB2=_registro.MatriculaPrecisionB;
     m_registro_simple_matriculas.fotomatriculaA2= _registro.MatriculaFotoAByte;
     m_registro_simple_matriculas.fotomatriculaB2= _registro.MatriculaFotoBByte;
+
 
     m_alpr_numero++;
     if(m_alpr_numero ==2){

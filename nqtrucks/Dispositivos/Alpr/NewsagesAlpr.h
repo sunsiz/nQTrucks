@@ -56,7 +56,7 @@ private:
     cv::Mat     m_FotoCamara;
     QSettings   *m_settings;
     //QSettings   *m_settings2; //BUG hilos QSettings begingroup simultaneo
-    t_MatriculaResults *m_matricularesults;
+    QVector<t_MatriculaResults*> m_results;
     /** END SETTINGS **/
 
 signals:

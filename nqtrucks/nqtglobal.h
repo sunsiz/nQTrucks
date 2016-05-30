@@ -56,6 +56,10 @@ const cv::Size fotoSize(fotoWidth,fotoHeight);
 
 const QString default_prewarp ="";//  "planar,1280,720,0,0,0,1.0,1.0,0,0";
 
+//const int max_db_image_width = 1280;
+//const int max_db_image_height = 720;
+//const cv::Size fotoSize(max_db_image_width,max_db_image_height);
+
 /** BASCULAS **/
 struct Bascula{
     bool bEstado=false;

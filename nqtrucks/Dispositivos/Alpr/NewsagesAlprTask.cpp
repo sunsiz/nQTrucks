@@ -19,10 +19,10 @@ namespace nQTrucks {
 
 
 /** CONSTRUCTOR TAREAS **/
-NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType, cv::Mat _fotoCamara, QSettings *_appsettings, QObject *parent)
+NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType, cv::Mat _fotoCamara, t_MatriculaResults *_results, QSettings *_appsettings, QObject *parent)
     : QObject(parent)
     , m_settings(_appsettings)
-    , m_matricularesult(new t_MatriculaResults)
+    , m_matricularesult(_results)
 {
     qRegisterMetaType<cv::Mat>("cv::Mat");
     qRegisterMetaType<t_Plank>("t_Plank");
@@ -50,34 +50,8 @@ NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType, cv::Mat _fotoCamara
     loadconfig();
 }
 
-NewsagesAlprTask::~NewsagesAlprTask()
-{
-//    m_matricularesult.MatriculaA.detach();
-//    m_matricularesult.MatriculaDetectedA=false;
-//    m_matricularesult.MatriculaFotoA.release();
-//    m_matricularesult.MatriculaFotoAByte.detach();
-//    m_matricularesult.MatriculaPrecisionA=0;
-//    m_matricularesult.MatriculaPrecisionAs.detach();
-//    m_matricularesult.OrigenFoto.release();
-//    m_matricularesult.OrigenFotoBlanca.release();
-//    m_matricularesult.OrigenFotoPrewarp.release();
-//    m_matricularesult.OrigenFotoResize.release();
-//    m_matricularesult.OrigenFotoResizeByte.detach();
-
-//    m_matricularesult.MatriculaB.detach();
-//    m_matricularesult.MatriculaDetectedB=false;
-//    m_matricularesult.MatriculaFotoB.release();
-//    m_matricularesult.MatriculaFotoBByte.detach();
-//    m_matricularesult.MatriculaPrecisionB=0;
-//    m_matricularesult.MatriculaPrecisionBs.detach();
-//    m_matricularesult.OrigenFoto.release();
-//    m_matricularesult.OrigenFotoRoja.release();
-//    m_matricularesult.OrigenFotoPrewarp.release();
-//    m_matricularesult.OrigenFotoResize.release();
-//    m_matricularesult.OrigenFotoResizeByte.detach();
+NewsagesAlprTask::~NewsagesAlprTask(){
     m_FotoCamara.release();
-    //this->deleteLater();
-
 }
 
 
@@ -197,23 +171,6 @@ void NewsagesAlprTask::procesar(){
         procesarRojas();
         break;
     }
-
-//    switch (getNType()) {
-//    case ALPR_PLANCK_BLANCO:
-//        qDebug() << "  blanca  - " << m_matricularesult.MatriculaDetectedA
-//                 << "\t precision: " << m_matricularesult.MatriculaPrecisionA << "% "
-//                 << m_matricularesult.MatriculaDetectedA << endl;
-//        break;
-//    case ALPR_PLANCK_ROJO:
-//        qDebug() << "  remolque  - " << m_matricularesult.MatriculaDetectedB
-//                 << "\t precision: " << m_matricularesult.MatriculaPrecisionB << "% "
-//                 << m_matricularesult.MatriculaDetectedB << endl;
-//        break;
-//    }
-
-    //emit ReplyMatriculaFoto(*m_matricularesult);
-    //emit workFinished();
-    //this->deleteLater();
 }
 
     /** BLANCAS **/
@@ -273,7 +230,7 @@ void NewsagesAlprTask::procesarBlancas()
            c++;
        }while( c<=m_retry_panks &&  m_matricularesult->MatriculaDetectedA!=true);
     }
-    emit ReplyMatriculaFoto(*m_matricularesult);
+    emit ReplyMatriculaFoto();
     workFinished();
     delete matricula;
 }
@@ -315,7 +272,7 @@ void NewsagesAlprTask::procesarRojas()
                                                          plate.plate_points[2].y - plate.plate_points[0].y);
 
                                 cv::resize(cv::Mat(m_matricularesult->OrigenFoto,rect),m_matricularesult->MatriculaFotoB,matriculaSize);
-                                m_matricularesult->MatriculaFotoBByte   = convertMat2ByteArray(m_matricularesult->MatriculaFotoB.clone());
+                                m_matricularesult->MatriculaFotoBByte   = convertMat2ByteArray(m_matricularesult->MatriculaFotoB);
                                 m_matricularesult->MatriculaDetectedB   = candidate.matches_template;
                                 m_matricularesult->MatriculaB           = QString::fromStdString(candidate.characters);
                                 m_matricularesult->MatriculaPrecisionB  = candidate.overall_confidence;
@@ -338,7 +295,7 @@ void NewsagesAlprTask::procesarRojas()
         }while( c<=m_retry_panks &&  m_matricularesult->MatriculaDetectedB!=true);
     }
     //*END ALGORITMO PLANKS
-    emit ReplyMatriculaFoto(*m_matricularesult);
+    emit ReplyMatriculaFoto();
     workFinished();
     //limpiar
     delete remolque;
