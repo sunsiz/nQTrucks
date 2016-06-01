@@ -1,16 +1,6 @@
 TEMPLATE = subdirs
 include(common.pri)
 
-##** QtZint **##
-#SUBDIRS += $$PWD/../../QtZint/QtZint
-
-##** nQAlpr **#
-#SUBDIRS += $$PWD/../../nQAlpr/nQAlpr
-
-##** REPORTS  **##
-#SUBDIRS += $$PWD/../../nQLReport/nQLReport
-
-
 #** nQTrucks **#
 SUBDIRS += nqtrucks
 
@@ -18,7 +8,8 @@ SUBDIRS += nqtrucks
 CONFIG   += ordered
 SUBDIRS += \
         #testalpr \
-        testlib
+        testlib \
+        nqtrucksserver
 
 OTHER_FILES += \
             .travis.yml \

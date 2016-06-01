@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Desktop</class>
+ <widget class="QMainWindow" name="Desktop">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QToolBar" name="systemToolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftToolBarArea|Qt::TopToolBarArea</set>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>64</width>
+     <height>64</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionKeyboard"/>
+   <addaction name="actionSystemSettings"/>
+   <addaction name="separator"/>
+  </widget>
+  <action name="actionSystemSettings">
+   <property name="icon">
+    <iconset>
+     <normalon>:/devices/icons/system/devices/preferences.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Sistema</string>
+   </property>
+   <property name="toolTip">
+    <string>Ajustes del Sistema</string>
+   </property>
+  </action>
+  <action name="actionKeyboard">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normalon>:/devices/icons/system/devices/input-keyboard1.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Teclado</string>
+   </property>
+   <property name="toolTip">
+    <string>Teclado</string>
+   </property>
+  </action>
+  <action name="actionImpresoras">
+   <property name="icon">
+    <iconset>
+     <normalon>:/devices/icons/system/devices/printer2.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Impresoras</string>
+   </property>
+   <property name="toolTip">
+    <string>Impresoras</string>
+   </property>
+  </action>
+  <action name="actionConexiones">
+   <property name="icon">
+    <iconset>
+     <normalon>:/devices/icons/system/devices/network-server.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Conexiones</string>
+   </property>
+   <property name="toolTip">
+    <string>Conexiones de Red</string>
+   </property>
+  </action>
+  <action name="actionRemoto">
+   <property name="icon">
+    <iconset>
+     <normalon>:/devices/icons/system/devices/user-desktop7.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Remoto</string>
+   </property>
+   <property name="toolTip">
+    <string>Acceso Remoto</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

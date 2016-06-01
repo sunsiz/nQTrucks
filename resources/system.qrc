@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/devices">
+        <file>icons/system/devices/add2.png</file>
+        <file>icons/system/devices/application-exit2.png</file>
+        <file>icons/system/devices/camera-photo.png</file>
+        <file>icons/system/devices/camera-video.png</file>
+        <file>icons/system/devices/camera-web.png</file>
+        <file>icons/system/devices/dialog-apply2.png</file>
+        <file>icons/system/devices/document-print-preview2.png</file>
+        <file>icons/system/devices/gnome-dev-printer-new2.png</file>
+        <file>icons/system/devices/gtk-print-warning2.png</file>
+        <file>icons/system/devices/help-hint.png</file>
+        <file>icons/system/devices/info2.png</file>
+        <file>icons/system/devices/input-keyboard1.png</file>
+        <file>icons/system/devices/input-keyboard2.png</file>
+        <file>icons/system/devices/jockey-disabled.png</file>
+        <file>icons/system/devices/jockey-enabled.png</file>
+        <file>icons/system/devices/media-playback-start.png</file>
+        <file>icons/system/devices/media-playback-start-rtl.png</file>
+        <file>icons/system/devices/network-server.png</file>
+        <file>icons/system/devices/network-wired.png</file>
+        <file>icons/system/devices/network-workgroup1.png</file>
+        <file>icons/system/devices/network-workgroup2.png</file>
+        <file>icons/system/devices/preferences.png</file>
+        <file>icons/system/devices/printer2.png</file>
+        <file>icons/system/devices/stock_lock.png</file>
+        <file>icons/system/devices/stock_lock-broken.png</file>
+        <file>icons/system/devices/stock_lock-ok.png</file>
+        <file>icons/system/devices/stock_lock-open.png</file>
+        <file>icons/system/devices/stock_network-printer2.png</file>
+        <file>icons/system/devices/stock_new-formula.png</file>
+        <file>icons/system/devices/text-x-makefile.png</file>
+        <file>icons/system/devices/user-desktop7.png</file>
+    </qresource>
+</RCC>
