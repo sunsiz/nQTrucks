@@ -31,16 +31,13 @@ unix:{
     }
 }
 
-SOURCES += main.cpp \
-    Desktop.cpp
 
 
-FORMS += \
-    Desktop.ui
+include(Desktop/desktop.pri)
 
-HEADERS += \
-    Desktop.h
+SOURCES += main.cpp
 
 RESOURCES += \
     $$PWD/../resources/system.qrc \
     $$PWD/../stylesheets/qdarkstyle/style.qrc
+

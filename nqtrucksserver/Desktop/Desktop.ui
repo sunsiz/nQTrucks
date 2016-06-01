@@ -48,6 +48,7 @@
    <addaction name="actionKeyboard"/>
    <addaction name="actionSystemSettings"/>
    <addaction name="separator"/>
+   <addaction name="actionConfiguracion"/>
   </widget>
   <action name="actionSystemSettings">
    <property name="icon">
@@ -115,6 +116,22 @@
    </property>
    <property name="toolTip">
     <string>Acceso Remoto</string>
+   </property>
+  </action>
+  <action name="actionConfiguracion">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normalon>:/devices/icons/system/devices/text-x-makefile.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Configuración</string>
+   </property>
+   <property name="toolTip">
+    <string>Configuración de nQTrucks</string>
    </property>
   </action>
  </widget>
