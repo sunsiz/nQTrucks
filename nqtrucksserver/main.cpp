@@ -27,10 +27,9 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
-#include "Desktop.h"
+#include "Desktop/Desktop.h"
 #include <QApplication>
 #include <QFile>
-
 
 int main(int argc, char *argv[])
 {
@@ -46,6 +45,6 @@ int main(int argc, char *argv[])
     w.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 
     w.showMaximized();
-    //w.showFullScreen();
+
     return app.exec();
 }

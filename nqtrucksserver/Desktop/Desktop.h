@@ -4,6 +4,11 @@
 #include <QMainWindow>
 #include <QProcess>
 
+
+/** APLICACION **/
+#include "nQTrucksEngine.h"
+#include "Configuracion/Configuracion.h"
+
 namespace Ui {
 class Desktop;
 }
@@ -27,6 +32,10 @@ private slots:
 
     void on_actionSystemSettings_triggered();
 
+    void on_actionConfiguracion_triggered();
+
+    void on_actionConfiguracion_toggled(bool arg1);
+
 private:
     Ui::Desktop *ui;
     /** HARDWARE **/
@@ -37,6 +46,11 @@ private:
     QProcess *m_vinagre;
     QProcess *m_control_center;
 
+
+    /** APLICACION **/
+private:
+    nQTrucks::nQTrucksEngine *m_app_engine;
+    Configuracion *m_app_config;
 };
 
 #endif // DESKTOP_H

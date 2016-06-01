@@ -33,7 +33,8 @@ unix:{
 
 
 
-include(Desktop/desktop.pri)
+include(Desktop/Desktop.pri)
+include(Configuracion/Configuracion.pri)
 
 SOURCES += main.cpp
 

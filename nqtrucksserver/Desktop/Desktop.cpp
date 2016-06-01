@@ -13,21 +13,8 @@ Desktop::Desktop(QWidget *parent) :
     m_keyboard->setProgram("/usr/bin/onboard");
     m_keyboard->start();
 
-//    m_keyboard = new QProcess();
-//    m_keyboard->setProgram("/usr/bin/onboard");
-//    m_keyboard->start();
-
-//    m_control_center = new QProcess(this);
-//    m_control_center->setProgram("/usr/bin/gnome-control-center");
-
-//    m_printers = new QProcess(this);
-//    m_printers->setProgram("/usr/bin/system-config-printer");
-
-//    m_networks= new QProcess(this);
-//    m_networks->setProgram("/usr/bin/nm-connection-editor");
-
-//    m_vinagre = new QProcess(this);
-//    m_vinagre->setProgram("/usr/bin/vino-preferences");
+    m_app_engine = new nQTrucks::nQTrucksEngine();
+    m_app_config = new Configuracion(m_app_engine);
 
 }
 
@@ -105,7 +92,7 @@ void Desktop::on_actionRemoto_triggered()
 
 void Desktop::on_actionSystemSettings_triggered()
 {
-    if (m_control_center == nullptr) {
+    if (m_control_center == nullptr){
         m_control_center = new QProcess(this);
         m_control_center->setProgram("/usr/bin/gnome-control-center");
         m_control_center->start();
@@ -116,4 +103,20 @@ void Desktop::on_actionSystemSettings_triggered()
         m_control_center->setProgram("/usr/bin/gnome-control-center");
         m_control_center->start();
     }
+}
+
+void Desktop::on_actionConfiguracion_triggered()
+{
+
+}
+
+void Desktop::on_actionConfiguracion_toggled(bool arg1)
+{
+    if (arg1){
+         ui->stackedWidget->addWidget(m_app_config);
+         ui->stackedWidget->setCurrentWidget(m_app_config);
+    }else{
+        ui->stackedWidget->removeWidget(m_app_config);
+    }
+
 }
