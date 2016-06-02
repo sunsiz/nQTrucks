@@ -44,10 +44,10 @@ int main(int argc, char *argv[])
     qss.close();
     app.setStyle("fusion");
 
-    //w.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    w.setFixedSize(1024,768);
+    w.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    //w.setFixedSize(1024,768);
     //w.setMaximumSize(dw.width(),dw.height());
-    w.show();
+    w.showMaximized();
 
     return app.exec();
 }

@@ -13,6 +13,11 @@ Desktop::Desktop(QWidget *parent) :
     m_keyboard->setProgram("/usr/bin/onboard");
     m_keyboard->start();
 
+    m_control_center = new QProcess(this);
+    m_control_center->setProgram("/usr/bin/gnome-control-center");
+
+
+
     m_app_engine = new nQTrucks::nQTrucksEngine();
     m_app_config = new Configuracion(m_app_engine);
 
@@ -114,7 +119,7 @@ void Desktop::on_actionConfiguracion_toggled(bool arg1)
 {
     if (arg1){
          ui->stackedWidget->addWidget(m_app_config);
-         //m_app_config->setMaximumSize(ui->stackedWidget->size());
+         m_app_config->setMaximumSize(ui->stackedWidget->size());
          ui->stackedWidget->setCurrentWidget(m_app_config);
     }else{
         ui->stackedWidget->removeWidget(m_app_config);
