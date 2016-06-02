@@ -114,6 +114,7 @@ void Desktop::on_actionConfiguracion_toggled(bool arg1)
 {
     if (arg1){
          ui->stackedWidget->addWidget(m_app_config);
+         //m_app_config->setMaximumSize(ui->stackedWidget->size());
          ui->stackedWidget->setCurrentWidget(m_app_config);
     }else{
         ui->stackedWidget->removeWidget(m_app_config);

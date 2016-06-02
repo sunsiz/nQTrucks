@@ -82,8 +82,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(engine ,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca2(cv::Mat)));
 
     loadconfig();
-    setFixedSize(1024,768);
-    this->showFullScreen();    
+//    setFixedSize(1024,768);
+//    this->showFullScreen();
 }
 
 MainWindow::~MainWindow()

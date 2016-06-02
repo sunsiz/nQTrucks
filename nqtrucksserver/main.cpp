@@ -27,6 +27,7 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
+#include <QDesktopWidget>
 #include "Desktop/Desktop.h"
 #include <QApplication>
 #include <QFile>
@@ -34,6 +35,7 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    QDesktopWidget dw;
     Desktop w;
 
     QFile qss(":qdarkstyle/style.qss");
@@ -42,9 +44,10 @@ int main(int argc, char *argv[])
     qss.close();
     app.setStyle("fusion");
 
-    w.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-
-    w.showMaximized();
+    //w.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    w.setFixedSize(1024,768);
+    //w.setMaximumSize(dw.width(),dw.height());
+    w.show();
 
     return app.exec();
 }
