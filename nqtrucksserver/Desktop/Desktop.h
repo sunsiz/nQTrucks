@@ -24,19 +24,8 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
-private slots:
-    void on_actionKeyboard_toggled(bool arg1);
-    void on_actionImpresoras_triggered();
-    void on_actionConexiones_triggered();
-    void on_actionRemoto_triggered();
-
-    void on_actionSystemSettings_triggered();
-
-    void on_actionConfiguracion_triggered();
-
-    void on_actionConfiguracion_toggled(bool arg1);
-
 private:
+
     Ui::Desktop *ui;
     /** HARDWARE **/
 private:
@@ -46,11 +35,20 @@ private:
     QProcess *m_vinagre;
     QProcess *m_control_center;
 
+private slots:
+    void on_Keyboard_exit(int arg1);
+    void on_actionKeyboard_toggled(bool arg1);
+    //void on_actionImpresoras_triggered();
+    //void on_actionConexiones_triggered();
+    //void on_actionRemoto_triggered();
+    void on_actionSystemSettings_triggered();
 
     /** APLICACION **/
 private:
     nQTrucks::nQTrucksEngine *m_app_engine;
     Configuracion *m_app_config;
+private slots:
+    void on_actionConfiguracion_toggled(bool arg1);
 };
 
 #endif // DESKTOP_H

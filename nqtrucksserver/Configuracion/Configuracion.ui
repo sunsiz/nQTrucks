@@ -55,7 +55,13 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>3</number>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
        </property>
        <property name="elideMode">
         <enum>Qt::ElideNone</enum>
@@ -76,6 +82,11 @@
         <bool>false</bool>
        </property>
        <widget class="QWidget" name="Bascula">
+        <attribute name="icon">
+         <iconset>
+          <normalon>:/tabs/icons/tabs/bascula.png</normalon>
+         </iconset>
+        </attribute>
         <attribute name="title">
          <string>Bascula</string>
         </attribute>
@@ -90,8 +101,20 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
              <property name="text">
-              <string>Dispositivo</string>
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="../../resources/system.qrc">:/tabs/icons/tabs/bascula.png</pixmap>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -120,24 +143,63 @@
              <property name="text">
               <string>...</string>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="conectarBasculaPushButton">
-             <property name="text">
-              <string>Conectar</string>
+             <property name="icon">
+              <iconset>
+               <normalon>:/temp/icons/system/devices/gnome-session-reboot2.png</normalon>
+              </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="desconectarBasculaPushButton">
+            <widget class="QToolButton" name="conectarBasculaToolButton">
+             <property name="text">
+              <string>Conectar</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normalon>:/temp/icons/system/devices/network-transmit-receive.png</normalon>
+              </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="desconectarBasculaToolButton">
              <property name="text">
               <string>Desconectar</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normalon>:/temp/icons/system/devices/network-offline.png</normalon>
+              </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="BasculaStatus">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -161,9 +223,20 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="guardarBasculaPushButton">
+            <widget class="QToolButton" name="guardarBasculaToolButton">
              <property name="text">
               <string>Guardar</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normalon>:/temp/icons/system/devices/media-floppy.png</normalon>
+              </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -301,6 +374,11 @@
         </layout>
        </widget>
        <widget class="QWidget" name="IODevice">
+        <attribute name="icon">
+         <iconset>
+          <normalon>:/temp/icons/system/devices/hw.png</normalon>
+         </iconset>
+        </attribute>
         <attribute name="title">
          <string>I/O</string>
         </attribute>
@@ -315,8 +393,20 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
              <property name="text">
-              <string>Dispositivo</string>
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="../../resources/system.qrc">:/app/icons/app/alpr_off.png</pixmap>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -341,10 +431,21 @@
              <property name="text">
               <string>...</string>
              </property>
+             <property name="icon">
+              <iconset>
+               <normalon>:/temp/icons/system/devices/gnome-session-reboot2.png</normalon>
+              </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer_2">
+            <spacer name="horizontalSpacer_6">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -357,7 +458,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="conectarIODevicesPushButton">
+            <widget class="QToolButton" name="conectarIODevicesToolButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -367,10 +468,21 @@
              <property name="text">
               <string>Conectar</string>
              </property>
+             <property name="icon">
+              <iconset>
+               <normalon>:/temp/icons/system/devices/network-transmit-receive.png</normalon>
+              </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="desconectarIODevicesPushButton">
+            <widget class="QToolButton" name="desconectarIODevicesToolButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -379,6 +491,17 @@
              </property>
              <property name="text">
               <string>Desconectar</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normalon>:/temp/icons/system/devices/network-offline.png</normalon>
+              </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -413,7 +536,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="guardarIODevicesPushButton1">
+            <widget class="QToolButton" name="guardarIODevicesToolButton1">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -423,83 +546,190 @@
              <property name="text">
               <string>Guardar</string>
              </property>
+             <property name="icon">
+              <iconset>
+               <normalon>:/temp/icons/system/devices/media-floppy.png</normalon>
+              </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
             </widget>
            </item>
           </layout>
          </item>
          <item row="1" column="0">
-          <widget class="QPushButton" name="ioDeviceREDLabel">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
-           <property name="icon">
-            <iconset resource="../../resources/system.qrc">
-             <normaloff>:/devices/icons/system/devices/jockey-disabled.png</normaloff>
-             <normalon>:/devices/icons/system/devices/jockey-enabled.png</normalon>:/devices/icons/system/devices/jockey-disabled.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>128</width>
-             <height>128</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>false</bool>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-           <property name="default">
-            <bool>false</bool>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_13">
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QFrame" name="frame">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Sunken</enum>
+             </property>
+             <property name="lineWidth">
+              <number>2</number>
+             </property>
+             <property name="midLineWidth">
+              <number>1</number>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <widget class="QPushButton" name="ioDeviceREDLabel">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../../resources/system.qrc">
+                  <normaloff>:/app/icons/app/alpr_off.png</normaloff>
+                  <normalon>:/app/icons/app/alpr_rojo.png</normalon>:/app/icons/app/alpr_off.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>128</width>
+                  <height>128</height>
+                 </size>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="ioDeviceYELLOWLabel">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../../resources/system.qrc">
+                  <normaloff>:/app/icons/app/alpr_off.png</normaloff>
+                  <normalon>:/app/icons/app/alpr_amarillo.png</normalon>:/app/icons/app/alpr_off.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>128</width>
+                  <height>128</height>
+                 </size>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="ioDeviceGREENLabel">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../../resources/system.qrc">
+                  <normaloff>:/app/icons/app/alpr_off.png</normaloff>
+                  <normalon>:/app/icons/app/alpr_verde.png</normalon>:/app/icons/app/alpr_off.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>128</width>
+                  <height>128</height>
+                 </size>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
-         <item row="3" column="0">
-          <widget class="QPushButton" name="ioDeviceGREENLabel">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="autoFillBackground">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../../resources/system.qrc">
-             <normaloff>:/devices/icons/system/devices/jockey-disabled.png</normaloff>
-             <normalon>:/devices/icons/system/devices/jockey-enabled.png</normalon>:/devices/icons/system/devices/jockey-disabled.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>128</width>
-             <height>128</height>
-            </size>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
+         <item row="2" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QPushButton" name="ioDeviceONpushButton">
+            <widget class="QToolButton" name="ioDeviceONtoolButton">
              <property name="baseSize">
               <size>
                <width>40</width>
@@ -516,10 +746,23 @@
              <property name="text">
               <string>ON</string>
              </property>
+             <property name="icon">
+              <iconset>
+               <normalon>:/devices/icons/system/devices/jockey-enabled.png</normalon>
+               <disabledoff>:/devices/icons/system/devices/jockey-enabled.png</disabledoff>
+               <disabledon>:/devices/icons/system/devices/jockey-enabled.png</disabledon>
+              </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="ioDeviceONpushButton_2">
+            <widget class="QToolButton" name="ioDeviceONtoolButton_2">
              <property name="baseSize">
               <size>
                <width>40</width>
@@ -536,10 +779,16 @@
              <property name="text">
               <string>||||</string>
              </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="ioDeviceOFFpushButton">
+            <widget class="QToolButton" name="ioDeviceOFFtoolButton">
              <property name="baseSize">
               <size>
                <width>40</width>
@@ -549,43 +798,29 @@
              <property name="text">
               <string>OFF</string>
              </property>
+             <property name="icon">
+              <iconset>
+               <normalon>:/temp/icons/system/devices/rosso.png</normalon>
+              </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
             </widget>
            </item>
           </layout>
          </item>
-         <item row="2" column="0">
-          <widget class="QPushButton" name="ioDeviceYELLOWLabel">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="autoFillBackground">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../../resources/system.qrc">
-             <normaloff>:/devices/icons/system/devices/jockey-disabled.png</normaloff>
-             <normalon>:/devices/icons/system/devices/jockey-enabled.png</normalon>:/devices/icons/system/devices/jockey-disabled.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>128</width>
-             <height>128</height>
-            </size>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="Camaras">
+        <attribute name="icon">
+         <iconset>
+          <normalon>:/devices/icons/system/devices/camera-video.png</normalon>
+         </iconset>
+        </attribute>
         <attribute name="title">
          <string>Camaras</string>
         </attribute>
@@ -681,13 +916,13 @@
             </widget>
            </item>
            <item row="6" column="0">
-            <widget class="QPushButton" name="GuardarCamara">
+            <widget class="QToolButton" name="GuardarCamara">
              <property name="text">
               <string>Guardar</string>
              </property>
              <property name="icon">
               <iconset>
-               <normalon>:/devices/icons/system/devices/camera-photo.png</normalon>
+               <normalon>:/temp/icons/system/devices/media-floppy.png</normalon>
               </iconset>
              </property>
              <property name="iconSize">
@@ -695,9 +930,6 @@
                <width>32</width>
                <height>32</height>
               </size>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -750,6 +982,11 @@
         </layout>
        </widget>
        <widget class="QWidget" name="Calibracion">
+        <attribute name="icon">
+         <iconset>
+          <normalon>:/temp/icons/system/devices/gtk-spell-check.png</normalon>
+         </iconset>
+        </attribute>
         <attribute name="title">
          <string>Calibracion</string>
         </attribute>
@@ -767,8 +1004,17 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
              <property name="text">
-              <string>ALPR</string>
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="../../resources/system.qrc">:/temp/icons/system/devices/indicator-cpufreq-100.png</pixmap>
              </property>
              <property name="scaledContents">
               <bool>true</bool>
@@ -1152,16 +1398,20 @@
                   </spacer>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="guardarPlanK">
+                  <widget class="QToolButton" name="guardarPlanK">
                    <property name="text">
                     <string>Guardar</string>
                    </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="resetPlanK">
-                   <property name="text">
-                    <string>Reset</string>
+                   <property name="icon">
+                    <iconset>
+                     <normalon>:/temp/icons/system/devices/media-floppy.png</normalon>
+                    </iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
                    </property>
                   </widget>
                  </item>
