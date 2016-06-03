@@ -249,14 +249,24 @@ void Configuracion::on_GuardarCamara_clicked()
 
 
 /** NEWSAGES I/O  **/
-void Configuracion::on_actualizarIODEvicestoolButton_clicked()
+void Configuracion::on_actualizarSemaforos_clicked()
 {
     ui->ioDevicesComboBox1->clear();
     QStringList l_IODevices = engine->getIODevices();
     ui->ioDevicesComboBox1->addItems(l_IODevices);
 }
 
-void Configuracion::on_guardarIODevicesPushButton1_clicked()
+void Configuracion::on_conectarSemaforo_clicked()
+{
+    engine->setIODevicesConnect(true);
+}
+
+void Configuracion::on_desconectarSemaforo_clicked()
+{
+    engine->setIODevicesConnect(false);
+}
+
+void Configuracion::on_guardarSemaforo_clicked()
 {
     engine->appConfig()->beginGroup(NEWSAGESIO);
     engine->appConfig()->setValue("device",ui->ioDevicesComboBox1->currentText());
@@ -264,23 +274,29 @@ void Configuracion::on_guardarIODevicesPushButton1_clicked()
     engine->setIODevicesConfig();
 }
 
-void Configuracion::on_ioDeviceONpushButton_clicked()
+void Configuracion::on_semaforoVerde_clicked()
 {
     engine->setSemaforoStatus(SEMAFORO_VERDE);
 }
 
-void Configuracion::on_ioDeviceOFFpushButton_clicked()
+void Configuracion::on_semaforoAmarillo_clicked()
 {
-        engine->setSemaforoStatus(SEMAFORO_ROJO);
+    engine->setSemaforoStatus(SEMAFORO_AMARILLO);
 }
+
+
+void Configuracion::on_semaforoRojo_clicked()
+{
+    engine->setSemaforoStatus(SEMAFORO_ROJO);
+}
+
+
 
 void Configuracion::on_ioDeviceSTATUS(bool status)
 {
   if(status){
-      ui->ioDeviceSTATUSLabel->setPalette(m_deviceReady_palette);
       ui->ioDeviceSTATUSLabel->setText("READY");
   }else{
-      ui->ioDeviceSTATUSLabel->setPalette(m_deviceNotReady_palette);
       ui->ioDeviceSTATUSLabel->setText("Disc");
   }
 }
@@ -290,6 +306,7 @@ void Configuracion::on_ioDeviceSemaforoChanged(int _color)
     switch (_color) {
     case SEMAFORO_VERDE:
         qDebug() << "SEMAFORO VERDE";
+
         break;
     case SEMAFORO_AMARILLO:
         //qDebug() << "SEMAFORO AMARILLO";
@@ -301,65 +318,39 @@ void Configuracion::on_ioDeviceSemaforoChanged(int _color)
         qDebug() << "SEMAFORO VERDE INDETERMINADO";
         break;
     }
-
-
-//    ui->ioDeviceGREENLabel->setPalette(m_semaforoOFF_palette);
-//    ui->ioDeviceREDLabel->setPalette(m_semaforoRED_palette);
-//    ui->ioDeviceGREENLabel->setPalette(m_semaforoGREEN_palette);
-//    ui->ioDeviceREDLabel->setPalette(m_semaforoOFF_palette);
-
 }
 
-void Configuracion::on_conectarIODevicesPushButton_clicked()
-{
-    engine->setIODevicesConnect(true);
-}
 
-void Configuracion::on_desconectarIODevicesPushButton_clicked()
-{
-    engine->setIODevicesConnect(false);
-}
 /** END NEWSAGES I/O **/
 
 
 
 
 /** BASCULAS **/
-void Configuracion::on_conectarBasculaPushButton_clicked()
+void Configuracion::on_actualizarBasculas_clicked()
+{
+    ui->BasculaDevicesComboBox->clear();
+    QStringList l_Devices = engine->getSerialDevices();
+    ui->BasculaDevicesComboBox->addItems(l_Devices);
+}
+
+void Configuracion::on_conectarBascula_clicked()
 {
     engine->setBasculaConnect(true);
 }
 
-void Configuracion::on_desconectarBasculaPushButton_clicked()
+void Configuracion::on_desconectarBascula_clicked()
 {
     engine->setBasculaConnect(false);
 }
 
-void Configuracion::onBascula(t_Bascula _bascula)
-{          
-    ui->BasculaLcd->display(_bascula.iBruto);
-    ui->BasculaLcd2->display(_bascula.iTara);
-    ui->BasculaLcd3->display(_bascula.iNeto);
-
-    if(_bascula.bEstado){// == _bascula.bEstado){
-        ui->BasculaEstable->setChecked(_bascula.bEstado);
-    }
-}
-
-void Configuracion::on_guardarBasculaPushButton_clicked()
+void Configuracion::on_guardarBascula_clicked()
 {
     engine->appConfig()->beginGroup(BASCULA);
     engine->appConfig()->setValue("device",ui->BasculaDevicesComboBox->currentText());
     engine->appConfig()->setValue("tipo",QString::number(ui->BasculaTipoComboBox->currentIndex()));
     engine->appConfig()->endGroup();
     engine->setIODevicesConfig();
-}
-
-void Configuracion::on_actualizarIBasculasButton_clicked()
-{
-    ui->BasculaDevicesComboBox->clear();
-    QStringList l_Devices = engine->getSerialDevices();
-    ui->BasculaDevicesComboBox->addItems(l_Devices);
 }
 
 void Configuracion::on_BasculaConectada(bool conectada)
@@ -369,8 +360,16 @@ void Configuracion::on_BasculaConectada(bool conectada)
         ui->BasculaLcd->display("-------");
         ui->BasculaLcd2->display("-------");
         ui->BasculaLcd3->display("-------");
-        ui->BasculaEstable->setChecked(false);
+        ui->BasculaStatus->setChecked(false);
     }
+}
+
+void Configuracion::onBascula(t_Bascula _bascula)
+{          
+    ui->BasculaLcd->display(_bascula.iBruto);
+    ui->BasculaLcd2->display(_bascula.iTara);
+    ui->BasculaLcd3->display(_bascula.iNeto);
+    ui->BasculaEstable->setChecked(_bascula.bEstado);
 }
 
 /** END BASCULAS **/
@@ -766,11 +765,5 @@ void Configuracion::on_guardarPlanK_clicked()
     }
     engine->calibrarFoto(index,m_matricularesults[index].OrigenFoto.clone());
 }
-void Configuracion::on_resetPlanK_clicked()
-{
-
-}
-
     /** END PLANKs **/
 /** END CALIBRACION *******************************************************************/
-

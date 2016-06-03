@@ -71,32 +71,28 @@ private slots:
 
 
     /** NEWSAGES I/O  **/
-private:
-    QPalette m_deviceNotReady_palette;
-    QPalette m_deviceReady_palette;
-    QPalette m_semaforoOFF_palette;
-    QPalette m_semaforoRED_palette;
-    QPalette m_semaforoGREEN_palette;
-
 private slots:
-    void on_actualizarIODEvicestoolButton_clicked();
-    void on_guardarIODevicesPushButton1_clicked();
-    void on_ioDeviceONpushButton_clicked();
-    void on_ioDeviceOFFpushButton_clicked();
+    void on_actualizarSemaforos_clicked();
+    void on_conectarSemaforo_clicked();
+    void on_desconectarSemaforo_clicked();
+    void on_guardarSemaforo_clicked();
+
+    void on_semaforoVerde_clicked();
+    void on_semaforoAmarillo_clicked();
+    void on_semaforoRojo_clicked();
+
     void on_ioDeviceSTATUS(bool status);
     void on_ioDeviceSemaforoChanged(int _color);
-    void on_conectarIODevicesPushButton_clicked();
-    void on_desconectarIODevicesPushButton_clicked();
     /** END NEWSAGES I/O  **/
 
     /** BASCULAS **/
 private slots:
-    void on_conectarBasculaPushButton_clicked();
-    void on_desconectarBasculaPushButton_clicked();
-    void onBascula(t_Bascula _bascula);
-    void on_guardarBasculaPushButton_clicked();
-    void on_actualizarIBasculasButton_clicked();
+    void on_actualizarBasculas_clicked();
+    void on_conectarBascula_clicked();
+    void on_desconectarBascula_clicked();
+    void on_guardarBascula_clicked();
     void on_BasculaConectada(bool conectada);
+    void onBascula(t_Bascula _bascula);
     /** END BASCULAS **/
 
 
@@ -148,8 +144,6 @@ private:
     cv::Mat updateprewarp(cv::Mat img);
     void loadprewarp();
     QString get_prewarp_config();
-//    cv::Mat curWarpedImage1;
-//    cv::Mat curWarpedImage2;
     QString m_prewarp;
     nQTrucks::t_Prewarp prewarp;
 private slots:
@@ -162,15 +156,7 @@ private slots:
     /** END  PREWARP **/
 
 
-
-
-
     /** CONFIG **/
-private slots:
-
-
-
-    void on_resetPlanK_clicked();
 
 private:
     void loadconfig();
