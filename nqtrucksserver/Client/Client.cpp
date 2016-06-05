@@ -106,15 +106,13 @@ void Client::on_SemaforoEstadoChanged(int _color){
 /** END NEWSAGES I/O **/
 
 /** BASCULAS **/
-void Client::on_BasculaConectada(bool conectada)
-{
+void Client::on_BasculaConectada(bool conectada){
     if (!conectada){
         ui->BasculaLcd->display("-------");
     }
 }
 
-void Client::onBascula(t_Bascula _bascula)
-{          
+void Client::onBascula(t_Bascula _bascula){          
     ui->BasculaLcd->display(_bascula.iBruto);
     ui->BasculaEstable->setChecked(_bascula.bEstado);
 }
@@ -141,36 +139,17 @@ void Client::onAllMatriculaResults()
         ui->MatriculaB->setText(m_matricularesults[1].MatriculaB);
         ui->MatriculaPrecisionB->setText(m_matricularesults[1].MatriculaPrecisionBs);
     }
-
-
-
-
-
     m_alpr_count=0;
 }
-
 /** END BASCULAS **/
 
 
-//void Client::updateCalibracionGui(){
-////    int index = getAlprIndex();
-////    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFoto.clone())));
-////    ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].MatriculaFotoA.clone())));
-////    ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].MatriculaFotoB.clone())));
-////    ui->MatriculaA->setText(m_matricularesults[index].MatriculaA);
-////    ui->MatriculaB->setText(m_matricularesults[index].MatriculaB);
-////    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFotoBlanca.clone())));
-////    ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFotoRoja.clone())));
-////    ui->LongMatriculaA->setText(m_matricularesults[index].MatriculaPrecisionAs);
-////    ui->LongMatriculaB->setText(m_matricularesults[index].MatriculaPrecisionBs);
-//}
 void Client::onReplyMatriculaResults1(const t_MatriculaResults &_result){
     m_matricularesults[0] = _result;
     m_alpr_count++;
     if (m_alpr_count==2){
         onAllMatriculaResults();
     }
-
 }
 
 void Client::onReplyMatriculaResults2(const t_MatriculaResults &_result){
@@ -179,7 +158,6 @@ void Client::onReplyMatriculaResults2(const t_MatriculaResults &_result){
     if (m_alpr_count==2){
         onAllMatriculaResults();
     }
-
 }
 
 /** CONVERSORES ***********************************/
