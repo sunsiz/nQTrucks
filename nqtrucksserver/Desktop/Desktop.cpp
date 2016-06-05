@@ -13,8 +13,6 @@ Desktop::Desktop(QWidget *parent) :
     m_keyboard = new QProcess(this);
     m_keyboard->setProgram("/usr/bin/onboard");
     m_keyboard->start();
-    /** KEYBOARD SIEMPRE VIVO **/
-    connect(m_keyboard,SIGNAL(finished(int)),this,SLOT(on_Keyboard_exit(int)));
     /** END KEYBOARD **/
 
     m_control_center = new QProcess(this);
@@ -23,7 +21,15 @@ Desktop::Desktop(QWidget *parent) :
     /** APLICACION **/
     m_app_engine = new nQTrucks::nQTrucksEngine();
     m_app_config = new Configuracion(m_app_engine);
+    m_app_client = new Client(m_app_engine);
 
+    /** KEYBOARD SIEMPRE VIVO **/
+    connect(m_keyboard,SIGNAL(finished(int)),this,SLOT(on_exit_Keyboard(int)));
+    //QDBusConnection::sessionBus().connect("org.onboard.Onboard","/org/onboard/Onboard/Keyboard","org.onboard.Onboard.Keyboard","PropertiesChanged",this,SLOT())
+
+    /** Listado de StackWidgets **/
+    //ui->appWidget->addWidget(m_app_config);
+    //ui->appWidget->setVisible(false);
 }
 
 Desktop::~Desktop(){
@@ -47,11 +53,8 @@ void Desktop::changeEvent(QEvent *e){
 
 /** HARDWARE **************************************************************/
 /** KEYBOARD ***/
-void Desktop::on_Keyboard_exit(int arg1){
+void Desktop::on_exit_Keyboard(const int &arg1){
     m_keyboard->start();
-//    QDBusConnection dbus =QDBusConnection::sessionBus();
-//    QDBusMessage msg = QDBusMessage::createMethodCall("org.onboard.Onboard", "/org/onboard/Onboard/Keyboard" , "org.onboard.Onboard.Keyboard","ToggleVisible");
-//    dbus.send(msg);
 }
 
 void Desktop::on_actionKeyboard_toggled(bool arg1){
@@ -64,6 +67,8 @@ void Desktop::on_actionKeyboard_toggled(bool arg1){
         QDBusMessage msg = QDBusMessage::createMethodCall("org.onboard.Onboard", "/org/onboard/Onboard/Keyboard" , "org.onboard.Onboard.Keyboard","Hide");
         dbus.send(msg);
     }
+   on_selectedAppChanged();
+
 }
 /** END KEYBOARD **/
 /** SYSTEM SETTINGS **/
@@ -73,20 +78,53 @@ void Desktop::on_actionSystemSettings_triggered(){
     }
     m_control_center->start();
 }
+
 /** END SYSTEM SETTINGS **/
 /** END HARDWARE **********************************************************************************/
+/** APPLICACION ***************************************************************/
+void Desktop::on_selectedAppChanged(){
+
+    switch (m_app) {
+    case appConfig:
+        ui->appWidget->removeWidget(m_app_config);
+        m_app_config->setMaximumSize(ui->appWidget->size());
+        m_app_config->setSizePolicy(ui->appWidget->sizePolicy());
+        ui->appWidget->addWidget(m_app_config);
+        ui->appWidget->setCurrentWidget(m_app_config);
+        break;
+    case appClient:
+        ui->appWidget->removeWidget(m_app_client);
+        m_app_client->setMaximumSize(ui->appWidget->size());
+        m_app_client->setSizePolicy(ui->appWidget->sizePolicy());
+        ui->appWidget->addWidget(m_app_client);
+        ui->appWidget->setCurrentWidget(m_app_client);
+        break;
+    case appNone:
+        ui->appWidget->removeWidget(m_app_config);
+        ui->appWidget->removeWidget(m_app_client);
+        break;
+    }
+}
 
 
-/** APPLICAION ***************************************************************/
 /** CONFIGURACION APP **/
 void Desktop::on_actionConfiguracion_toggled(bool arg1){
     if (arg1){
-         ui->stackedWidget->addWidget(m_app_config);
-         m_app_config->setMaximumSize(ui->stackedWidget->size());
-         ui->stackedWidget->setCurrentWidget(m_app_config);
+        m_app=appConfig;
     }else{
-        ui->stackedWidget->removeWidget(m_app_config);
+        m_app=appNone;
     }
+    on_selectedAppChanged();
 }
 /** END CONFIGURACION APP **/
 
+/** CLIENT **/
+void Desktop::on_actionClient_toggled(bool arg1){
+    if (arg1){
+        m_app=appClient;
+    }else{
+        m_app=appNone;
+   }
+    on_selectedAppChanged();
+}
+/** END CLIENT **/

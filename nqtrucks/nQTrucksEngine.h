@@ -70,12 +70,11 @@ signals:
 public:
     QStringList getIODevices();
 public slots:
-    void setIODevicesConnect(const bool &_value);
+    void setSemaforoDevicesConnect(const bool &_value);
     void setSemaforoStatus(const int &_color);
-    void setIODevicesConfig();
 signals:
-    void IODevicesSemaforoChanged(const int &color);
-    void IODeviceConnectChanged(const bool &_value);
+    void SemaforoEstadoChanged(const int &color);
+    void SemaforoConnectChanged(const bool &_value);
     /** END NEWSAGES I/O **/
 
     /** BASCULAS **/

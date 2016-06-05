@@ -35,12 +35,36 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QStackedWidget" name="stackedWidget">
+     <widget class="QStackedWidget" name="appWidget">
       <property name="maximumSize">
        <size>
-        <width>900</width>
-        <height>750</height>
+        <width>860</width>
+        <height>700</height>
        </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>860</width>
+        <height>700</height>
+       </size>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
+      </property>
+      <property name="lineWidth">
+       <number>3</number>
+      </property>
+      <property name="midLineWidth">
+       <number>1</number>
+      </property>
+      <property name="currentIndex">
+       <number>-1</number>
       </property>
      </widget>
     </item>
@@ -81,6 +105,7 @@
    <addaction name="actionSystemSettings"/>
    <addaction name="separator"/>
    <addaction name="actionConfiguracion"/>
+   <addaction name="actionClient"/>
   </widget>
   <action name="actionSystemSettings">
    <property name="icon">
@@ -137,17 +162,17 @@
     <string>Conexiones de Red</string>
    </property>
   </action>
-  <action name="actionRemoto">
+  <action name="actionClient">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset>
      <normalon>:/devices/icons/system/devices/user-desktop7.png</normalon>
     </iconset>
    </property>
    <property name="text">
-    <string>Remoto</string>
-   </property>
-   <property name="toolTip">
-    <string>Acceso Remoto</string>
+    <string>Client</string>
    </property>
   </action>
   <action name="actionConfiguracion">
@@ -164,6 +189,9 @@
    </property>
    <property name="toolTip">
     <string>Configuración de nQTrucks</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
    </property>
   </action>
  </widget>

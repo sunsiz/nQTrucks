@@ -58,8 +58,8 @@ Configuracion::Configuracion(nQTrucks::nQTrucksEngine *_engine, QWidget *parent)
     connect(engine,SIGNAL(CamaraIPFotoCV2(cv::Mat)),this,SLOT(onGetFotoCV2(cv::Mat)));
 
     /** IO **/
-    connect(engine,SIGNAL(IODevicesStatusChanged(bool)),this,SLOT(on_ioDeviceSTATUS(bool)));
-    connect(engine,SIGNAL(IODevicesSemaforoChanged(int)),this,SLOT(on_ioDeviceSemaforoChanged(int)));
+    connect(engine,SIGNAL(SemaforoConnectChanged(bool)),this,SLOT(on_SemaforoConnect(bool)));
+    connect(engine,SIGNAL(SemaforoEstadoChanged(int)),this,SLOT(on_SemaforoEstadoChanged(int)));
 
     /** BASCULAS **/
     connect(engine ,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
@@ -139,8 +139,6 @@ void Configuracion::loadconfig()
     /** IO DEVICES **/
     QStringList l_IODevices = engine->getIODevices();
     ui->ioDevicesComboBox1->addItems(l_IODevices);
-    ui->ioDeviceSTATUSLabel->setAutoFillBackground(true);
-    ui->ioDeviceSTATUSLabel->setText("Disc");
     /** IO DEVICES **/
 
     /** BASCULAS **/
@@ -249,78 +247,61 @@ void Configuracion::on_GuardarCamara_clicked()
 
 
 /** NEWSAGES I/O  **/
-void Configuracion::on_actualizarSemaforos_clicked()
-{
+void Configuracion::on_actualizarSemaforos_clicked(){
     ui->ioDevicesComboBox1->clear();
     QStringList l_IODevices = engine->getIODevices();
     ui->ioDevicesComboBox1->addItems(l_IODevices);
 }
 
-void Configuracion::on_conectarSemaforo_clicked()
-{
-    engine->setIODevicesConnect(true);
+void Configuracion::on_conectarSemaforo_clicked(){
+    on_guardarSemaforo_clicked();
+    engine->setSemaforoDevicesConnect(true);
 }
 
-void Configuracion::on_desconectarSemaforo_clicked()
-{
-    engine->setIODevicesConnect(false);
+void Configuracion::on_desconectarSemaforo_clicked(){
+    engine->setSemaforoDevicesConnect(false);
 }
 
-void Configuracion::on_guardarSemaforo_clicked()
-{
-    engine->appConfig()->beginGroup(NEWSAGESIO);
-    engine->appConfig()->setValue("device",ui->ioDevicesComboBox1->currentText());
-    engine->appConfig()->endGroup();
-    engine->setIODevicesConfig();
+void Configuracion::on_guardarSemaforo_clicked(){
+    engine->appConfig()->setValue(QString(NEWSAGESIO) + "/device",ui->ioDevicesComboBox1->currentText());
 }
 
-void Configuracion::on_semaforoVerde_clicked()
-{
+void Configuracion::on_semaforoVerde_clicked(){
     engine->setSemaforoStatus(SEMAFORO_VERDE);
 }
 
-void Configuracion::on_semaforoAmarillo_clicked()
-{
+void Configuracion::on_semaforoAmarillo_clicked(){
     engine->setSemaforoStatus(SEMAFORO_AMARILLO);
 }
 
-
-void Configuracion::on_semaforoRojo_clicked()
-{
+void Configuracion::on_semaforoRojo_clicked(){
     engine->setSemaforoStatus(SEMAFORO_ROJO);
 }
 
-
-
-void Configuracion::on_ioDeviceSTATUS(bool status)
-{
-  if(status){
-      ui->ioDeviceSTATUSLabel->setText("READY");
-  }else{
-      ui->ioDeviceSTATUSLabel->setText("Disc");
-  }
+void Configuracion::on_SemaforoConnect(bool status){
+    ui->semaforoConectado->setChecked(status);
 }
 
-void Configuracion::on_ioDeviceSemaforoChanged(int _color)
-{
+void Configuracion::on_SemaforoEstadoChanged(int _color){
     switch (_color) {
     case SEMAFORO_VERDE:
         qDebug() << "SEMAFORO VERDE";
-
+        ui->semaforoVerde->setChecked(true);
         break;
     case SEMAFORO_AMARILLO:
-        //qDebug() << "SEMAFORO AMARILLO";
+        qDebug() << "SEMAFORO AMARILLO";
+        ui->semaforoAmarillo->setChecked(true);
         break;
     case SEMAFORO_ROJO:
         qDebug() << "SEMAFORO ROJO";
+        ui->semaforoRojo->setChecked(true);
         break;
     default:
         qDebug() << "SEMAFORO VERDE INDETERMINADO";
+        ui->semaforoVerde->setChecked(true);
         break;
     }
 }
-
-
 /** END NEWSAGES I/O **/
 
 
@@ -336,6 +317,7 @@ void Configuracion::on_actualizarBasculas_clicked()
 
 void Configuracion::on_conectarBascula_clicked()
 {
+    on_guardarBascula_clicked();
     engine->setBasculaConnect(true);
 }
 
@@ -346,11 +328,8 @@ void Configuracion::on_desconectarBascula_clicked()
 
 void Configuracion::on_guardarBascula_clicked()
 {
-    engine->appConfig()->beginGroup(BASCULA);
-    engine->appConfig()->setValue("device",ui->BasculaDevicesComboBox->currentText());
-    engine->appConfig()->setValue("tipo",QString::number(ui->BasculaTipoComboBox->currentIndex()));
-    engine->appConfig()->endGroup();
-    engine->setIODevicesConfig();
+    engine->appConfig()->setValue(QString(BASCULA) + "/device",ui->BasculaDevicesComboBox->currentText());
+    engine->appConfig()->setValue(QString(BASCULA) + "/tipo",QString::number(ui->BasculaTipoComboBox->currentIndex()));
 }
 
 void Configuracion::on_BasculaConectada(bool conectada)
@@ -374,11 +353,7 @@ void Configuracion::onBascula(t_Bascula _bascula)
 
 /** END BASCULAS **/
 
-
-
-/** CALIBRACION ***********************************/
-
-
+/** CONVERSORES ***********************************/
 QImage Configuracion::convertMat2QImage(const cv::Mat& src)
 {
     QImage qtImg;
@@ -400,9 +375,134 @@ QImage Configuracion::convertMat2QImage(const cv::Mat& src)
     }
     return qtImg.copy();
 }
+/** END CONVERSORES ***********************************/
 
 
 
+/** CALIBRACION ***************************************************************/
+    /** GUI **/
+void Configuracion::on_calibracionSelect_currentIndexChanged(int index){
+    setAlprIndex(index);
+    loadPlanks(index);
+    updateCalibracionGui();
+}
+
+void Configuracion::loadPlanks(const int &index){
+    switch (index) {
+    case 0:
+        ui->vPlankA->setValue(engine->appConfig()->value(QString(ALPR) + "/planka1","0").toInt());
+        ui->vPlankB->setValue(engine->appConfig()->value(QString(ALPR) + "/plankb1","0").toInt());
+        ui->vPlankC->setValue(engine->appConfig()->value(QString(ALPR) + "/plankc1","0").toInt());
+        break;
+    case 1:
+        ui->vPlankA->setValue(engine->appConfig()->value(QString(ALPR) + "/planka2","0").toInt());
+        ui->vPlankB->setValue(engine->appConfig()->value(QString(ALPR) + "/plankb2","0").toInt());
+        ui->vPlankC->setValue(engine->appConfig()->value(QString(ALPR) + "/plankc2","0").toInt());
+        break;
+    }
+}
+void Configuracion::on_TestMatricula_clicked(){
+    int index = getAlprIndex();
+    on_guardarPlanK_clicked();
+    engine->getFotoMatricula(index,m_matricularesults[index].OrigenFoto.clone());
+}
+void Configuracion::on_ActualizarCamara_clicked(){
+    int index = getAlprIndex();
+    engine->getCamaraFoto(index);
+}
+    /** END GUI **/
+    /** ALPR **/
+void Configuracion::updateCalibracionGui(){
+    int index = getAlprIndex();
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFoto.clone())));
+    ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].MatriculaFotoA.clone())));
+    ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].MatriculaFotoB.clone())));
+    ui->MatriculaA->setText(m_matricularesults[index].MatriculaA);
+    ui->MatriculaB->setText(m_matricularesults[index].MatriculaB);
+    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFotoBlanca.clone())));
+    ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFotoRoja.clone())));
+    ui->LongMatriculaA->setText(m_matricularesults[index].MatriculaPrecisionAs);
+    ui->LongMatriculaB->setText(m_matricularesults[index].MatriculaPrecisionBs);
+}
+    /** ALPR 1 **/
+void Configuracion::onReplyMatriculaResults1(const t_MatriculaResults &_result){
+    m_matricularesults[0] = _result;
+    loadPlanks(0);
+    updateCalibracionGui();
+}
+
+void Configuracion::onGetOriginalMatricula1(const cv::Mat &foto){
+    m_matricularesults[0].OrigenFoto = foto.clone();
+    updateCalibracionGui();
+}
+
+void Configuracion::onGetOriginalMatriculaRoja1(const cv::Mat &foto){
+    m_matricularesults[0].OrigenFotoRoja = foto.clone();
+    updateCalibracionGui();
+}
+
+void Configuracion::onGetOriginalMatriculaBlanca1(const cv::Mat &foto){
+    m_matricularesults[0].OrigenFotoBlanca = foto.clone();
+    updateCalibracionGui();
+}
+    /** END ALPR1 **/
+    /** ALPR2 **/
+void Configuracion::onReplyMatriculaResults2(const t_MatriculaResults &_result){
+    m_matricularesults[1] = _result;
+    loadPlanks(1);
+    updateCalibracionGui();
+}
+
+void Configuracion::onGetOriginalMatricula2(const cv::Mat &foto){
+    m_matricularesults[1].OrigenFoto = foto.clone();
+    updateCalibracionGui();
+}
+
+void Configuracion::onGetOriginalMatriculaRoja2(const cv::Mat &foto){
+    m_matricularesults[1].OrigenFotoRoja = foto.clone();
+    updateCalibracionGui();
+}
+
+void Configuracion::onGetOriginalMatriculaBlanca2(const cv::Mat &foto){
+    m_matricularesults[1].OrigenFotoBlanca = foto.clone();
+    updateCalibracionGui();
+}
+    /** END ALPR2 **/
+    /** PLANKs **/
+void Configuracion::on_vPlankA_valueChanged(int value){
+    ui->lvPlankA->setText(QString::number( value));
+}
+void Configuracion::on_vPlankB_valueChanged(int value){
+    ui->lvPlankB->setText(QString::number( value));
+}
+void Configuracion::on_vPlankC_valueChanged(int value){
+    ui->lvPlankC->setText(QString::number( value));
+}
+
+
+void Configuracion::on_guardarPlanK_clicked()
+{
+    int index = getAlprIndex();
+    switch (index) {
+    case 0:
+        engine->appConfig()->setValue(QString(ALPR) + "/planka1",QString::number(ui->vPlankA->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankb1",QString::number(ui->vPlankB->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankc1",QString::number(ui->vPlankC->value()));
+        break;
+    case 1:
+        engine->appConfig()->setValue(QString(ALPR) + "/planka2",QString::number(ui->vPlankA->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankb2",QString::number(ui->vPlankB->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankc2",QString::number(ui->vPlankC->value()));
+        break;
+    }
+    engine->calibrarFoto(index,m_matricularesults[index].OrigenFoto.clone());
+}
+    /** END PLANKs **/
+
+
+
+
+/** TODO PREWARP **/
 /** PREWARP **/
 void Configuracion::loadprewarp(){
     /** DEBUG **/
@@ -624,146 +724,4 @@ void Configuracion::on_guardarPrewarp_clicked()
 
 }
 /** END PREWARP **/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/** CALIBRACION ***************************************************************/
-    /** GUI **/
-void Configuracion::on_calibracionSelect_currentIndexChanged(int index){
-    setAlprIndex(index);
-    loadPlanks(index);
-    updateCalibracionGui();
-}
-
-void Configuracion::loadPlanks(const int &index){
-    switch (index) {
-    case 0:
-        engine->appConfig()->beginGroup(ALPR);
-        ui->vPlankA->setValue(engine->appConfig()->value("planka1","0").toInt());
-        ui->vPlankB->setValue(engine->appConfig()->value("plankb1","0").toInt());
-        ui->vPlankC->setValue(engine->appConfig()->value("plankc1","0").toInt());
-        engine->appConfig()->endGroup();
-        break;
-    case 1:
-        engine->appConfig()->beginGroup(ALPR);
-        ui->vPlankA->setValue(engine->appConfig()->value("planka2","0").toInt());
-        ui->vPlankB->setValue(engine->appConfig()->value("plankb2","0").toInt());
-        ui->vPlankC->setValue(engine->appConfig()->value("plankc2","0").toInt());
-        engine->appConfig()->endGroup();
-        break;
-    }
-}
-void Configuracion::on_TestMatricula_clicked(){
-    int index = getAlprIndex();
-    on_guardarPlanK_clicked();
-    engine->getFotoMatricula(index,m_matricularesults[index].OrigenFoto.clone());
-}
-void Configuracion::on_ActualizarCamara_clicked(){
-    int index = getAlprIndex();
-    engine->getCamaraFoto(index);
-}
-    /** END GUI **/
-    /** ALPR **/
-void Configuracion::updateCalibracionGui(){
-    int index = getAlprIndex();
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFoto.clone())));
-    ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].MatriculaFotoA.clone())));
-    ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].MatriculaFotoB.clone())));
-    ui->MatriculaA->setText(m_matricularesults[index].MatriculaA);
-    ui->MatriculaB->setText(m_matricularesults[index].MatriculaB);
-    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFotoBlanca.clone())));
-    ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFotoRoja.clone())));
-    ui->LongMatriculaA->setText(m_matricularesults[index].MatriculaPrecisionAs);
-    ui->LongMatriculaB->setText(m_matricularesults[index].MatriculaPrecisionBs);
-}
-    /** ALPR 1 **/
-void Configuracion::onReplyMatriculaResults1(const t_MatriculaResults &_result){
-    m_matricularesults[0] = _result;
-    loadPlanks(0);
-    updateCalibracionGui();
-}
-
-void Configuracion::onGetOriginalMatricula1(const cv::Mat &foto){
-    m_matricularesults[0].OrigenFoto = foto.clone();
-    updateCalibracionGui();
-}
-
-void Configuracion::onGetOriginalMatriculaRoja1(const cv::Mat &foto){
-    m_matricularesults[0].OrigenFotoRoja = foto.clone();
-    updateCalibracionGui();
-}
-
-void Configuracion::onGetOriginalMatriculaBlanca1(const cv::Mat &foto){
-    m_matricularesults[0].OrigenFotoBlanca = foto.clone();
-    updateCalibracionGui();
-}
-    /** END ALPR1 **/
-    /** ALPR2 **/
-void Configuracion::onReplyMatriculaResults2(const t_MatriculaResults &_result){
-    m_matricularesults[1] = _result;
-    loadPlanks(1);
-    updateCalibracionGui();
-}
-
-void Configuracion::onGetOriginalMatricula2(const cv::Mat &foto){
-    m_matricularesults[1].OrigenFoto = foto.clone();
-    updateCalibracionGui();
-}
-
-void Configuracion::onGetOriginalMatriculaRoja2(const cv::Mat &foto){
-    m_matricularesults[1].OrigenFotoRoja = foto.clone();
-    updateCalibracionGui();
-}
-
-void Configuracion::onGetOriginalMatriculaBlanca2(const cv::Mat &foto){
-    m_matricularesults[1].OrigenFotoBlanca = foto.clone();
-    updateCalibracionGui();
-}
-    /** END ALPR2 **/
-    /** PLANKs **/
-void Configuracion::on_vPlankA_valueChanged(int value){
-    ui->lvPlankA->setText(QString::number( value));
-}
-void Configuracion::on_vPlankB_valueChanged(int value){
-    ui->lvPlankB->setText(QString::number( value));
-}
-void Configuracion::on_vPlankC_valueChanged(int value){
-    ui->lvPlankC->setText(QString::number( value));
-}
-
-
-void Configuracion::on_guardarPlanK_clicked()
-{
-    int index = getAlprIndex();
-    switch (index) {
-    case 0:
-        engine->appConfig()->beginGroup(ALPR);
-        engine->appConfig()->setValue("planka1",QString::number(ui->vPlankA->value()));
-        engine->appConfig()->setValue("plankb1",QString::number(ui->vPlankB->value()));
-        engine->appConfig()->setValue("plankc1",QString::number(ui->vPlankC->value()));
-        engine->appConfig()->endGroup();
-        break;
-    case 1:
-        engine->appConfig()->beginGroup(ALPR);
-        engine->appConfig()->setValue("planka2",QString::number(ui->vPlankA->value()));
-        engine->appConfig()->setValue("plankb2",QString::number(ui->vPlankB->value()));
-        engine->appConfig()->setValue("plankc2",QString::number(ui->vPlankC->value()));
-        engine->appConfig()->endGroup();
-        break;
-    }
-    engine->calibrarFoto(index,m_matricularesults[index].OrigenFoto.clone());
-}
-    /** END PLANKs **/
 /** END CALIBRACION *******************************************************************/

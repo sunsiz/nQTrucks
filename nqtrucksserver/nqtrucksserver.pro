@@ -35,6 +35,7 @@ unix:{
 
 include(Desktop/Desktop.pri)
 include(Configuracion/Configuracion.pri)
+include(Client/Client.pri)
 
 SOURCES += main.cpp
 

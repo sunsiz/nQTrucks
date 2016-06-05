@@ -46,7 +46,7 @@ void Daemon::setInit(bool init)
 void Daemon::onStartStop(const bool &_init){
     if (_init){
         m_bascula->connectPort(_init);
-        m_newsagesIO->setIODeviceConnect(true);
+        m_newsagesIO->setSemaforoDeviceConnect(true);
         m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
     }else{
         m_bascula->connectPort(false);

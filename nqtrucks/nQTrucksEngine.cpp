@@ -193,9 +193,9 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     /** END CAMARAS IP **/
 
     /** NEWSAGES IO **/
-    connect(d->m_newsagesIO,SIGNAL(IODeviceConnectChanged(bool)),this,SIGNAL(IODeviceConnectChanged(bool)));
-    connect(d->m_newsagesIO,SIGNAL(readyChanged(bool)),this,SIGNAL(IODeviceReadyChanged(bool)));
-    connect(d->m_newsagesIO,SIGNAL(EstadoSemaforoChanged(int)),this,SIGNAL(IODevicesSemaforoChanged(int)));
+    connect(d->m_newsagesIO,SIGNAL(SemaforoConnectChanged(bool)),this,SIGNAL(SemaforoConnectChanged(bool)));
+    //connect(d->m_newsagesIO,SIGNAL(readyChanged(bool)),this,SIGNAL(IODeviceReadyChanged(bool)));
+    connect(d->m_newsagesIO,SIGNAL(SemaforoEstadoChanged(int)),this,SIGNAL(SemaforoEstadoChanged(int)));
     /** END NEWSAGES IO **/
 
     /** BASCULAS **/
@@ -287,28 +287,16 @@ QStringList nQTrucksEngine::getIODevices()
     return d->getIODevices();
 }
 
-void nQTrucksEngine::setIODevicesConnect(const bool &_value)
+void nQTrucksEngine::setSemaforoDevicesConnect(const bool &_value)
 {
     Q_D(nQTrucksEngine);
-    d->m_newsagesIO->setIODeviceConnect(_value);
+    d->m_newsagesIO->setSemaforoDeviceConnect(_value);
 }
 
 void nQTrucksEngine::setSemaforoStatus(const int &_color)
 {
     Q_D(nQTrucksEngine);
     d->m_newsagesIO->setSemaforo(_color);
-}
-
-//void nQTrucksEngine::setIODevicesPin10(bool _value)
-//{
-//    Q_D(nQTrucksEngine);
-//    d->m_newsagesIO->setValuePin10(_value);
-//}
-
-void nQTrucksEngine::setIODevicesConfig()
-{
-    Q_D(nQTrucksEngine);
-    d->m_newsagesIO->setIODeviceConfig();
 }
 /** END NEWSAGES I/O *******************************************************************************************************/
 

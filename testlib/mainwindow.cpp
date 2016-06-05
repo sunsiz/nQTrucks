@@ -265,7 +265,7 @@ void MainWindow::on_guardarIODevicesPushButton1_clicked()
     engine->appConfig()->beginGroup(NEWSAGESIO);
     engine->appConfig()->setValue("device",ui->ioDevicesComboBox1->currentText());
     engine->appConfig()->endGroup();
-    engine->setIODevicesConfig();
+    //engine->setIODevicesConfig();
 }
 
 void MainWindow::on_ioDeviceONpushButton_clicked()
@@ -305,23 +305,16 @@ void MainWindow::on_ioDeviceSemaforoChanged(int _color)
         qDebug() << "SEMAFORO VERDE INDETERMINADO";
         break;
     }
-
-
-//    ui->ioDeviceGREENLabel->setPalette(m_semaforoOFF_palette);
-//    ui->ioDeviceREDLabel->setPalette(m_semaforoRED_palette);
-//    ui->ioDeviceGREENLabel->setPalette(m_semaforoGREEN_palette);
-//    ui->ioDeviceREDLabel->setPalette(m_semaforoOFF_palette);
-
 }
 
 void MainWindow::on_conectarIODevicesPushButton_clicked()
 {
-    engine->setIODevicesConnect(true);
+    engine->setSemaforoDevicesConnect(true);
 }
 
 void MainWindow::on_desconectarIODevicesPushButton_clicked()
 {
-    engine->setIODevicesConnect(false);
+    engine->setSemaforoDevicesConnect(false);
 }
 /** END NEWSAGES I/O **/
 
@@ -356,7 +349,7 @@ void MainWindow::on_guardarBasculaPushButton_clicked()
     engine->appConfig()->setValue("device",ui->BasculaDevicesComboBox->currentText());
     engine->appConfig()->setValue("tipo",QString::number(ui->BasculaTipoComboBox->currentIndex()));
     engine->appConfig()->endGroup();
-    engine->setIODevicesConfig();
+    //engine->setIODevicesConfig();
 }
 
 void MainWindow::on_actualizarIBasculasButton_clicked()

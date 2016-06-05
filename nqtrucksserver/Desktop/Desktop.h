@@ -6,8 +6,10 @@
 
 
 /** APLICACION **/
+//#include "QStackedWidget"
 #include "nQTrucksEngine.h"
 #include "Configuracion/Configuracion.h"
+#include "Client/Client.h"
 
 namespace Ui {
 class Desktop;
@@ -36,19 +38,29 @@ private:
     QProcess *m_control_center;
 
 private slots:
-    void on_Keyboard_exit(int arg1);
+    void on_exit_Keyboard(const int &arg1);
     void on_actionKeyboard_toggled(bool arg1);
-    //void on_actionImpresoras_triggered();
-    //void on_actionConexiones_triggered();
-    //void on_actionRemoto_triggered();
     void on_actionSystemSettings_triggered();
 
     /** APLICACION **/
 private:
     nQTrucks::nQTrucksEngine *m_app_engine;
     Configuracion *m_app_config;
+    Client  *m_app_client;
+    int m_app=0;
+public:
+    enum SelecteAPP{
+        appNone =0,
+        appConfig,
+        appClient,
+    };
+
 private slots:
+    void on_selectedAppChanged();
     void on_actionConfiguracion_toggled(bool arg1);
+    //void on_actionConfiguracion_triggered();
+    //void on_actionClient_triggered();
+    void on_actionClient_toggled(bool arg1);
 };
 
 #endif // DESKTOP_H

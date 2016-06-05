@@ -51,65 +51,70 @@ class NewsagesIO : public Firmata
 public:
     explicit NewsagesIO(QSettings *_appsettings=0,QObject *parent = 0);
 
-    /** PROPIEDADES **/
+    /** PROPIEDADES *******************************************************/
+public:
     enum EstadoSemaforo{
-        verde=SEMAFORO_VERDE,
-        amarillo=SEMAFORO_AMARILLO,
-        rojo=SEMAFORO_ROJO,
+        verde       =   SEMAFORO_VERDE,
+        amarillo    =   SEMAFORO_AMARILLO,
+        rojo        =   SEMAFORO_ROJO,
     };
 
 signals:
-    void IODeviceConnectChanged(const bool &value);
-    void IODeviceChanged();
     void ValuePin10Changed(const bool &value);
     void ValuePin13Changed(const bool &value);
 
-public slots:
-    void setIODevice  (const QString &_IODevice);
-    void setIODeviceConfig();
-    void setIODeviceConnect(const bool &value);
+
+private slots:
+    void setValuePin10(const bool &value);
+    void setValuePin13(const bool &value);
 
 private:
     QString m_IODevice;
     bool    m_ValuePin10;
+    DigitalPin *m_OutPin10;
     bool    m_ValuePin13;
-    bool    m_conectado;//Guardar el valor del pin para controlar reset y ultimo estado    
-    /** FIN PROPIEDADES **/
+    DigitalPin *m_OutPin13;
+    bool    m_conectado;
+
+public:
+    bool getConectado() const {return m_conectado;}
+    void setConectado(bool conectado) {m_conectado = conectado;}
+    /** FIN PROPIEDADES **************************************************************/
 
 
-    /** FTDI **/
+    /** FTDI *************************************************************************/
+private:
     SerialPortList *m_ioPortList;
     SerialFirmata  *m_ioFtdi;
 private slots:
     void onIOConectado();
-    void onIOReset(int r, int v);
-    void setValuePin10(const bool &value);
-    void setValuePin13(const bool &value);
-    /** END FTDI **/
+    void onIOReset(int r, int v) {Q_UNUSED(r); Q_UNUSED(v); onIOConectado();}
 
-    /** SETTINGS **/
+
+    /** END FTDI ********************************************************************/
+
+    /** SETTINGS ********************************************************************/
 private:
-    QString   m_configroot;
-    void      loadconfig();
+    void      loadconfig() {setSemaforoDevice(m_settings->value(QString(NEWSAGESIO) + "/device").toString());}
     QSettings *m_settings;
-    /** END SETTINGS **/
+    /** END SETTINGS ****************************************************************/
 
-    /** RELE SEMAFORO **/
-private:
-    DigitalPin *m_OutPin10;
-    DigitalPin *m_OutPin13;
-    /** END RELE SEMAFORO **/
 
     /** SEMAFORO **/
 public:
-    int semaforo() const;
-    void setSemaforo(int semaforo);
+    int  getSemaforo() const {return m_semaforo;}
+    void setSemaforo(const int &_color);
 private:
     int     m_semaforo;
+private slots:
+    void setSemaforoDevice  (const QString &_IODevice);
 public slots:
-    void setEstadoSemaforo(const int &_color);
+    void setSemaforoDeviceConnect(const bool &value);
+    void setSemaforoEstado(const int &_color);
 signals:
-    void EstadoSemaforoChanged(const int &_color);
+    void SemaforoConnectChanged(const bool &value);
+    void SemaforoChanged();
+    void SemaforoEstadoChanged(const int &_color);
     /** END SEMAFORO **/
 
 };

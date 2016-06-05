@@ -151,7 +151,9 @@ struct FirmataBackend::Private
 
 FirmataBackend::FirmataBackend(QObject *parent)
 	: QObject(parent), d(new Private(this))
-{}
+{
+
+}
 
 FirmataBackend::~FirmataBackend()
 {
@@ -186,7 +188,7 @@ void FirmataBackend::setStatusText(const QString &text)
 
 void FirmataBackend::writeAnalogPin(uint8_t pin, uint16_t value)
 {
-	qDebug("Write analog pin %d <- %d", pin, value);
+    //qDebug("Write analog pin %d <- %d", pin, value);
 	if(pin<0x10) {
 		const uint8_t buffer[] {
 			cmdPin(CMD_ANALOG_IO, pin),
@@ -213,7 +215,7 @@ void FirmataBackend::writeAnalogPin(uint8_t pin, uint16_t value)
 
 void FirmataBackend::writeDigitalPin(uint8_t pin, bool value)
 {
-	qDebug("Write digital pin %d <- %d", pin, value);
+    //qDebug("Write digital pin %d <- %d", pin, value);
 	if(pin<0x80) {
 		const uint8_t buffer[] {
 			CMD_SET_DIGITAL_PIN,
@@ -229,7 +231,7 @@ void FirmataBackend::writeDigitalPin(uint8_t pin, bool value)
 
 void FirmataBackend::reportAnalogPin(uint8_t pin, bool enable)
 {
-	qDebug("Report analog pin %d = %s", pin, enable ? "on" : "off");
+    //qDebug("Report analog pin %d = %s", pin, enable ? "on" : "off");
 	if(pin<0x10) {
 		const uint8_t buffer[] {
 			cmdPin(CMD_ANALOG_REPORT, pin),
@@ -244,7 +246,7 @@ void FirmataBackend::reportAnalogPin(uint8_t pin, bool enable)
 
 void FirmataBackend::reportDigitalPort(uint8_t port, bool enable)
 {
-	qDebug("Report digital port %d = %s", port, enable ? "on" : "off");
+    //qDebug("Report digital port %d = %s", port, enable ? "on" : "off");
 	if(port<0x10) {
 		const uint8_t buffer[] {
 			cmdPin(CMD_DIGITAL_REPORT, port),
@@ -265,7 +267,7 @@ void FirmataBackend::reportProtocolVersion()
 
 void FirmataBackend::setPinMode(uint8_t pin, IoMode mode)
 {
-	qDebug("Set pin mode %d = %d", pin, int(mode));
+    //qDebug("Set pin mode %d = %d", pin, int(mode));
 	if(pin<0x80) {
 		const uint8_t buffer[] {
 			CMD_SET_PINMODE,
@@ -289,7 +291,7 @@ void FirmataBackend::writeSysex(const uint8_t *data, int len)
 		}
 	}
 #endif
-	qDebug("Writing sysex 0x%x (payload len=%d)", data[0], len-1);
+    //qDebug("Writing sysex 0x%x (payload len=%d)", data[0], len-1);
 	writeBuffer(&CMD_SYSEX_START, 1);
 	writeBuffer(data, len);
 	writeBuffer(&CMD_SYSEX_END, 1);

@@ -27,8 +27,8 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
-#ifndef CONFIGURACION_H
-#define CONFIGURACION_H
+#ifndef CLIENT_H
+#define CLIENT_H
 
 #include <QMainWindow>
 
@@ -37,24 +37,20 @@
 
 
 namespace Ui {
-class Configuracion;
+class Client;
 }
 
-class Configuracion : public QWidget
+class Client : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Configuracion(nQTrucks::nQTrucksEngine *_engine=nullptr, QWidget *parent = 0);
-    ~Configuracion();
+    explicit Client(nQTrucks::nQTrucksEngine *_engine=nullptr, QWidget *parent = 0);
+    ~Client();
 
 private:
-    Ui::Configuracion *ui;
+    Ui::Client *ui;
     bool m_running=false;
-    void updateGui();
-
-private slots:
-    void isRunning(bool clicked);
 
     /** nQTrucks Lib **/
 private:
@@ -63,8 +59,6 @@ private:
 
     /** CAMARAS **/
 private slots:
-    void on_CamaraSelect_currentIndexChanged(int index);
-    void on_GuardarCamara_clicked();
     void onGetFotoCV1(const cv::Mat &fotocv);
     void onGetFotoCV2(const cv::Mat &fotocv);
     /** END CAMARAS **/
@@ -72,96 +66,35 @@ private slots:
 
     /** NEWSAGES I/O  **/
 private slots:
-    void on_actualizarSemaforos_clicked();
-    void on_conectarSemaforo_clicked();
-    void on_desconectarSemaforo_clicked();
-    void on_guardarSemaforo_clicked();
-
-    void on_semaforoVerde_clicked();
-    void on_semaforoAmarillo_clicked();
-    void on_semaforoRojo_clicked();
-
-    void on_SemaforoConnect(bool status);
     void on_SemaforoEstadoChanged(int _color);
     /** END NEWSAGES I/O  **/
 
     /** BASCULAS **/
 private slots:
-    void on_actualizarBasculas_clicked();
-    void on_conectarBascula_clicked();
-    void on_desconectarBascula_clicked();
-    void on_guardarBascula_clicked();
     void on_BasculaConectada(bool conectada);
     void onBascula(t_Bascula _bascula);
     /** END BASCULAS **/
 
 
-    /** CALIBRACION ***************************************/
-    /** GUI **/
-private slots:
-    void on_calibracionSelect_currentIndexChanged(int index);
-    void loadPlanks(const int &index);
-    void on_TestMatricula_clicked();
-    void on_ActualizarCamara_clicked();
-    /** END GUI **/
     /** ALPR **/
-public:
-    int getAlprIndex()const {return m_AlprIndex;}
-    void setAlprIndex(int _AlprIndex){ m_AlprIndex = _AlprIndex;}
 private:
-    int m_AlprIndex=0;
+    int m_alpr_count;
     QVector<t_MatriculaResults> m_matricularesults={};
     QVector<t_MatriculaResults>::iterator m_matricularesults_iterator;
-    void updateCalibracionGui();
-
-    /** ALPR1 **/
+//    void updateCalibracionGui();
 private slots:
+    void onAllMatriculaResults();
     void onReplyMatriculaResults1(const t_MatriculaResults &_result);
-    void onGetOriginalMatricula1(const cv::Mat &foto);
-    void onGetOriginalMatriculaRoja1(const cv::Mat &foto);
-    void onGetOriginalMatriculaBlanca1(const cv::Mat &foto);
-    /** END ALPR1 **/
-
-    /** ALPR2 **/
-private slots:
     void onReplyMatriculaResults2(const t_MatriculaResults &_result);
-    void onGetOriginalMatricula2(const cv::Mat &foto);
-    void onGetOriginalMatriculaRoja2(const cv::Mat &foto);
-    void onGetOriginalMatriculaBlanca2(const cv::Mat &foto);
-    /** END NEWSAGES ALPR 2 **/
-    /** PLANKs **/
-private slots:
-    void on_vPlankA_valueChanged(int value);
-    void on_vPlankB_valueChanged(int value);
-    void on_vPlankC_valueChanged(int value);
-    void on_guardarPlanK_clicked();
-    /** END PLANKS **/
-
-/** END CALIBRACION ************************************************/
-
-    /** PREWARP **/
-private:
-    cv::Mat updateprewarp(cv::Mat img);
-    void loadprewarp();
-    QString get_prewarp_config();
-    QString m_prewarp;
-    nQTrucks::t_Prewarp prewarp;
-private slots:
-    void on_valueXA1_valueChanged(int value);
-    void on_valueYA1_valueChanged(int value);
-    void on_valueZA1_valueChanged(int value);
-    void on_valueWA1_valueChanged(int value);
-    void on_valueDA1_valueChanged(int value);
-    void on_guardarPrewarp_clicked();
-    /** END  PREWARP **/
+    /** END ALPR **/
 
 
     /** CONFIG **/
-
 private:
     void loadconfig();
     /** END CONFIG **/
+
     static QImage convertMat2QImage(const cv::Mat &src);
 };
 
-#endif // CONFIGURACION_H
+#endif // CLIENT_H

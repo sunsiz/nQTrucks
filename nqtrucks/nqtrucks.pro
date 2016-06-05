@@ -78,9 +78,7 @@ unix:{
     linux:{
         QMAKE_LFLAGS += -Wl,--rpath=/opt/newsages/lib
         target.path = $${NEWSAGES_LIBS}
-        extra.path = $${NEWSAGES_DIR}/nQTrucks
-        extra.files = $${EXTRA_DIRS}
-        INSTALLS += target extra
+        INSTALLS += target
     }
 }
 

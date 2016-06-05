@@ -9,15 +9,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
-    <height>700</height>
+    <width>615</width>
+    <height>405</height>
    </rect>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>850</width>
-    <height>700</height>
-   </size>
   </property>
   <property name="font">
    <font>
@@ -93,6 +87,9 @@
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetFixedSize</enum>
+           </property>
            <item>
             <widget class="QLabel" name="label_8">
              <property name="sizePolicy">
@@ -139,7 +136,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QToolButton" name="actualizarIBasculas">
+            <widget class="QToolButton" name="actualizarBasculas">
              <property name="text">
               <string>...</string>
              </property>
@@ -278,7 +275,7 @@
            <item>
             <widget class="QLCDNumber" name="BasculaLcd">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -300,7 +297,7 @@
            <item>
             <widget class="QLCDNumber" name="BasculaLcd2">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -322,7 +319,7 @@
            <item>
             <widget class="QLCDNumber" name="BasculaLcd3">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -413,6 +410,9 @@
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetFixedSize</enum>
+           </property>
            <item>
             <widget class="QLabel" name="label_2">
              <property name="sizePolicy">
@@ -473,19 +473,6 @@
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer_6">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <widget class="QToolButton" name="conectarSemaforo">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -534,20 +521,39 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="ioDeviceSTATUSLabel">
+            <widget class="QToolButton" name="semaforoConectado">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="statusTip">
+              <string notr="true"/>
+             </property>
+             <property name="whatsThis">
+              <string notr="true"/>
+             </property>
+             <property name="accessibleName">
+              <string notr="true"/>
+             </property>
+             <property name="accessibleDescription">
+              <string notr="true"/>
+             </property>
+             <property name="autoFillBackground">
+              <bool>true</bool>
+             </property>
              <property name="text">
-              <string/>
+              <string notr="true"/>
              </property>
              <property name="icon">
               <iconset resource="../../resources/system.qrc">
-               <normaloff>:/devices/icons/system/devices/jockey-disabled.png</normaloff>
-               <normalon>:/devices/icons/system/devices/jockey-enabled.png</normalon>:/devices/icons/system/devices/jockey-disabled.png</iconset>
+               <normaloff>:/app/icons/app/alpr_off.png</normaloff>
+               <normalon>:/app/icons/app/alpr_verde.png</normalon>
+               <disabledon>:/app/icons/app/alpr_verde.png</disabledon>:/app/icons/app/alpr_off.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -555,10 +561,16 @@
                <height>32</height>
               </size>
              </property>
+             <property name="shortcut">
+              <string notr="true"/>
+             </property>
              <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
               <bool>false</bool>
              </property>
-             <property name="flat">
+             <property name="autoRaise">
               <bool>true</bool>
              </property>
             </widget>
@@ -587,6 +599,19 @@
              </property>
             </widget>
            </item>
+           <item>
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
          <item row="1" column="0">
@@ -606,6 +631,12 @@
            </item>
            <item>
             <widget class="QFrame" name="frame">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="frameShape">
               <enum>QFrame::Box</enum>
              </property>
@@ -624,12 +655,6 @@
                 <property name="enabled">
                  <bool>true</bool>
                 </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
                 <property name="focusPolicy">
                  <enum>Qt::NoFocus</enum>
                 </property>
@@ -646,8 +671,8 @@
                 </property>
                 <property name="iconSize">
                  <size>
-                  <width>128</width>
-                  <height>128</height>
+                  <width>64</width>
+                  <height>64</height>
                  </size>
                 </property>
                 <property name="checkable">
@@ -666,12 +691,6 @@
                 <property name="enabled">
                  <bool>true</bool>
                 </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
                 <property name="focusPolicy">
                  <enum>Qt::NoFocus</enum>
                 </property>
@@ -688,8 +707,8 @@
                 </property>
                 <property name="iconSize">
                  <size>
-                  <width>128</width>
-                  <height>128</height>
+                  <width>64</width>
+                  <height>64</height>
                  </size>
                 </property>
                 <property name="checkable">
@@ -711,12 +730,6 @@
                 <property name="enabled">
                  <bool>true</bool>
                 </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
                 <property name="focusPolicy">
                  <enum>Qt::NoFocus</enum>
                 </property>
@@ -733,8 +746,8 @@
                 </property>
                 <property name="iconSize">
                  <size>
-                  <width>128</width>
-                  <height>128</height>
+                  <width>64</width>
+                  <height>64</height>
                  </size>
                 </property>
                 <property name="checkable">
@@ -770,7 +783,17 @@
           </layout>
          </item>
          <item row="2" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>
@@ -784,6 +807,46 @@
          <string>Camaras</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="1">
+          <widget class="QLabel" name="camaraLabel">
+           <property name="minimumSize">
+            <size>
+             <width>320</width>
+             <height>180</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>426</width>
+             <height>240</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>1280</width>
+             <height>720</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <property name="lineWidth">
+            <number>2</number>
+           </property>
+           <property name="midLineWidth">
+            <number>2</number>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="0">
           <layout class="QFormLayout" name="formLayout">
            <item row="0" column="0">
@@ -894,46 +957,15 @@
            </item>
           </layout>
          </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="camaraLabel">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <property name="lineWidth">
-            <number>2</number>
-           </property>
-           <property name="midLineWidth">
-            <number>2</number>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="scaledContents">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <spacer name="verticalSpacer_2">
+         <item row="1" column="1">
+          <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::MinimumExpanding</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>118</height>
+             <height>40</height>
             </size>
            </property>
           </spacer>
@@ -953,7 +985,7 @@
          <item row="0" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <property name="sizeConstraint">
-            <enum>QLayout::SetDefaultConstraint</enum>
+            <enum>QLayout::SetFixedSize</enum>
            </property>
            <item>
             <widget class="QLabel" name="label_9">
@@ -997,19 +1029,6 @@
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <widget class="QToolButton" name="ActualizarCamara">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1049,6 +1068,19 @@
              </property>
             </widget>
            </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
          <item row="1" column="0">
@@ -1061,10 +1093,22 @@
              <item>
               <widget class="QLabel" name="FotoOriginalA">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>640</width>
+                 <height>360</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>1280</width>
+                 <height>720</height>
+                </size>
                </property>
                <property name="frameShape">
                 <enum>QFrame::Box</enum>
@@ -1091,21 +1135,21 @@
                <item>
                 <widget class="QLabel" name="FotoMatriculaA">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>80</height>
-                  </size>
-                 </property>
                  <property name="maximumSize">
                   <size>
-                   <width>340</width>
-                   <height>80</height>
+                   <width>520</width>
+                   <height>110</height>
+                  </size>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>520</width>
+                   <height>110</height>
                   </size>
                  </property>
                  <property name="frameShape">
@@ -1132,12 +1176,6 @@
                 <layout class="QVBoxLayout" name="verticalLayout_5">
                  <item>
                   <widget class="QLabel" name="MatriculaA">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>MATRICULA A1</string>
                    </property>
@@ -1145,12 +1183,6 @@
                  </item>
                  <item>
                   <widget class="QLabel" name="LongMatriculaA">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>000%</string>
                    </property>
@@ -1165,21 +1197,21 @@
                <item>
                 <widget class="QLabel" name="FotoMatriculaB">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>80</height>
-                  </size>
-                 </property>
                  <property name="maximumSize">
                   <size>
-                   <width>340</width>
-                   <height>80</height>
+                   <width>520</width>
+                   <height>110</height>
+                  </size>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>520</width>
+                   <height>110</height>
                   </size>
                  </property>
                  <property name="frameShape">
@@ -1206,12 +1238,6 @@
                 <layout class="QVBoxLayout" name="verticalLayout_6">
                  <item>
                   <widget class="QLabel" name="MatriculaB">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>MATRICULA A2</string>
                    </property>
@@ -1219,12 +1245,6 @@
                  </item>
                  <item>
                   <widget class="QLabel" name="LongMatriculaB">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>000%</string>
                    </property>
@@ -1240,12 +1260,6 @@
             <widget class="QTabWidget" name="tabWidget">
              <property name="enabled">
               <bool>true</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
              </property>
              <property name="tabPosition">
               <enum>QTabWidget::East</enum>
@@ -1267,31 +1281,25 @@
                <string>Plank</string>
               </attribute>
               <layout class="QGridLayout" name="gridLayout">
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <property name="horizontalSpacing">
-                <number>0</number>
-               </property>
-               <property name="verticalSpacing">
-                <number>2</number>
-               </property>
                <item row="0" column="0">
                 <widget class="QLabel" name="FotoBlancosA">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>640</width>
+                   <height>360</height>
+                  </size>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>1280</width>
+                   <height>720</height>
+                  </size>
                  </property>
                  <property name="frameShape">
                   <enum>QFrame::Box</enum>
@@ -1316,10 +1324,22 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="FotoRojosA">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>640</width>
+                   <height>360</height>
+                  </size>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>1280</width>
+                   <height>720</height>
+                  </size>
                  </property>
                  <property name="frameShape">
                   <enum>QFrame::Box</enum>
@@ -1341,99 +1361,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="6" column="0">
-                <layout class="QHBoxLayout" name="horizontalLayout_10">
-                 <item>
-                  <spacer name="horizontalSpacer_5">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QToolButton" name="guardarPlanK">
-                   <property name="text">
-                    <string>Guardar</string>
-                   </property>
-                   <property name="icon">
-                    <iconset>
-                     <normalon>:/temp/icons/system/devices/media-floppy.png</normalon>
-                    </iconset>
-                   </property>
-                   <property name="iconSize">
-                    <size>
-                     <width>32</width>
-                     <height>32</height>
-                    </size>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="5" column="0">
-                <layout class="QHBoxLayout" name="horizontalLayout_8">
-                 <item>
-                  <widget class="QLabel" name="lvPlankC">
-                   <property name="minimumSize">
-                    <size>
-                     <width>25</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>30</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string>0</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QSlider" name="vPlankC">
-                   <property name="maximum">
-                    <number>254</number>
-                   </property>
-                   <property name="singleStep">
-                    <number>1</number>
-                   </property>
-                   <property name="pageStep">
-                    <number>1</number>
-                   </property>
-                   <property name="value">
-                    <number>40</number>
-                   </property>
-                   <property name="tracking">
-                    <bool>true</bool>
-                   </property>
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="invertedControls">
-                    <bool>false</bool>
-                   </property>
-                   <property name="tickPosition">
-                    <enum>QSlider::NoTicks</enum>
-                   </property>
-                   <property name="tickInterval">
-                    <number>2</number>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="3" column="0">
+               <item row="2" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_4">
                  <item>
                   <widget class="QLabel" name="lvPlankA">
@@ -1462,6 +1390,12 @@
                  </item>
                  <item>
                   <widget class="QSlider" name="vPlankA">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="maximum">
                     <number>254</number>
                    </property>
@@ -1496,7 +1430,7 @@
                  </item>
                 </layout>
                </item>
-               <item row="4" column="0">
+               <item row="3" column="0">
                 <layout class="QHBoxLayout" name="horizontalLayout_12">
                  <item>
                   <widget class="QLabel" name="lvPlankB">
@@ -1522,6 +1456,12 @@
                  </item>
                  <item>
                   <widget class="QSlider" name="vPlankB">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="maximum">
                     <number>254</number>
                    </property>
@@ -1545,6 +1485,107 @@
                    </property>
                    <property name="tickInterval">
                     <number>2</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="4" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QLabel" name="lvPlankC">
+                   <property name="minimumSize">
+                    <size>
+                     <width>25</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>0</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSlider" name="vPlankC">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="maximum">
+                    <number>254</number>
+                   </property>
+                   <property name="singleStep">
+                    <number>1</number>
+                   </property>
+                   <property name="pageStep">
+                    <number>1</number>
+                   </property>
+                   <property name="value">
+                    <number>40</number>
+                   </property>
+                   <property name="tracking">
+                    <bool>true</bool>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="invertedControls">
+                    <bool>false</bool>
+                   </property>
+                   <property name="tickPosition">
+                    <enum>QSlider::NoTicks</enum>
+                   </property>
+                   <property name="tickInterval">
+                    <number>2</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="5" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <spacer name="horizontalSpacer_5">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::MinimumExpanding</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="guardarPlanK">
+                   <property name="text">
+                    <string>Guardar</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normalon>:/temp/icons/system/devices/media-floppy.png</normalon>
+                    </iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
                    </property>
                   </widget>
                  </item>
