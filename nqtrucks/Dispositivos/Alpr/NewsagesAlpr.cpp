@@ -52,9 +52,9 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
     , bhilo2(false)
 {
     m_results.resize(3);
-    m_results[0] = new t_MatriculaResults;
-    m_results[1] = new t_MatriculaResults;
-    m_results[2] = new t_MatriculaResults;
+    m_results[0] = new Registros::t_MatriculaResults;
+    m_results[1] = new Registros::t_MatriculaResults;
+    m_results[2] = new Registros::t_MatriculaResults;
 
     m_results[0]->id=m_nDevice;
     m_results[1]->id=m_nDevice;
@@ -98,6 +98,7 @@ void NewsagesAlpr::calibrarFoto(const cv::Mat &Foto){
 
         /** conectar hilos con proceso BLANCOS **/
         connect( tareaCalibrar1, &NewsagesAlprTask::ReplyOriginalFotoBlanca, [=](const cv::Mat &_PlanckBlancos){
+            Q_UNUSED(_PlanckBlancos);
             tareaCalibrar1->workFinished();
             });
 
@@ -119,6 +120,7 @@ void NewsagesAlpr::calibrarFoto(const cv::Mat &Foto){
 
         /** conectar hilos con proceso ROJOS **/
         connect( tareaCalibrar2, &NewsagesAlprTask::ReplyOriginalFotoRoja, [=](const cv::Mat &_PlanckRojos){
+            Q_UNUSED(_PlanckRojos);
             tareaCalibrar2->workFinished();
             });
 

@@ -19,7 +19,7 @@ namespace nQTrucks {
 
 
 /** CONSTRUCTOR TAREAS **/
-NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType, cv::Mat _fotoCamara, t_MatriculaResults *_results, QSettings *_appsettings, QObject *parent)
+NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType, cv::Mat _fotoCamara, Registros::t_MatriculaResults *_results, QSettings *_appsettings, QObject *parent)
     : QObject(parent)
     , m_settings(_appsettings)
     , m_matricularesult(_results)
@@ -27,7 +27,7 @@ NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType, cv::Mat _fotoCamara
     setlocale(LC_NUMERIC, "C");
     qRegisterMetaType<cv::Mat>("cv::Mat");
     qRegisterMetaType<t_Plank>("t_Plank");
-    qRegisterMetaType<MatriculaResults>("t_MatriculaResults");
+    qRegisterMetaType<Registros::MatriculaResults>("Registros::t_MatriculaResults");
 
     setFotoCamara(_fotoCamara);
     setNDevice(_nDevice);

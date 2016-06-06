@@ -98,14 +98,14 @@ signals:
     void ReplyOriginalFoto1(const cv::Mat &Foto);
     void ReplyOriginalFotoBlanca1(const cv::Mat &Foto);
     void ReplyOriginalFotoRoja1(const cv::Mat &Foto);
-    void ReplyMatriculaResults1(const t_MatriculaResults &_results);
+    void ReplyMatriculaResults1(const Registros::t_MatriculaResults &_results);
 
     /** ALPR 2 **/
 signals:
     void ReplyOriginalFoto2(const cv::Mat &Foto);
     void ReplyOriginalFotoBlanca2(const cv::Mat &Foto);
     void ReplyOriginalFotoRoja2(const cv::Mat &Foto);
-    void ReplyMatriculaResults2(const t_MatriculaResults &_results);
+    void ReplyMatriculaResults2(const Registros::t_MatriculaResults &_results);
 
     /** END NEWSAGES ALPR **/
 

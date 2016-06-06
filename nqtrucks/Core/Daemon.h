@@ -50,10 +50,10 @@ private:
 
 /** REGRISTRO **/
 private:
-    Registro_Simple m_registro_simple;
-    Registro_Simple m_registro_simple_vacio;
-    Registro_Simple_Matriculas m_registro_simple_matriculas;
-    Registro_Simple_Matriculas m_registro_simple_matriculas_vacio;
+    Registros::Simple m_registro_simple;
+    Registros::Simple m_registro_simple_vacio;
+    Registros::Simple_Matriculas m_registro_simple_matriculas;
+    Registros::Simple_Matriculas m_registro_simple_matriculas_vacio;
 /** END REGISTRO **/
 
 
@@ -96,8 +96,8 @@ private:
     QMetaObject::Connection &alprconn1 = *palprconn1;
     QMetaObject::Connection &alprconn2 = *palprconn2;
 private slots:
-    void onReplyMatriculaResults1(const t_MatriculaResults &_registro);
-    void onReplyMatriculaResults2(const t_MatriculaResults &_registro);
+    void onReplyMatriculaResults1(const Registros::t_MatriculaResults &_registro);
+    void onReplyMatriculaResults2(const Registros::t_MatriculaResults &_registro);
     /** END ALPRS **/
 
 
@@ -114,8 +114,8 @@ private:
     QThread *hiloDb;
     Db::DatabaseManager *tareaDb;
 private slots:
-    void onGuardarRegistroSimple(Registro_Simple &_registro);
-    void onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_registro);
+    void onGuardarRegistroSimple(Registros::Simple &_registro);
+    void onGuardarRegistroSimpleMatriculas(Registros::Simple_Matriculas &_registro);
 /** END BD **/
 
 

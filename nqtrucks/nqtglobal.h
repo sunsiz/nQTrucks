@@ -77,18 +77,21 @@ struct PlanK{
     int C=0;
 }; typedef PlanK t_Plank;
 
-struct s_RegistroSimple{
+
+namespace Registros{              /** REPORTS **/
+
+struct s_Simple{
     Bascula bascula={};
     QByteArray camara1={};
     QByteArray camara1resize={};
     QByteArray camara2={};
     QByteArray camara2resize={};
 
-}; typedef s_RegistroSimple Registro_Simple;
+}; typedef s_Simple Simple;
 
 
-struct s_RegistroSimpleMatriculas{
-    Registro_Simple registrosimple={};
+struct s_SimpleMatriculas{
+    Simple registrosimple={};
 
     QByteArray  fotomatriculaA1={};
     QString     matriculaA1={};
@@ -106,7 +109,7 @@ struct s_RegistroSimpleMatriculas{
     QString     matriculaB2={};
     long        precisionB2={};
 
-}; typedef s_RegistroSimpleMatriculas Registro_Simple_Matriculas;
+}; typedef s_SimpleMatriculas Simple_Matriculas;
 
 struct MatriculaResults{
     int        tipo                 =0;  //0 para calibracion, 1 para procesado
@@ -134,6 +137,43 @@ struct MatriculaResults{
 
 }; typedef MatriculaResults t_MatriculaResults;
 /** END ALRP **/
+
+
+
+        #define REGISTRO_ID                          0
+        #define REGISTRO_FECHA                       1
+        #define REGISTRO_PESO_BRUTO                  2
+        #define REGISTRO_PESO_NETO                   3
+        #define REGISTRO_PESO_TARA                   4
+        #define REGISTRO_CAMARA1                     5
+        #define REGISTRO_CAMARA2                     10
+/*
+qry.bindValue(":fotocamara1",       m_registro_simple_matriculas.registrosimple.camara1resize);
+qry.bindValue(":fotomatriculaA1",   m_registro_simple_matriculas.fotomatriculaA1);
+qry.bindValue(":fotomatriculaB1",   m_registro_simple_matriculas.fotomatriculaB1);
+qry.bindValue(":matriculaA1",       m_registro_simple_matriculas.matriculaA1);
+qry.bindValue(":matriculaB1",       m_registro_simple_matriculas.matriculaB1);
+qry.bindValue(":precisionA1",       QString::number(m_registro_simple_matriculas.precisionA1,'g',6));
+qry.bindValue(":precisionB1",       QString::number(m_registro_simple_matriculas.precisionB1,'g',6));
+
+
+qry.bindValue(":fotocamara2",       m_registro_simple_matriculas.registrosimple.camara2resize);
+qry.bindValue(":fotomatriculaA2",   m_registro_simple_matriculas.fotomatriculaA2);
+qry.bindValue(":fotomatriculaB2",   m_registro_simple_matriculas.fotomatriculaB2);
+qry.bindValue(":matriculaA2",       m_registro_simple_matriculas.matriculaA2);
+qry.bindValue(":matriculaB2",       m_registro_simple_matriculas.matriculaB2);
+qry.bindValue(":precisionA2",       QString::number(m_registro_simple_matriculas.precisionA2,'g',6));
+qry.bindValue(":precisionB2",       QString::number(m_registro_simple_matriculas.precisionB2,'g',6));
+*/
+
+
+        struct sMatriculas{
+            QString key[255]={0};
+            QString v[255]={0};
+            QString l[255]={0};
+        };typedef sMatriculas Matriculas;
+
+} /** END REPORTS **/
 
 
 /** SETTINGS **/

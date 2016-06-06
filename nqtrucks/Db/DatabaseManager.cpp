@@ -33,7 +33,7 @@ void DatabaseManager::guardarRegistroSimpleMatriculas()
         }
 
         db.transaction();
-        QSqlQuery qry(QSqlDatabase::database("registro_matriculas"));
+        QSqlQuery qry(db);
         qry.prepare( "INSERT INTO registros_matriculas( "
                      " pesobruto,  pesoneto,  pesotara, "
                      " fotocamara1, fotomatriculaA1, fotomatriculaB1, matriculaA1,  matriculaB1, precisionA1, precisionB1,"
@@ -73,13 +73,16 @@ void DatabaseManager::guardarRegistroSimpleMatriculas()
          }else{
             db.commit();
            qDebug() <<  "Inserted!: " << qry.lastInsertId().toInt();
+
+
+
          }
         db.close();
     }
     emit workFinished();
 }
 
-void DatabaseManager::setRegistroSimpleMatriculas(const Registro_Simple_Matriculas &_registro)
+void DatabaseManager::setRegistroSimpleMatriculas(const Registros::Simple_Matriculas &_registro)
 {
     m_registro_simple_matriculas = _registro;
     if (!QSqlDatabase::contains("registro_matriculas")){

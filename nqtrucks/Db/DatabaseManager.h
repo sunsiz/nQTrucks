@@ -21,14 +21,14 @@ signals:
     /** DB **/
 private:
     QSqlDatabase db;
-    Registro_Simple_Matriculas m_registro_simple_matriculas;
+    Registros::Simple_Matriculas m_registro_simple_matriculas;
 //        QByteArray resizeFoto(QByteArray _ByteArray);
 //        cv::Mat byteArray2Mat(QByteArray &byteArray);
 //        QImage convertMat2QImage(const cv::Mat &src);
 //        QByteArray convertMat2ByteArray(const cv::Mat &img);
 public slots:
     void guardarRegistroSimpleMatriculas();
-    void setRegistroSimpleMatriculas(const Registro_Simple_Matriculas &_registro);
+    void setRegistroSimpleMatriculas(const Registros::Simple_Matriculas &_registro);
 
     /** END DB **/
 };

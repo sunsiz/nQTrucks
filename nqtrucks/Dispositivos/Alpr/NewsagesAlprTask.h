@@ -11,7 +11,7 @@ namespace Devices {
 class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
-    explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, cv::Mat _fotoCamara=cv::Mat(), t_MatriculaResults *_results={},  QSettings *_appsettings=0, QObject *parent = 0);
+    explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, cv::Mat _fotoCamara=cv::Mat(), Registros::t_MatriculaResults *_results={},  QSettings *_appsettings=0, QObject *parent = 0);
     ~NewsagesAlprTask();
 signals:
     void workFinished();
@@ -65,7 +65,7 @@ signals:
 public slots:
     void procesar();
 private:
-   t_MatriculaResults *m_matricularesult;
+   Registros::t_MatriculaResults *m_matricularesult;
    void procesarBlancas();
    void procesarRojas();
 signals:

@@ -17,8 +17,9 @@ Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_news
     , m_registrando(false)
 
 {
-    qRegisterMetaType<Registro_Simple>("Registro_Simple");
-    qRegisterMetaType<Registro_Simple_Matriculas>("Registro_Simple_Matriculas");  
+    qRegisterMetaType<Registros::Simple>("Registros::Simple");
+    qRegisterMetaType<Registros::Simple_Matriculas>("Registros::Simple_Matriculas");
+    qRegisterMetaType<Registros::Matriculas>("Registros::Matriculas");
 
     QObject::connect(this,SIGNAL(initChanged(bool)),this,SLOT(onStartStop(bool)));
     QObject::connect(m_bascula,SIGNAL(BasculaPesoNuevo(t_Bascula)),this,SLOT(onPesoNuevo(t_Bascula)));
@@ -160,7 +161,7 @@ void Daemon::onReplyCamaraIPFotoCV2(const cv::Mat &_Reply)
 
 
 /** DB **/
-void Daemon::onGuardarRegistroSimple(Registro_Simple &_registro){
+void Daemon::onGuardarRegistroSimple(Registros::Simple &_registro){
 
     if (m_registrando){
         //Pilla el registro simple
@@ -176,7 +177,7 @@ void Daemon::onGuardarRegistroSimple(Registro_Simple &_registro){
 }
 
 
-void Daemon::onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_registro){
+void Daemon::onGuardarRegistroSimpleMatriculas(Registros::Simple_Matriculas &_registro){
 
     /* Crea un Hilo para la base de datos */
     /* Ejecuta el registro Simple */
@@ -204,7 +205,7 @@ void Daemon::onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_regi
 
 /** ALPRS **/
 
-void Daemon::onReplyMatriculaResults1(const t_MatriculaResults &_registro){
+void Daemon::onReplyMatriculaResults1(const Registros::t_MatriculaResults &_registro){
     QObject::disconnect(alprconn1);
     m_registro_simple_matriculas.matriculaA1=_registro.MatriculaA;
     m_registro_simple_matriculas.matriculaB1=_registro.MatriculaB;
@@ -219,7 +220,7 @@ void Daemon::onReplyMatriculaResults1(const t_MatriculaResults &_registro){
     }
 }
 
-void Daemon::onReplyMatriculaResults2(const t_MatriculaResults &_registro){
+void Daemon::onReplyMatriculaResults2(const Registros::t_MatriculaResults &_registro){
     QObject::disconnect(alprconn2);
     m_registro_simple_matriculas.matriculaA2=_registro.MatriculaA;
     m_registro_simple_matriculas.matriculaB2=_registro.MatriculaB;
