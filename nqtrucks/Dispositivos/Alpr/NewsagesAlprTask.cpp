@@ -24,10 +24,10 @@ NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType, cv::Mat _fotoCamara
     , m_settings(_appsettings)
     , m_matricularesult(_results)
 {
+    setlocale(LC_NUMERIC, "C");
     qRegisterMetaType<cv::Mat>("cv::Mat");
     qRegisterMetaType<t_Plank>("t_Plank");
     qRegisterMetaType<MatriculaResults>("t_MatriculaResults");
-    setlocale(LC_NUMERIC, "C");
 
     setFotoCamara(_fotoCamara);
     setNDevice(_nDevice);
@@ -82,10 +82,10 @@ void NewsagesAlprTask::loadconfig()
 
 
 
-void NewsagesAlprTask::setPlank(const QString &A, const QString &B, const QString &C){
-  m_plank.A=A.toInt();
-  m_plank.B=B.toInt();
-  m_plank.C=C.toInt();
+void NewsagesAlprTask::setPlank(const QString &_plankA, const QString &_plankB, const QString &_plankC){
+  m_plank.A=_plankA.toInt();
+  m_plank.B=_plankB.toInt();
+  m_plank.C=_plankC.toInt();
 }
 
 /** END SETTINGS **/
@@ -96,7 +96,6 @@ void NewsagesAlprTask::calibrar()
 {
     setFotoCalibrada();
     //qDebug() << "plank" << m_nDevice <<"=" << m_plank.A << "," << m_plank.B << "," << m_plank.C;
-    //emit workFinished();
 }
 
 void NewsagesAlprTask::setFotoCalibrada()

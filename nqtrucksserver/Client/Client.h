@@ -57,13 +57,6 @@ private:
     nQTrucks::nQTrucksEngine *engine;
     /** END nQTrucks Lib **/
 
-    /** CAMARAS **/
-private slots:
-    void onGetFotoCV1(const cv::Mat &fotocv);
-    void onGetFotoCV2(const cv::Mat &fotocv);
-    /** END CAMARAS **/
-
-
     /** NEWSAGES I/O  **/
 private slots:
     void on_SemaforoEstadoChanged(int _color);
@@ -81,7 +74,7 @@ private:
     int m_alpr_count;
     QVector<t_MatriculaResults> m_matricularesults={};
     QVector<t_MatriculaResults>::iterator m_matricularesults_iterator;
-//    void updateCalibracionGui();
+
 private slots:
     void onAllMatriculaResults();
     void onReplyMatriculaResults1(const t_MatriculaResults &_result);

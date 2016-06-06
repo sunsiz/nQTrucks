@@ -97,8 +97,9 @@ private:
     /** END BASCULAS **/
 
     /** ALPR **/
-    Devices::NewsagesAlpr *m_alpr1= new Devices::NewsagesAlpr(0,settings(),this);//settings(),this);
-    Devices::NewsagesAlpr *m_alpr2= new Devices::NewsagesAlpr(1,settings(),this);//settings(),this);
+    QVector<Devices::NewsagesAlpr*> m_alpr;
+    //Devices::NewsagesAlpr *m_alpr1= new Devices::NewsagesAlpr(0,settings(),this);//settings(),this);
+    //Devices::NewsagesAlpr *m_alpr2= new Devices::NewsagesAlpr(1,settings(),this);//settings(),this);
     /** END ALPR **/
 
 

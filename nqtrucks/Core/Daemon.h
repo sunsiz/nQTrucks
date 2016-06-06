@@ -11,7 +11,8 @@
 #include "Dispositivos/CamaraIP.h"
 #include "Dispositivos/Alpr/NewsagesAlpr.h"
 
-#include <QSqlDatabase>
+//#include <QSqlDatabase>
+#include "Db/DatabaseManager.h"
 
 /* PUNTEROS **/
 
@@ -27,16 +28,14 @@ public:
     explicit Daemon(Devices::nQSerialPortReader *_bascula,
                     Devices::NewsagesIO         *_newsagesIO,
                     QVector<Devices::CamaraIP*> _camara,
-                    Devices::NewsagesAlpr       *_alpr1=nullptr,
-                    Devices::NewsagesAlpr       *_alpr2=nullptr,
+                    QVector<Devices::NewsagesAlpr*> _alpr,
                     QObject *parent=nullptr);
 
 private:
     Devices::nQSerialPortReader *m_bascula;
     Devices::NewsagesIO *m_newsagesIO;
     QVector<Devices::CamaraIP*> m_camara;
-    Devices::NewsagesAlpr *m_alpr1;
-    Devices::NewsagesAlpr *m_alpr2;
+    QVector<Devices::NewsagesAlpr*> m_alpr;
 
 public:
     void setInit(bool init);
@@ -48,7 +47,6 @@ private:
     bool m_init;
     bool m_registrando;
     bool m_saliendo;
-    //bool m_entrando;
 
 /** REGRISTRO **/
 private:
@@ -102,13 +100,19 @@ private slots:
     void onReplyMatriculaResults2(const t_MatriculaResults &_registro);
     /** END ALPRS **/
 
-/** BD **/
+
+/** CONVERSORES **/
 private:
-    QSqlDatabase db;
     QByteArray resizeFoto(QByteArray _ByteArray);
     cv::Mat byteArray2Mat(QByteArray &byteArray);
     QImage convertMat2QImage(const cv::Mat &src);
     QByteArray convertMat2ByteArray(const cv::Mat &img);
+/** END CONVERSORES **/
+
+/** BD **/
+private:
+    QThread *hiloDb;
+    Db::DatabaseManager *tareaDb;
 private slots:
     void onGuardarRegistroSimple(Registro_Simple &_registro);
     void onGuardarRegistroSimpleMatriculas(Registro_Simple_Matriculas &_registro);

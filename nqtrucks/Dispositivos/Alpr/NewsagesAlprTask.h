@@ -36,7 +36,7 @@ private:
 
 private:
     t_Plank    m_plank;
-    void setPlank(const QString &A, const QString &B, const QString &C);
+    void setPlank(const QString &_plankA, const QString &_plankB, const QString &_plankC);
     t_Plank getPlank() const{return m_plank;}
 
     QString  m_prewarp;
@@ -69,8 +69,6 @@ private:
    void procesarBlancas();
    void procesarRojas();
 signals:
-   //void ReplyMatriculaFoto(const t_MatriculaResults &_tempResults);
-   //void ReplyMatriculaFoto(t_MatriculaResults _tempResults);
    void ReplyMatriculaFoto();
     /** END PROCESAR **************************************************************/
 
@@ -79,7 +77,6 @@ private:
     /*static*/ QImage     convertMat2QImage(   const cv::Mat    &_cvimage);
     /*static*/ cv::Mat    convertQImage2Mat(   const QImage     &_qimage);
     /*static*/ QByteArray convertMat2ByteArray(const cv::Mat    &_cvimage);
-    //nQTrucks::Tools m_tools;
     /** END TOOLS **/
 
 };

@@ -8,7 +8,8 @@ SOURCES += \
     $$PWD/nqtglobal.cpp \
     $$PWD/nQTrucksEngine.cpp \
     $$PWD/Dispositivos/Alpr/NewsagesAlprTask.cpp \
-    $$PWD/Core/Daemon.cpp
+    $$PWD/Core/Daemon.cpp \
+    $$PWD/Db/DatabaseManager.cpp
 
 
 contains(CONFIG, zint){
@@ -20,7 +21,8 @@ HEADERS += \
     $$PWD/nQTrucksEngine_p.h \
     $$PWD/nQTrucksEngine.h \
     $$PWD/Dispositivos/Alpr/NewsagesAlprTask.h \
-    $$PWD/Core/Daemon.h
+    $$PWD/Core/Daemon.h \
+    $$PWD/Db/DatabaseManager.h
 
 
 contains(CONFIG,zint){

@@ -54,6 +54,7 @@ void Desktop::changeEvent(QEvent *e){
 /** HARDWARE **************************************************************/
 /** KEYBOARD ***/
 void Desktop::on_exit_Keyboard(const int &arg1){
+    Q_UNUSED(arg1);
     m_keyboard->start();
 }
 

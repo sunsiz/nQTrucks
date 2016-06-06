@@ -47,6 +47,11 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
     m_camara.resize(2);
     m_camara[0] = new Devices::CamaraIP(0,settings(), this);
     m_camara[1] = new Devices::CamaraIP(1,settings(), this);
+
+    m_alpr.resize(2);
+    m_alpr[0] = new Devices::NewsagesAlpr(0,settings(),this);
+    m_alpr[1] = new Devices::NewsagesAlpr(0,settings(),this);
+
 }
 
 nQTrucksEnginePrivate::~nQTrucksEnginePrivate()
@@ -205,16 +210,16 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** NEWSAGES ALPR **/
     /** 1 **/
-    connect(d->m_alpr1,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto1(cv::Mat)));
-    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)));
-    connect(d->m_alpr1,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)));
-    connect(d->m_alpr1,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults1(t_MatriculaResults)));
+    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto1(cv::Mat)));
+    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)));
+    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)));
+    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults1(t_MatriculaResults)));
 
     /** 2 **/
-    connect(d->m_alpr2,SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto2(cv::Mat)));
-    connect(d->m_alpr2,SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)));
-    connect(d->m_alpr2,SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)));
-    connect(d->m_alpr2,SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(t_MatriculaResults)));
+    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto2(cv::Mat)));
+    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)));
+    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)));
+    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(t_MatriculaResults)));
     /** END NEWSAGES ALPR **/
 
 }
@@ -327,10 +332,10 @@ void nQTrucksEngine::calibrarFoto(const int &_device, const cv::Mat &_foto)
     Q_D(nQTrucksEngine);
     switch (_device) {
     case 0:
-        d->m_alpr1->calibrarFoto(_foto.clone());
+        d->m_alpr[0]->calibrarFoto(_foto.clone());
         break;
     case 1:
-        d->m_alpr2->calibrarFoto(_foto.clone());
+        d->m_alpr[1]->calibrarFoto(_foto.clone());
         break;
     default:
         break;
@@ -342,10 +347,10 @@ void nQTrucksEngine::getFotoMatricula(const int &_device, const cv::Mat &_foto)
      Q_D(nQTrucksEngine);
     switch (_device) {
     case 0:
-         d->m_alpr1->processFoto(_foto.clone());
+         d->m_alpr[0]->processFoto(_foto.clone());
         break;
     case 1:
-         d->m_alpr2->processFoto(_foto.clone());
+         d->m_alpr[1]->processFoto(_foto.clone());
         break;
     default:
         break;
@@ -359,7 +364,7 @@ void nQTrucksEngine::setInitDaemon(const bool &_init)
 {
     Q_D(nQTrucksEngine);
     if (_init){
-         d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara,d->m_alpr1,d->m_alpr2, this);
+         d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara,d->m_alpr, this);
          d->m_daemon->setInit(_init);
     } else{
         //d->m_daemon->setInit(_init);

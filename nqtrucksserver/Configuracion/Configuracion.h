@@ -139,21 +139,21 @@ private slots:
 
 /** END CALIBRACION ************************************************/
 
-    /** PREWARP **/
-private:
-    cv::Mat updateprewarp(cv::Mat img);
-    void loadprewarp();
-    QString get_prewarp_config();
-    QString m_prewarp;
-    nQTrucks::t_Prewarp prewarp;
-private slots:
-    void on_valueXA1_valueChanged(int value);
-    void on_valueYA1_valueChanged(int value);
-    void on_valueZA1_valueChanged(int value);
-    void on_valueWA1_valueChanged(int value);
-    void on_valueDA1_valueChanged(int value);
-    void on_guardarPrewarp_clicked();
-    /** END  PREWARP **/
+//    /** PREWARP **/
+//private:
+//    cv::Mat updateprewarp(cv::Mat img);
+//    void loadprewarp();
+//    QString get_prewarp_config();
+//    QString m_prewarp;
+//    nQTrucks::t_Prewarp prewarp;
+//private slots:
+//    void on_valueXA1_valueChanged(int value);
+//    void on_valueYA1_valueChanged(int value);
+//    void on_valueZA1_valueChanged(int value);
+//    void on_valueWA1_valueChanged(int value);
+//    void on_valueDA1_valueChanged(int value);
+//    void on_guardarPrewarp_clicked();
+//    /** END  PREWARP **/
 
 
     /** CONFIG **/

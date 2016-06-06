@@ -42,15 +42,11 @@
 
 Client::Client(nQTrucks::nQTrucksEngine *_engine, QWidget *parent)
     : QWidget(parent)
-    , engine(_engine)
     , ui(new Ui::Client)
+    , engine(_engine)
 {
     ui->setupUi(this);
     m_matricularesults.resize(2);
-
-    /** CAMARAS **/
-    connect(engine,SIGNAL(CamaraIPFotoCV1(cv::Mat)),this,SLOT(onGetFotoCV1(cv::Mat)));
-    connect(engine,SIGNAL(CamaraIPFotoCV2(cv::Mat)),this,SLOT(onGetFotoCV2(cv::Mat)));
 
     /** IO **/
     //connect(engine,SIGNAL(SemaforoConnectChanged(bool)),this,SLOT(on_SemaforoConnect(bool)));
@@ -71,20 +67,6 @@ Client::~Client()
 {
     delete ui;
 }
-
-/** CAMARAS *************************************************************************/
-    /** CAMARA1 **/
-void Client::onGetFotoCV1(const cv::Mat &fotocv){
-    cv::resize(fotocv,m_matricularesults[0].OrigenFoto,m_matricularesults[0].OrigenFoto.size());
-    ui->camara1->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[0].OrigenFoto.clone())));
-}
-    /** CAMARA2 **/
-void Client::onGetFotoCV2(const cv::Mat &fotocv){
-    cv::resize(fotocv,m_matricularesults[1].OrigenFoto,m_matricularesults[1].OrigenFoto.size());
-    ui->camara2->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[1].OrigenFoto.clone())));
-}
-/** END CAMARAS ************************************************************************/
-
 
 /** NEWSAGES I/O  **/
 void Client::on_SemaforoEstadoChanged(int _color){
@@ -119,6 +101,8 @@ void Client::onBascula(t_Bascula _bascula){
 
 void Client::onAllMatriculaResults()
 {
+    ui->camara1->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[0].OrigenFotoResize.clone())));
+    ui->camara2->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[1].OrigenFotoResize.clone())));
 
     if ( m_matricularesults[0].MatriculaPrecisionA >= m_matricularesults[1].MatriculaPrecisionA){
         ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[0].MatriculaFotoA.clone())));
