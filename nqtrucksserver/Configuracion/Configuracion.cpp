@@ -33,8 +33,8 @@
 #include <QDebug>
 #include <QDesktopWidget>
 
-#include <QDir>
-#include <QUrl>
+//#include <QDir>
+//#include <QUrl>
 
 #include "alpr.h"
 #include "prewarp.h"
@@ -66,13 +66,13 @@ Configuracion::Configuracion(nQTrucks::nQTrucksEngine *_engine, QWidget *parent)
     connect(engine ,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
 
     /** ALPR 1 **/
-    connect(engine, SIGNAL(ReplyMatriculaResults1(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(t_MatriculaResults)));
+    connect(engine, SIGNAL(ReplyMatriculaResults1(Registros::t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::t_MatriculaResults)));
     connect(engine ,SIGNAL(ReplyOriginalFoto1(cv::Mat)),this,SLOT(onGetOriginalMatricula1(cv::Mat)));
     connect(engine ,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja1(cv::Mat)));
     connect(engine ,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca1(cv::Mat)));
 
     /** ALPR 2 **/
-    connect(engine, SIGNAL(ReplyMatriculaResults2(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(t_MatriculaResults)));
+    connect(engine, SIGNAL(ReplyMatriculaResults2(Registros::t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::t_MatriculaResults)));
     connect(engine ,SIGNAL(ReplyOriginalFoto2(cv::Mat)),this,SLOT(onGetOriginalMatricula2(cv::Mat)));
     connect(engine ,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja2(cv::Mat)));
     connect(engine ,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca2(cv::Mat)));
@@ -162,6 +162,11 @@ void Configuracion::loadconfig()
     /** ALPR  **/
     ui->calibracionSelect->addItem(ALPR1);
     ui->calibracionSelect->addItem(ALPR2);   
+
+    /** REPORTS **/
+    engine->buildReportsTree(ui->reportsTreeWidget);
+    /** END REPORTS **/
+
 
     updateGui();
     updateCalibracionGui();
@@ -425,7 +430,7 @@ void Configuracion::updateCalibracionGui(){
     ui->LongMatriculaB->setText(m_matricularesults[index].MatriculaPrecisionBs);
 }
     /** ALPR 1 **/
-void Configuracion::onReplyMatriculaResults1(const t_MatriculaResults &_result){
+void Configuracion::onReplyMatriculaResults1(const Registros::t_MatriculaResults &_result){
     m_matricularesults[0] = _result;
     loadPlanks(0);
     updateCalibracionGui();
@@ -447,7 +452,7 @@ void Configuracion::onGetOriginalMatriculaBlanca1(const cv::Mat &foto){
 }
     /** END ALPR1 **/
     /** ALPR2 **/
-void Configuracion::onReplyMatriculaResults2(const t_MatriculaResults &_result){
+void Configuracion::onReplyMatriculaResults2(const Registros::t_MatriculaResults &_result){
     m_matricularesults[1] = _result;
     loadPlanks(1);
     updateCalibracionGui();
@@ -498,230 +503,9 @@ void Configuracion::on_guardarPlanK_clicked()
     engine->calibrarFoto(index,m_matricularesults[index].OrigenFoto.clone());
 }
     /** END PLANKs **/
-
-
-
-
-//* TODO PREWARP **/
-///** PREWARP **/
-//void Configuracion::loadprewarp(){
-//    /** DEBUG **/
-//    //updateOriginal();
-////    int max_width;
-////    int max_height;
-////    QStringList valores;
-////    /** PREWARP **/
-////    switch (ui->calibracionSelect->currentIndex()) {
-////    case 0:
-////        m_fotoprewarpCVA1 = m_fotocamaraCVA1.clone();
-////        prewarp.w = m_fotoprewarpCVA1.cols;
-////        prewarp.h = m_fotoprewarpCVA1.rows;
-////        max_width = m_fotoprewarpCVA1.cols;
-////        max_height = m_fotoprewarpCVA1.rows;
-
-////        if (m_fotoprewarpCVA1.cols > max_width){
-////          float aspect = max_width / ((float)m_fotoprewarpCVA1.cols);
-////          float y = ((float)m_fotoprewarpCVA1.rows) * aspect;
-////          cv::resize(m_fotoprewarpCVA1, m_fotoprewarpCVA1, cv::Size((int) max_width, (int) y));
-////        }
-////        if (m_fotoprewarpCVA1.rows > max_height){
-////          float aspect = max_height / ((float)m_fotoprewarpCVA1.rows);
-////          float x = ((float)m_fotoprewarpCVA1.cols) * aspect;
-////          cv::resize(m_fotoprewarpCVA1, m_fotoprewarpCVA1, cv::Size((int) x, (int) max_height));
-////        }
-////        valores = m_prewarp.split(",");
-////        if (valores.count()==10){
-////            prewarp.w = m_fotoprewarpCVA1.cols;
-////            prewarp.h = m_fotoprewarpCVA1.rows;
-////            prewarp.rotationx   = QString(valores.value(3)).toFloat();
-////            prewarp.rotationy   = QString(valores.value(4)).toFloat();
-////            prewarp.rotationz   = QString(valores.value(5)).toFloat();
-////            prewarp.stretchX    = QString(valores.value(6)).toFloat();
-////            prewarp.dist        = QString(valores.value(7)).toFloat();
-////            prewarp.panX        = QString(valores.value(8)).toFloat();
-////            prewarp.panY        = QString(valores.value(9)).toFloat();
-
-////            //set bars
-////            ui->valueXA1->setValue(-(prewarp.rotationx*20000.0)+100);
-////            ui->valueYA1->setValue((prewarp.rotationy*20000.0)+100);
-////            ui->valueZA1->setValue(-(prewarp.rotationz*100.0)+100);
-////            ui->valueWA1->setValue(-(1-prewarp.stretchX)*-200+100);
-////            ui->valueDA1->setValue((1-prewarp.dist)*200+100);
-////        }
-////        else{
-////            //DEFAULT
-////            ui->valueXA1->setValue(100);
-////            ui->valueYA1->setValue(100);
-////            ui->valueZA1->setValue(100);
-////            ui->valueWA1->setValue(100);
-////            ui->valueDA1->setValue(100);
-////        }
-////        m_fotoprewarpCVA1=updateprewarp(m_fotoprewarpCVA1);
-////        break;
-
-////    case 1:
-////        m_fotoprewarpCVA2 = m_fotocamaraCVA2.clone();
-////        prewarp.w = m_fotoprewarpCVA2.cols;
-////        prewarp.h = m_fotoprewarpCVA2.rows;
-////        max_width = m_fotoprewarpCVA2.cols;
-////        max_height = m_fotoprewarpCVA2.rows;
-////        break;
-////        if (m_fotoprewarpCVA2.cols > max_width){
-////          float aspect = max_width / ((float)m_fotoprewarpCVA2.cols);
-////          float y = ((float)m_fotoprewarpCVA2.rows) * aspect;
-////          cv::resize(m_fotoprewarpCVA2, m_fotoprewarpCVA2, cv::Size((int) max_width, (int) y));
-////        }
-////        if (m_fotoprewarpCVA2.rows > max_height){
-////          float aspect = max_height / ((float)m_fotoprewarpCVA2.rows);
-////          float x = ((float)m_fotoprewarpCVA2.cols) * aspect;
-////          cv::resize(m_fotoprewarpCVA2, m_fotoprewarpCVA2, cv::Size((int) x, (int) max_height));
-////        }
-////        valores = m_prewarp.split(",");
-////        if (valores.count()==10){
-////            prewarp.w = m_fotoprewarpCVA2.cols;
-////            prewarp.h = m_fotoprewarpCVA2.rows;
-////            prewarp.rotationx   = QString(valores.value(3)).toFloat();
-////            prewarp.rotationy   = QString(valores.value(4)).toFloat();
-////            prewarp.rotationz   = QString(valores.value(5)).toFloat();
-////            prewarp.stretchX    = QString(valores.value(6)).toFloat();
-////            prewarp.dist        = QString(valores.value(7)).toFloat();
-////            prewarp.panX        = QString(valores.value(8)).toFloat();
-////            prewarp.panY        = QString(valores.value(9)).toFloat();
-
-////            //set bars
-////            ui->valueXA1->setValue(-(prewarp.rotationx*20000.0)+100);
-////            ui->valueYA1->setValue((prewarp.rotationy*20000.0)+100);
-////            ui->valueZA1->setValue(-(prewarp.rotationz*100.0)+100);
-////            ui->valueWA1->setValue(-(1-prewarp.stretchX)*-200+100);
-////            ui->valueDA1->setValue((1-prewarp.dist)*200+100);
-////        }
-////        else{
-////            //DEFAULT
-////            ui->valueXA1->setValue(100);
-////            ui->valueYA1->setValue(100);
-////            ui->valueZA1->setValue(100);
-////            ui->valueWA1->setValue(100);
-////            ui->valueDA1->setValue(100);
-////        }
-////        m_fotoprewarpCVA2=updateprewarp(m_fotoprewarpCVA2);
-////        break;
-////    }
-////    updateGui();
-//}
-
-//QString Configuracion::get_prewarp_config()
-//{
-////    float width_ratio;
-////    float height_ratio;
-
-////    switch (ui->calibracionSelect->currentIndex()) {
-////    case 0:
-//////        width_ratio = prewarp.w / ((float)m_fotoprewarpCVA1.cols);
-//////        height_ratio = prewarp.h / ((float)m_fotoprewarpCVA1.rows);
-////        break;
-////    case 1:
-//////        width_ratio = prewarp.w / ((float)m_fotoprewarpCVA2.cols);
-//////        height_ratio = prewarp.h / ((float)m_fotoprewarpCVA2.rows);
-////        break;
-////    }
-////    updateGui();
-
-////    prewarp.rotationx *=width_ratio;
-////    prewarp.rotationy *=width_ratio;
-////    prewarp.panX /= width_ratio;
-////    prewarp.panY /= height_ratio;
-
-////    std::stringstream output;
-////    output << "planar," << std::fixed;
-////    output << prewarp.w << "," << prewarp.h << ",";
-////    output << prewarp.rotationx << "," << prewarp.rotationy << "," << prewarp.rotationz << ",";
-////    output << prewarp.stretchX << "," << prewarp.dist << ",";
-////    output << prewarp.panX << "," << prewarp.panY;
-////    m_prewarp= QString::fromStdString(output.str());
-//    //qDebug() << m_prewarp;
-//    return m_prewarp;
-
-//}
-
-//cv::Mat Configuracion::updateprewarp(cv::Mat img){
-//    alpr::Config config("truck");
-//    config.prewarp = get_prewarp_config().toStdString();
-//    config.setDebug(false);
-//    alpr::PreWarp prewarp(&config);
-//    return prewarp.warpImage(img);
-//}
-
-//void Configuracion::on_valueXA1_valueChanged(int value)
-//{
-////    prewarp.rotationx = -((float)value - 100) / 20000.0;
-////    switch (ui->calibracionSelect->currentIndex()) {
-////    case 0:
-////        m_matricularesults1.OrigenFotoPrewarp=updateprewarp(m_matricularesults1.OrigenFotoPrewarp);
-////        break;
-////    case 1:
-////        m_matricularesults2.OrigenFotoPrewarp=updateprewarp(m_matricularesults2.OrigenFotoPrewarp);
-////        break;
-////    }
-//}
-
-//void Configuracion::on_valueYA1_valueChanged(int value)
-//{
-////      prewarp.rotationy = ((float)value - 100) / 20000.0;
-////      switch (ui->calibracionSelect->currentIndex()) {
-////      case 0:
-////          m_matricularesults1.OrigenFotoPrewarp=updateprewarp(m_matricularesults1.OrigenFotoPrewarp);
-////          break;
-////      case 1:
-////          m_matricularesults2.OrigenFotoPrewarp=updateprewarp(m_matricularesults2.OrigenFotoPrewarp);
-////          break;
-////      }
-//}
-
-//void Configuracion::on_valueZA1_valueChanged(int value)
-//{
-////  prewarp.rotationz = -((float)value - 100) / 100.0;
-////  switch (ui->calibracionSelect->currentIndex()) {
-////  case 0:
-////      m_matricularesults1.OrigenFotoPrewarp=updateprewarp(m_matricularesults1.OrigenFotoPrewarp);
-////      break;
-////  case 1:
-////      m_matricularesults2.OrigenFotoPrewarp=updateprewarp(m_matricularesults2.OrigenFotoPrewarp);
-////      break;
-////  }
-//}
-
-//void Configuracion::on_valueWA1_valueChanged(int value)
-//{
-////    prewarp.stretchX = 1.0 + ((float)value - 100) / -200.0;
-////    switch (ui->calibracionSelect->currentIndex()) {
-////    case 0:
-////        m_matricularesults1.OrigenFotoPrewarp=updateprewarp(m_matricularesults1.OrigenFotoPrewarp);
-////        break;
-////    case 1:
-////        m_matricularesults2.OrigenFotoPrewarp=updateprewarp(m_matricularesults2.OrigenFotoPrewarp);
-////        break;
-////    }
-//}
-
-//void Configuracion::on_valueDA1_valueChanged(int value)
-//{
-////    prewarp.dist = 1.0 - ((float)value - 100) / 200.0;
-////    switch (ui->calibracionSelect->currentIndex()) {
-////    case 0:
-////        m_matricularesults1.OrigenFotoPrewarp=updateprewarp(m_matricularesults1.OrigenFotoPrewarp);
-////        break;
-////    case 1:
-////        m_matricularesults2.OrigenFotoPrewarp=updateprewarp(m_matricularesults2.OrigenFotoPrewarp);
-////        break;
-////    }
-//}
-
-//void Configuracion::on_guardarPrewarp_clicked()
-//{
-////    engine->appConfig()->beginGroup(ALPR);
-////    engine->appConfig()->setValue(QString("prewarp"+(QString::number(ui->calibracionSelect->currentIndex()+1))),get_prewarp_config());
-////    engine->appConfig()->endGroup();
-
-//}
-///** END PREWARP *
 /** END CALIBRACION *******************************************************************/
+
+void Configuracion::on_reportsTreeWidget_doubleClicked(const QModelIndex &index)
+{
+
+}

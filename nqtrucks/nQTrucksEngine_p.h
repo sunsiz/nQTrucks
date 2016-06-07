@@ -33,8 +33,8 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QMetaEnum>
-#include <QCoreApplication>
-#include <QDir>
+//#include <QCoreApplication>
+//#include <QDir>
 
 #include<QVector>
 
@@ -42,16 +42,18 @@
 #include "nQTrucksEngine.h"
 
 #include "Dispositivos/CamaraIP.h"
-
 #include "Dispositivos/NewsagesIO.h"
 #include <QtSerialPort/QSerialPortInfo>
-
 #include <Dispositivos/Basculas/nQSerialPortReader.h>
-
 #include <Dispositivos/Alpr/NewsagesAlpr.h>
 
-
 #include <Core/Daemon.h>
+
+/** REPORTS **/
+#include <QApplication>
+#include <QDir>
+#include <QTreeWidgetItem>
+#include "LimeReport"
 
 namespace nQTrucks {
 
@@ -76,8 +78,6 @@ private:
     /** CAMARAS **/
 public:
     QStringList getCameraTypes();
-//    Devices::CamaraIP *m_camara1 = new Devices::CamaraIP(0,settings(), this);
-//    Devices::CamaraIP *m_camara2 = new Devices::CamaraIP(1,settings(), this);
     QVector<Devices::CamaraIP*> m_camara;// = new Devices::CamaraIP(0,settings(), this);
     /** FIN CAMARAS **/
 
@@ -98,15 +98,18 @@ private:
 
     /** ALPR **/
     QVector<Devices::NewsagesAlpr*> m_alpr;
-    //Devices::NewsagesAlpr *m_alpr1= new Devices::NewsagesAlpr(0,settings(),this);//settings(),this);
-    //Devices::NewsagesAlpr *m_alpr2= new Devices::NewsagesAlpr(1,settings(),this);//settings(),this);
     /** END ALPR **/
-
 
     /** CORE **/
 private:
     Core::Daemon *m_daemon;
     /** END CORE **/
+
+    /** REPORTS **/
+private:
+    LimeReport::ReportEngine *m_report_editor;
+    /** END REPORTS **/
+
 };
 
 

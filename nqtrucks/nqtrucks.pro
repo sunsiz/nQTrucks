@@ -76,13 +76,61 @@ unix:{
      }
 
 }
+
+#** LimeReport **#
+unix{
+    DEPENDPATH  += $${GLOBAL_INCLUDE}/nQLReport/include
+    INCLUDEPATH += $${GLOBAL_INCLUDE}/nQLReport/include
+
+    LIBS        += -L$${GLOBAL_LIBS}/nQLReport/lib
+    PRE_TARGETDEPS  += $${GLOBAL_LIBS}/nQLReport/lib/liblimereport.a
+
+    EXTRA_LIBS += \
+        $${GLOBAL_LIBS}/nQLReport/lib/*
+     for(FILES_EXTRA_LIBS,EXTRA_LIBS){
+         QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILES_EXTRA_LIBS) $$quote($${DEST_LIBS}) $$escape_expand(\\n\\t) # copy includes for impl
+     }
+
+    EXTRA_INCLUDES += \
+        $${GLOBAL_INCLUDE}/nQLReport/include/*
+        QMAKE_POST_LINK += mkdir -p $$quote($${DEST_BINS}/include) $$escape_expand(\\n\\t) # qmake need make mkdir -p on subdirs more than root/
+     for(FILES_EXTRA_INCLUDES,EXTRA_INCLUDES){
+         QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILES_EXTRA_INCLUDES) $$quote($${DEST_BINS}/include/) $$escape_expand(\\n\\t) # copy includes for impl
+     }
+}
+
+
+# ***nQLReport ***#
+unix{
+    INCLUDEPATH     += $${DEST_INCLUDE_DIR}
+    DEPENDPATH      += $${DEST_INCLUDE_DIR}
+    PRE_TARGETDEPS  += $${DEST_INCLUDE_DIR}
+    LIBS += -L$${DEST_LIBS} -llimereport
+    LIBS += -L$${DEST_LIBS} -lQtZint
+    EXTRA_DIR_REPORTS = $$PWD/reports
+    QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$quote($$EXTRA_DIR_REPORTS) $$quote($$DEST_BINS) $$escape_expand(\n\t)
+
+    OTHER_FILES += \
+        $$PWD/reports/reports.lrxml
+}
+
+
+
 #INSTALLS
 linux:{
    QMAKE_LFLAGS += -Wl,--rpath=/opt/newsages/lib
     target.path == $${NEWSAGES_LIBS}
+
+    extralibs.path = $${NEWSAGES_LIBS}
+    extralibs.files = $${EXTRA_LIBS}
+
     extradirs.path = $${NEWSAGES_DIR}/nQTrucks
     extradirs.files = $${EXTRA_DIRS}
-    INSTALLS += target extradirs
+
+    reports.path = $${NEWSAGES_DIR}/nQTrucks
+    reports.files = $${EXTRA_DIR_REPORTS}
+
+    INSTALLS += target extradirs extralibs reports
 }
 
 

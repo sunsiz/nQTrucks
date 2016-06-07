@@ -14,13 +14,15 @@ class DatabaseManager : public QObject{
     Q_OBJECT
 public:
     explicit DatabaseManager(QObject *parent=nullptr);
+    ~DatabaseManager();
 
 signals:
     void workFinished();
 
     /** DB **/
 private:
-    QSqlDatabase db;
+    void initDb();
+    QSqlDatabase m_db;
     Registros::Simple_Matriculas m_registro_simple_matriculas;
 //        QByteArray resizeFoto(QByteArray _ByteArray);
 //        cv::Mat byteArray2Mat(QByteArray &byteArray);

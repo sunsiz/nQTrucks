@@ -52,6 +52,8 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
     m_alpr[0] = new Devices::NewsagesAlpr(0,settings(),this);
     m_alpr[1] = new Devices::NewsagesAlpr(0,settings(),this);
 
+    m_report_editor = new LimeReport::ReportEngine(this);
+
 }
 
 nQTrucksEnginePrivate::~nQTrucksEnginePrivate()
@@ -213,13 +215,13 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     connect(d->m_alpr[0],SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto1(cv::Mat)));
     connect(d->m_alpr[0],SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)));
     connect(d->m_alpr[0],SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)));
-    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults1(t_MatriculaResults)));
+    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(Registros::t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults1(Registros::t_MatriculaResults)));
 
     /** 2 **/
     connect(d->m_alpr[1],SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto2(cv::Mat)));
     connect(d->m_alpr[1],SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)));
     connect(d->m_alpr[1],SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)));
-    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(t_MatriculaResults)));
+    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(Registros::t_MatriculaResults)));
     /** END NEWSAGES ALPR **/
 
 }
@@ -373,6 +375,7 @@ void nQTrucksEngine::setInitDaemon(const bool &_init)
 
 
 }
+
 /** END CORE ************************************************************************/
 
 

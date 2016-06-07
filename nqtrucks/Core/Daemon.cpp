@@ -168,8 +168,8 @@ void Daemon::onGuardarRegistroSimple(Registros::Simple &_registro){
         m_registro_simple_matriculas.registrosimple = _registro;
         //consigue matriculas
         m_alpr_numero=0;
-        alprconn1 = connect(m_alpr[0],SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(t_MatriculaResults)));
-        alprconn2 = connect(m_alpr[1],SIGNAL(ReplyMatriculaResults(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(t_MatriculaResults)));
+        alprconn1 = connect(m_alpr[0],SIGNAL(ReplyMatriculaResults(Registros::t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::t_MatriculaResults)));
+        alprconn2 = connect(m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::t_MatriculaResults)));
         m_alpr[0]->processFoto(byteArray2Mat(_registro.camara1));
         m_alpr[1]->processFoto(byteArray2Mat(_registro.camara2));
         m_registrando=false;

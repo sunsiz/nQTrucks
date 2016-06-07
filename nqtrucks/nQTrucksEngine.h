@@ -33,8 +33,14 @@
 
 #include <QObject>
 
-#include <QSettings>
 #include <nqtglobal.h>
+
+#include <QSettings>
+
+/** REPORTS **/
+#include <QApplication>
+#include <QDir>
+#include <QTreeWidgetItem>
 
 namespace nQTrucks {
 class nQTrucksEnginePrivate;
@@ -114,6 +120,36 @@ public slots:
     void setInitDaemon(const bool &_init);
 
     /** END CORE ************************************/
+
+    /** REPORTS **/
+private:
+
+public:
+    template< typename T >
+    void buildReportsTree(T* parentItem, const QString &path=QApplication::applicationDirPath()+"/reports/")
+    {
+        QDir reportsDir(path);
+        QStringList items = reportsDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+        foreach( QString dir, items){
+            QTreeWidgetItem* listItem = new QTreeWidgetItem(parentItem);
+            listItem->setText(0,dir);
+            listItem->setIcon(0,QIcon(":/temp/icons/system/devices/folder-new.png"));
+            buildReportsTree(listItem,reportsDir.path() + "/" +dir );
+        }
+        QStringList nameFilters;
+        nameFilters <<"*.lrxml";
+        items = reportsDir.entryList(nameFilters, QDir::Files);
+        foreach( QString file, items){
+            QStringList fileonly = file.toUpper().split(".");
+            QTreeWidgetItem* listItem = new QTreeWidgetItem(parentItem);
+            listItem->setIcon(0,QIcon(":/temp/icons/system/devices/libreoffice3-impress2.png"));
+            listItem->setText(0,fileonly[0]);
+            listItem->setData(0,Qt::UserRole,reportsDir.path()+"/"+file);
+        }
+    }
+    /** END REPORTS **/
+
+
 
 
     /** nQTrucksEnginePrivate **/

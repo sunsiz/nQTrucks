@@ -49,7 +49,6 @@ Client::Client(nQTrucks::nQTrucksEngine *_engine, QWidget *parent)
     m_matricularesults.resize(2);
 
     /** IO **/
-    //connect(engine,SIGNAL(SemaforoConnectChanged(bool)),this,SLOT(on_SemaforoConnect(bool)));
     connect(engine,SIGNAL(SemaforoEstadoChanged(int)),this,SLOT(on_SemaforoEstadoChanged(int)));
 
     /** BASCULAS **/
@@ -57,9 +56,8 @@ Client::Client(nQTrucks::nQTrucksEngine *_engine, QWidget *parent)
     connect(engine ,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
 
     /** ALPR **/
-    connect(engine, SIGNAL(ReplyMatriculaResults1(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(t_MatriculaResults)));
-    connect(engine, SIGNAL(ReplyMatriculaResults2(t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(t_MatriculaResults)));
-
+    connect(engine, SIGNAL(ReplyMatriculaResults1(Registros::t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::t_MatriculaResults)));
+    connect(engine, SIGNAL(ReplyMatriculaResults2(Registros::t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::t_MatriculaResults)));
     m_alpr_count = 0;
 }
 
@@ -128,7 +126,7 @@ void Client::onAllMatriculaResults()
 /** END BASCULAS **/
 
 
-void Client::onReplyMatriculaResults1(const t_MatriculaResults &_result){
+void Client::onReplyMatriculaResults1(const Registros::t_MatriculaResults &_result){
     m_matricularesults[0] = _result;
     m_alpr_count++;
     if (m_alpr_count==2){
@@ -136,7 +134,7 @@ void Client::onReplyMatriculaResults1(const t_MatriculaResults &_result){
     }
 }
 
-void Client::onReplyMatriculaResults2(const t_MatriculaResults &_result){
+void Client::onReplyMatriculaResults2(const Registros::t_MatriculaResults &_result){
     m_matricularesults[1] = _result;
     m_alpr_count++;
     if (m_alpr_count==2){

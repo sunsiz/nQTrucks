@@ -110,13 +110,13 @@ public:
     void setAlprIndex(int _AlprIndex){ m_AlprIndex = _AlprIndex;}
 private:
     int m_AlprIndex=0;
-    QVector<t_MatriculaResults> m_matricularesults={};
-    QVector<t_MatriculaResults>::iterator m_matricularesults_iterator;
+    QVector<Registros::t_MatriculaResults> m_matricularesults={};
+    QVector<Registros::t_MatriculaResults>::iterator m_matricularesults_iterator;
     void updateCalibracionGui();
 
     /** ALPR1 **/
 private slots:
-    void onReplyMatriculaResults1(const t_MatriculaResults &_result);
+    void onReplyMatriculaResults1(const Registros::t_MatriculaResults &_result);
     void onGetOriginalMatricula1(const cv::Mat &foto);
     void onGetOriginalMatriculaRoja1(const cv::Mat &foto);
     void onGetOriginalMatriculaBlanca1(const cv::Mat &foto);
@@ -124,7 +124,7 @@ private slots:
 
     /** ALPR2 **/
 private slots:
-    void onReplyMatriculaResults2(const t_MatriculaResults &_result);
+    void onReplyMatriculaResults2(const Registros::t_MatriculaResults &_result);
     void onGetOriginalMatricula2(const cv::Mat &foto);
     void onGetOriginalMatriculaRoja2(const cv::Mat &foto);
     void onGetOriginalMatriculaBlanca2(const cv::Mat &foto);
@@ -139,29 +139,15 @@ private slots:
 
 /** END CALIBRACION ************************************************/
 
-//    /** PREWARP **/
-//private:
-//    cv::Mat updateprewarp(cv::Mat img);
-//    void loadprewarp();
-//    QString get_prewarp_config();
-//    QString m_prewarp;
-//    nQTrucks::t_Prewarp prewarp;
-//private slots:
-//    void on_valueXA1_valueChanged(int value);
-//    void on_valueYA1_valueChanged(int value);
-//    void on_valueZA1_valueChanged(int value);
-//    void on_valueWA1_valueChanged(int value);
-//    void on_valueDA1_valueChanged(int value);
-//    void on_guardarPrewarp_clicked();
-//    /** END  PREWARP **/
-
-
     /** CONFIG **/
+
+    void on_reportsTreeWidget_doubleClicked(const QModelIndex &index);
 
 private:
     void loadconfig();
     /** END CONFIG **/
     static QImage convertMat2QImage(const cv::Mat &src);
+
 };
 
 #endif // CONFIGURACION_H

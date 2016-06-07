@@ -687,7 +687,7 @@ void MainWindow::updateCalibracionGui(){
     ui->LongMatriculaB->setText(m_matricularesults[index].MatriculaPrecisionBs);
 }
     /** ALPR 1 **/
-void MainWindow::onReplyMatriculaResults1(const t_MatriculaResults &_result){
+void MainWindow::onReplyMatriculaResults1(const Registros::t_MatriculaResults &_result){
     m_matricularesults[0] = _result;
     loadPlanks(0);
     updateCalibracionGui();
@@ -709,7 +709,7 @@ void MainWindow::onGetOriginalMatriculaBlanca1(const cv::Mat &foto){
 }
     /** END ALPR1 **/
     /** ALPR2 **/
-void MainWindow::onReplyMatriculaResults2(const t_MatriculaResults &_result){
+void MainWindow::onReplyMatriculaResults2(const Registros::t_MatriculaResults &_result){
     m_matricularesults[1] = _result;
     loadPlanks(1);
     updateCalibracionGui();

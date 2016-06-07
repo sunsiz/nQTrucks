@@ -12,11 +12,32 @@ DatabaseManager::DatabaseManager(QObject *parent)
 
 }
 
-void DatabaseManager::guardarRegistroSimpleMatriculas()
-{
-    if( !db.open() )
+DatabaseManager::~DatabaseManager(){
+}
+
+void DatabaseManager::initDb(){
+    qDebug() << "conexion inicial es: " << m_db.connectionName();
+
+    if ( !QSqlDatabase::contains("nqtrucks")) {
+        m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks");//,"/opt/newsages/QNav/"+_appDB);//getPath(_appDB));
+        m_db.setDatabaseName( "nqtrucks" );
+        m_db.setHostName(     "localhost" );
+        m_db.setUserName(     "nqtrucks" );
+        m_db.setPassword(     "nqtrucks" );
+        qDebug() << "conexion al crear es: " << m_db.connectionName();
+    } else {
+        m_db = QSqlDatabase::database("nqtrucks");//getPath(_appDB));
+        qDebug() << "conexion al volver a usar es: " << m_db.connectionName();
+    }
+    qDebug() << "conexion al verificar es: " << m_db.connectionName();
+}
+
+void DatabaseManager::guardarRegistroSimpleMatriculas(){
+    initDb();
+
+    if( !m_db.open() )
     {
-      qDebug() << db.lastError();
+      qDebug() << m_db.lastError();
       qDebug() << "Failed to connect." ;
     }else{
         qDebug( "Connected!" );
@@ -32,8 +53,9 @@ void DatabaseManager::guardarRegistroSimpleMatriculas()
             m_registro_simple_matriculas.registrosimple.camara2resize.clear();
         }
 
-        db.transaction();
-        QSqlQuery qry(db);
+        m_db.transaction();
+        QSqlQuery qry(m_db);
+
         qry.prepare( "INSERT INTO registros_matriculas( "
                      " pesobruto,  pesoneto,  pesotara, "
                      " fotocamara1, fotomatriculaA1, fotomatriculaB1, matriculaA1,  matriculaB1, precisionA1, precisionB1,"
@@ -69,30 +91,28 @@ void DatabaseManager::guardarRegistroSimpleMatriculas()
 
          if( !qry.exec() ){
            qDebug() << qry.lastError();
-            db.rollback();
+            m_db.rollback();
          }else{
-            db.commit();
+            m_db.commit();
            qDebug() <<  "Inserted!: " << qry.lastInsertId().toInt();
 
+           /** Report Pesada **/
+
+
+
+           /** Buscar Pareja **/
+                /** Si pareja **/
+                    /** Report Pareja **/
 
 
          }
-        db.close();
+        m_db.close();
     }
     emit workFinished();
 }
 
-void DatabaseManager::setRegistroSimpleMatriculas(const Registros::Simple_Matriculas &_registro)
-{
+void DatabaseManager::setRegistroSimpleMatriculas(const Registros::Simple_Matriculas &_registro){
     m_registro_simple_matriculas = _registro;
-    if (!QSqlDatabase::contains("registro_matriculas")){
-        /*TODO SETTINGS AND CLASS */
-        db = QSqlDatabase::addDatabase( "QMYSQL","registro_matriculas" );
-        db.setHostName( "localhost" );
-        db.setDatabaseName( "nqtrucks" );
-        db.setUserName( "nqtrucks" );
-        db.setPassword( "nqtrucks" );
-    }
 }
 
 

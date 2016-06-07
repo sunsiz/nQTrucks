@@ -72,13 +72,13 @@ private slots:
     /** ALPR **/
 private:
     int m_alpr_count;
-    QVector<t_MatriculaResults> m_matricularesults={};
-    QVector<t_MatriculaResults>::iterator m_matricularesults_iterator;
+    QVector<Registros::t_MatriculaResults> m_matricularesults={};
+    QVector<Registros::t_MatriculaResults>::iterator m_matricularesults_iterator;
 
 private slots:
     void onAllMatriculaResults();
-    void onReplyMatriculaResults1(const t_MatriculaResults &_result);
-    void onReplyMatriculaResults2(const t_MatriculaResults &_result);
+    void onReplyMatriculaResults1(const Registros::t_MatriculaResults &_result);
+    void onReplyMatriculaResults2(const Registros::t_MatriculaResults &_result);
     /** END ALPR **/
 
 
