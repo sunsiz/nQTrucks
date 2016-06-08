@@ -126,7 +126,7 @@ private:
 
 public:
     template< typename T >
-    void buildReportsTree(T* parentItem, const QString &path=QApplication::applicationDirPath()+"/reports/")
+    void report_buildReportsTree(T* parentItem, const QString &path=QApplication::applicationDirPath()+"/reports/")
     {
         QDir reportsDir(path);
         QStringList items = reportsDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -134,7 +134,7 @@ public:
             QTreeWidgetItem* listItem = new QTreeWidgetItem(parentItem);
             listItem->setText(0,dir);
             listItem->setIcon(0,QIcon(":/temp/icons/system/devices/folder-new.png"));
-            buildReportsTree(listItem,reportsDir.path() + "/" +dir );
+            report_buildReportsTree(listItem,reportsDir.path() + "/" +dir );
         }
         QStringList nameFilters;
         nameFilters <<"*.lrxml";
@@ -147,6 +147,9 @@ public:
             listItem->setData(0,Qt::UserRole,reportsDir.path()+"/"+file);
         }
     }
+    void report_desingReport();
+public slots:
+    void report_loadFromFile(const QString &_file);
     /** END REPORTS **/
 
 

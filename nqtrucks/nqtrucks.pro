@@ -1,5 +1,5 @@
 include(../common.pri)
-QT += network sql core serialport qml #testlib
+QT += network sql core serialport qml script #testlib
 TARGET = nQTrucks
 TEMPLATE = lib
 #CONFIG += lib
@@ -111,7 +111,9 @@ unix{
     QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$quote($$EXTRA_DIR_REPORTS) $$quote($$DEST_BINS) $$escape_expand(\n\t)
 
     OTHER_FILES += \
-        $$PWD/reports/reports.lrxml
+        $$PWD/reports/reports.lrxml \
+        $$PWD/reports/peso.lrxml \
+        $$PWD/reports/peso_matricula.lrxml
 }
 
 

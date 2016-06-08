@@ -164,7 +164,7 @@ void Configuracion::loadconfig()
     ui->calibracionSelect->addItem(ALPR2);   
 
     /** REPORTS **/
-    engine->buildReportsTree(ui->reportsTreeWidget);
+    engine->report_buildReportsTree(ui->reportsTreeWidget);
     /** END REPORTS **/
 
 
@@ -507,5 +507,7 @@ void Configuracion::on_guardarPlanK_clicked()
 
 void Configuracion::on_reportsTreeWidget_doubleClicked(const QModelIndex &index)
 {
-
+    qDebug() << index.data(Qt::UserRole).toString();
+    engine->report_loadFromFile(index.data(Qt::UserRole).toString());
+    engine->report_desingReport();
 }

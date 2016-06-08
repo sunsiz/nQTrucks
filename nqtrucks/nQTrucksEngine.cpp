@@ -54,6 +54,7 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
 
     m_report_editor = new LimeReport::ReportEngine(this);
 
+
 }
 
 nQTrucksEnginePrivate::~nQTrucksEnginePrivate()
@@ -376,7 +377,20 @@ void nQTrucksEngine::setInitDaemon(const bool &_init)
 
 }
 
+void nQTrucksEngine::report_desingReport()
+{
+    Q_D(nQTrucksEngine);
+    d->m_report_editor->designReport();
+}
 /** END CORE ************************************************************************/
+
+/** REPORTS ************************************************************/
+void nQTrucksEngine::report_loadFromFile(const QString &_file)
+{
+    Q_D(nQTrucksEngine);
+    d->m_report_editor->loadFromFile(_file);
+}
+/** END REPORTS *******************************************************/
 
 
 /** *****************************************************************************************
