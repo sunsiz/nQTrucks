@@ -51,16 +51,16 @@ private:
 /** REGRISTRO **/
 private:
     Registros::Simple m_registro_simple;
-    Registros::Simple m_registro_simple_vacio;
-    Registros::Simple_Matriculas m_registro_simple_matriculas;
-    Registros::Simple_Matriculas m_registro_simple_matriculas_vacio;
+    //Registros::Simple m_registro_simple_vacio;
+    Registros::SimpleMatriculas m_registro_simple_matriculas;
+    //Registros::Simple_Matriculas m_registro_simple_matriculas_vacio;
 /** END REGISTRO **/
 
 
     /** PESO ****************************************************************************************************/
 private slots:
-    void onPesoNuevo(const t_Bascula &_nuevaPesada);
-    void onBasculaChanged(const t_Bascula &_pesoRT);
+    void onPesoNuevo(const Bascula &_nuevaPesada);
+    void onBasculaChanged(const Bascula &_pesoRT);
     /** FIN PESO ***********************************************************************************************/
 
     /** CAMARAS **/
@@ -96,8 +96,8 @@ private:
     QMetaObject::Connection &alprconn1 = *palprconn1;
     QMetaObject::Connection &alprconn2 = *palprconn2;
 private slots:
-    void onReplyMatriculaResults1(const Registros::t_MatriculaResults &_registro);
-    void onReplyMatriculaResults2(const Registros::t_MatriculaResults &_registro);
+    void onReplyMatriculaResults1(const Registros::MatriculaResults &_registro);
+    void onReplyMatriculaResults2(const Registros::MatriculaResults &_registro);
     /** END ALPRS **/
 
 
@@ -114,8 +114,8 @@ private:
     QThread *hiloDb;
     Db::DatabaseManager *tareaDb;
 private slots:
-    void onGuardarRegistroSimple(Registros::Simple &_registro);
-    void onGuardarRegistroSimpleMatriculas(Registros::Simple_Matriculas &_registro);
+    void onGuardarRegistroSimple();
+    void onGuardarRegistroSimpleMatriculas();
 /** END BD **/
 
 

@@ -61,81 +61,85 @@ const QString default_prewarp ="";//  "planar,1280,720,0,0,0,1.0,1.0,0,0";
 //const cv::Size fotoSize(max_db_image_width,max_db_image_height);
 
 /** BASCULAS **/
-struct Bascula{
-    bool bEstado=false;
-    bool bEstadoAnterior=false;
-    float iBruto=0;
-    float iTara=0;
-    float iNeto=0;
-}; typedef Bascula t_Bascula;
+    class Bascula{
+    public:
+        bool bEstado=false;
+        bool bEstadoAnterior=false;
+        float iBruto=0;
+        float iTara=0;
+        float iNeto=0;
+    };// typedef Bascula t_Bascula;
 /** END BASCULAS **/
 
 /** ALPR  **/
-struct PlanK{
-    int A=0;
-    int B=0;
-    int C=0;
-}; typedef PlanK t_Plank;
+    class Planck{
+    public:
+        int A=0;
+        int B=0;
+        int C=0;
+    };// typedef PlanK t_Plank;
 
 
 namespace Registros{              /** REPORTS **/
 
-struct s_Simple{
-    Bascula bascula={};
-    QByteArray camara1={};
-    QByteArray camara1resize={};
-    QByteArray camara2={};
-    QByteArray camara2resize={};
+    class Simple{
+        public:
+        Bascula bascula;//={};
+        QByteArray camara1;//={};
+        QByteArray camara1resize;//={};
+        QByteArray camara2;//={};
+        QByteArray camara2resize;//={};
+    }; //typedef s_Simple Simple;
 
-}; typedef s_Simple Simple;
 
+    class SimpleMatriculas{
+    public:
+        Simple registrosimple;//={};
 
-struct s_SimpleMatriculas{
-    Simple registrosimple={};
+        QByteArray  fotomatriculaA1;//={};
+        QString     matriculaA1;//={};
+        long        precisionA1;//={};
 
-    QByteArray  fotomatriculaA1={};
-    QString     matriculaA1={};
-    long        precisionA1={};
+        QByteArray  fotomatriculaA2;//={};
+        QString     matriculaA2;//={};
+        long        precisionA2;//={};
 
-    QByteArray  fotomatriculaA2={};
-    QString     matriculaA2={};
-    long        precisionA2={};
+        QByteArray  fotomatriculaB1;//={};
+        QString     matriculaB1;//={};
+        long        precisionB1;//={};
 
-    QByteArray  fotomatriculaB1={};
-    QString     matriculaB1={};
-    long        precisionB1={};
+        QByteArray  fotomatriculaB2;//={};
+        QString     matriculaB2;//={};
+        long        precisionB2;//={};
 
-    QByteArray  fotomatriculaB2={};
-    QString     matriculaB2={};
-    long        precisionB2={};
+    };// typedef s_SimpleMatriculas Simple_Matriculas;
 
-}; typedef s_SimpleMatriculas Simple_Matriculas;
+    class MatriculaResults{
+    public:
+        int        tipo                 =0;  //0 para calibracion, 1 para procesado
+        int        id                   =0;    //id fuente de captura de foto
+        cv::Mat    OrigenFoto           =cv::Mat::zeros(fotoSize, CV_8UC3 ); //Imagen Original
+        cv::Mat    OrigenFotoResize     =cv::Mat::zeros(fotoSize, CV_8UC3 ); //Imagen Original
+        cv::Mat    OrigenFotoPrewarp    =cv::Mat::zeros(fotoSize, CV_8UC3 ); // Imagen con calibracion prewarp
+        cv::Mat    OrigenFotoBlanca     =cv::Mat::zeros(fotoSize, CV_8UC3 );  //  Imagen con calibracion de Blancos
+        cv::Mat    OrigenFotoRoja       =cv::Mat::zeros(fotoSize, CV_8UC3 );    // Imagen con calibracion de Rojos
+        QByteArray OrigenFotoResizeByte ={};
 
-struct MatriculaResults{
-    int        tipo                 =0;  //0 para calibracion, 1 para procesado
-    int        id                   =0;    //id fuente de captura de foto
-    cv::Mat    OrigenFoto           =cv::Mat::zeros(fotoSize, CV_8UC3 ); //Imagen Original
-    cv::Mat    OrigenFotoResize     =cv::Mat::zeros(fotoSize, CV_8UC3 ); //Imagen Original
-    cv::Mat    OrigenFotoPrewarp    =cv::Mat::zeros(fotoSize, CV_8UC3 ); // Imagen con calibracion prewarp
-    cv::Mat    OrigenFotoBlanca     =cv::Mat::zeros(fotoSize, CV_8UC3 );  //  Imagen con calibracion de Blancos
-    cv::Mat    OrigenFotoRoja       =cv::Mat::zeros(fotoSize, CV_8UC3 );    // Imagen con calibracion de Rojos
-    QByteArray OrigenFotoResizeByte ={};
+        bool       MatriculaDetectedA   =false;  // Coincide con un patron de busqueda?
+        QString    MatriculaA           ="";             // STring de la matricula
+        cv::Mat    MatriculaFotoA       =cv::Mat::zeros( matriculaSize, CV_8UC3 );            // Imagen recortada de la Matricula
+        QByteArray MatriculaFotoAByte   ={};
+        float      MatriculaPrecisionA  =0;     // Precision del OCR
+        QString    MatriculaPrecisionAs ="0%";
 
-    bool       MatriculaDetectedA   =false;  // Coincide con un patron de busqueda?
-    QString    MatriculaA           ="";             // STring de la matricula
-    cv::Mat    MatriculaFotoA       =cv::Mat::zeros( matriculaSize, CV_8UC3 );            // Imagen recortada de la Matricula
-    QByteArray MatriculaFotoAByte   ={};
-    float      MatriculaPrecisionA  =0;     // Precision del OCR
-    QString    MatriculaPrecisionAs ="0%";
+        bool       MatriculaDetectedB   =false;  // Coincide con un patron de busqueda?
+        QString    MatriculaB           ="";             // STring de la matricula
+        cv::Mat    MatriculaFotoB       =cv::Mat::zeros( matriculaSize, CV_8UC3 );            // Imagen recortada de la Matricula
+        QByteArray MatriculaFotoBByte   ={};
+        float      MatriculaPrecisionB  =0;     // Precision del OCR
+        QString    MatriculaPrecisionBs ="0%";
 
-    bool       MatriculaDetectedB   =false;  // Coincide con un patron de busqueda?
-    QString    MatriculaB           ="";             // STring de la matricula
-    cv::Mat    MatriculaFotoB       =cv::Mat::zeros( matriculaSize, CV_8UC3 );            // Imagen recortada de la Matricula
-    QByteArray MatriculaFotoBByte   ={};
-    float      MatriculaPrecisionB  =0;     // Precision del OCR
-    QString    MatriculaPrecisionBs ="0%";
-
-}; typedef MatriculaResults t_MatriculaResults;
+    };// typedef MatriculaResults t_MatriculaResults;
 /** END ALRP **/
 
 

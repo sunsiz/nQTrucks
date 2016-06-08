@@ -52,9 +52,9 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
     , bhilo2(false)
 {
     m_results.resize(3);
-    m_results[0] = new Registros::t_MatriculaResults;
-    m_results[1] = new Registros::t_MatriculaResults;
-    m_results[2] = new Registros::t_MatriculaResults;
+    m_results[0] = new Registros::MatriculaResults; //emitir
+    m_results[1] = new Registros::MatriculaResults; //calibrar
+    m_results[2] = new Registros::MatriculaResults; //procesar
 
     m_results[0]->id=m_nDevice;
     m_results[1]->id=m_nDevice;
@@ -215,24 +215,25 @@ void NewsagesAlpr::processFoto(const cv::Mat &Foto)
 
 void NewsagesAlpr::onProcesarFotoFinished(){
 
-    m_results[0]->OrigenFoto              = m_results[2]->OrigenFoto;
-    m_results[0]->OrigenFotoRoja          = m_results[2]->OrigenFotoRoja;
-    m_results[0]->OrigenFotoBlanca        = m_results[2]->OrigenFotoBlanca;
-    m_results[0]->OrigenFotoPrewarp       = m_results[2]->OrigenFotoPrewarp;
-    m_results[0]->OrigenFotoResize        = m_results[2]->OrigenFotoResize;
-    m_results[0]->OrigenFotoResizeByte    = m_results[2]->OrigenFotoResizeByte;
-    m_results[0]->MatriculaA              = m_results[2]->MatriculaA;
-    m_results[0]->MatriculaDetectedA      = m_results[2]->MatriculaDetectedA;
-    m_results[0]->MatriculaFotoA          = m_results[2]->MatriculaFotoA;
-    m_results[0]->MatriculaFotoAByte      = m_results[2]->MatriculaFotoAByte;
-    m_results[0]->MatriculaPrecisionA     = m_results[2]->MatriculaPrecisionA;
-    m_results[0]->MatriculaPrecisionAs    = m_results[2]->MatriculaPrecisionAs;
-    m_results[0]->MatriculaB              = m_results[2]->MatriculaB;
-    m_results[0]->MatriculaDetectedB      = m_results[2]->MatriculaDetectedB;
-    m_results[0]->MatriculaFotoB          = m_results[2]->MatriculaFotoB;
-    m_results[0]->MatriculaFotoBByte      = m_results[2]->MatriculaFotoBByte;
-    m_results[0]->MatriculaPrecisionB     = m_results[2]->MatriculaPrecisionB;
-    m_results[0]->MatriculaPrecisionBs    = m_results[2]->MatriculaPrecisionBs;
+    m_results[0] = m_results[2];
+    //    m_results[0]->OrigenFoto              = m_results[2]->OrigenFoto;
+//    m_results[0]->OrigenFotoRoja          = m_results[2]->OrigenFotoRoja;
+//    m_results[0]->OrigenFotoBlanca        = m_results[2]->OrigenFotoBlanca;
+//    m_results[0]->OrigenFotoPrewarp       = m_results[2]->OrigenFotoPrewarp;
+//    m_results[0]->OrigenFotoResize        = m_results[2]->OrigenFotoResize;
+//    m_results[0]->OrigenFotoResizeByte    = m_results[2]->OrigenFotoResizeByte;
+//    m_results[0]->MatriculaA              = m_results[2]->MatriculaA;
+//    m_results[0]->MatriculaDetectedA      = m_results[2]->MatriculaDetectedA;
+//    m_results[0]->MatriculaFotoA          = m_results[2]->MatriculaFotoA;
+//    m_results[0]->MatriculaFotoAByte      = m_results[2]->MatriculaFotoAByte;
+//    m_results[0]->MatriculaPrecisionA     = m_results[2]->MatriculaPrecisionA;
+//    m_results[0]->MatriculaPrecisionAs    = m_results[2]->MatriculaPrecisionAs;
+//    m_results[0]->MatriculaB              = m_results[2]->MatriculaB;
+//    m_results[0]->MatriculaDetectedB      = m_results[2]->MatriculaDetectedB;
+//    m_results[0]->MatriculaFotoB          = m_results[2]->MatriculaFotoB;
+//    m_results[0]->MatriculaFotoBByte      = m_results[2]->MatriculaFotoBByte;
+//    m_results[0]->MatriculaPrecisionB     = m_results[2]->MatriculaPrecisionB;
+//    m_results[0]->MatriculaPrecisionBs    = m_results[2]->MatriculaPrecisionBs;
 
     emit ReplyMatriculaResults(*m_results[0]);
     qDebug() << "Device:" << m_results[0]->id << endl

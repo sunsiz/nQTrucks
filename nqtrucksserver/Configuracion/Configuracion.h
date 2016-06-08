@@ -92,7 +92,7 @@ private slots:
     void on_desconectarBascula_clicked();
     void on_guardarBascula_clicked();
     void on_BasculaConectada(bool conectada);
-    void onBascula(t_Bascula _bascula);
+    void onBascula(Bascula _bascula);
     /** END BASCULAS **/
 
 
@@ -110,13 +110,13 @@ public:
     void setAlprIndex(int _AlprIndex){ m_AlprIndex = _AlprIndex;}
 private:
     int m_AlprIndex=0;
-    QVector<Registros::t_MatriculaResults> m_matricularesults={};
-    QVector<Registros::t_MatriculaResults>::iterator m_matricularesults_iterator;
+    QVector<Registros::MatriculaResults> m_matricularesults={};
+    QVector<Registros::MatriculaResults>::iterator m_matricularesults_iterator;
     void updateCalibracionGui();
 
     /** ALPR1 **/
 private slots:
-    void onReplyMatriculaResults1(const Registros::t_MatriculaResults &_result);
+    void onReplyMatriculaResults1(const Registros::MatriculaResults &_result);
     void onGetOriginalMatricula1(const cv::Mat &foto);
     void onGetOriginalMatriculaRoja1(const cv::Mat &foto);
     void onGetOriginalMatriculaBlanca1(const cv::Mat &foto);
@@ -124,7 +124,7 @@ private slots:
 
     /** ALPR2 **/
 private slots:
-    void onReplyMatriculaResults2(const Registros::t_MatriculaResults &_result);
+    void onReplyMatriculaResults2(const Registros::MatriculaResults &_result);
     void onGetOriginalMatricula2(const cv::Mat &foto);
     void onGetOriginalMatriculaRoja2(const cv::Mat &foto);
     void onGetOriginalMatriculaBlanca2(const cv::Mat &foto);

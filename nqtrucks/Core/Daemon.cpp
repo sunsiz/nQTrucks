@@ -18,12 +18,12 @@ Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_news
 
 {
     qRegisterMetaType<Registros::Simple>("Registros::Simple");
-    qRegisterMetaType<Registros::Simple_Matriculas>("Registros::Simple_Matriculas");
+    qRegisterMetaType<Registros::SimpleMatriculas>("Registros::SimpleMatriculas");
     qRegisterMetaType<Registros::Matriculas>("Registros::Matriculas");
 
     QObject::connect(this,SIGNAL(initChanged(bool)),this,SLOT(onStartStop(bool)));
-    QObject::connect(m_bascula,SIGNAL(BasculaPesoNuevo(t_Bascula)),this,SLOT(onPesoNuevo(t_Bascula)));
-    QObject::connect(m_bascula,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBasculaChanged(t_Bascula)));
+    QObject::connect(m_bascula,SIGNAL(BasculaPesoNuevo(Bascula)),this,SLOT(onPesoNuevo(Bascula)));
+    QObject::connect(m_bascula,SIGNAL(BasculaChanged(Bascula)),this,SLOT(onBasculaChanged(Bascula)));
 
 }
 
@@ -47,7 +47,7 @@ void Daemon::onStartStop(const bool &_init){
 }
 
 /** PESO *****************************/
-void Daemon::onPesoNuevo(const t_Bascula &_nuevaPesada)
+void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
 {
   if((m_init) && (!m_registrando)){
       // Bloqueo Registro
@@ -77,7 +77,7 @@ void Daemon::onPesoNuevo(const t_Bascula &_nuevaPesada)
 
 }
 
-void Daemon::onBasculaChanged(const t_Bascula &_pesoRT){
+void Daemon::onBasculaChanged(const Bascula &_pesoRT){
     int peso_minimo=40;
     if (_pesoRT.iBruto > peso_minimo){
         if (!m_saliendo && !m_registrando){
@@ -104,7 +104,7 @@ void Daemon::onReplyCamaraIPFoto1(const QByteArray &_Reply)
     if(m_foto_numero==4){
         m_saliendo=true;
         m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
-        onGuardarRegistroSimple(m_registro_simple);
+        onGuardarRegistroSimple();
     }
 }
 
@@ -122,7 +122,7 @@ void Daemon::onReplyCamaraIPFotoCV1(const cv::Mat &_Reply)
     if(m_foto_numero==4){
         m_saliendo=true;
         m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
-        onGuardarRegistroSimple(m_registro_simple);
+        onGuardarRegistroSimple();
     }
 }
 
@@ -135,7 +135,7 @@ void Daemon::onReplyCamaraIPFoto2(const QByteArray &_Reply)
     if(m_foto_numero==4){
         m_saliendo=true;
         m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
-        onGuardarRegistroSimple(m_registro_simple);
+        onGuardarRegistroSimple();
     }
 }
 
@@ -152,7 +152,7 @@ void Daemon::onReplyCamaraIPFotoCV2(const cv::Mat &_Reply)
     if(m_foto_numero==4){
         m_saliendo=true;
         m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
-        onGuardarRegistroSimple(m_registro_simple);        
+        onGuardarRegistroSimple();
     }
 }
 
@@ -161,33 +161,33 @@ void Daemon::onReplyCamaraIPFotoCV2(const cv::Mat &_Reply)
 
 
 /** DB **/
-void Daemon::onGuardarRegistroSimple(Registros::Simple &_registro){
+void Daemon::onGuardarRegistroSimple(){
 
     if (m_registrando){
         //Pilla el registro simple
-        m_registro_simple_matriculas.registrosimple = _registro;
+        m_registro_simple_matriculas.registrosimple = m_registro_simple;// _registro;
         //consigue matriculas
         m_alpr_numero=0;
-        alprconn1 = connect(m_alpr[0],SIGNAL(ReplyMatriculaResults(Registros::t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::t_MatriculaResults)));
-        alprconn2 = connect(m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::t_MatriculaResults)));
-        m_alpr[0]->processFoto(byteArray2Mat(_registro.camara1));
-        m_alpr[1]->processFoto(byteArray2Mat(_registro.camara2));
+        alprconn1 = connect(m_alpr[0],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::MatriculaResults)));
+        alprconn2 = connect(m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::MatriculaResults)));
+        m_alpr[0]->processFoto(byteArray2Mat(m_registro_simple_matriculas.registrosimple.camara1));
+        m_alpr[1]->processFoto(byteArray2Mat(m_registro_simple_matriculas.registrosimple.camara2));
         m_registrando=false;
     }
 }
 
 
-void Daemon::onGuardarRegistroSimpleMatriculas(Registros::Simple_Matriculas &_registro){
+void Daemon::onGuardarRegistroSimpleMatriculas(){
 
     /* Crea un Hilo para la base de datos */
     /* Ejecuta el registro Simple */
 
     hiloDb = new QThread;
-    tareaDb = new Db::DatabaseManager();
+    tareaDb = new Db::DatabaseManager;
 
     tareaDb->moveToThread(hiloDb);
 
-    tareaDb->setRegistroSimpleMatriculas(_registro);
+    tareaDb->setRegistroSimpleMatriculas(m_registro_simple_matriculas);
 
     connect( hiloDb,  SIGNAL(started()),      tareaDb, SLOT(guardarRegistroSimpleMatriculas())  );
     connect( tareaDb, SIGNAL(workFinished()), hiloDb,  SLOT(quit()) );
@@ -205,7 +205,7 @@ void Daemon::onGuardarRegistroSimpleMatriculas(Registros::Simple_Matriculas &_re
 
 /** ALPRS **/
 
-void Daemon::onReplyMatriculaResults1(const Registros::t_MatriculaResults &_registro){
+void Daemon::onReplyMatriculaResults1(const Registros::MatriculaResults &_registro){
     QObject::disconnect(alprconn1);
     m_registro_simple_matriculas.matriculaA1=_registro.MatriculaA;
     m_registro_simple_matriculas.matriculaB1=_registro.MatriculaB;
@@ -216,11 +216,11 @@ void Daemon::onReplyMatriculaResults1(const Registros::t_MatriculaResults &_regi
 
     m_alpr_numero++;
     if(m_alpr_numero ==2){
-        onGuardarRegistroSimpleMatriculas(m_registro_simple_matriculas);
+        onGuardarRegistroSimpleMatriculas();
     }
 }
 
-void Daemon::onReplyMatriculaResults2(const Registros::t_MatriculaResults &_registro){
+void Daemon::onReplyMatriculaResults2(const Registros::MatriculaResults &_registro){
     QObject::disconnect(alprconn2);
     m_registro_simple_matriculas.matriculaA2=_registro.MatriculaA;
     m_registro_simple_matriculas.matriculaB2=_registro.MatriculaB;
@@ -231,7 +231,7 @@ void Daemon::onReplyMatriculaResults2(const Registros::t_MatriculaResults &_regi
 
     m_alpr_numero++;
     if(m_alpr_numero ==2){
-        onGuardarRegistroSimpleMatriculas(m_registro_simple_matriculas);
+        onGuardarRegistroSimpleMatriculas();
     }
 
 }

@@ -43,10 +43,10 @@ nQSerialPortReader::nQSerialPortReader(QSettings *_appsettings, QObject *parent)
     , m_inicio_peso(false)
 
 {
-    qRegisterMetaType<t_Bascula>("t_Bascula");
+    qRegisterMetaType<Bascula>("Bascula");
     emit BasculaStatus(false);
 
-    connect(this, SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(MuestrearBascula(t_Bascula)));
+    connect(this, SIGNAL(BasculaChanged(Bascula)),this,SLOT(MuestrearBascula(Bascula)));
     //connectPort();
 }
 
@@ -159,7 +159,7 @@ void nQSerialPortReader::ReadType0()
 }
 
 
-void nQSerialPortReader::MuestrearBascula(const t_Bascula &_bascula){
+void nQSerialPortReader::MuestrearBascula(const Bascula &_bascula){
     if (m_inicio_peso){
         if((_bascula.bEstado) & (_bascula.iBruto !=0)){
             m_muestras++;

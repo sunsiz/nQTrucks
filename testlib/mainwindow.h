@@ -95,7 +95,7 @@ private slots:
 private slots:
     void on_conectarBasculaPushButton_clicked();
     void on_desconectarBasculaPushButton_clicked();
-    void onBascula(t_Bascula _bascula);
+    void onBascula(Bascula _bascula);
     void on_guardarBasculaPushButton_clicked();
     void on_actualizarIBasculasButton_clicked();
     void on_BasculaConectada(bool conectada);
@@ -116,13 +116,13 @@ public:
     void setAlprIndex(int _AlprIndex){ m_AlprIndex = _AlprIndex;}
 private:
     int m_AlprIndex=0;
-    QVector<Registros::t_MatriculaResults> m_matricularesults={};
-    QVector<Registros::t_MatriculaResults>::iterator m_matricularesults_iterator;
+    QVector<Registros::MatriculaResults> m_matricularesults;
+    QVector<Registros::MatriculaResults>::iterator m_matricularesults_iterator;
     void updateCalibracionGui();
 
     /** ALPR1 **/
 private slots:
-    void onReplyMatriculaResults1(const Registros::t_MatriculaResults &_result);
+    void onReplyMatriculaResults1(const Registros::MatriculaResults &_result);
     void onGetOriginalMatricula1(const cv::Mat &foto);
     void onGetOriginalMatriculaRoja1(const cv::Mat &foto);
     void onGetOriginalMatriculaBlanca1(const cv::Mat &foto);
@@ -130,7 +130,7 @@ private slots:
 
     /** ALPR2 **/
 private slots:
-    void onReplyMatriculaResults2(const Registros::t_MatriculaResults &_result);
+    void onReplyMatriculaResults2(const Registros::MatriculaResults &_result);
     void onGetOriginalMatricula2(const cv::Mat &foto);
     void onGetOriginalMatriculaRoja2(const cv::Mat &foto);
     void onGetOriginalMatriculaBlanca2(const cv::Mat &foto);
@@ -145,33 +145,8 @@ private slots:
 
 /** END CALIBRACION ************************************************/
 
-//    /** PREWARP **/
-//private:
-//    cv::Mat updateprewarp(cv::Mat img);
-//    void loadprewarp();
-//    QString get_prewarp_config();
-////    cv::Mat curWarpedImage1;
-////    cv::Mat curWarpedImage2;
-//    QString m_prewarp;
-//    nQTrucks::t_Prewarp prewarp;
-//private slots:
-//    void on_valueXA1_valueChanged(int value);
-//    void on_valueYA1_valueChanged(int value);
-//    void on_valueZA1_valueChanged(int value);
-//    void on_valueWA1_valueChanged(int value);
-//    void on_valueDA1_valueChanged(int value);
-//    void on_guardarPrewarp_clicked();
-//    /** END  PREWARP **/
-
-
-
-
-
     /** CONFIG **/
 private slots:
-
-
-
     void on_resetPlanK_clicked();
 
 private:

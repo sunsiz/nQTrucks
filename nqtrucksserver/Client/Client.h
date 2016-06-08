@@ -65,20 +65,20 @@ private slots:
     /** BASCULAS **/
 private slots:
     void on_BasculaConectada(bool conectada);
-    void onBascula(t_Bascula _bascula);
+    void onBascula(Bascula _bascula);
     /** END BASCULAS **/
 
 
     /** ALPR **/
 private:
     int m_alpr_count;
-    QVector<Registros::t_MatriculaResults> m_matricularesults={};
-    QVector<Registros::t_MatriculaResults>::iterator m_matricularesults_iterator;
+    QVector<Registros::MatriculaResults> m_matricularesults;
+    QVector<Registros::MatriculaResults>::iterator m_matricularesults_iterator;
 
 private slots:
     void onAllMatriculaResults();
-    void onReplyMatriculaResults1(const Registros::t_MatriculaResults &_result);
-    void onReplyMatriculaResults2(const Registros::t_MatriculaResults &_result);
+    void onReplyMatriculaResults1(const Registros::MatriculaResults &_result);
+    void onReplyMatriculaResults2(const Registros::MatriculaResults &_result);
     /** END ALPR **/
 
 

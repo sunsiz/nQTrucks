@@ -7,6 +7,8 @@
 
 #include <QSqlDatabase>
 
+#include "ReportManager.h"
+
 namespace nQTrucks {
 namespace Db {
 
@@ -23,14 +25,15 @@ signals:
 private:
     void initDb();
     QSqlDatabase m_db;
-    Registros::Simple_Matriculas m_registro_simple_matriculas;
+    Registros::SimpleMatriculas m_registro_simple_matriculas;
+    ReportManager m_report_manager;
 //        QByteArray resizeFoto(QByteArray _ByteArray);
 //        cv::Mat byteArray2Mat(QByteArray &byteArray);
 //        QImage convertMat2QImage(const cv::Mat &src);
 //        QByteArray convertMat2ByteArray(const cv::Mat &img);
 public slots:
     void guardarRegistroSimpleMatriculas();
-    void setRegistroSimpleMatriculas(const Registros::Simple_Matriculas &_registro);
+    void setRegistroSimpleMatriculas(const Registros::SimpleMatriculas &_registro);
 
     /** END DB **/
 };

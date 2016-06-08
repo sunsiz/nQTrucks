@@ -56,13 +56,13 @@ private:
     cv::Mat     m_FotoCamara;
     QSettings   *m_settings;
     //QSettings   *m_settings2; //BUG hilos QSettings begingroup simultaneo
-    QVector<Registros::t_MatriculaResults*> m_results;
+    QVector<Registros::MatriculaResults*> m_results;
     /** END SETTINGS **/
 
 signals:
     void ReplyOriginalFoto(const cv::Mat &Foto);
-    void ReplyMatriculaFoto        (const Registros::t_MatriculaResults &_tempResults);
-    void ReplyMatriculaFotoRemolque(const Registros::t_MatriculaResults &_tempResultsRemolque);
+    void ReplyMatriculaFoto        (const Registros::MatriculaResults &_tempResults);
+    void ReplyMatriculaFotoRemolque(const Registros::MatriculaResults &_tempResultsRemolque);
 
     /** CALIBRAR *****************************************************/
 private:
@@ -87,7 +87,7 @@ private slots:
 public slots:
     void processFoto(const cv::Mat &Foto);
 signals:
-    void ReplyMatriculaResults(const Registros::t_MatriculaResults &_MatriculaResults);
+    void ReplyMatriculaResults(const Registros::MatriculaResults &_MatriculaResults);
 protected slots:
     void onProcesarFotoFinished();
 private:

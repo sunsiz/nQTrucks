@@ -11,7 +11,7 @@ namespace Devices {
 class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
-    explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, cv::Mat _fotoCamara=cv::Mat(), Registros::t_MatriculaResults *_results={},  QSettings *_appsettings=0, QObject *parent = 0);
+    explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, cv::Mat _fotoCamara=cv::Mat(), Registros::MatriculaResults *_results=0,  QSettings *_appsettings=0, QObject *parent = 0);
     ~NewsagesAlprTask();
 signals:
     void workFinished();
@@ -35,9 +35,9 @@ private:
     int     getNType() const {return m_nType;}
 
 private:
-    t_Plank    m_plank;
+    Planck    m_plank;
     void setPlank(const QString &_plankA, const QString &_plankB, const QString &_plankC);
-    t_Plank getPlank() const{return m_plank;}
+    Planck getPlank() const{return m_plank;}
 
     QString  m_prewarp;
     void setPrewarp(const QString &prewarp){m_prewarp=prewarp;}
@@ -65,7 +65,7 @@ signals:
 public slots:
     void procesar();
 private:
-   Registros::t_MatriculaResults *m_matricularesult;
+   Registros::MatriculaResults *m_matricularesult;
    void procesarBlancas();
    void procesarRojas();
 signals:

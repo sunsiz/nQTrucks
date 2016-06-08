@@ -208,7 +208,7 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** BASCULAS **/
     connect(d->m_basculaReader1,SIGNAL(BasculaStatus(bool)),this,SIGNAL(BasculaStatus(bool)));
-    connect(d->m_basculaReader1,SIGNAL(BasculaChanged(t_Bascula)),this,SIGNAL(BasculaChanged(t_Bascula)));
+    connect(d->m_basculaReader1,SIGNAL(BasculaChanged(Bascula)),this,SIGNAL(BasculaChanged(Bascula)));
     /** END BASCULAS **/
 
     /** NEWSAGES ALPR **/
@@ -216,13 +216,13 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     connect(d->m_alpr[0],SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto1(cv::Mat)));
     connect(d->m_alpr[0],SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)));
     connect(d->m_alpr[0],SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)));
-    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(Registros::t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults1(Registros::t_MatriculaResults)));
+    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)));
 
     /** 2 **/
     connect(d->m_alpr[1],SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto2(cv::Mat)));
     connect(d->m_alpr[1],SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)));
     connect(d->m_alpr[1],SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)));
-    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::t_MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(Registros::t_MatriculaResults)));
+    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)));
     /** END NEWSAGES ALPR **/
 
 }
@@ -281,11 +281,6 @@ void nQTrucksEngine::getCamaraFoto(int _ncamara)
     }
 }
 
-//void nQTrucksEngine::setCamaraIP(int nCamara, QString type, QString host, QString port, QString user, QString passwd)
-//{
-//    Q_D(nQTrucksEngine);
-//    d->setCamaraIP(nCamara,type,host,port,user,passwd);
-//}
 /** END CAMARAS ***********************************************************************************************************/
 
 /** NEWSAGES I/O **********************************************************************************************************/
@@ -373,8 +368,6 @@ void nQTrucksEngine::setInitDaemon(const bool &_init)
         //d->m_daemon->setInit(_init);
         delete d->m_daemon;
     }
-
-
 }
 
 void nQTrucksEngine::report_desingReport()

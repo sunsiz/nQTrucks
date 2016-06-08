@@ -63,16 +63,16 @@ Configuracion::Configuracion(nQTrucks::nQTrucksEngine *_engine, QWidget *parent)
 
     /** BASCULAS **/
     connect(engine ,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
-    connect(engine ,SIGNAL(BasculaChanged(t_Bascula)),this,SLOT(onBascula(t_Bascula)));
+    connect(engine ,SIGNAL(BasculaChanged(Bascula)),this,SLOT(onBascula(Bascula)));
 
     /** ALPR 1 **/
-    connect(engine, SIGNAL(ReplyMatriculaResults1(Registros::t_MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::t_MatriculaResults)));
+    connect(engine, SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::MatriculaResults)));
     connect(engine ,SIGNAL(ReplyOriginalFoto1(cv::Mat)),this,SLOT(onGetOriginalMatricula1(cv::Mat)));
     connect(engine ,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja1(cv::Mat)));
     connect(engine ,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca1(cv::Mat)));
 
     /** ALPR 2 **/
-    connect(engine, SIGNAL(ReplyMatriculaResults2(Registros::t_MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::t_MatriculaResults)));
+    connect(engine, SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::MatriculaResults)));
     connect(engine ,SIGNAL(ReplyOriginalFoto2(cv::Mat)),this,SLOT(onGetOriginalMatricula2(cv::Mat)));
     connect(engine ,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja2(cv::Mat)));
     connect(engine ,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca2(cv::Mat)));
@@ -348,7 +348,7 @@ void Configuracion::on_BasculaConectada(bool conectada)
     }
 }
 
-void Configuracion::onBascula(t_Bascula _bascula)
+void Configuracion::onBascula(Bascula _bascula)
 {          
     ui->BasculaLcd->display(_bascula.iBruto);
     ui->BasculaLcd2->display(_bascula.iTara);
@@ -430,7 +430,7 @@ void Configuracion::updateCalibracionGui(){
     ui->LongMatriculaB->setText(m_matricularesults[index].MatriculaPrecisionBs);
 }
     /** ALPR 1 **/
-void Configuracion::onReplyMatriculaResults1(const Registros::t_MatriculaResults &_result){
+void Configuracion::onReplyMatriculaResults1(const Registros::MatriculaResults &_result){
     m_matricularesults[0] = _result;
     loadPlanks(0);
     updateCalibracionGui();
@@ -452,7 +452,7 @@ void Configuracion::onGetOriginalMatriculaBlanca1(const cv::Mat &foto){
 }
     /** END ALPR1 **/
     /** ALPR2 **/
-void Configuracion::onReplyMatriculaResults2(const Registros::t_MatriculaResults &_result){
+void Configuracion::onReplyMatriculaResults2(const Registros::MatriculaResults &_result){
     m_matricularesults[1] = _result;
     loadPlanks(1);
     updateCalibracionGui();

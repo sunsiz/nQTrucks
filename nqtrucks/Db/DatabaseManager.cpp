@@ -5,7 +5,6 @@
 namespace nQTrucks{
 namespace Db{
 
-
 DatabaseManager::DatabaseManager(QObject *parent)
     : QObject(parent)
 {
@@ -13,29 +12,31 @@ DatabaseManager::DatabaseManager(QObject *parent)
 }
 
 DatabaseManager::~DatabaseManager(){
+
 }
 
 void DatabaseManager::initDb(){
     qDebug() << "conexion inicial es: " << m_db.connectionName();
 
     if ( !QSqlDatabase::contains("nqtrucks")) {
-        m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks");//,"/opt/newsages/QNav/"+_appDB);//getPath(_appDB));
+        m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks");
         m_db.setDatabaseName( "nqtrucks" );
         m_db.setHostName(     "localhost" );
         m_db.setUserName(     "nqtrucks" );
         m_db.setPassword(     "nqtrucks" );
         qDebug() << "conexion al crear es: " << m_db.connectionName();
     } else {
-        m_db = QSqlDatabase::database("nqtrucks");//getPath(_appDB));
+        m_db = QSqlDatabase::database("nqtrucks");
         qDebug() << "conexion al volver a usar es: " << m_db.connectionName();
     }
     qDebug() << "conexion al verificar es: " << m_db.connectionName();
 }
 
 void DatabaseManager::guardarRegistroSimpleMatriculas(){
+    /** TODO First row always corrupt? **/
     initDb();
 
-    if( !m_db.open() )
+    if (!m_db.isOpen() && !m_db.open() )
     {
       qDebug() << m_db.lastError();
       qDebug() << "Failed to connect." ;
@@ -94,10 +95,11 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
             m_db.rollback();
          }else{
             m_db.commit();
+
            qDebug() <<  "Inserted!: " << qry.lastInsertId().toInt();
-
+            int lastrow = qry.lastInsertId().toInt();
            /** Report Pesada **/
-
+            m_report_manager.printRegistroMatricula(lastrow);
 
 
            /** Buscar Pareja **/
@@ -107,11 +109,12 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
 
          }
         m_db.close();
+
     }
     emit workFinished();
 }
 
-void DatabaseManager::setRegistroSimpleMatriculas(const Registros::Simple_Matriculas &_registro){
+void DatabaseManager::setRegistroSimpleMatriculas(const Registros::SimpleMatriculas &_registro){
     m_registro_simple_matriculas = _registro;
 }
 

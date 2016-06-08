@@ -1,8 +1,10 @@
 #ifndef REPORTMANAGER_H
 #define REPORTMANAGER_H
+
 #include <QObject>
 #include <nqtglobal.h>
 #include <LimeReport>
+#include <QApplication>
 
 namespace nQTrucks {
 namespace Db {
@@ -15,7 +17,9 @@ public:
 private:
     LimeReport::ReportEngine m_report;
 private:
-
+    QString m_informe_peso = QApplication::applicationDirPath()+"/reports/peso.lrxml";
+public:
+    void printRegistroMatricula(const int &row);
 };
 
 }
