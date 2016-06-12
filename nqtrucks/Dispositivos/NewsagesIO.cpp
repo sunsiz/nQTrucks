@@ -47,7 +47,8 @@ NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
     m_ioFtdi = new SerialFirmata(this);
     this->setBackend(m_ioFtdi);
     this->setInitPins(false);
-    setConectado(false);
+    m_conectado=false;
+    m_semaforo=0;
 
     /** RELE */
     m_OutPin10 = new DigitalPin(this);
@@ -68,7 +69,7 @@ NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
     connect(m_OutPin13,SIGNAL(valueChanged(bool)),this,SLOT(setValuePin13(bool)));
     connect(this->m_ioFtdi, &FirmataBackend::protocolVersion ,this, &NewsagesIO::onIOConectado);
 
-    setSemaforo(SEMAFORO_VERDE);
+    //setSemaforo(SEMAFORO_VERDE);
 }
 
 /** PROPIEDADES *******************************************************/

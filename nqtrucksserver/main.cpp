@@ -32,6 +32,8 @@
 #include <QApplication>
 #include <QFile>
 
+using namespace nQTrucks;
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

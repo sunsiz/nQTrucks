@@ -11,11 +11,9 @@
 #include "Dispositivos/CamaraIP.h"
 #include "Dispositivos/Alpr/NewsagesAlpr.h"
 
-//#include <QSqlDatabase>
 #include "Db/DatabaseManager.h"
 
 /* PUNTEROS **/
-
 #include <memory>
 
 namespace nQTrucks{
@@ -50,10 +48,9 @@ private:
 
 /** REGRISTRO **/
 private:
-    Registros::Simple m_registro_simple;
-    //Registros::Simple m_registro_simple_vacio;
-    Registros::SimpleMatriculas m_registro_simple_matriculas;
-    //Registros::Simple_Matriculas m_registro_simple_matriculas_vacio;
+   SimpleMatriculas m_RegistroMatriculas;
+signals:
+    void RegistroChanged(const SimpleMatriculas &_results);
 /** END REGISTRO **/
 
 
@@ -65,49 +62,23 @@ private slots:
 
     /** CAMARAS **/
 private:
-    int m_foto_numero;    
+    bool m_bfoto1;
+    bool m_bfoto2;
     std::unique_ptr<QMetaObject::Connection> pcamaraconn1{new QMetaObject::Connection};
     QMetaObject::Connection &camaraconn1 = *pcamaraconn1;
     std::unique_ptr<QMetaObject::Connection> pcamaraconn2{new QMetaObject::Connection};
     QMetaObject::Connection &camaraconn2 = *pcamaraconn2;
-    std::unique_ptr<QMetaObject::Connection> pcamaraconncv1{new QMetaObject::Connection};
-    QMetaObject::Connection &camaraconncv1 = *pcamaraconncv1;
-    std::unique_ptr<QMetaObject::Connection> pcamaraconncv2{new QMetaObject::Connection};
-    QMetaObject::Connection &camaraconncv2 = *pcamaraconncv2;
-
-
-private slots:
-    void onReplyCamaraIPFoto1(const QByteArray &_Reply);
-    void onReplyCamaraIPFotoCV1(const cv::Mat &_cvimage);
-    void onReplyCamaraIPFoto2(const QByteArray &_Reply);
-    void onReplyCamaraIPFotoCV2(const cv::Mat &_cvimage);
-
-
-    /** TOOLS **/
-private:
-    nQTrucks::Tools m_tools;
-    /** END CAMARAS **/
 
     /** ALPRS **/
 private:
-    int m_alpr_numero;
+    bool m_balpr1;
+    bool m_balpr2;
     std::unique_ptr<QMetaObject::Connection> palprconn1{new QMetaObject::Connection};
     std::unique_ptr<QMetaObject::Connection> palprconn2{new QMetaObject::Connection};
     QMetaObject::Connection &alprconn1 = *palprconn1;
     QMetaObject::Connection &alprconn2 = *palprconn2;
-private slots:
-    void onReplyMatriculaResults1(const Registros::MatriculaResults &_registro);
-    void onReplyMatriculaResults2(const Registros::MatriculaResults &_registro);
     /** END ALPRS **/
 
-
-/** CONVERSORES **/
-private:
-    QByteArray resizeFoto(QByteArray _ByteArray);
-    cv::Mat byteArray2Mat(QByteArray &byteArray);
-    QImage convertMat2QImage(const cv::Mat &src);
-    QByteArray convertMat2ByteArray(const cv::Mat &img);
-/** END CONVERSORES **/
 
 /** BD **/
 private:

@@ -19,39 +19,26 @@ namespace nQTrucks {
 
 
 /** CONSTRUCTOR TAREAS **/
-NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType, cv::Mat _fotoCamara, Registros::MatriculaResults *_results, QSettings *_appsettings, QObject *parent)
+NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType,Registros::MatriculaResults *_results, QSettings *_appsettings, QObject *parent)
     : QObject(parent)
     , m_settings(_appsettings)
     , m_matricularesult(_results)
+    , m_tools(new nQTrucks::Tools(this))
 {
     setlocale(LC_NUMERIC, "C");
-    qRegisterMetaType<cv::Mat>("cv::Mat");
-    qRegisterMetaType<Planck>("Planck");
-    qRegisterMetaType<Registros::MatriculaResults>("Registros::MatriculaResults");
-
-    setFotoCamara(_fotoCamara);
     setNDevice(_nDevice);
     setNType(_nType);
 
-    //Respuesta por defecto
-    m_matricularesult->OrigenFoto=getFotoCamara();
-    cv::resize(m_matricularesult->OrigenFoto,m_matricularesult->OrigenFotoResize,fotoSize);
-
-    if (m_matricularesult->OrigenFoto.cols < fotoWidth){
-        cv::resize(m_matricularesult->OrigenFoto,m_matricularesult->OrigenFoto,fotoSize);
-    }
-    if (m_matricularesult->OrigenFoto.rows < fotoHeight){
-        cv::resize(m_matricularesult->OrigenFoto,m_matricularesult->OrigenFoto,fotoSize);
-    }
-    m_matricularesult->OrigenFotoResizeByte = convertMat2ByteArray(m_matricularesult->OrigenFotoResize);
-    m_matricularesult->MatriculaFotoAByte   = convertMat2ByteArray(m_matricularesult->MatriculaFotoA);
-    m_matricularesult->MatriculaFotoBByte   = convertMat2ByteArray(m_matricularesult->MatriculaFotoB);
+    m_matricularesult->OrigenFotoByte       = m_tools->convertMat2ByteArray(m_matricularesult->OrigenFoto);
+    m_matricularesult->MatriculaFotoAByte   = m_tools->convertMat2ByteArray(m_matricularesult->MatriculaFotoA);
+    m_matricularesult->MatriculaFotoBByte   = m_tools->convertMat2ByteArray(m_matricularesult->MatriculaFotoB);
 
     loadconfig();
 }
 
 NewsagesAlprTask::~NewsagesAlprTask(){
-    m_FotoCamara.release();
+
+    m_tools->deleteLater();
 }
 
 
@@ -95,11 +82,12 @@ void NewsagesAlprTask::setPlank(const QString &_plankA, const QString &_plankB, 
 void NewsagesAlprTask::calibrar()
 {
     setFotoCalibrada();
-    //qDebug() << "plank" << m_nDevice <<"=" << m_plank.A << "," << m_plank.B << "," << m_plank.C;
+
 }
 
 void NewsagesAlprTask::setFotoCalibrada()
 {
+//    m_MutexWrite.lock();
     cv::Mat channel[3];
     switch (getNType()) {
     case ALPR_PLANCK_BLANCO:
@@ -125,15 +113,13 @@ void NewsagesAlprTask::setFotoCalibrada()
         channel[1].release();
         channel[2].release();
         break;
-    default:
-        m_matricularesult->OrigenFotoBlanca = m_matricularesult->OrigenFoto.clone();
-        m_matricularesult->OrigenFotoRoja = m_matricularesult->OrigenFoto.clone();
-        break;
     }
+  //  m_MutexWrite.unlock();
 }
 
 void NewsagesAlprTask::guardarPlanK()
 {
+//    m_MutexWrite.lock();
     switch (m_nDevice) {
     case 0:
         m_settings->setValue(QString(ALPR) + "/planka1",QString::number(getPlank().A));
@@ -146,6 +132,7 @@ void NewsagesAlprTask::guardarPlanK()
         m_settings->setValue(QString(ALPR) + "/plankc2",QString::number(getPlank().C));
         break;
     }
+//    m_MutexWrite.unlock();
 }
 
 
@@ -203,21 +190,15 @@ void NewsagesAlprTask::procesarBlancas()
                         AlprPlate candidate = plate.topNPlates[k];
                         //Auto ajuste Plank BLANCAS
                         if (candidate.matches_template  && m_matricularesult->MatriculaPrecisionA < candidate.overall_confidence){
+                            m_matricularesult->MatriculaDetectedA   = candidate.matches_template;
+                            m_matricularesult->MatriculaPrecisionA  = candidate.overall_confidence;
+                            m_matricularesult->MatriculaPrecisionAs = QString::number(m_matricularesult->MatriculaPrecisionA,'g',6);
+                            m_matricularesult->MatriculaA           = QString::fromStdString(candidate.characters);
                             cv::Rect rect = cv::Rect(plate.plate_points[0].x , plate.plate_points[0].y,
                                                      plate.plate_points[2].x - plate.plate_points[0].x,
                                                      plate.plate_points[2].y - plate.plate_points[0].y);
-
                             cv::resize(cv::Mat(m_matricularesult->OrigenFoto,rect),m_matricularesult->MatriculaFotoA,matriculaSize);
-                            m_matricularesult->MatriculaFotoAByte   = convertMat2ByteArray(m_matricularesult->MatriculaFotoA);
-                            m_matricularesult->MatriculaDetectedA   = candidate.matches_template;
-                            m_matricularesult->MatriculaA           = QString::fromStdString(candidate.characters);
-                            m_matricularesult->MatriculaPrecisionA  = candidate.overall_confidence;
-                            m_matricularesult->MatriculaPrecisionAs = QString::number(m_matricularesult->MatriculaPrecisionA,'g',6);
-
-                            if(m_matricularesult->MatriculaDetectedA){
-                                guardarPlanK();
-                                emit ReplyOriginalFotoBlanca(m_matricularesult->OrigenFotoBlanca);
-                            }
+                            m_matricularesult->MatriculaFotoAByte   = m_tools->convertMat2ByteArray(m_matricularesult->MatriculaFotoA);
                         }
                     }
                 }
@@ -229,9 +210,10 @@ void NewsagesAlprTask::procesarBlancas()
            c++;
        }while( c<=m_retry_panks &&  m_matricularesult->MatriculaDetectedA!=true);
     }
-    emit ReplyMatriculaFoto();
-    workFinished();
     delete matricula;
+    guardarPlanK();
+    emit ReplyOriginalFotoBlanca(m_matricularesult->OrigenFotoBlanca);
+    emit ReplyMatriculaFoto();
 }
 
 
@@ -265,22 +247,19 @@ void NewsagesAlprTask::procesarRojas()
                         AlprPlateResult plate = results.plates[i];
                         for (uint k = 0; k < plate.topNPlates.size(); k++){
                             AlprPlate candidate = plate.topNPlates[k];
-                            if (candidate.matches_template  && m_matricularesult->MatriculaPrecisionB < candidate.overall_confidence){
-                                cv::Rect rect = cv::Rect(plate.plate_points[0].x  ,plate.plate_points[0].y,
-                                                         plate.plate_points[2].x - plate.plate_points[0].x,
-                                                         plate.plate_points[2].y - plate.plate_points[0].y);
 
-                                cv::resize(cv::Mat(m_matricularesult->OrigenFoto,rect),m_matricularesult->MatriculaFotoB,matriculaSize);
-                                m_matricularesult->MatriculaFotoBByte   = convertMat2ByteArray(m_matricularesult->MatriculaFotoB);
+                            if (candidate.matches_template  && m_matricularesult->MatriculaPrecisionB < candidate.overall_confidence){
                                 m_matricularesult->MatriculaDetectedB   = candidate.matches_template;
-                                m_matricularesult->MatriculaB           = QString::fromStdString(candidate.characters);
                                 m_matricularesult->MatriculaPrecisionB  = candidate.overall_confidence;
                                 m_matricularesult->MatriculaPrecisionBs = QString::number(m_matricularesult->MatriculaPrecisionB,'g',6);
 
-                                if(m_matricularesult->MatriculaDetectedB){
-                                    guardarPlanK();
-                                    emit ReplyOriginalFotoRoja(m_matricularesult->OrigenFotoRoja);
-                                }
+                                cv::Rect rect = cv::Rect(plate.plate_points[0].x  ,plate.plate_points[0].y,
+                                                         plate.plate_points[2].x - plate.plate_points[0].x,
+                                                         plate.plate_points[2].y - plate.plate_points[0].y);
+                                cv::resize(cv::Mat(m_matricularesult->OrigenFoto,rect),m_matricularesult->MatriculaFotoB,matriculaSize);
+                                m_matricularesult->MatriculaFotoBByte   = m_tools->convertMat2ByteArray(m_matricularesult->MatriculaFotoB);
+                                m_matricularesult->MatriculaDetectedB   = candidate.matches_template;
+                                m_matricularesult->MatriculaB           = QString::fromStdString(candidate.characters);
                             }
                        }
                     }
@@ -293,66 +272,13 @@ void NewsagesAlprTask::procesarRojas()
             c++;
         }while( c<=m_retry_panks &&  m_matricularesult->MatriculaDetectedB!=true);
     }
-    //*END ALGORITMO PLANKS
-    emit ReplyMatriculaFoto();
-    workFinished();
-    //limpiar
     delete remolque;
+    guardarPlanK();
+    emit ReplyOriginalFotoRoja(m_matricularesult->OrigenFotoRoja);
+    emit ReplyMatriculaFoto();
+
 }
 /** END PROCESAR ************************************************************************/
-
-
-
-///** CONVERSORES *************************************************************************/
-cv::Mat NewsagesAlprTask::convertQImage2Mat(const QImage &img){
-    QByteArray baScene; // byte array with data
-    QBuffer buffer(&baScene);
-    buffer.open(QIODevice::WriteOnly);
-    img.save(&buffer,"PNG");
-
-    const char* begin = reinterpret_cast<char*>(baScene.data());
-    const char* end = begin + baScene.size();
-    std::vector<char> pic(begin, end);
-    buffer.close();
-    baScene.clear();
-    return cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
-}
-
-QImage NewsagesAlprTask::convertMat2QImage(const cv::Mat &src)
-{
-    QImage qtImg= QImage();
-    if( !src.empty() && src.depth() == CV_8U ){
-        if(src.channels() == 1){
-            qtImg = QImage( (const unsigned char *)(src.data),
-                            src.cols,
-                            src.rows,
-                            QImage::Format_Indexed8 );
-        }
-        else{
-            cv::cvtColor( src, src, CV_BGR2RGB );
-            qtImg = QImage( (const unsigned char *)(src.data),
-                            src.cols,
-                            src.rows,
-                            src.step,
-                            QImage::Format_RGB888 );
-        }
-    }
-    return qtImg;
-}
-
-QByteArray NewsagesAlprTask::convertMat2ByteArray(const cv::Mat &img){
-
-    QImage qtImg = convertMat2QImage(img.clone());
-    QByteArray baScene; // byte array with data
-    QBuffer buffer(&baScene);
-    buffer.open(QIODevice::WriteOnly);
-    qtImg.save(&buffer,"PNG");
-    buffer.close();
-    return baScene;
-
-}
-
-///** END CONVERSORES ***********************************************************/
 } /** END NAMESPACE Devices  **/
 } /** END NAMESPACE nQTrucks **/
 

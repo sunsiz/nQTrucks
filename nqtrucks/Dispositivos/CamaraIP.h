@@ -78,7 +78,7 @@ private:
 private:
     QUrl setCamaraURL();
     QNetworkAccessManager *m_netmanager;
-
+    Registros::Camara m_RegistroCamara;
 public slots:
     void sendCamaraIPFotoRequest();
 
@@ -86,8 +86,10 @@ private slots:
     void camaraNetworkReplyFinished(QNetworkReply *reply);
 
 signals:
-    void ReplyCamaraIPFotoCV(const cv::Mat &ReplyCV);
-    void ReplyCamaraIPFoto(const QByteArray &Reply);
+    void ReplyCamaraIP(const Registros::Camara &_ReplyCamara);
+    void ReplyCamaraIPFotoCV(const cv::Mat &_ReplyCV);
+    void ReplyCamaraIPFoto(const QByteArray &_Reply);
+
     void CamaraIPWeb(const QString &CamaraWeb);
     void CamaraError(const QString &errorCamaraIP);
 private:

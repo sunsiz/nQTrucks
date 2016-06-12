@@ -33,18 +33,17 @@
 #include <QDebug>
 #include <QDesktopWidget>
 
-//#include <QDir>
-//#include <QUrl>
-
 #include "alpr.h"
 #include "prewarp.h"
 
+namespace nQTrucks{
 
-Configuracion::Configuracion(nQTrucks::nQTrucksEngine *_engine, QWidget *parent)
+Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Configuracion)
     , m_running(false)
     , engine(_engine)
+    , m_tools(new Tools(this))
 {
     ui->setupUi(this);
 
@@ -85,16 +84,17 @@ Configuracion::Configuracion(nQTrucks::nQTrucksEngine *_engine, QWidget *parent)
 Configuracion::~Configuracion()
 {
     delete ui;
+    m_tools->deleteLater();
 }
 
 
 void Configuracion::updateGui(){
     switch (ui->CamaraSelect->currentIndex()) {
     case 0:
-        ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[0].OrigenFoto.clone())));
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[0].OrigenFoto.clone())));
         break;
     case 1:
-        ui->camaraLabel->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[1].OrigenFoto.clone())));
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[1].OrigenFoto.clone())));
         break;
     }
 }
@@ -179,13 +179,13 @@ void Configuracion::loadconfig()
 /** CAMARAS *************************************************************************/
     /** CAMARA1 **/
 void Configuracion::onGetFotoCV1(const cv::Mat &fotocv){
-    cv::resize(fotocv,m_matricularesults[0].OrigenFoto,m_matricularesults[0].OrigenFoto.size());
+    m_matricularesults[0].OrigenFoto = fotocv.clone();
     updateGui();
     updateCalibracionGui();
 }
     /** CAMARA2 **/
 void Configuracion::onGetFotoCV2(const cv::Mat &fotocv){
-    cv::resize(fotocv,m_matricularesults[1].OrigenFoto,m_matricularesults[1].OrigenFoto.size());
+    m_matricularesults[1].OrigenFoto = fotocv.clone();
     updateGui();
     updateCalibracionGui();
 }
@@ -198,22 +198,18 @@ void Configuracion::on_CamaraSelect_currentIndexChanged(int index)
 
     switch (index) {
     case 0:
-        engine->appConfig()->beginGroup(CAMARA1);
-        ui->camaraTipo->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
-        ui->hostLineEdit->setText(engine->appConfig()->value("host").toString());
-        ui->puertoLineEdit->setText(engine->appConfig()->value("port").toString());
-        ui->usuarioLineEdit->setText(engine->appConfig()->value("user").toString());
-        ui->passwdLineEdit->setText(engine->appConfig()->value("pass").toString());
-        engine->appConfig()->endGroup();
+        ui->camaraTipo->setCurrentIndex(engine->appConfig()->value( QString(CAMARA1) + "/tipo","0").toInt());
+        ui->hostLineEdit->setText(engine->appConfig()->value(       QString(CAMARA1) + "/host").toString());
+        ui->puertoLineEdit->setText(engine->appConfig()->value(     QString(CAMARA1) + "/port").toString());
+        ui->usuarioLineEdit->setText(engine->appConfig()->value(    QString(CAMARA1) + "/user").toString());
+        ui->passwdLineEdit->setText(engine->appConfig()->value(     QString(CAMARA1) + "/pass").toString());
         break;
     case 1:
-        engine->appConfig()->beginGroup(CAMARA2);
-        ui->camaraTipo->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
-        ui->hostLineEdit->setText(engine->appConfig()->value("host").toString());
-        ui->puertoLineEdit->setText(engine->appConfig()->value("port").toString());
-        ui->usuarioLineEdit->setText(engine->appConfig()->value("user").toString());
-        ui->passwdLineEdit->setText(engine->appConfig()->value("pass").toString());
-        engine->appConfig()->endGroup();
+        ui->camaraTipo->setCurrentIndex(engine->appConfig()->value( QString(CAMARA2) + "/tipo","0").toInt());
+        ui->hostLineEdit->setText(engine->appConfig()->value(       QString(CAMARA2) + "/host").toString());
+        ui->puertoLineEdit->setText(engine->appConfig()->value(     QString(CAMARA2) + "/port").toString());
+        ui->usuarioLineEdit->setText(engine->appConfig()->value(    QString(CAMARA2) + "/user").toString());
+        ui->passwdLineEdit->setText(engine->appConfig()->value(     QString(CAMARA2) + "/pass").toString());
         break;
     }
     updateGui();
@@ -225,23 +221,19 @@ void Configuracion::on_GuardarCamara_clicked()
 {
     switch (ui->CamaraSelect->currentIndex()) {
     case 0:
-        engine->appConfig()->beginGroup(CAMARA1);
-        engine->appConfig()->setValue("tipo",QString::number(ui->camaraTipo->currentIndex()));
-        engine->appConfig()->setValue("host",ui->hostLineEdit->text());
-        engine->appConfig()->setValue("port",ui->puertoLineEdit->text());
-        engine->appConfig()->setValue("user",ui->usuarioLineEdit->text());
-        engine->appConfig()->setValue("pass",ui->passwdLineEdit->text());
-        engine->appConfig()->endGroup();
+        engine->appConfig()->setValue(QString(CAMARA1) + "/tipo",QString::number(ui->camaraTipo->currentIndex()));
+        engine->appConfig()->setValue(QString(CAMARA1) + "/host",ui->hostLineEdit->text());
+        engine->appConfig()->setValue(QString(CAMARA1) + "/port",ui->puertoLineEdit->text());
+        engine->appConfig()->setValue(QString(CAMARA1) + "/user",ui->usuarioLineEdit->text());
+        engine->appConfig()->setValue(QString(CAMARA1) + "/pass",ui->passwdLineEdit->text());
         engine->getCamaraFoto(0);
         break;
     case 1:
-        engine->appConfig()->beginGroup(CAMARA2);
-        engine->appConfig()->setValue("tipo",QString::number(ui->camaraTipo->currentIndex()));
-        engine->appConfig()->setValue("host",ui->hostLineEdit->text());
-        engine->appConfig()->setValue("port",ui->puertoLineEdit->text());
-        engine->appConfig()->setValue("user",ui->usuarioLineEdit->text());
-        engine->appConfig()->setValue("pass",ui->passwdLineEdit->text());
-        engine->appConfig()->endGroup();
+        engine->appConfig()->setValue(QString(CAMARA2) + "/tipo",QString::number(ui->camaraTipo->currentIndex()));
+        engine->appConfig()->setValue(QString(CAMARA2) + "/host",ui->hostLineEdit->text());
+        engine->appConfig()->setValue(QString(CAMARA2) + "/port",ui->puertoLineEdit->text());
+        engine->appConfig()->setValue(QString(CAMARA2) + "/user",ui->usuarioLineEdit->text());
+        engine->appConfig()->setValue(QString(CAMARA2) + "/pass",ui->passwdLineEdit->text());
         engine->getCamaraFoto(1);
         break;
     }
@@ -358,31 +350,6 @@ void Configuracion::onBascula(Bascula _bascula)
 
 /** END BASCULAS **/
 
-/** CONVERSORES ***********************************/
-QImage Configuracion::convertMat2QImage(const cv::Mat& src)
-{
-    QImage qtImg;
-    if( !src.empty() && src.depth() == CV_8U ){
-        if(src.channels() == 1){
-            qtImg = QImage( (const unsigned char *)(src.data),
-                            src.cols,
-                            src.rows,
-                            QImage::Format_Indexed8 );
-        }
-        else{
-            cv::cvtColor( src, src, CV_BGR2RGB );
-            qtImg = QImage( (const unsigned char *)(src.data),
-                            src.cols,
-                            src.rows,
-                            src.step,
-                            QImage::Format_RGB888 );
-        }
-    }
-    return qtImg.copy();
-}
-/** END CONVERSORES ***********************************/
-
-
 
 /** CALIBRACION ***************************************************************/
     /** GUI **/
@@ -419,13 +386,13 @@ void Configuracion::on_ActualizarCamara_clicked(){
     /** ALPR **/
 void Configuracion::updateCalibracionGui(){
     int index = getAlprIndex();
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFoto.clone())));
-    ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].MatriculaFotoA.clone())));
-    ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].MatriculaFotoB.clone())));
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[index].OrigenFoto.clone())));
+    ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[index].MatriculaFotoA.clone())));
+    ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[index].MatriculaFotoB.clone())));
     ui->MatriculaA->setText(m_matricularesults[index].MatriculaA);
     ui->MatriculaB->setText(m_matricularesults[index].MatriculaB);
-    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFotoBlanca.clone())));
-    ui->FotoRojosA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[index].OrigenFotoRoja.clone())));
+    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[index].OrigenFotoBlanca.clone())));
+    ui->FotoRojosA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[index].OrigenFotoRoja.clone())));
     ui->LongMatriculaA->setText(m_matricularesults[index].MatriculaPrecisionAs);
     ui->LongMatriculaB->setText(m_matricularesults[index].MatriculaPrecisionBs);
 }
@@ -510,4 +477,8 @@ void Configuracion::on_reportsTreeWidget_doubleClicked(const QModelIndex &index)
     qDebug() << index.data(Qt::UserRole).toString();
     engine->report_loadFromFile(index.data(Qt::UserRole).toString());
     engine->report_desingReport();
+}
+
+
+
 }

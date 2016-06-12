@@ -8,7 +8,7 @@ SUBDIRS += nqtrucks
 CONFIG   += ordered
 SUBDIRS += \
         #testalpr \
-        testlib \
+        #testlib \
         nqtrucksserver
 
 OTHER_FILES += \

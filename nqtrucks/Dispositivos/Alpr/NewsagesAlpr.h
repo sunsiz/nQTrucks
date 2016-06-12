@@ -49,18 +49,15 @@ public:
 
     /** SETTINGS **/
 public slots:
-    cv::Mat FotoCamara() const {return m_FotoCamara; }
     void setFotoCamara(const cv::Mat &Foto);
 private:
     int         m_nDevice;
-    cv::Mat     m_FotoCamara;
     QSettings   *m_settings;
-    //QSettings   *m_settings2; //BUG hilos QSettings begingroup simultaneo
     QVector<Registros::MatriculaResults*> m_results;
     /** END SETTINGS **/
 
 signals:
-    void ReplyOriginalFoto(const cv::Mat &Foto);
+    void ReplyOriginalFoto(         const cv::Mat &Foto);
     void ReplyMatriculaFoto        (const Registros::MatriculaResults &_tempResults);
     void ReplyMatriculaFotoRemolque(const Registros::MatriculaResults &_tempResultsRemolque);
 

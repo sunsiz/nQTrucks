@@ -40,12 +40,13 @@ namespace Ui {
 class Configuracion;
 }
 
+namespace nQTrucks{
 class Configuracion : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Configuracion(nQTrucks::nQTrucksEngine *_engine=nullptr, QWidget *parent = 0);
+    explicit Configuracion(nQTrucksEngine *_engine=nullptr, QWidget *parent = 0);
     ~Configuracion();
 
 private:
@@ -58,7 +59,7 @@ private slots:
 
     /** nQTrucks Lib **/
 private:
-    nQTrucks::nQTrucksEngine *engine;
+    nQTrucksEngine *engine;
     /** END nQTrucks Lib **/
 
     /** CAMARAS **/
@@ -146,8 +147,8 @@ private slots:
 private:
     void loadconfig();
     /** END CONFIG **/
-    static QImage convertMat2QImage(const cv::Mat &src);
-
+    Tools *m_tools;
 };
 
+}
 #endif // CONFIGURACION_H

@@ -30,23 +30,16 @@
 #include "Client.h"
 #include "ui_Client.h"
 
-#include <QDebug>
-#include <QDesktopWidget>
-
-#include <QDir>
-#include <QUrl>
-
-#include "alpr.h"
-#include "prewarp.h"
+namespace nQTrucks {
 
 
-Client::Client(nQTrucks::nQTrucksEngine *_engine, QWidget *parent)
+Client::Client(nQTrucksEngine *_engine, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Client)
     , engine(_engine)
+    , m_tools(new Tools(this))
 {
     ui->setupUi(this);
-    m_matricularesults.resize(2);
 
     /** IO **/
     connect(engine,SIGNAL(SemaforoEstadoChanged(int)),this,SLOT(on_SemaforoEstadoChanged(int)));
@@ -55,15 +48,14 @@ Client::Client(nQTrucks::nQTrucksEngine *_engine, QWidget *parent)
     connect(engine ,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
     connect(engine ,SIGNAL(BasculaChanged(Bascula)),this,SLOT(onBascula(Bascula)));
 
-    /** ALPR **/
-    connect(engine, SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::MatriculaResults)));
-    connect(engine, SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::MatriculaResults)));
-    m_alpr_count = 0;
+    /** DAEMON **/
+    connect(engine,SIGNAL(daemonRegistroChanged(SimpleMatriculas)),this,SLOT(onDaemonRegistroChanged(SimpleMatriculas)));
 }
 
 Client::~Client()
 {
     delete ui;
+    m_tools->deleteLater();
 }
 
 /** NEWSAGES I/O  **/
@@ -97,72 +89,34 @@ void Client::onBascula(Bascula _bascula){
     ui->BasculaEstable->setChecked(_bascula.bEstado);
 }
 
-void Client::onAllMatriculaResults()
+void Client::onDaemonRegistroChanged(const SimpleMatriculas &_result)
 {
-    ui->camara1->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[0].OrigenFotoResize.clone())));
-    ui->camara2->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[1].OrigenFotoResize.clone())));
+    ui->camara1->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[0].OrigenFoto.clone())));
+    ui->camara2->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[1].OrigenFoto.clone())));
 
-    if ( m_matricularesults[0].MatriculaPrecisionA >= m_matricularesults[1].MatriculaPrecisionA){
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[0].MatriculaFotoA.clone())));
-        ui->MatriculaA->setText(m_matricularesults[0].MatriculaA);
-        ui->MatriculaPrecisionA->setText(m_matricularesults[0].MatriculaPrecisionAs);
+    if ( _result.results[0].MatriculaPrecisionA >= _result.results[1].MatriculaPrecisionA){
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[0].MatriculaFotoA.clone())));
+        ui->MatriculaA->setText(_result.results[0].MatriculaA);
+        ui->MatriculaPrecisionA->setText(_result.results[0].MatriculaPrecisionAs);
     }else{
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[1].MatriculaFotoA.clone())));
-        ui->MatriculaA->setText(m_matricularesults[1].MatriculaA);
-        ui->MatriculaPrecisionA->setText(m_matricularesults[1].MatriculaPrecisionAs);
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[1].MatriculaFotoA.clone())));
+        ui->MatriculaA->setText(_result.results[1].MatriculaA);
+        ui->MatriculaPrecisionA->setText(_result.results[1].MatriculaPrecisionAs);
     }
 
-    if ( m_matricularesults[0].MatriculaPrecisionB >= m_matricularesults[1].MatriculaPrecisionB){
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[0].MatriculaFotoB.clone())));
-        ui->MatriculaB->setText(m_matricularesults[0].MatriculaB);
-        ui->MatriculaPrecisionB->setText(m_matricularesults[0].MatriculaPrecisionBs);
+    if ( _result.results[0].MatriculaPrecisionB >= _result.results[1].MatriculaPrecisionB){
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[0].MatriculaFotoB.clone())));
+        ui->MatriculaB->setText(_result.results[0].MatriculaB);
+        ui->MatriculaPrecisionB->setText(_result.results[0].MatriculaPrecisionBs);
     }else{
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(convertMat2QImage(m_matricularesults[1].MatriculaFotoB.clone())));
-        ui->MatriculaB->setText(m_matricularesults[1].MatriculaB);
-        ui->MatriculaPrecisionB->setText(m_matricularesults[1].MatriculaPrecisionBs);
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[1].MatriculaFotoB.clone())));
+        ui->MatriculaB->setText(_result.results[1].MatriculaB);
+        ui->MatriculaPrecisionB->setText(_result.results[1].MatriculaPrecisionBs);
     }
-    m_alpr_count=0;
-}
-/** END BASCULAS **/
 
-
-void Client::onReplyMatriculaResults1(const Registros::MatriculaResults &_result){
-    m_matricularesults[0] = _result;
-    m_alpr_count++;
-    if (m_alpr_count==2){
-        onAllMatriculaResults();
-    }
 }
 
-void Client::onReplyMatriculaResults2(const Registros::MatriculaResults &_result){
-    m_matricularesults[1] = _result;
-    m_alpr_count++;
-    if (m_alpr_count==2){
-        onAllMatriculaResults();
-    }
-}
 
-/** CONVERSORES ***********************************/
-QImage Client::convertMat2QImage(const cv::Mat& src)
-{
-    QImage qtImg;
-    if( !src.empty() && src.depth() == CV_8U ){
-        if(src.channels() == 1){
-            qtImg = QImage( (const unsigned char *)(src.data),
-                            src.cols,
-                            src.rows,
-                            QImage::Format_Indexed8 );
-        }
-        else{
-            cv::cvtColor( src, src, CV_BGR2RGB );
-            qtImg = QImage( (const unsigned char *)(src.data),
-                            src.cols,
-                            src.rows,
-                            src.step,
-                            QImage::Format_RGB888 );
-        }
-    }
-    return qtImg.copy();
-}
-/** END CONVERSORES ***********************************/
 
+
+}

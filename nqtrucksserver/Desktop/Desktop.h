@@ -11,10 +11,13 @@
 #include "Configuracion/Configuracion.h"
 #include "Client/Client.h"
 
+
+
 namespace Ui {
 class Desktop;
 }
 
+namespace nQTrucks {
 class Desktop : public QMainWindow
 {
     Q_OBJECT
@@ -63,4 +66,5 @@ private slots:
     void on_actionClient_toggled(bool arg1);
 };
 
+}
 #endif // DESKTOP_H

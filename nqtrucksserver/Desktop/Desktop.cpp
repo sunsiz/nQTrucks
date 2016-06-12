@@ -3,6 +3,9 @@
 #include <QtDBus>
 #include <QWindow>
 
+namespace nQTrucks {
+
+
 Desktop::Desktop(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Desktop)
@@ -19,7 +22,7 @@ Desktop::Desktop(QWidget *parent) :
     m_control_center->setProgram("/usr/bin/gnome-control-center");
 
     /** APLICACION **/
-    m_app_engine = new nQTrucks::nQTrucksEngine();
+    m_app_engine = new nQTrucksEngine();
     m_app_config = new Configuracion(m_app_engine);
     m_app_client = new Client(m_app_engine);
 
@@ -129,3 +132,5 @@ void Desktop::on_actionClient_toggled(bool arg1){
     on_selectedAppChanged();
 }
 /** END CLIENT **/
+
+}

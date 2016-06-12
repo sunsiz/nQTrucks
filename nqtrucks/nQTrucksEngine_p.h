@@ -33,8 +33,8 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QMetaEnum>
-//#include <QCoreApplication>
-//#include <QDir>
+#include <QLoggingCategory>
+
 
 #include<QVector>
 

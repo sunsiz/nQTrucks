@@ -43,14 +43,32 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
 : QObject(parent)
 , m_settings(0)
 {
+
+    /** ALPR TYPES **/
+    qRegisterMetaType<cv::Mat>("cv::Mat");
+    qRegisterMetaType<Planck>("Planck");
     qRegisterMetaType<nQTrucks::t_Prewarp>("nQTrucks::t_Prewarp");
+    qRegisterMetaType<Registros::MatriculaResults>("Registros::MatriculaResults");
+
+
+    /** Daemon Types **/
+    qRegisterMetaType<Registros::Simple>            ("Registros::Simple");
+    qRegisterMetaType<Registros::Matriculas>        ("Registros::Matriculas");
+
+    /** Bascula Types **/
+    qRegisterMetaType<Bascula>("Bascula");
+
+    /** Camara Types **/
+    QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
+    qRegisterMetaType<Registros::Camara>("Registros::Camara");
+
     m_camara.resize(2);
     m_camara[0] = new Devices::CamaraIP(0,settings(), this);
     m_camara[1] = new Devices::CamaraIP(1,settings(), this);
 
     m_alpr.resize(2);
     m_alpr[0] = new Devices::NewsagesAlpr(0,settings(),this);
-    m_alpr[1] = new Devices::NewsagesAlpr(0,settings(),this);
+    m_alpr[1] = new Devices::NewsagesAlpr(1,settings(),this);
 
     m_report_editor = new LimeReport::ReportEngine(this);
 
@@ -363,10 +381,12 @@ void nQTrucksEngine::setInitDaemon(const bool &_init)
     Q_D(nQTrucksEngine);
     if (_init){
          d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara,d->m_alpr, this);
+        auto daemon_connect = connect(d->m_daemon,SIGNAL(RegistroChanged(SimpleMatriculas)),
+                this       ,SIGNAL(daemonRegistroChanged(SimpleMatriculas)));
          d->m_daemon->setInit(_init);
     } else{
-        //d->m_daemon->setInit(_init);
-        delete d->m_daemon;
+        d->m_daemon->setInit(_init);
+        d->m_daemon->deleteLater();
     }
 }
 

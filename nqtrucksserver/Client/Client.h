@@ -36,16 +36,19 @@
 #include "nqtglobal.h"
 
 
+
 namespace Ui {
 class Client;
 }
+
+namespace nQTrucks {
 
 class Client : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Client(nQTrucks::nQTrucksEngine *_engine=nullptr, QWidget *parent = 0);
+    explicit Client(nQTrucksEngine *_engine=nullptr, QWidget *parent = 0);
     ~Client();
 
 private:
@@ -54,7 +57,7 @@ private:
 
     /** nQTrucks Lib **/
 private:
-    nQTrucks::nQTrucksEngine *engine;
+    nQTrucksEngine *engine;
     /** END nQTrucks Lib **/
 
     /** NEWSAGES I/O  **/
@@ -68,26 +71,16 @@ private slots:
     void onBascula(Bascula _bascula);
     /** END BASCULAS **/
 
-
-    /** ALPR **/
-private:
-    int m_alpr_count;
-    QVector<Registros::MatriculaResults> m_matricularesults;
-    QVector<Registros::MatriculaResults>::iterator m_matricularesults_iterator;
-
 private slots:
-    void onAllMatriculaResults();
-    void onReplyMatriculaResults1(const Registros::MatriculaResults &_result);
-    void onReplyMatriculaResults2(const Registros::MatriculaResults &_result);
+    void onDaemonRegistroChanged(const SimpleMatriculas &_result);
     /** END ALPR **/
-
 
     /** CONFIG **/
 private:
     void loadconfig();
     /** END CONFIG **/
-
-    static QImage convertMat2QImage(const cv::Mat &src);
+    Tools *m_tools;
 };
 
+}
 #endif // CLIENT_H

@@ -36,18 +36,11 @@ namespace Devices {
 
 nQSerialPortReader::nQSerialPortReader(QSettings *_appsettings, QObject *parent)
     : QObject(parent)
-    , m_serialPort(new QSerialPort(this))
-    , m_serialBuffer("")
     , m_settings(_appsettings)
-    , m_muestras(0)
-    , m_inicio_peso(false)
-
 {
-    qRegisterMetaType<Bascula>("Bascula");
+    m_serialPort = new QSerialPort(this);
     emit BasculaStatus(false);
-
     connect(this, SIGNAL(BasculaChanged(Bascula)),this,SLOT(MuestrearBascula(Bascula)));
-    //connectPort();
 }
 
 nQSerialPortReader::~nQSerialPortReader()
@@ -55,6 +48,7 @@ nQSerialPortReader::~nQSerialPortReader()
     if(m_serialPort->isOpen()){
         m_serialPort->close();
     }
+    m_serialPort->deleteLater();
 }
 
 void nQSerialPortReader::setBasculaType(const int &_TipoBascula)
@@ -69,17 +63,22 @@ void nQSerialPortReader::setBasculaPort(const QString &_IODevice)
 {
     if (m_serialPortName != _IODevice) {
         m_serialPortName = _IODevice;
-        m_settings->setValue("device",m_serialPortName);
+        m_settings->setValue(QString(BASCULA) + "/device",m_serialPortName);
+    }
+}
+
+void nQSerialPortReader::setBasculaMuestras(const int &_muestras)
+{
+    if(m_BasculaMuestras != _muestras){
+        m_BasculaMuestras = _muestras;
+        m_settings->setValue(QString(BASCULA) + "/muestras",m_BasculaMuestras);
     }
 }
 
 void nQSerialPortReader::loadconfig(){
-    m_configroot = (QString(BASCULA));
-    m_settings->beginGroup(m_configroot);
-    setBasculaPort(m_settings->value("device","/dev/ttyUSB0").toString());
-    setBasculaType(m_settings->value("tipo","0").toInt());
-    m_settings->endGroup();
-
+    setBasculaPort(m_settings->value(       QString(BASCULA) + "/device",  "/dev/ttyUSB0").toString());
+    setBasculaType(m_settings->value(       QString(BASCULA) + "/tipo",    "0"           ).toInt());
+    setBasculaMuestras(m_settings->value(   QString(BASCULA) + "/muestras","100"         ).toInt());
 }
 void nQSerialPortReader::connectPort(const bool &_value){
     if(m_serialPort->isOpen()){
@@ -159,11 +158,12 @@ void nQSerialPortReader::ReadType0()
 }
 
 
+
 void nQSerialPortReader::MuestrearBascula(const Bascula &_bascula){
     if (m_inicio_peso){
         if((_bascula.bEstado) & (_bascula.iBruto !=0)){
             m_muestras++;
-            if(m_muestras==100){
+            if(m_muestras == m_BasculaMuestras){
                 m_inicio_peso=false;
                 m_bascula_estable = _bascula;
                 emit BasculaPesoNuevo(m_bascula_estable);

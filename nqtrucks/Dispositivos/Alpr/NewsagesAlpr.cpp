@@ -53,25 +53,27 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
 {
     m_results.resize(3);
     m_results[0] = new Registros::MatriculaResults; //emitir
-    m_results[1] = new Registros::MatriculaResults; //calibrar
-    m_results[2] = new Registros::MatriculaResults; //procesar
-
     m_results[0]->id=m_nDevice;
+
+    m_results[1] = new Registros::MatriculaResults; //calibrar
     m_results[1]->id=m_nDevice;
+
+    m_results[2] = new Registros::MatriculaResults; //procesar
     m_results[2]->id=m_nDevice;
+
 
 }
 
 NewsagesAlpr::~NewsagesAlpr()
 {
- m_FotoCamara.release();
+ m_results.detach();
 }
 
 void NewsagesAlpr::setFotoCamara(const cv::Mat &Foto) {
-    m_FotoCamara = Foto.clone();
-    m_results[0]->OrigenFoto=Foto.clone();
-    m_results[0]->OrigenFotoPrewarp=FotoCamara(); /** <<<<<< TODO CHANGE TO FUNCTION load and set prewarp **/
-    emit ReplyOriginalFoto(FotoCamara());
+    m_results[0]->OrigenFoto = Foto.clone();
+    m_results[1]->OrigenFoto = Foto.clone();
+    m_results[2]->OrigenFoto = Foto.clone();
+    emit ReplyOriginalFoto(m_results[0]->OrigenFoto);
 }
 
 /** SOLO CALIBRACION ***************************************************************************************/
@@ -84,12 +86,13 @@ void NewsagesAlpr::calibrarFoto(const cv::Mat &Foto){
         //this->setFotoCamara(Foto);
 
         /** Crear hilos por Tipos de matriculas **/
-        hiloCalibrar1 = new QThread;
-        hiloCalibrar2 = new QThread;
+        hiloCalibrar1 = new QThread();
+        hiloCalibrar2 = new QThread();
 
         /** Crear tareas **/
-        tareaCalibrar1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, Foto, m_results[1], m_settings);
-        tareaCalibrar2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   Foto, m_results[1],  m_settings);
+        m_results[1]->OrigenFoto = Foto.clone();
+        tareaCalibrar1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results[1], m_settings);
+        tareaCalibrar2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results[1], m_settings);
 
         /** Asignar tareas a hilos **/
         tareaCalibrar1->moveToThread(hiloCalibrar1);
@@ -106,7 +109,6 @@ void NewsagesAlpr::calibrarFoto(const cv::Mat &Foto){
         connect( tareaCalibrar1, SIGNAL(workFinished()), hiloCalibrar1,  SLOT(quit()) );
         connect( tareaCalibrar1, SIGNAL(workFinished()), tareaCalibrar1, SLOT(deleteLater()) );
         connect( hiloCalibrar1,  SIGNAL(finished()),     hiloCalibrar1,  SLOT(deleteLater()) );
-
         std::unique_ptr<QMetaObject::Connection> pconnCalibrar1{new QMetaObject::Connection};
         QMetaObject::Connection &connCalibrar1 = *pconnCalibrar1;
         connCalibrar1=connect( hiloCalibrar1, &QThread::finished, [=](){
@@ -145,8 +147,8 @@ void NewsagesAlpr::calibrarFoto(const cv::Mat &Foto){
 }
 
 void NewsagesAlpr::onCalibrarFotoFinished(){
-    this->ReplyOriginalFotoBlanca(m_results[1]->OrigenFotoBlanca);
-    this->ReplyOriginalFotoRoja(  m_results[1]->OrigenFotoRoja);
+    this->ReplyOriginalFotoBlanca( m_results[1]->OrigenFotoBlanca);
+    this->ReplyOriginalFotoRoja(   m_results[1]->OrigenFotoRoja  );
 }
 /** END SOLO CALIBRACION *************************************************************************************/
 
@@ -166,8 +168,9 @@ void NewsagesAlpr::processFoto(const cv::Mat &Foto)
         hilo2 = new QThread;
 
         /** Crear tareas **/
-        tarea1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, Foto, m_results[2], m_settings);
-        tarea2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   Foto, m_results[2], m_settings);
+        m_results[2]->OrigenFoto = Foto.clone();
+        tarea1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results[2], m_settings);
+        tarea2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results[2], m_settings);
 
         /** Asignar tareas a hilos **/
         tarea1->moveToThread(hilo1);
@@ -181,13 +184,16 @@ void NewsagesAlpr::processFoto(const cv::Mat &Foto)
 
         std::unique_ptr<QMetaObject::Connection> pconn1{new QMetaObject::Connection};
         QMetaObject::Connection &conn1 = *pconn1;
-        conn1 =connect( hilo1, &QThread::finished, [=](){
+        conn1=connect(tarea1,  &NewsagesAlprTask::ReplyMatriculaFoto, [=](){
             QObject::disconnect(conn1);
-                bhilo1=false;
-                if (!bhilo1 && !bhilo2){
-                    onProcesarFotoFinished();
-                }
-             });
+            bhilo1=false;
+            if (!bhilo1 && !bhilo2){
+                onProcesarFotoFinished();
+            }
+            tarea1->workFinished();
+        });
+
+
         connect( hilo2, SIGNAL(started()), tarea2, SLOT(procesar()) );
         connect( tarea2,SIGNAL(workFinished()), hilo2, SLOT(quit()) );
         connect( tarea2, SIGNAL(workFinished()), tarea2, SLOT(deleteLater()) );
@@ -195,17 +201,16 @@ void NewsagesAlpr::processFoto(const cv::Mat &Foto)
 
         std::unique_ptr<QMetaObject::Connection> pconn2{new QMetaObject::Connection};
         QMetaObject::Connection &conn2 = *pconn2;
-        conn2 = connect( hilo2, &QThread::finished, [=](){
+        conn2 = connect(tarea2,  &NewsagesAlprTask::ReplyMatriculaFoto, [=](){
             QObject::disconnect(conn2);
-                bhilo2=false;
-                if (!bhilo1 && !bhilo2){
-                    onProcesarFotoFinished();
-                }
-            });
+            bhilo2=false;
+            if (!bhilo1 && !bhilo2){
+                onProcesarFotoFinished();
+            }
+            tarea2->workFinished();
+        });
 
         /** conectar respuestas con padre **/
-        connect(tarea1, SIGNAL(ReplyMatriculaFoto()),tarea1,SIGNAL(workFinished()));
-        connect(tarea2, SIGNAL(ReplyMatriculaFoto()),tarea2,SIGNAL(workFinished()));
         /** Ejecutar Procesos **/
         hilo1->start();
         hilo2->start();
@@ -214,34 +219,12 @@ void NewsagesAlpr::processFoto(const cv::Mat &Foto)
 }
 
 void NewsagesAlpr::onProcesarFotoFinished(){
-
-    m_results[0] = m_results[2];
-    //    m_results[0]->OrigenFoto              = m_results[2]->OrigenFoto;
-//    m_results[0]->OrigenFotoRoja          = m_results[2]->OrigenFotoRoja;
-//    m_results[0]->OrigenFotoBlanca        = m_results[2]->OrigenFotoBlanca;
-//    m_results[0]->OrigenFotoPrewarp       = m_results[2]->OrigenFotoPrewarp;
-//    m_results[0]->OrigenFotoResize        = m_results[2]->OrigenFotoResize;
-//    m_results[0]->OrigenFotoResizeByte    = m_results[2]->OrigenFotoResizeByte;
-//    m_results[0]->MatriculaA              = m_results[2]->MatriculaA;
-//    m_results[0]->MatriculaDetectedA      = m_results[2]->MatriculaDetectedA;
-//    m_results[0]->MatriculaFotoA          = m_results[2]->MatriculaFotoA;
-//    m_results[0]->MatriculaFotoAByte      = m_results[2]->MatriculaFotoAByte;
-//    m_results[0]->MatriculaPrecisionA     = m_results[2]->MatriculaPrecisionA;
-//    m_results[0]->MatriculaPrecisionAs    = m_results[2]->MatriculaPrecisionAs;
-//    m_results[0]->MatriculaB              = m_results[2]->MatriculaB;
-//    m_results[0]->MatriculaDetectedB      = m_results[2]->MatriculaDetectedB;
-//    m_results[0]->MatriculaFotoB          = m_results[2]->MatriculaFotoB;
-//    m_results[0]->MatriculaFotoBByte      = m_results[2]->MatriculaFotoBByte;
-//    m_results[0]->MatriculaPrecisionB     = m_results[2]->MatriculaPrecisionB;
-//    m_results[0]->MatriculaPrecisionBs    = m_results[2]->MatriculaPrecisionBs;
-
-    emit ReplyMatriculaResults(*m_results[0]);
-    qDebug() << "Device:" << m_results[0]->id << endl
-             << "\t Matricula1:"   << m_results[0]->MatriculaA
-             << "precision:"<<m_results[0]->MatriculaPrecisionAs<<"%"<< "patron:"    << m_results[0]->MatriculaDetectedA << endl
-             << "\t Matricula2:"<<m_results[0]->MatriculaB
-             << "precision:" << m_results[0]->MatriculaPrecisionBs << "%" << "patron:" << m_results[0]->MatriculaDetectedB << endl;
-
+    emit ReplyMatriculaResults(*m_results[2]);
+    qDebug() << "Device:"           << m_results[2]->id << endl
+             << "\t Matricula1:"    << m_results[2]->MatriculaA
+             << "precision:"        << m_results[2]->MatriculaPrecisionAs<<"%"<< "patron:"    << m_results[2]->MatriculaDetectedA << endl
+             << "\t Matricula2:"    << m_results[2]->MatriculaB
+             << "precision:"        << m_results[2]->MatriculaPrecisionBs << "%" << "patron:" << m_results[2]->MatriculaDetectedB << endl;
 }
 
 /** END PROCESAR ********************************************************************************************************/

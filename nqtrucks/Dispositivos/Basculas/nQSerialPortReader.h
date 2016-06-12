@@ -54,54 +54,49 @@ public:
         NEWSAGES1
     };
 
-private:
-    int m_type;
-    QString      m_serialPortName;
-    QSerialPort *m_serialPort;
-    Bascula    m_bascula;
-    QByteArray   m_serialData;
-    QString      m_serialBuffer;
-    int          charInicio=0;
-
-
-    /** INTERFACE REALTIME **/
-signals:
-    void BasculaChanged(const Bascula &bascula);
-    void BasculaStatus(const bool &status);
-
-public slots:
-    void connectPort(const bool &_value);
-    /** END INTERFACE REALTIME**/
-
-
     /** SETTINGS **/
 private slots:
     void setBasculaType(const int &_TipoBascula);
     void setBasculaPort(const QString &_IODevice);
-
+    void setBasculaMuestras(const int &_muestras);
 private:
-    QString   m_configroot;
     QSettings *m_settings;
     void loadconfig();
     /** END SETTINGS **/
 
+    /** INTERFACE REALTIME **/
+private:
+    QSerialPort *m_serialPort;
+    int          m_type=0;
+    QString      m_serialBuffer="";
+    int          charInicio=0;
+    QByteArray   m_serialData;
+    Bascula      m_bascula;
+    QString      m_serialPortName;
+public slots:
+    void connectPort(const bool &_value);
 private slots:
     void connectBasculaType(int _type);
-    void handleError(QSerialPort::SerialPortError error);
+    void handleError(QSerialPort::SerialPortError error);  
+signals:
+    void BasculaChanged(const Bascula &bascula);
+    void BasculaStatus(const bool &status);
+    /** END INTERFACE REALTIME**/
 
     /** LECTURA SEGUN TIPOS **/
 private slots:
     void ReadType0();
     /** END LECTURA SEGUN TIPOS **/
 
+
     /** INTERFACE ESTABILIZADA **/
 private:
-    int m_muestras;
-    bool m_inicio_peso;
-    bool m_fin_peso;
+    int  m_muestras=0;
+    int  m_BasculaMuestras=100;
+    bool m_inicio_peso=false;
     Bascula    m_bascula_estable;
 signals:
-    void BasculaPesoNuevo(const Bascula &_nuevaPesada);
+    void BasculaPesoNuevo(Bascula _nuevaPesada);
 private slots:
     void MuestrearBascula(const Bascula &_bascula);
     /** FIN INTERFACE ESTABILIZADA **/

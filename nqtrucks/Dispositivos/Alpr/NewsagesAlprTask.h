@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QImage>
 #include <nqtglobal.h>
+#include <QMutex>
 
 namespace nQTrucks {
 namespace Devices {
@@ -11,10 +12,12 @@ namespace Devices {
 class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
-    explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, cv::Mat _fotoCamara=cv::Mat(), Registros::MatriculaResults *_results=0,  QSettings *_appsettings=0, QObject *parent = 0);
+    explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, Registros::MatriculaResults *_results=0,  QSettings *_appsettings=0, QObject *parent = 0);
     ~NewsagesAlprTask();
 signals:
     void workFinished();
+private:
+    QMutex m_MutexWrite;
 
     /** SETTINGS *******************************************************/
 private:
@@ -22,10 +25,6 @@ private:
     QString    m_config_file;
     void       loadconfig();
 private:
-    cv::Mat m_FotoCamara;
-    void    setFotoCamara(const cv::Mat &FotoCamara){ m_FotoCamara = FotoCamara;}
-    cv::Mat getFotoCamara() const {return m_FotoCamara;}
-
     int     m_nDevice;
     void    setNDevice(int nDevice) {m_nDevice = nDevice;}
     int     getNDevice() const {return m_nDevice;}
@@ -74,9 +73,8 @@ signals:
 
     /** TOOLS **/
 private:
-    /*static*/ QImage     convertMat2QImage(   const cv::Mat    &_cvimage);
-    /*static*/ cv::Mat    convertQImage2Mat(   const QImage     &_qimage);
-    /*static*/ QByteArray convertMat2ByteArray(const cv::Mat    &_cvimage);
+
+    nQTrucks::Tools *m_tools;
     /** END TOOLS **/
 
 };

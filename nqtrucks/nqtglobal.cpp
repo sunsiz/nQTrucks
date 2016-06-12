@@ -46,14 +46,19 @@ QString nQTrucks::extractClassName(QString className)
 }
 
 
+namespace nQTrucks {
+/** TOOLS **************************************************************/
+Tools::Tools(QObject *parent)
+    :QObject(parent)
+{
 
-
-/** CONVERSORES *************************************************************************/
-cv::Mat nQTrucks::Tools::convertQImage2Mat(const QImage &_qimage){
+}
+/** CONVERSORES ***********/
+cv::Mat Tools::convertQImage2Mat(const QImage &_qimage){
     QByteArray baScene; // byte array with data
     QBuffer buffer(&baScene);
     buffer.open(QIODevice::WriteOnly);
-    _qimage.save(&buffer,"JPG");
+    _qimage.save(&buffer,"PNG");
 
     const char* begin = reinterpret_cast<char*>(baScene.data());
     const char* end = begin + baScene.size();
@@ -63,7 +68,7 @@ cv::Mat nQTrucks::Tools::convertQImage2Mat(const QImage &_qimage){
     return cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
 }
 
-QImage nQTrucks::Tools::convertMat2QImage(const cv::Mat &_cvimage)
+QImage Tools::convertMat2QImage(const cv::Mat &_cvimage)
 {
     QImage qtImg= QImage();
     if( !_cvimage.empty() && _cvimage.depth() == CV_8U ){
@@ -85,56 +90,92 @@ QImage nQTrucks::Tools::convertMat2QImage(const cv::Mat &_cvimage)
     return qtImg;
 }
 
-QByteArray nQTrucks::Tools::convertMat2ByteArray(const cv::Mat &_cvimage){
-
-    QImage qtImg = convertMat2QImage(_cvimage);
+QByteArray Tools::convertMat2ByteArray(const cv::Mat &_cvimage){
+    QImage qtImg = convertMat2QImage(_cvimage.clone());
     QByteArray baScene; // byte array with data
     QBuffer buffer(&baScene);
     buffer.open(QIODevice::WriteOnly);
-    qtImg.save(&buffer,"JPG");
+    qtImg.save(&buffer,"PNG");
     buffer.close();
     return baScene;
 }
 
 
-cv::Mat nQTrucks::Tools::convertByteArray2Mat(QByteArray _ByteArray )
-{
-    const char* begin = reinterpret_cast<char*>(_ByteArray.data());
-    const char* end = begin + _ByteArray.size();
-    std::vector<char> pic(begin, end);
-    cv::Mat mat =  cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
-    return mat.clone();
-}
+//cv::Mat Tools::convertByteArray2Mat(QByteArray _ByteArray )
+//{
+//    const char* begin = reinterpret_cast<char*>(_ByteArray.data());
+//    const char* end = begin + _ByteArray.size();
+//    std::vector<char> pic(begin, end);
+//    cv::Mat mat =  cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
+//    return mat.clone();
+//}
 
-QByteArray nQTrucks::Tools::resizeByteArray2ByteArray(QByteArray _ByteArray, const int &_w, const int &_h)
-{
-    const char* begin = reinterpret_cast<char*>(_ByteArray.data());
-    const char* end = begin + _ByteArray.size();
-    std::vector<char> pic(begin, end);
-    cv::Mat cvresize =  cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
+//QByteArray Tools::resizeByteArray2ByteArray(QByteArray _ByteArray, const int &_w, const int &_h)
+//{
+//    const char* begin = reinterpret_cast<char*>(_ByteArray.data());
+//    const char* end = begin + _ByteArray.size();
+//    std::vector<char> pic(begin, end);
+//    cv::Mat cvresize =  cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
 
-    int max_width = _w;
-    int max_height = _h;
+//    int max_width = _w;
+//    int max_height = _h;
 
-    if (cvresize.cols > max_width){
-        float aspect = max_width / ((float)cvresize.cols);
-        float y = ((float)cvresize.rows) * aspect;
-        cv::resize(cvresize, cvresize, cv::Size((int) max_width, (int) y));
-       }
+//    if (cvresize.cols > max_width){
+//        float aspect = max_width / ((float)cvresize.cols);
+//        float y = ((float)cvresize.rows) * aspect;
+//        cv::resize(cvresize, cvresize, cv::Size((int) max_width, (int) y));
+//       }
 
-    if (cvresize.rows > max_height){
-        float aspect = max_height / ((float)cvresize.rows);
-        float x = ((float)cvresize.cols) * aspect;
-        cv::resize(cvresize, cvresize, cv::Size((int) x, (int) max_height));
-    }
+//    if (cvresize.rows > max_height){
+//        float aspect = max_height / ((float)cvresize.rows);
+//        float x = ((float)cvresize.cols) * aspect;
+//        cv::resize(cvresize, cvresize, cv::Size((int) x, (int) max_height));
+//    }
 
-    return convertMat2ByteArray(cvresize.clone());
-}
-
-/** END CONVERSORES ***********************************************************/
-
+//    return convertMat2ByteArray(cvresize.clone());
+//}
+/** END CONVERSORES **********/
+/** END TOOLS ************************************************************/
 
 
 
 //}
 
+namespace Registros{
+
+
+Camara::Camara()
+{
+    OrigenFoto              =cv::Mat::zeros(fotoSize, CV_8UC3 );                 //Imagen Original
+    OrigenFotoByte          =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
+}
+
+
+MatriculaResults::MatriculaResults()
+{
+    tipo                 =0;                                                     //0 para calibracion, 1 para procesado
+    id                   =0;                                                     //id fuente de captura de foto
+    OrigenFoto           =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //Imagen Original
+    OrigenFotoByte       =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
+    OrigenFotoPrewarp    =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
+    OrigenFotoBlanca     =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //  Imagen con calibracion de Blancos
+    OrigenFotoRoja       =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion de Rojos
+
+    MatriculaDetectedA   =false;                                                 // Coincide con un patron de busqueda?
+    MatriculaA           ="";                                                    // STring de la matricula
+    MatriculaFotoA       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
+    MatriculaFotoAByte   =nQTrucks::Tools::convertMat2ByteArray(MatriculaFotoA);
+    MatriculaPrecisionA  =0;                                                     // Precision del OCR
+    MatriculaPrecisionAs ="0%";
+
+    MatriculaDetectedB   =false;                                                 // Coincide con un patron de busqueda?
+    MatriculaB           ="";                                                    // STring de la matricula
+    MatriculaFotoB       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
+    MatriculaFotoBByte   =nQTrucks::Tools::convertMat2ByteArray(MatriculaFotoB);
+    MatriculaPrecisionB  =0;                                                     // Precision del OCR
+    MatriculaPrecisionBs ="0%";
+}
+
+
+}
+}

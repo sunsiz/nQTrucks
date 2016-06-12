@@ -62,7 +62,6 @@ public:
     /** Camaras **/
 public:
     QStringList getTiposCamaras();
-    //void setCamaraIP(int nCamara, QString type,QString host, QString port, QString user, QString passwd);
     void getCamaraFoto(int _ncamara);
 signals:
 
@@ -104,7 +103,7 @@ signals:
     void ReplyOriginalFoto1(const cv::Mat &Foto);
     void ReplyOriginalFotoBlanca1(const cv::Mat &Foto);
     void ReplyOriginalFotoRoja1(const cv::Mat &Foto);
-    void ReplyMatriculaResults1(const Registros::MatriculaResults &_results);
+    void ReplyMatriculaResults1(const Registros::MatriculaResults  &_results);
 
     /** ALPR 2 **/
 signals:
@@ -113,9 +112,12 @@ signals:
     void ReplyOriginalFotoRoja2(const cv::Mat &Foto);
     void ReplyMatriculaResults2(const Registros::MatriculaResults &_results);
 
-    /** END NEWSAGES ALPR **/
+    /** END NEWSAGES ALPR **/        
 
     /** CORE ***************************************/
+    /** DAEMON **/
+signals:
+    void daemonRegistroChanged(const SimpleMatriculas & _results);
 public slots:
     void setInitDaemon(const bool &_init);
 

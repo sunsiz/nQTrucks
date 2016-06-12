@@ -2,7 +2,6 @@
 #define DATABASEMANAGER_H
 
 #include <QObject>
-#include <QImage>
 #include <nqtglobal.h>
 
 #include <QSqlDatabase>
@@ -15,6 +14,7 @@ namespace Db {
 class DatabaseManager : public QObject{
     Q_OBJECT
 public:
+   // DatabaseManager(QObject *parent=nullptr);
     explicit DatabaseManager(QObject *parent=nullptr);
     ~DatabaseManager();
 
@@ -25,15 +25,14 @@ signals:
 private:
     void initDb();
     QSqlDatabase m_db;
-    Registros::SimpleMatriculas m_registro_simple_matriculas;
+    SimpleMatriculas m_RegistroMatriculas;
     ReportManager m_report_manager;
-//        QByteArray resizeFoto(QByteArray _ByteArray);
-//        cv::Mat byteArray2Mat(QByteArray &byteArray);
-//        QImage convertMat2QImage(const cv::Mat &src);
-//        QByteArray convertMat2ByteArray(const cv::Mat &img);
+
+public:
+    void setRegistroMatriculas(const SimpleMatriculas &RegistroMatriculas);
+
 public slots:
     void guardarRegistroSimpleMatriculas();
-    void setRegistroSimpleMatriculas(const Registros::SimpleMatriculas &_registro);
 
     /** END DB **/
 };

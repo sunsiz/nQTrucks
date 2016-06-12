@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <nqtglobal.h>
-#include <LimeReport>
 #include <QApplication>
+#include <QSqlDatabase>
 
 namespace nQTrucks {
 namespace Db {
@@ -15,11 +15,9 @@ public:
     explicit ReportManager(QObject *parent=nullptr);
 
 private:
-    LimeReport::ReportEngine m_report;
-private:
-    QString m_informe_peso = QApplication::applicationDirPath()+"/reports/peso.lrxml";
+    QString m_informe_peso = QApplication::applicationDirPath()+"/reports/peso_matricula.lrxml";
 public:
-    void printRegistroMatricula(const int &row);
+    void printRegistroMatricula(const QSqlDatabase &_db, const int &row);
 };
 
 }

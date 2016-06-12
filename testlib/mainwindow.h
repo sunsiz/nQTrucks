@@ -152,7 +152,8 @@ private slots:
 private:
     void loadconfig();
     /** END CONFIG **/
-    static QImage convertMat2QImage(const cv::Mat &src);
+    nQTrucks::Tools * m_tools;
+    //static QImage convertMat2QImage(const cv::Mat &src);
 };
 
 #endif // MAINWINDOW_H
