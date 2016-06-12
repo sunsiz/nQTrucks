@@ -20,6 +20,7 @@ Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_news
     , m_bfoto2(false)
     , m_balpr1(false)
     , m_balpr2(false)
+    //, m_tools(new Tools(this))
 
 {
     QObject::connect(this,SIGNAL(initChanged(bool)),this,SLOT(onStartStop(bool)));
@@ -151,11 +152,13 @@ void Daemon::onGuardarRegistroSimpleMatriculas(){
 
     /* Crea un Hilo para la base de datos */
     /* Ejecuta el registro Simple */
+
+    //m_RegistroMatriculas.convertirFotos();
     emit RegistroChanged(m_RegistroMatriculas);
 
     hiloDb = new QThread();
     tareaDb = new Db::DatabaseManager;
-    tareaDb->moveToThread(hiloDb);
+    tareaDb->moveToThread(hiloDb);    
     tareaDb->setRegistroMatriculas(m_RegistroMatriculas);
 
     connect( hiloDb,  SIGNAL(started()),      tareaDb, SLOT(guardarRegistroSimpleMatriculas())  );

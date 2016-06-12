@@ -37,7 +37,6 @@ Client::Client(nQTrucksEngine *_engine, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Client)
     , engine(_engine)
-    , m_tools(new Tools(this))
 {
     ui->setupUi(this);
 
@@ -55,7 +54,6 @@ Client::Client(nQTrucksEngine *_engine, QWidget *parent)
 Client::~Client()
 {
     delete ui;
-    m_tools->deleteLater();
 }
 
 /** NEWSAGES I/O  **/
@@ -91,25 +89,26 @@ void Client::onBascula(Bascula _bascula){
 
 void Client::onDaemonRegistroChanged(const SimpleMatriculas &_result)
 {
-    ui->camara1->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[0].OrigenFoto.clone())));
-    ui->camara2->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[1].OrigenFoto.clone())));
+    //_result.convertirFotos();
+    ui->camara1->setPixmap(QPixmap::fromImage(_result.results[0].OrigenFotoQ));
+    ui->camara2->setPixmap(QPixmap::fromImage(_result.results[1].OrigenFotoQ));
 
     if ( _result.results[0].MatriculaPrecisionA >= _result.results[1].MatriculaPrecisionA){
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[0].MatriculaFotoA.clone())));
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.results[0].MatriculaFotoAQ));
         ui->MatriculaA->setText(_result.results[0].MatriculaA);
         ui->MatriculaPrecisionA->setText(_result.results[0].MatriculaPrecisionAs);
     }else{
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[1].MatriculaFotoA.clone())));
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.results[1].MatriculaFotoAQ));
         ui->MatriculaA->setText(_result.results[1].MatriculaA);
         ui->MatriculaPrecisionA->setText(_result.results[1].MatriculaPrecisionAs);
     }
 
     if ( _result.results[0].MatriculaPrecisionB >= _result.results[1].MatriculaPrecisionB){
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[0].MatriculaFotoB.clone())));
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(_result.results[0].MatriculaFotoBQ));
         ui->MatriculaB->setText(_result.results[0].MatriculaB);
         ui->MatriculaPrecisionB->setText(_result.results[0].MatriculaPrecisionBs);
     }else{
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(_result.results[1].MatriculaFotoB.clone())));
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(_result.results[1].MatriculaFotoBQ));
         ui->MatriculaB->setText(_result.results[1].MatriculaB);
         ui->MatriculaPrecisionB->setText(_result.results[1].MatriculaPrecisionBs);
     }

@@ -43,7 +43,6 @@ Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
     , ui(new Ui::Configuracion)
     , m_running(false)
     , engine(_engine)
-    , m_tools(new Tools(this))
 {
     ui->setupUi(this);
 
@@ -84,17 +83,16 @@ Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
 Configuracion::~Configuracion()
 {
     delete ui;
-    m_tools->deleteLater();
 }
 
 
 void Configuracion::updateGui(){
     switch (ui->CamaraSelect->currentIndex()) {
     case 0:
-        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[0].OrigenFoto.clone())));
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[0].OrigenFotoQ));
         break;
     case 1:
-        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[1].OrigenFoto.clone())));
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[1].OrigenFotoQ));
         break;
     }
 }
@@ -118,12 +116,8 @@ void Configuracion::loadconfig()
     /** DEFAULTS UI **/
     for(m_matricularesults_iterator = m_matricularesults.begin(); m_matricularesults_iterator != m_matricularesults.end(); m_matricularesults_iterator++)
     {
-        m_matricularesults_iterator->OrigenFoto=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-        m_matricularesults_iterator->OrigenFotoPrewarp=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-        m_matricularesults_iterator->OrigenFotoRoja=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-        m_matricularesults_iterator->OrigenFotoBlanca=cv::Mat::zeros( 720, 1280, CV_8UC3 );
-        m_matricularesults_iterator->MatriculaFotoA=cv::Mat::zeros( 110, 520, CV_8UC3 );
-        m_matricularesults_iterator->MatriculaFotoB=cv::Mat::zeros( 110, 520, CV_8UC3 );
+        m_matricularesults_iterator->convertirFotos();
+
     }
     /** END DEFAULT UIS **/
 
@@ -385,20 +379,21 @@ void Configuracion::on_ActualizarCamara_clicked(){
     /** END GUI **/
     /** ALPR **/
 void Configuracion::updateCalibracionGui(){
-    int index = getAlprIndex();
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[index].OrigenFoto.clone())));
-    ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[index].MatriculaFotoA.clone())));
-    ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[index].MatriculaFotoB.clone())));
+    int index = getAlprIndex();    
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_matricularesults[index].OrigenFotoQ));
+    ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_matricularesults[index].MatriculaFotoAQ));
+    ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_matricularesults[index].MatriculaFotoBQ));
     ui->MatriculaA->setText(m_matricularesults[index].MatriculaA);
     ui->MatriculaB->setText(m_matricularesults[index].MatriculaB);
-    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[index].OrigenFotoBlanca.clone())));
-    ui->FotoRojosA->setPixmap(QPixmap::fromImage(m_tools->convertMat2QImage(m_matricularesults[index].OrigenFotoRoja.clone())));
+    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(m_matricularesults[index].OrigenFotoBlancaQ));
+    ui->FotoRojosA->setPixmap(QPixmap::fromImage(m_matricularesults[index].OrigenFotoRojaQ));
     ui->LongMatriculaA->setText(m_matricularesults[index].MatriculaPrecisionAs);
     ui->LongMatriculaB->setText(m_matricularesults[index].MatriculaPrecisionBs);
 }
     /** ALPR 1 **/
 void Configuracion::onReplyMatriculaResults1(const Registros::MatriculaResults &_result){
     m_matricularesults[0] = _result;
+    //m_matricularesults[0].convertirFotos();
     loadPlanks(0);
     updateCalibracionGui();
 }

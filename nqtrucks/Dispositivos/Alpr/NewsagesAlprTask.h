@@ -74,7 +74,7 @@ signals:
     /** TOOLS **/
 private:
 
-    nQTrucks::Tools *m_tools;
+    //nQTrucks::Tools *m_tools;
     /** END TOOLS **/
 
 };

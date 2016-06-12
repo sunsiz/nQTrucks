@@ -90,7 +90,7 @@ void NewsagesAlpr::calibrarFoto(const cv::Mat &Foto){
         hiloCalibrar2 = new QThread();
 
         /** Crear tareas **/
-        m_results[1]->OrigenFoto = Foto.clone();
+        m_results[1]->OrigenFoto = Foto.clone();        
         tareaCalibrar1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results[1], m_settings);
         tareaCalibrar2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results[1], m_settings);
 
@@ -219,6 +219,7 @@ void NewsagesAlpr::processFoto(const cv::Mat &Foto)
 }
 
 void NewsagesAlpr::onProcesarFotoFinished(){
+    m_results[2]->convertirFotos();
     emit ReplyMatriculaResults(*m_results[2]);
     qDebug() << "Device:"           << m_results[2]->id << endl
              << "\t Matricula1:"    << m_results[2]->MatriculaA

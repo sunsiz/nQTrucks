@@ -36,9 +36,12 @@
 
 #include <QObject>
 #include <QSettings>
-//#include <QImage>
+#include <QVector>
+#include <QImage>
+
 #include "opencv2/opencv.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
+
 
 #if defined(NQTRUCKS_LIBRARY)
 #  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_EXPORT
@@ -163,16 +166,24 @@ namespace Registros{              /** REPORTS **/
         MatriculaResults();
         int        tipo;//                 =0;                                                     //0 para calibracion, 1 para procesado
         int        id ;//                  =0;                                                     //id fuente de captura de foto
+
         cv::Mat    OrigenFoto;//           =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //Imagen Original
+        QImage     OrigenFotoQ;
         QByteArray OrigenFotoByte;//       =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
+
         cv::Mat    OrigenFotoPrewarp;//    =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
+        QImage     OrigenFotoPrewarpQ;
+
         cv::Mat    OrigenFotoBlanca;//     =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //  Imagen con calibracion de Blancos
+        QImage     OrigenFotoBlancaQ;
         cv::Mat    OrigenFotoRoja;//       =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion de Rojos
+        QImage     OrigenFotoRojaQ;
 
         bool       MatriculaDetectedA;//   =false;                                                 // Coincide con un patron de busqueda?
         QString    MatriculaA;//           ="";                                                    // STring de la matricula
         cv::Mat    MatriculaFotoA;//       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
         QByteArray MatriculaFotoAByte;//   =nQTrucks::Tools::convertMat2ByteArray(MatriculaFotoA);
+        QImage     MatriculaFotoAQ;
         float      MatriculaPrecisionA;//  =0;                                                     // Precision del OCR
         QString    MatriculaPrecisionAs;// ="0%";
 
@@ -180,8 +191,11 @@ namespace Registros{              /** REPORTS **/
         QString    MatriculaB;//           ="";                                                    // STring de la matricula
         cv::Mat    MatriculaFotoB;//       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
         QByteArray MatriculaFotoBByte;//   =nQTrucks::Tools::convertMat2ByteArray(MatriculaFotoB);
-        float      MatriculaPrecisionB;//  =0;                                                     // Precision del OCR
+        QImage     MatriculaFotoBQ;
+        float      MatriculaPrecisionB;//  =0;                                                     // Precision del OCR        
         QString    MatriculaPrecisionBs;// ="0%";
+
+        void convertirFotos();
 
     };
 
@@ -206,8 +220,10 @@ namespace Registros{              /** REPORTS **/
 
 class SimpleMatriculas{
 public:
+
     Bascula bascula;
-    Registros::MatriculaResults results[2];
+    QVector<Registros::MatriculaResults> results = QVector<Registros::MatriculaResults>(2);
+    void convertirFotos();
     };
 
 

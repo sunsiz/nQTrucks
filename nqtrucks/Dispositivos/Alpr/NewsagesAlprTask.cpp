@@ -23,22 +23,19 @@ NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType,Registros::Matricula
     : QObject(parent)
     , m_settings(_appsettings)
     , m_matricularesult(_results)
-    , m_tools(new nQTrucks::Tools(this))
 {
     setlocale(LC_NUMERIC, "C");
     setNDevice(_nDevice);
     setNType(_nType);
 
-    m_matricularesult->OrigenFotoByte       = m_tools->convertMat2ByteArray(m_matricularesult->OrigenFoto);
-    m_matricularesult->MatriculaFotoAByte   = m_tools->convertMat2ByteArray(m_matricularesult->MatriculaFotoA);
-    m_matricularesult->MatriculaFotoBByte   = m_tools->convertMat2ByteArray(m_matricularesult->MatriculaFotoB);
+    m_matricularesult->convertirFotos();
 
     loadconfig();
 }
 
 NewsagesAlprTask::~NewsagesAlprTask(){
 
-    m_tools->deleteLater();
+
 }
 
 
@@ -198,7 +195,6 @@ void NewsagesAlprTask::procesarBlancas()
                                                      plate.plate_points[2].x - plate.plate_points[0].x,
                                                      plate.plate_points[2].y - plate.plate_points[0].y);
                             cv::resize(cv::Mat(m_matricularesult->OrigenFoto,rect),m_matricularesult->MatriculaFotoA,matriculaSize);
-                            m_matricularesult->MatriculaFotoAByte   = m_tools->convertMat2ByteArray(m_matricularesult->MatriculaFotoA);
                         }
                     }
                 }
@@ -213,6 +209,7 @@ void NewsagesAlprTask::procesarBlancas()
     delete matricula;
     guardarPlanK();
     emit ReplyOriginalFotoBlanca(m_matricularesult->OrigenFotoBlanca);
+    m_matricularesult->convertirFotos();
     emit ReplyMatriculaFoto();
 }
 
@@ -257,9 +254,6 @@ void NewsagesAlprTask::procesarRojas()
                                                          plate.plate_points[2].x - plate.plate_points[0].x,
                                                          plate.plate_points[2].y - plate.plate_points[0].y);
                                 cv::resize(cv::Mat(m_matricularesult->OrigenFoto,rect),m_matricularesult->MatriculaFotoB,matriculaSize);
-                                m_matricularesult->MatriculaFotoBByte   = m_tools->convertMat2ByteArray(m_matricularesult->MatriculaFotoB);
-                                m_matricularesult->MatriculaDetectedB   = candidate.matches_template;
-                                m_matricularesult->MatriculaB           = QString::fromStdString(candidate.characters);
                             }
                        }
                     }
@@ -275,6 +269,7 @@ void NewsagesAlprTask::procesarRojas()
     delete remolque;
     guardarPlanK();
     emit ReplyOriginalFotoRoja(m_matricularesult->OrigenFotoRoja);
+    m_matricularesult->convertirFotos();
     emit ReplyMatriculaFoto();
 
 }

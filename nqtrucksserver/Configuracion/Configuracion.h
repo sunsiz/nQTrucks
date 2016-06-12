@@ -147,7 +147,7 @@ private slots:
 private:
     void loadconfig();
     /** END CONFIG **/
-    Tools *m_tools;
+   // Tools *m_tools;
 };
 
 }
