@@ -27,6 +27,10 @@ private:
     QSqlDatabase m_db;
     SimpleMatriculas m_RegistroMatriculas;
     ReportManager m_report_manager;
+    long long m_lastrecord=0;
+
+
+
 
 public:
     void setRegistroMatriculas(const SimpleMatriculas &RegistroMatriculas);

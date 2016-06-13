@@ -53,7 +53,7 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
       qDebug() << "Failed to connect." ;
     }else{
         qDebug( "Connected!" );
-        //m_db.transaction();
+        m_db.transaction();
         QSqlQuery qry(m_db);
 
         qry.prepare( "INSERT INTO registros_matriculas( "
@@ -91,40 +91,44 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
 
          if( !qry.exec() ){
            qDebug() << qry.lastError();
-            //m_db.rollback();
+            m_db.rollback();
          }else{
-            //m_db.commit();
+            m_db.commit();
            qDebug() <<  "Inserted!: " << qry.lastInsertId().toInt();
-            int lastrow = qry.lastInsertId().toInt();
+            m_lastrecord = qry.lastInsertId().toLongLong();
            /** Report Pesada **/
-            m_report_manager.printRegistroMatricula(m_db,lastrow);
+            m_report_manager.printRegistroMatricula(m_db,m_lastrecord);
 
             /** No Guardar Si Cualquiera de las 4 Matriculas es detectada **/
             if ( m_RegistroMatriculas.results[0].MatriculaPrecisionA >80 || m_RegistroMatriculas.results[0].MatriculaPrecisionB >80 ||
                  m_RegistroMatriculas.results[1].MatriculaPrecisionA >80 || m_RegistroMatriculas.results[1].MatriculaPrecisionB >80  )
             {
 
-                //m_db.transaction();
+                m_db.transaction();
                 qry.prepare(" UPDATE registros_matriculas "
                             " SET "
                             " fotocamara1 = :fotocamara1, "
                             " fotocamara2 = :fotocamara2  "
                             " WHERE id =  :id;");
-                qry.bindValue(":id",                lastrow    );
+                qry.bindValue(":id",                m_lastrecord);
                 qry.bindValue(":fotocamara1",       QVariant());
                 qry.bindValue(":fotocamara2",       QVariant());
-                qry.exec();
-                //m_db.commit();
+
+                if (!qry.exec()){
+                    qDebug() << qry.lastError();
+                }else{
+                    m_db.commit();
+                    /** Buscar Pareja **/
+                         /** Si pareja **/
+                             /** Report Pareja **/
+                }
+
             }
 
 
 
 
 
-
-           /** Buscar Pareja **/
-                /** Si pareja **/
-                    /** Report Pareja **/
 
 
          }

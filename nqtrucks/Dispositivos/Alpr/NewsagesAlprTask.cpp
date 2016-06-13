@@ -249,7 +249,7 @@ void NewsagesAlprTask::procesarRojas()
                                 m_matricularesult->MatriculaDetectedB   = candidate.matches_template;
                                 m_matricularesult->MatriculaPrecisionB  = candidate.overall_confidence;
                                 m_matricularesult->MatriculaPrecisionBs = QString::number(m_matricularesult->MatriculaPrecisionB,'g',6);
-
+                                m_matricularesult->MatriculaB           = QString::fromStdString(candidate.characters);
                                 cv::Rect rect = cv::Rect(plate.plate_points[0].x  ,plate.plate_points[0].y,
                                                          plate.plate_points[2].x - plate.plate_points[0].x,
                                                          plate.plate_points[2].y - plate.plate_points[0].y);
