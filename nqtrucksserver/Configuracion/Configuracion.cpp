@@ -67,21 +67,13 @@ Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
     /** ALPR 1 **/
     connect(engine ,SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::MatriculaResults)));
     connect(engine ,SIGNAL(ReplyOriginalFoto1(Registros::Camara)),this,SLOT(onGetOriginalMatricula1(Registros::Camara)));
-    connect(engine ,SIGNAL(ReplyMatriculaCalibrationResults1(Registros::MatriculaResults),
-                           this,SIGNAL(onGetCalibrationResult1(Registros::MatriculaResults)));;
-
-    //connect(engine ,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja1(cv::Mat)));
-    //connect(engine ,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca1(cv::Mat)));
-
+    connect(engine ,SIGNAL(ReplyMatriculaCalibrationResults1(Registros::MatriculaResults)),
+                           this,SLOT(onGetCalibrationResult1(Registros::MatriculaResults)));
     /** ALPR 2 **/
     connect(engine, SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::MatriculaResults)));
     connect(engine ,SIGNAL(ReplyOriginalFoto2(Registros::Camara)),this,SLOT(onGetOriginalMatricula2(Registros::Camara)));
-    connect(engine ,SIGNAL(ReplyMatriculaCalibrationResults2(Registros::MatriculaResults),
-                           this,SIGNAL(onGetCalibrationResult2(Registros::MatriculaResults)));;
-
-    //connect(engine ,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja2(cv::Mat)));
-    //connect(engine ,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca2(cv::Mat)));
-
+    connect(engine ,SIGNAL(ReplyMatriculaCalibrationResults2(Registros::MatriculaResults)),
+                           this,SLOT(onGetCalibrationResult2(Registros::MatriculaResults)));
     loadconfig();
     //setFixedSize(1024,768);
     //this->showFullScreen();

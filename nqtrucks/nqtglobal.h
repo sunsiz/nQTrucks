@@ -88,9 +88,9 @@ namespace nQTrucks
         Q_OBJECT
     public:
         explicit Tools(QObject *parent=nullptr);
-        static QImage     convertMat2QImage(   const cv::Mat    &_cvimage);
-        static cv::Mat    convertQImage2Mat(   const QImage     &_qimage);
-        static QByteArray convertMat2ByteArray(const cv::Mat    &_cvimage);
+        /*static*/ QImage     convertMat2QImage(   const cv::Mat    &_cvimage);
+        /*static*/ cv::Mat    convertQImage2Mat(   const QImage     &_qimage);
+        /*static*/ QByteArray convertMat2ByteArray(const cv::Mat    &_cvimage);
         //static cv::Mat    convertByteArray2Mat(QByteArray _Bytearray);
         //static QByteArray resizeByteArray2ByteArray(QByteArray _ByteArray, const int &_w, const int &_h);
     };
@@ -152,10 +152,12 @@ namespace Registros{              /** REPORTS **/
     class Camara{        
     public:
         Camara();
+        ~Camara();
         cv::Mat    OrigenFoto;//              =cv::Mat::zeros(fotoSize, CV_8UC3 );                 //Imagen Original
         QByteArray OrigenFotoByte;//          =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
         QImage     OrigenFotoQ;
         void convertirFotos();
+        Tools *m_tools;
     };
 
     class Simple{
@@ -166,6 +168,7 @@ namespace Registros{              /** REPORTS **/
     class MatriculaResults{
     public:
         MatriculaResults();
+        ~MatriculaResults();
         int        tipo;//                 =0;                                                     //0 para calibracion, 1 para procesado
         int        id ;//                  =0;                                                     //id fuente de captura de foto
 
@@ -198,6 +201,7 @@ namespace Registros{              /** REPORTS **/
         float      MatriculaPrecisionB;//  =0;                                                     // Precision del OCR        
         QString    MatriculaPrecisionBs;// ="0%";
 
+        Tools *m_tools;
         void convertirFotos();
 
     };
