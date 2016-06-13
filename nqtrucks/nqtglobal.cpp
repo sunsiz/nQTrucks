@@ -57,13 +57,13 @@ cv::Mat Tools::convertQImage2Mat(const QImage &_qimage){
     QByteArray baScene; // byte array with data
     QBuffer buffer(&baScene);
     buffer.open(QIODevice::WriteOnly);
-    _qimage.save(&buffer,"PNG");
+    _qimage.save(&buffer,"JPG");
 
     const char* begin = reinterpret_cast<char*>(baScene.data());
     const char* end = begin + baScene.size();
     std::vector<char> pic(begin, end);
     buffer.close();
-    //baScene.clear();
+    baScene.clear();
     return cv::imdecode(pic,CV_LOAD_IMAGE_COLOR).clone();
 }
 
@@ -95,7 +95,7 @@ QByteArray Tools::convertMat2ByteArray(const cv::Mat &_cvimage){
     QByteArray baScene; // byte array with data
     QBuffer buffer(&baScene);
     buffer.open(QIODevice::WriteOnly);
-    qtImg.save(&buffer,"PNG");
+    qtImg.save(&buffer,"JPG");
     buffer.close();
     return baScene;
 }
