@@ -149,7 +149,7 @@ Camara::Camara():
 {
     OrigenFoto              =cv::Mat::zeros(fotoSize, CV_8UC3 );                 //Imagen Original
     OrigenFotoByte          =m_tools->convertMat2ByteArray(OrigenFoto.clone());
-    OrigenFotoQ             =m_tools->convertMat2QImage(OrigenFoto.clone()).copy();
+    OrigenFotoQ             =m_tools->convertMat2QImage(OrigenFoto.clone());
 }
 
 Camara::~Camara(){
@@ -159,7 +159,7 @@ Camara::~Camara(){
 void Camara::convertirFotos()
 {
     OrigenFotoByte  = m_tools->convertMat2ByteArray(OrigenFoto.clone());
-    OrigenFotoQ     = m_tools->convertMat2QImage(OrigenFoto.clone()).copy();
+    OrigenFotoQ     = m_tools->convertMat2QImage(OrigenFoto.clone());
 }
 
 
@@ -170,17 +170,17 @@ MatriculaResults::MatriculaResults()
     id                   =0;                                                     //id fuente de captura de foto
 
     OrigenFotoPrewarp    =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
-    OrigenFotoPrewarpQ   =m_tools->convertMat2QImage(OrigenFotoPrewarp.clone()).copy();
+    OrigenFotoPrewarpQ   =m_tools->convertMat2QImage(OrigenFotoPrewarp.clone());
     OrigenFotoBlanca     =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //  Imagen con calibracion de Blancos
-    OrigenFotoBlancaQ    =m_tools->convertMat2QImage(OrigenFotoBlanca.clone()).copy();
+    OrigenFotoBlancaQ    =m_tools->convertMat2QImage(OrigenFotoBlanca.clone());
     OrigenFotoRoja       =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion de Rojos
-    OrigenFotoRojaQ      =m_tools->convertMat2QImage(OrigenFotoRoja.clone()).copy();
+    OrigenFotoRojaQ      =m_tools->convertMat2QImage(OrigenFotoRoja.clone());
 
     MatriculaDetectedA   =false;                                                 // Coincide con un patron de busqueda?
     MatriculaA           ="";                                                    // STring de la matricula
     MatriculaFotoA       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
     MatriculaFotoAByte   =m_tools->convertMat2ByteArray(MatriculaFotoA.clone());
-    MatriculaFotoAQ      =m_tools->convertMat2QImage(MatriculaFotoA.clone()).copy();
+    MatriculaFotoAQ      =m_tools->convertMat2QImage(MatriculaFotoA.clone());
     MatriculaPrecisionA  =0;                                                     // Precision del OCR
     MatriculaPrecisionAs ="0%";
 
@@ -188,7 +188,7 @@ MatriculaResults::MatriculaResults()
     MatriculaB           ="";                                                    // STring de la matricula
     MatriculaFotoB       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
     MatriculaFotoBByte   =m_tools->convertMat2ByteArray(MatriculaFotoB.clone());
-    MatriculaFotoBQ      =m_tools->convertMat2QImage(MatriculaFotoB.clone()).copy();
+    MatriculaFotoBQ      =m_tools->convertMat2QImage(MatriculaFotoB.clone());
     MatriculaPrecisionB  =0;                                                     // Precision del OCR
     MatriculaPrecisionBs ="0%";
 }
@@ -200,15 +200,15 @@ MatriculaResults::~MatriculaResults()
 
 void MatriculaResults::convertirFotos()
 {
-    OrigenFotoPrewarpQ    =  m_tools->convertMat2QImage(OrigenFotoPrewarp.clone()).copy();
-    OrigenFotoBlancaQ     =  m_tools->convertMat2QImage(OrigenFotoBlanca.clone()).copy();
-    OrigenFotoRojaQ       =  m_tools->convertMat2QImage(OrigenFotoRoja.clone()).copy();
+    OrigenFotoPrewarpQ    =  m_tools->convertMat2QImage(OrigenFotoPrewarp.clone());
+    OrigenFotoBlancaQ     =  m_tools->convertMat2QImage(OrigenFotoBlanca.clone());
+    OrigenFotoRojaQ       =  m_tools->convertMat2QImage(OrigenFotoRoja.clone());
 
     MatriculaFotoAByte    =  m_tools->convertMat2ByteArray(MatriculaFotoA.clone());
-    MatriculaFotoAQ       =  m_tools->convertMat2QImage(MatriculaFotoA.clone()).copy();
+    MatriculaFotoAQ       =  m_tools->convertMat2QImage(MatriculaFotoA.clone());
 
     MatriculaFotoBByte    =  m_tools->convertMat2ByteArray(MatriculaFotoB.clone());
-    MatriculaFotoBQ       =  m_tools->convertMat2QImage(MatriculaFotoB.clone()).copy();
+    MatriculaFotoBQ       =  m_tools->convertMat2QImage(MatriculaFotoB.clone());
 
 }
 
