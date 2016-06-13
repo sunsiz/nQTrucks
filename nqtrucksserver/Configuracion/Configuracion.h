@@ -66,8 +66,8 @@ private:
 private slots:
     void on_CamaraSelect_currentIndexChanged(int index);
     void on_GuardarCamara_clicked();
-    void onGetFotoCV1(const cv::Mat &fotocv);
-    void onGetFotoCV2(const cv::Mat &fotocv);
+    void onGetFoto1(const Registros::Camara &_camara);
+    void onGetFoto2(const Registros::Camara &_camara);
     /** END CAMARAS **/
 
 
@@ -117,18 +117,16 @@ private:
 
     /** ALPR1 **/
 private slots:
+    void onGetCalibrationResult1(const Registros::MatriculaResults &_calibration_result);
+    void onGetOriginalMatricula1(const Registros::Camara &_camara);
     void onReplyMatriculaResults1(const Registros::MatriculaResults &_result);
-    void onGetOriginalMatricula1(const cv::Mat &foto);
-    void onGetOriginalMatriculaRoja1(const cv::Mat &foto);
-    void onGetOriginalMatriculaBlanca1(const cv::Mat &foto);
     /** END ALPR1 **/
 
     /** ALPR2 **/
 private slots:
+    void onGetCalibrationResult2(const Registros::MatriculaResults &_calibration_result);
+    void onGetOriginalMatricula2(const Registros::Camara &_camara);
     void onReplyMatriculaResults2(const Registros::MatriculaResults &_result);
-    void onGetOriginalMatricula2(const cv::Mat &foto);
-    void onGetOriginalMatriculaRoja2(const cv::Mat &foto);
-    void onGetOriginalMatriculaBlanca2(const cv::Mat &foto);
     /** END NEWSAGES ALPR 2 **/
     /** PLANKs **/
 private slots:

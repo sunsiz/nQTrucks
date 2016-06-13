@@ -69,15 +69,15 @@ NewsagesAlpr::~NewsagesAlpr()
  m_results.detach();
 }
 
-void NewsagesAlpr::setFotoCamara(const cv::Mat &Foto) {
-    m_results[0]->OrigenFoto = Foto.clone();
-    m_results[1]->OrigenFoto = Foto.clone();
-    m_results[2]->OrigenFoto = Foto.clone();
-    emit ReplyOriginalFoto(m_results[0]->OrigenFoto);
+void NewsagesAlpr::setFotoCamara(const Registros::Camara &_camara) {
+    m_results[0]->camara = _camara;
+    m_results[1]->camara = _camara;
+    m_results[2]->camara = _camara;
+    emit ReplyOriginalFoto(m_results[0]->camara);
 }
 
 /** SOLO CALIBRACION ***************************************************************************************/
-void NewsagesAlpr::calibrarFoto(const cv::Mat &Foto){
+void NewsagesAlpr::calibrarFoto(const Registros::Camara &_camara){
 
     if(!bhiloCalibrar1 && !bhiloCalibrar2){
         bhiloCalibrar1=true;
@@ -90,7 +90,7 @@ void NewsagesAlpr::calibrarFoto(const cv::Mat &Foto){
         hiloCalibrar2 = new QThread();
 
         /** Crear tareas **/
-        m_results[1]->OrigenFoto = Foto.clone();        
+        m_results[1]->camara = _camara;
         tareaCalibrar1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results[1], m_settings);
         tareaCalibrar2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results[1], m_settings);
 
@@ -147,14 +147,14 @@ void NewsagesAlpr::calibrarFoto(const cv::Mat &Foto){
 }
 
 void NewsagesAlpr::onCalibrarFotoFinished(){
-    this->ReplyOriginalFotoBlanca( m_results[1]->OrigenFotoBlanca);
-    this->ReplyOriginalFotoRoja(   m_results[1]->OrigenFotoRoja  );
+    m_results[1]->convertirFotos();
+    this->ReplyMatriculaCalibrationResults(*m_results[1]);
 }
 /** END SOLO CALIBRACION *************************************************************************************/
 
 
 /** PROCESAR ************************************************************************************************/
-void NewsagesAlpr::processFoto(const cv::Mat &Foto)
+void NewsagesAlpr::processFoto(const Registros::Camara &_camara)
 {
 
     if(!bhilo1 && !bhilo2){
@@ -168,7 +168,7 @@ void NewsagesAlpr::processFoto(const cv::Mat &Foto)
         hilo2 = new QThread;
 
         /** Crear tareas **/
-        m_results[2]->OrigenFoto = Foto.clone();
+        m_results[2]->camara = _camara;
         tarea1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results[2], m_settings);
         tarea2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results[2], m_settings);
 

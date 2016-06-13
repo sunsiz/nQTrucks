@@ -212,16 +212,15 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** CAMARAS IP **/
     /** 1 **/
-    connect(d->m_camara[0],SIGNAL(ReplyCamaraIPFotoCV(cv::Mat)),this,SIGNAL(CamaraIPFotoCV1(cv::Mat)));
+    connect(d->m_camara[0],SIGNAL(ReplyCamaraIP(Registros::Camara)),this,SIGNAL(CamaraIP1(Registros::Camara)));
     connect(d->m_camara[0],SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb1(QString)));
     /** 2 **/
-    connect(d->m_camara[1],SIGNAL(ReplyCamaraIPFotoCV(cv::Mat)),this,SIGNAL(CamaraIPFotoCV2(cv::Mat)));
+    connect(d->m_camara[1],SIGNAL(ReplyCamaraIP(Registros::Camara)),this,SIGNAL(CamaraIP2(Registros::Camara)));
     connect(d->m_camara[1],SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb2(QString)));
     /** END CAMARAS IP **/
 
     /** NEWSAGES IO **/
     connect(d->m_newsagesIO,SIGNAL(SemaforoConnectChanged(bool)),this,SIGNAL(SemaforoConnectChanged(bool)));
-    //connect(d->m_newsagesIO,SIGNAL(readyChanged(bool)),this,SIGNAL(IODeviceReadyChanged(bool)));
     connect(d->m_newsagesIO,SIGNAL(SemaforoEstadoChanged(int)),this,SIGNAL(SemaforoEstadoChanged(int)));
     /** END NEWSAGES IO **/
 
@@ -232,15 +231,13 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** NEWSAGES ALPR **/
     /** 1 **/
-    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto1(cv::Mat)));
-    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)));
-    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)));
+    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFoto(Registros::Camara)),this,SIGNAL(ReplyOriginalFoto1(Registros::Camara)));
+    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaCalibrationResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaCalibrationResults1(Registros::MatriculaResults)));
     connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)));
 
     /** 2 **/
-    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFoto(cv::Mat)),this,SIGNAL(ReplyOriginalFoto2(cv::Mat)));
-    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFotoBlanca(cv::Mat)),this,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)));
-    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFotoRoja(cv::Mat)),this,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)));
+    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFoto(Registros::Camara)),this,SIGNAL(ReplyOriginalFoto2(Registros::Camara)));
+    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaCalibrationResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaCalibrationResults2(Registros::MatriculaResults)));
     connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)));
     /** END NEWSAGES ALPR **/
 
@@ -344,30 +341,30 @@ QStringList nQTrucksEngine::getSerialDevices()
 
 
 /** ALRP ********************************************************************************************************************/
-void nQTrucksEngine::calibrarFoto(const int &_device, const cv::Mat &_foto)
+void nQTrucksEngine::calibrarFoto(const int &_device, const Registros::Camara &_camara)
 {
     Q_D(nQTrucksEngine);
     switch (_device) {
     case 0:
-        d->m_alpr[0]->calibrarFoto(_foto.clone());
+        d->m_alpr[0]->calibrarFoto(_camara);
         break;
     case 1:
-        d->m_alpr[1]->calibrarFoto(_foto.clone());
+        d->m_alpr[1]->calibrarFoto(_camara);
         break;
     default:
         break;
     }
 }
 
-void nQTrucksEngine::getFotoMatricula(const int &_device, const cv::Mat &_foto)
+void nQTrucksEngine::getFotoMatricula(const int &_device, const Registros::Camara &_camara)
 {
      Q_D(nQTrucksEngine);
     switch (_device) {
     case 0:
-         d->m_alpr[0]->processFoto(_foto.clone());
+         d->m_alpr[0]->processFoto(_camara);
         break;
     case 1:
-         d->m_alpr[1]->processFoto(_foto.clone());
+         d->m_alpr[1]->processFoto(_camara);
         break;
     default:
         break;

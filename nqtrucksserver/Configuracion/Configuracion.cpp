@@ -52,8 +52,9 @@ Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
     connect(ui->runningCheckBox,SIGNAL(clicked(bool)),this,SLOT(isRunning(bool)));
 
     /** CAMARAS **/
-    connect(engine,SIGNAL(CamaraIPFotoCV1(cv::Mat)),this,SLOT(onGetFotoCV1(cv::Mat)));
-    connect(engine,SIGNAL(CamaraIPFotoCV2(cv::Mat)),this,SLOT(onGetFotoCV2(cv::Mat)));
+    connect(engine,SIGNAL(CamaraIP1(Registros::Camara)),this,SLOT(onGetFoto1(Registros::Camara)));
+    connect(engine,SIGNAL(CamaraIP2(Registros::Camara)),this,SLOT(onGetFoto2(Registros::Camara)));
+
 
     /** IO **/
     connect(engine,SIGNAL(SemaforoConnectChanged(bool)),this,SLOT(on_SemaforoConnect(bool)));
@@ -64,16 +65,22 @@ Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
     connect(engine ,SIGNAL(BasculaChanged(Bascula)),this,SLOT(onBascula(Bascula)));
 
     /** ALPR 1 **/
-    connect(engine, SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::MatriculaResults)));
-    connect(engine ,SIGNAL(ReplyOriginalFoto1(cv::Mat)),this,SLOT(onGetOriginalMatricula1(cv::Mat)));
-    connect(engine ,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja1(cv::Mat)));
-    connect(engine ,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca1(cv::Mat)));
+    connect(engine ,SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::MatriculaResults)));
+    connect(engine ,SIGNAL(ReplyOriginalFoto1(Registros::Camara)),this,SLOT(onGetOriginalMatricula1(Registros::Camara)));
+    connect(engine ,SIGNAL(ReplyMatriculaCalibrationResults1(Registros::MatriculaResults),
+                           this,SIGNAL(onGetCalibrationResult1(Registros::MatriculaResults)));;
+
+    //connect(engine ,SIGNAL(ReplyOriginalFotoRoja1(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja1(cv::Mat)));
+    //connect(engine ,SIGNAL(ReplyOriginalFotoBlanca1(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca1(cv::Mat)));
 
     /** ALPR 2 **/
     connect(engine, SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::MatriculaResults)));
-    connect(engine ,SIGNAL(ReplyOriginalFoto2(cv::Mat)),this,SLOT(onGetOriginalMatricula2(cv::Mat)));
-    connect(engine ,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja2(cv::Mat)));
-    connect(engine ,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca2(cv::Mat)));
+    connect(engine ,SIGNAL(ReplyOriginalFoto2(Registros::Camara)),this,SLOT(onGetOriginalMatricula2(Registros::Camara)));
+    connect(engine ,SIGNAL(ReplyMatriculaCalibrationResults2(Registros::MatriculaResults),
+                           this,SIGNAL(onGetCalibrationResult2(Registros::MatriculaResults)));;
+
+    //connect(engine ,SIGNAL(ReplyOriginalFotoRoja2(cv::Mat)),this,SLOT(onGetOriginalMatriculaRoja2(cv::Mat)));
+    //connect(engine ,SIGNAL(ReplyOriginalFotoBlanca2(cv::Mat)),this,SLOT(onGetOriginalMatriculaBlanca2(cv::Mat)));
 
     loadconfig();
     //setFixedSize(1024,768);
@@ -88,11 +95,11 @@ Configuracion::~Configuracion()
 
 void Configuracion::updateGui(){
     switch (ui->CamaraSelect->currentIndex()) {
-    case 0:
-        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[0].OrigenFotoQ));
+    case 0:        
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[0].camara.OrigenFotoQ));
         break;
     case 1:
-        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[1].OrigenFotoQ));
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[1].camara.OrigenFotoQ));
         break;
     }
 }
@@ -172,14 +179,14 @@ void Configuracion::loadconfig()
 
 /** CAMARAS *************************************************************************/
     /** CAMARA1 **/
-void Configuracion::onGetFotoCV1(const cv::Mat &fotocv){
-    m_matricularesults[0].OrigenFoto = fotocv.clone();
+void Configuracion::onGetFoto1(const Registros::Camara &_camara){
+    m_matricularesults[0].camara = _camara;
     updateGui();
     updateCalibracionGui();
 }
     /** CAMARA2 **/
-void Configuracion::onGetFotoCV2(const cv::Mat &fotocv){
-    m_matricularesults[1].OrigenFoto = fotocv.clone();
+void Configuracion::onGetFoto2(const Registros::Camara &_camara){
+    m_matricularesults[1].camara = _camara;
     updateGui();
     updateCalibracionGui();
 }
@@ -370,7 +377,7 @@ void Configuracion::loadPlanks(const int &index){
 void Configuracion::on_TestMatricula_clicked(){
     int index = getAlprIndex();
     on_guardarPlanK_clicked();
-    engine->getFotoMatricula(index,m_matricularesults[index].OrigenFoto.clone());
+    engine->getFotoMatricula(index,m_matricularesults[index].camara);
 }
 void Configuracion::on_ActualizarCamara_clicked(){
     int index = getAlprIndex();
@@ -379,8 +386,8 @@ void Configuracion::on_ActualizarCamara_clicked(){
     /** END GUI **/
     /** ALPR **/
 void Configuracion::updateCalibracionGui(){
-    int index = getAlprIndex();    
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_matricularesults[index].OrigenFotoQ));
+    int index = getAlprIndex();
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_matricularesults[index].camara.OrigenFotoQ));
     ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_matricularesults[index].MatriculaFotoAQ));
     ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_matricularesults[index].MatriculaFotoBQ));
     ui->MatriculaA->setText(m_matricularesults[index].MatriculaA);
@@ -393,23 +400,17 @@ void Configuracion::updateCalibracionGui(){
     /** ALPR 1 **/
 void Configuracion::onReplyMatriculaResults1(const Registros::MatriculaResults &_result){
     m_matricularesults[0] = _result;
-    //m_matricularesults[0].convertirFotos();
     loadPlanks(0);
     updateCalibracionGui();
 }
 
-void Configuracion::onGetOriginalMatricula1(const cv::Mat &foto){
-    m_matricularesults[0].OrigenFoto = foto.clone();
+void Configuracion::onGetOriginalMatricula1(const Registros::Camara &_camara){
+    m_matricularesults[0].camara = _camara;
     updateCalibracionGui();
 }
 
-void Configuracion::onGetOriginalMatriculaRoja1(const cv::Mat &foto){
-    m_matricularesults[0].OrigenFotoRoja = foto.clone();
-    updateCalibracionGui();
-}
-
-void Configuracion::onGetOriginalMatriculaBlanca1(const cv::Mat &foto){
-    m_matricularesults[0].OrigenFotoBlanca = foto.clone();
+void Configuracion::onGetCalibrationResult1(const Registros::MatriculaResults &_calibration_result){
+    m_matricularesults[0] = _calibration_result;
     updateCalibracionGui();
 }
     /** END ALPR1 **/
@@ -420,20 +421,16 @@ void Configuracion::onReplyMatriculaResults2(const Registros::MatriculaResults &
     updateCalibracionGui();
 }
 
-void Configuracion::onGetOriginalMatricula2(const cv::Mat &foto){
-    m_matricularesults[1].OrigenFoto = foto.clone();
+void Configuracion::onGetOriginalMatricula2(const Registros::Camara &_camara){
+    m_matricularesults[1].camara = _camara;
     updateCalibracionGui();
 }
 
-void Configuracion::onGetOriginalMatriculaRoja2(const cv::Mat &foto){
-    m_matricularesults[1].OrigenFotoRoja = foto.clone();
+void Configuracion::onGetCalibrationResult2(const Registros::MatriculaResults &_calibration_result){
+    m_matricularesults[1] = _calibration_result;
     updateCalibracionGui();
 }
 
-void Configuracion::onGetOriginalMatriculaBlanca2(const cv::Mat &foto){
-    m_matricularesults[1].OrigenFotoBlanca = foto.clone();
-    updateCalibracionGui();
-}
     /** END ALPR2 **/
     /** PLANKs **/
 void Configuracion::on_vPlankA_valueChanged(int value){
@@ -462,7 +459,7 @@ void Configuracion::on_guardarPlanK_clicked()
         engine->appConfig()->setValue(QString(ALPR) + "/plankc2",QString::number(ui->vPlankC->value()));
         break;
     }
-    engine->calibrarFoto(index,m_matricularesults[index].OrigenFoto.clone());
+    engine->calibrarFoto(index,m_matricularesults[index].camara);
 }
     /** END PLANKs **/
 /** END CALIBRACION *******************************************************************/

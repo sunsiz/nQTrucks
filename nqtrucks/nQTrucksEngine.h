@@ -64,10 +64,9 @@ public:
     QStringList getTiposCamaras();
     void getCamaraFoto(int _ncamara);
 signals:
-
-    void CamaraIPFotoCV1(const cv::Mat &fotocv);
+    void CamaraIP1(const Registros::Camara &_camara);
     void CamaraIPWeb1(const QString &url);
-    void CamaraIPFotoCV2(const cv::Mat &fotocv);
+    void CamaraIP2(const Registros::Camara &_camara);
     void CamaraIPWeb2(const QString &url);
     /** END Camaras **/
 
@@ -95,21 +94,19 @@ signals:
 
     /** NEWSAGES ALPR **/
 public:
-    void calibrarFoto(const int &_device, const cv::Mat &_foto);
-    void getFotoMatricula(const int &_device, const cv::Mat &_foto);
+    void calibrarFoto(const int &_device, const Registros::Camara &_camara);
+    void getFotoMatricula(const int &_device, const Registros::Camara &_camara);
 
     /** ALPR 1 **/
 signals:
-    void ReplyOriginalFoto1(const cv::Mat &Foto);
-    void ReplyOriginalFotoBlanca1(const cv::Mat &Foto);
-    void ReplyOriginalFotoRoja1(const cv::Mat &Foto);
+    void ReplyOriginalFoto1(const Registros::Camara &_camara);
+    void ReplyMatriculaCalibrationResults1(const Registros::MatriculaResults  &_calibration_results);
     void ReplyMatriculaResults1(const Registros::MatriculaResults  &_results);
 
     /** ALPR 2 **/
 signals:
-    void ReplyOriginalFoto2(const cv::Mat &Foto);
-    void ReplyOriginalFotoBlanca2(const cv::Mat &Foto);
-    void ReplyOriginalFotoRoja2(const cv::Mat &Foto);
+    void ReplyOriginalFoto2(const Registros::Camara &_camara);
+    void ReplyMatriculaCalibrationResults2(const Registros::MatriculaResults  &_calibration_results);
     void ReplyMatriculaResults2(const Registros::MatriculaResults &_results);
 
     /** END NEWSAGES ALPR **/        

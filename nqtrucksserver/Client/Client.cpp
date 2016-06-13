@@ -89,9 +89,9 @@ void Client::onBascula(Bascula _bascula){
 
 void Client::onDaemonRegistroChanged(const SimpleMatriculas &_result)
 {
-    //_result.convertirFotos();
-    ui->camara1->setPixmap(QPixmap::fromImage(_result.results[0].OrigenFotoQ));
-    ui->camara2->setPixmap(QPixmap::fromImage(_result.results[1].OrigenFotoQ));
+
+    ui->camara1->setPixmap(QPixmap::fromImage(_result.results[0].camara.OrigenFotoQ));
+    ui->camara2->setPixmap(QPixmap::fromImage(_result.results[1].camara.OrigenFotoQ));
 
     if ( _result.results[0].MatriculaPrecisionA >= _result.results[1].MatriculaPrecisionA){
         ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.results[0].MatriculaFotoAQ));

@@ -72,7 +72,7 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
         qry.bindValue(":pesoneto",          m_RegistroMatriculas.bascula.iNeto);
         qry.bindValue(":pesotara",          m_RegistroMatriculas.bascula.iTara);
 
-        qry.bindValue(":fotocamara1",       m_RegistroMatriculas.results[0].OrigenFotoByte);
+        qry.bindValue(":fotocamara1",       m_RegistroMatriculas.results[0].camara.OrigenFotoByte);
         qry.bindValue(":fotomatriculaA1",   m_RegistroMatriculas.results[0].MatriculaFotoAByte);
         qry.bindValue(":fotomatriculaB1",   m_RegistroMatriculas.results[0].MatriculaFotoBByte);
         qry.bindValue(":matriculaA1",       m_RegistroMatriculas.results[0].MatriculaA);
@@ -81,7 +81,7 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
         qry.bindValue(":precisionB1",       QString::number(m_RegistroMatriculas.results[0].MatriculaPrecisionB,'g',6));
 
 
-        qry.bindValue(":fotocamara2",       m_RegistroMatriculas.results[1].OrigenFotoByte);
+        qry.bindValue(":fotocamara2",       m_RegistroMatriculas.results[1].camara.OrigenFotoByte);
         qry.bindValue(":fotomatriculaA2",   m_RegistroMatriculas.results[1].MatriculaFotoAByte);
         qry.bindValue(":fotomatriculaB2",   m_RegistroMatriculas.results[1].MatriculaFotoBByte);
         qry.bindValue(":matriculaA2",       m_RegistroMatriculas.results[1].MatriculaA);

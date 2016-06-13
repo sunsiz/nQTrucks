@@ -154,6 +154,8 @@ namespace Registros{              /** REPORTS **/
         Camara();
         cv::Mat    OrigenFoto;//              =cv::Mat::zeros(fotoSize, CV_8UC3 );                 //Imagen Original
         QByteArray OrigenFotoByte;//          =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
+        QImage     OrigenFotoQ;
+        void convertirFotos();
     };
 
     class Simple{
@@ -167,9 +169,10 @@ namespace Registros{              /** REPORTS **/
         int        tipo;//                 =0;                                                     //0 para calibracion, 1 para procesado
         int        id ;//                  =0;                                                     //id fuente de captura de foto
 
-        cv::Mat    OrigenFoto;//           =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //Imagen Original
-        QImage     OrigenFotoQ;
-        QByteArray OrigenFotoByte;//       =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
+        Camara    camara;
+//        cv::Mat    OrigenFoto;//           =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //Imagen Original
+//        QImage     OrigenFotoQ;
+//        QByteArray OrigenFotoByte;//       =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
 
         cv::Mat    OrigenFotoPrewarp;//    =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
         QImage     OrigenFotoPrewarpQ;

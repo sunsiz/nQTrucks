@@ -87,8 +87,8 @@ private slots:
 
 signals:
     void ReplyCamaraIP(const Registros::Camara &_ReplyCamara);
-    void ReplyCamaraIPFotoCV(const cv::Mat &_ReplyCV);
-    void ReplyCamaraIPFoto(const QByteArray &_Reply);
+  //  void ReplyCamaraIPFotoCV(const cv::Mat &_ReplyCV);
+  //  void ReplyCamaraIPFoto(const QByteArray &_Reply);
 
     void CamaraIPWeb(const QString &CamaraWeb);
     void CamaraError(const QString &errorCamaraIP);

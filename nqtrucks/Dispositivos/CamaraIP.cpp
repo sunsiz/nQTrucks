@@ -148,33 +148,33 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply)
         std::vector<char> pic(begin, end);
         buffer.close();
 
-        m_RegistroCamara.OrigenFotoByte=data;
-        cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,&m_RegistroCamara.OrigenFoto);       
+        //m_RegistroCamara.OrigenFotoByte=data;
+        cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,&m_RegistroCamara.OrigenFoto);
         cv::resize(m_RegistroCamara.OrigenFoto,m_RegistroCamara.OrigenFoto,fotoSize);
 
 
     }else{
         /** CAMARA ERROR ByteArray **/
-        temp = QImage(fotoWidth, fotoHeight, QImage::Format_RGB32);
-        temp.fill(Qt::red);
+//        temp = QImage(fotoWidth, fotoHeight, QImage::Format_RGB32);
+//        temp.fill(Qt::red);
 
-        QByteArray ba;
-        QBuffer buffer(&ba);
-        buffer.open(QIODevice::WriteOnly);
-        temp.save(&buffer, "PNG");
-        buffer.close();
+//        QByteArray ba;
+//        QBuffer buffer(&ba);
+//        buffer.open(QIODevice::WriteOnly);
+//        temp.save(&buffer, "PNG");
+//        buffer.close();
         //buffer.reset();
 
-        m_RegistroCamara.OrigenFotoByte=ba;
+        //m_RegistroCamara.OrigenFotoByte=ba;
 
         /** CAMARA ERROR CV::MAT **/
-
         emit CamaraError(m_errorCamaraIP);
         //fotoCamaraErrorCV.release();
     }
 
-    emit ReplyCamaraIPFotoCV(m_RegistroCamara.OrigenFoto);
-    emit ReplyCamaraIPFoto(m_RegistroCamara.OrigenFotoByte);
+    //emit ReplyCamaraIPFotoCV(m_RegistroCamara.OrigenFoto);
+    //emit ReplyCamaraIPFoto(m_RegistroCamara.OrigenFotoByte);
+    m_RegistroCamara.convertirFotos();
     emit ReplyCamaraIP(m_RegistroCamara);
 
     data.clear();

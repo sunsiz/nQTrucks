@@ -84,7 +84,7 @@ private:
 private:
     QThread *hiloDb;
     Db::DatabaseManager *tareaDb;
-    //Tools *m_tools;
+
 private slots:
     void onGuardarRegistroSimple();
     void onGuardarRegistroSimpleMatriculas();

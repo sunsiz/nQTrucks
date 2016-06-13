@@ -49,7 +49,7 @@ public:
 
     /** SETTINGS **/
 public slots:
-    void setFotoCamara(const cv::Mat &Foto);
+    void setFotoCamara(const Registros::Camara &_camara);
 private:
     int         m_nDevice;
     QSettings   *m_settings;
@@ -57,7 +57,7 @@ private:
     /** END SETTINGS **/
 
 signals:
-    void ReplyOriginalFoto(         const cv::Mat &Foto);
+    void ReplyOriginalFoto(         const Registros::Camara &_camara);
     void ReplyMatriculaFoto        (const Registros::MatriculaResults &_tempResults);
     void ReplyMatriculaFotoRemolque(const Registros::MatriculaResults &_tempResultsRemolque);
 
@@ -71,10 +71,11 @@ private:
     NewsagesAlprTask *tareaCalibrar2;
     bool bhiloCalibrar2;
 public slots:
-    void calibrarFoto(const cv::Mat &Foto);
+    void calibrarFoto(const Registros::Camara &_camara);
 signals:
-    void ReplyOriginalFotoRoja(const cv::Mat &Foto);
-    void ReplyOriginalFotoBlanca(const cv::Mat &Foto);
+    //void ReplyOriginalFotoRoja(const cv::Mat &Foto);
+    //void ReplyOriginalFotoBlanca(const cv::Mat &Foto);
+    void ReplyMatriculaCalibrationResults(const Registros::MatriculaResults  &_calibration_results);
 private slots:
     void onCalibrarFotoFinished();
     /** END CALIBRAR *******************************************************/
@@ -82,7 +83,7 @@ private slots:
 
     /** Procesar Matriculas **/
 public slots:
-    void processFoto(const cv::Mat &Foto);
+    void processFoto(const Registros::Camara &_camara);
 signals:
     void ReplyMatriculaResults(const Registros::MatriculaResults &_MatriculaResults);
 protected slots:

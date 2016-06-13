@@ -28,7 +28,7 @@ NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType,Registros::Matricula
     setNDevice(_nDevice);
     setNType(_nType);
 
-    m_matricularesult->convertirFotos();
+    //m_matricularesult->convertirFotos();
 
     loadconfig();
 }
@@ -88,7 +88,7 @@ void NewsagesAlprTask::setFotoCalibrada()
     cv::Mat channel[3];
     switch (getNType()) {
     case ALPR_PLANCK_BLANCO:
-        m_matricularesult->OrigenFotoBlanca = m_matricularesult->OrigenFoto.clone();
+        m_matricularesult->OrigenFotoBlanca = m_matricularesult->camara.OrigenFoto.clone();
         cv::add(m_matricularesult->OrigenFotoBlanca,cv::Scalar(getPlank().C,getPlank().B,getPlank().A),m_matricularesult->OrigenFotoBlanca);
         cv::split(m_matricularesult->OrigenFotoBlanca, channel);
         m_matricularesult->OrigenFotoBlanca = channel[2] - channel[1] -   channel[2] + channel[0];
@@ -99,7 +99,7 @@ void NewsagesAlprTask::setFotoCalibrada()
         channel[2].release();
         break;
     case ALPR_PLANCK_ROJO:
-        m_matricularesult->OrigenFotoRoja = m_matricularesult->OrigenFoto.clone();
+        m_matricularesult->OrigenFotoRoja = m_matricularesult->camara.OrigenFoto.clone();
         cv::add(m_matricularesult->OrigenFotoRoja,cv::Scalar(getPlank().A,getPlank().B,getPlank().C),m_matricularesult->OrigenFotoRoja);
         cv::split(m_matricularesult->OrigenFotoRoja, channel);
         cv::add(channel[0], channel[1], m_matricularesult->OrigenFotoRoja);
@@ -194,7 +194,7 @@ void NewsagesAlprTask::procesarBlancas()
                             cv::Rect rect = cv::Rect(plate.plate_points[0].x , plate.plate_points[0].y,
                                                      plate.plate_points[2].x - plate.plate_points[0].x,
                                                      plate.plate_points[2].y - plate.plate_points[0].y);
-                            cv::resize(cv::Mat(m_matricularesult->OrigenFoto,rect),m_matricularesult->MatriculaFotoA,matriculaSize);
+                            cv::resize(cv::Mat(m_matricularesult->camara.OrigenFoto,rect),m_matricularesult->MatriculaFotoA,matriculaSize);
                         }
                     }
                 }
@@ -209,7 +209,7 @@ void NewsagesAlprTask::procesarBlancas()
     delete matricula;
     guardarPlanK();
     emit ReplyOriginalFotoBlanca(m_matricularesult->OrigenFotoBlanca);
-    m_matricularesult->convertirFotos();
+    //m_matricularesult->convertirFotos();
     emit ReplyMatriculaFoto();
 }
 
@@ -253,7 +253,7 @@ void NewsagesAlprTask::procesarRojas()
                                 cv::Rect rect = cv::Rect(plate.plate_points[0].x  ,plate.plate_points[0].y,
                                                          plate.plate_points[2].x - plate.plate_points[0].x,
                                                          plate.plate_points[2].y - plate.plate_points[0].y);
-                                cv::resize(cv::Mat(m_matricularesult->OrigenFoto,rect),m_matricularesult->MatriculaFotoB,matriculaSize);
+                                cv::resize(cv::Mat(m_matricularesult->camara.OrigenFoto,rect),m_matricularesult->MatriculaFotoB,matriculaSize);
                             }
                        }
                     }
@@ -269,7 +269,7 @@ void NewsagesAlprTask::procesarRojas()
     delete remolque;
     guardarPlanK();
     emit ReplyOriginalFotoRoja(m_matricularesult->OrigenFotoRoja);
-    m_matricularesult->convertirFotos();
+    //m_matricularesult->convertirFotos();
     emit ReplyMatriculaFoto();
 
 }

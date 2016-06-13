@@ -64,8 +64,8 @@ cv::Mat Tools::convertQImage2Mat(const QImage &_qimage){
     const char* end = begin + baScene.size();
     std::vector<char> pic(begin, end);
     buffer.close();
-    baScene.clear();
-    return cv::imdecode(pic,CV_LOAD_IMAGE_COLOR);
+    //baScene.clear();
+    return cv::imdecode(pic,CV_LOAD_IMAGE_COLOR).clone();
 }
 
 QImage Tools::convertMat2QImage(const cv::Mat &_cvimage)
@@ -76,6 +76,7 @@ QImage Tools::convertMat2QImage(const cv::Mat &_cvimage)
             qtImg = QImage( (const unsigned char *)(_cvimage.data),
                             _cvimage.cols,
                             _cvimage.rows,
+                            _cvimage.step,
                             QImage::Format_Indexed8 );
         }
         else{
@@ -147,53 +148,64 @@ namespace Registros{
 Camara::Camara()
 {
     OrigenFoto              =cv::Mat::zeros(fotoSize, CV_8UC3 );                 //Imagen Original
-    OrigenFotoByte          =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
+    OrigenFotoByte          =Tools::convertMat2ByteArray(OrigenFoto.clone());
+    OrigenFotoQ             =Tools::convertMat2QImage(OrigenFoto.clone());
+}
+
+void Camara::convertirFotos()
+{
+    OrigenFotoByte          =Tools::convertMat2ByteArray(OrigenFoto.clone());
+    OrigenFotoQ             =Tools::convertMat2QImage(OrigenFoto.clone());
 }
 
 
 MatriculaResults::MatriculaResults()
 {
-//    tipo                 =0;                                                     //0 para calibracion, 1 para procesado
-//    id                   =0;                                                     //id fuente de captura de foto
-//    OrigenFoto           =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //Imagen Original
-//    OrigenFotoByte       =Tools::convertMat2ByteArray(OrigenFoto);
-//    OrigenFotoQ          =Tools::convertMat2QImage(OrigenFoto.clone());
-//    OrigenFotoPrewarp    =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
-//    OrigenFotoPrewarpQ   =Tools::convertMat2QImage(OrigenFotoPrewarp.clone());
-//    OrigenFotoBlanca     =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //  Imagen con calibracion de Blancos
-//    OrigenFotoBlancaQ    =Tools::convertMat2QImage(OrigenFotoBlanca.clone());
-//    OrigenFotoRoja       =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion de Rojos
-//    OrigenFotoRojaQ      =Tools::convertMat2QImage(OrigenFotoRoja.clone());
+    tipo                 =0;                                                     //0 para calibracion, 1 para procesado
+    id                   =0;                                                     //id fuente de captura de foto
+    camara.OrigenFoto           =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //Imagen Original
+    camara.OrigenFotoByte       =Tools::convertMat2ByteArray(camara.OrigenFoto.clone());
+    camara.OrigenFotoQ          =Tools::convertMat2QImage(camara.OrigenFoto.clone());
 
-//    MatriculaDetectedA   =false;                                                 // Coincide con un patron de busqueda?
-//    MatriculaA           ="";                                                    // STring de la matricula
-//    MatriculaFotoA       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
-//    MatriculaFotoAByte   =Tools::convertMat2ByteArray(MatriculaFotoA);
-//    MatriculaFotoAQ      =Tools::convertMat2QImage(MatriculaFotoA.clone());
-//    MatriculaPrecisionA  =0;                                                     // Precision del OCR
-//    MatriculaPrecisionAs ="0%";
+    OrigenFotoPrewarp    =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
+    OrigenFotoPrewarpQ   =Tools::convertMat2QImage(OrigenFotoPrewarp.clone());
+    OrigenFotoBlanca     =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //  Imagen con calibracion de Blancos
+    OrigenFotoBlancaQ    =Tools::convertMat2QImage(OrigenFotoBlanca.clone());
+    OrigenFotoRoja       =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion de Rojos
+    OrigenFotoRojaQ      =Tools::convertMat2QImage(OrigenFotoRoja.clone());
 
-//    MatriculaDetectedB   =false;                                                 // Coincide con un patron de busqueda?
-//    MatriculaB           ="";                                                    // STring de la matricula
-//    MatriculaFotoB       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
-//    MatriculaFotoBByte   =Tools::convertMat2ByteArray(MatriculaFotoB);
-//    MatriculaFotoBQ      =Tools::convertMat2QImage(MatriculaFotoB.clone());
-//    MatriculaPrecisionB  =0;                                                     // Precision del OCR
-    //    MatriculaPrecisionBs ="0%";
+    MatriculaDetectedA   =false;                                                 // Coincide con un patron de busqueda?
+    MatriculaA           ="";                                                    // STring de la matricula
+    MatriculaFotoA       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
+    MatriculaFotoAByte   =Tools::convertMat2ByteArray(MatriculaFotoA.clone());
+    MatriculaFotoAQ      =Tools::convertMat2QImage(MatriculaFotoA.clone());
+    MatriculaPrecisionA  =0;                                                     // Precision del OCR
+    MatriculaPrecisionAs ="0%";
+
+    MatriculaDetectedB   =false;                                                 // Coincide con un patron de busqueda?
+    MatriculaB           ="";                                                    // STring de la matricula
+    MatriculaFotoB       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
+    MatriculaFotoBByte   =Tools::convertMat2ByteArray(MatriculaFotoB.clone());
+    MatriculaFotoBQ      =Tools::convertMat2QImage(MatriculaFotoB.clone());
+    MatriculaPrecisionB  =0;                                                     // Precision del OCR
+    MatriculaPrecisionBs ="0%";
 }
 
 void MatriculaResults::convertirFotos()
 {
-    OrigenFotoByte       =  Tools::convertMat2ByteArray(OrigenFoto);
-    MatriculaFotoAByte   =  Tools::convertMat2ByteArray(MatriculaFotoA);
-    MatriculaFotoBByte   =  Tools::convertMat2ByteArray(MatriculaFotoB);
+    camara.OrigenFotoByte =  Tools::convertMat2ByteArray(camara.OrigenFoto.clone());
+    camara.OrigenFotoQ    =  Tools::convertMat2QImage(camara.OrigenFoto.clone());
 
-    OrigenFotoQ          =  Tools::convertMat2QImage(OrigenFoto.clone());
-    OrigenFotoPrewarpQ   =  Tools::convertMat2QImage(OrigenFotoPrewarp.clone());
-    OrigenFotoBlancaQ    =  Tools::convertMat2QImage(OrigenFotoBlanca.clone());
-    OrigenFotoRojaQ      =  Tools::convertMat2QImage(OrigenFotoRoja.clone());
-    MatriculaFotoAQ      =  Tools::convertMat2QImage(MatriculaFotoA.clone());
-    MatriculaFotoBQ      =  Tools::convertMat2QImage(MatriculaFotoB.clone());
+    OrigenFotoPrewarpQ    =  Tools::convertMat2QImage(OrigenFotoPrewarp.clone());
+    OrigenFotoBlancaQ     =  Tools::convertMat2QImage(OrigenFotoBlanca.clone());
+    OrigenFotoRojaQ       =  Tools::convertMat2QImage(OrigenFotoRoja.clone());
+
+    MatriculaFotoAByte    =  Tools::convertMat2ByteArray(MatriculaFotoA.clone());
+    MatriculaFotoAQ       =  Tools::convertMat2QImage(MatriculaFotoA.clone());
+
+    MatriculaFotoBByte    =  Tools::convertMat2ByteArray(MatriculaFotoB.clone());
+    MatriculaFotoBQ       =  Tools::convertMat2QImage(MatriculaFotoB.clone());
+
 }
 
 
