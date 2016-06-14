@@ -110,10 +110,9 @@ unix{
     EXTRA_DIR_REPORTS = $$PWD/reports
     QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$quote($$EXTRA_DIR_REPORTS) $$quote($$DEST_BINS) $$escape_expand(\n\t)
 
-    OTHER_FILES += \
-        $$PWD/reports/reports.lrxml \
-        $$PWD/reports/peso.lrxml \
-        $$PWD/reports/peso_matricula.lrxml
+#    OTHER_FILES += \
+#        $$PWD/reports/peso_matricula.lrxml \
+#        $$PWD/reports/peso_procesado.lrxml
 }
 
 

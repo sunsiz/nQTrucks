@@ -27,7 +27,6 @@ private:
     QSqlDatabase m_db;
     QVector<SimpleMatriculas> m_RegistroMatriculas;
     ReportManager m_report_manager;
-    //long long m_lastrecord=0;
 
 /** Registro Simple **/
 public:
@@ -41,8 +40,8 @@ private:
     QStringList m_MatriculasList;
     bool getFechaRegistro(const int &_id);
     bool encontrarPareja();
-    bool buscarPareja(const long long _id, const);
-
+    bool buscarPareja(const long long &_id, const QString &_matricula);
+    bool actualizarPareja();
     /** END DB **/
 };
 

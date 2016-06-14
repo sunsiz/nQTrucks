@@ -4,19 +4,19 @@
     <pages Type="Collection">
       <item ClassName="LimeReport::PageDesignIntf" Type="Object">
         <objectName Type="QString">page1</objectName>
-        <sceneRect height="3070" y="-50" x="-50" width="2200" Type="QRect"/>
+        <sceneRect Type="QRect" x="-50" y="-50" width="2200" height="3070"/>
         <bspTreeDepth Value="5" Type="int"/>
-        <font weight="50" family="Ubuntu" pointSize="11" stylename="" underline="0" italic="0" Type="QFont"/>
+        <font Type="QFont" pointSize="11" family="Ubuntu" italic="0" underline="0" bold="0"/>
         <sortCacheEnabled Value="0" Type="bool"/>
         <stickyFocus Value="0" Type="bool"/>
         <minimumRenderSize Value="0" Type="qreal"/>
         <pageItem ClassName="PageItem" Type="Object">
           <objectName Type="QString">label</objectName>
-          <geometry height="2970" y="0" x="0" width="2100" Type="QRect"/>
+          <geometry Type="QRect" x="0" y="0" width="2100" height="2970"/>
           <children Type="Collection">
             <item ClassName="TextItem" Type="Object">
               <objectName Type="QString">TextItem1</objectName>
-              <geometry height="100" y="300" x="200" width="1700" Type="QRect"/>
+              <geometry Type="QRect" x="200" y="300" width="1700" height="100"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -27,12 +27,13 @@
               <itemLocation Value="1" Type="enumAndFlags"/>
               <stretchToMaxHeight Value="0" Type="bool"/>
               <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">Fecha: $D{registro1.fecha}</content>
+              <content Type="QString">Fecha Entrada: $D{registro1.fecha}
+Fecha Salida:     $D{registro2.fecha}</content>
               <margin Value="4" Type="int"/>
               <alignment Value="33" Type="enumAndFlags"/>
               <autoWidth Value="0" Type="enumAndFlags"/>
               <autoHeight Value="0" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
+              <font Type="QFont" pointSize="12" family="Ubuntu" italic="0" underline="0" bold="0"/>
               <backgroundOpacity Value="100" Type="int"/>
               <backgroundMode Value="1" Type="enumAndFlags"/>
               <backgroundColor Value="#ffffff" Type="QColor"/>
@@ -45,7 +46,7 @@
             </item>
             <item ClassName="TextItem" Type="Object">
               <objectName Type="QString">TextItem2</objectName>
-              <geometry height="100" y="200" x="200" width="1700" Type="QRect"/>
+              <geometry Type="QRect" x="200" y="200" width="1700" height="100"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -56,12 +57,13 @@
               <itemLocation Value="1" Type="enumAndFlags"/>
               <stretchToMaxHeight Value="0" Type="bool"/>
               <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">Registro: $D{registro1.id}</content>
+              <content Type="QString">Registro Entrada: $D{registro1.id}
+Registro Salida:     $D{registro2.id}</content>
               <margin Value="4" Type="int"/>
               <alignment Value="33" Type="enumAndFlags"/>
               <autoWidth Value="0" Type="enumAndFlags"/>
               <autoHeight Value="0" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
+              <font Type="QFont" pointSize="12" family="Ubuntu" italic="0" underline="0" bold="0"/>
               <backgroundOpacity Value="100" Type="int"/>
               <backgroundMode Value="1" Type="enumAndFlags"/>
               <backgroundColor Value="#ffffff" Type="QColor"/>
@@ -74,7 +76,7 @@
             </item>
             <item ClassName="TextItem" Type="Object">
               <objectName Type="QString">TextItem3</objectName>
-              <geometry height="100" y="400" x="200" width="1700" Type="QRect"/>
+              <geometry Type="QRect" x="200" y="400" width="1700" height="150"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -85,12 +87,14 @@
               <itemLocation Value="1" Type="enumAndFlags"/>
               <stretchToMaxHeight Value="0" Type="bool"/>
               <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">Peso Bruto:   $D{registro1.pesobruto}</content>
+              <content Type="QString">Peso Bruto Entrada:  $D{registro1.pesobruto}
+Peso Bruto Salida:      $D{registro2.pesobruto}
+Peso Neto:                    $D{registro2.pesoneto}</content>
               <margin Value="4" Type="int"/>
               <alignment Value="33" Type="enumAndFlags"/>
               <autoWidth Value="0" Type="enumAndFlags"/>
               <autoHeight Value="0" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
+              <font Type="QFont" pointSize="12" family="Ubuntu" italic="0" underline="0" bold="0"/>
               <backgroundOpacity Value="100" Type="int"/>
               <backgroundMode Value="1" Type="enumAndFlags"/>
               <backgroundColor Value="#ffffff" Type="QColor"/>
@@ -102,52 +106,8 @@
               <allowHTMLInFields Value="0" Type="bool"/>
             </item>
             <item ClassName="ImageItem" Type="Object">
-              <objectName Type="QString">ImageItem3</objectName>
-              <geometry height="500" y="602" x="200" width="850" Type="QRect"/>
-              <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
-              <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="1" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
-              <image Type="QImage"></image>
-              <opacity Value="100" Type="int"/>
-              <datasource Type="QString">registro1</datasource>
-              <field Type="QString">fotocamara1</field>
-              <autoSize Value="0" Type="bool"/>
-              <scale Value="1" Type="bool"/>
-              <keepAspectRatio Value="0" Type="bool"/>
-              <center Value="1" Type="bool"/>
-            </item>
-            <item ClassName="ImageItem" Type="Object">
-              <objectName Type="QString">ImageItem4</objectName>
-              <geometry height="500" y="602" x="1050" width="850" Type="QRect"/>
-              <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
-              <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="1" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
-              <image Type="QImage"></image>
-              <opacity Value="100" Type="int"/>
-              <datasource Type="QString">registro1</datasource>
-              <field Type="QString">fotocamara2</field>
-              <autoSize Value="0" Type="bool"/>
-              <scale Value="1" Type="bool"/>
-              <keepAspectRatio Value="0" Type="bool"/>
-              <center Value="1" Type="bool"/>
-            </item>
-            <item ClassName="ImageItem" Type="Object">
               <objectName Type="QString">ImageItem1</objectName>
-              <geometry height="200" y="1302" x="200" width="850" Type="QRect"/>
+              <geometry Type="QRect" x="900" y="702" width="450" height="100"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -169,7 +129,7 @@
             </item>
             <item ClassName="ImageItem" Type="Object">
               <objectName Type="QString">ImageItem2</objectName>
-              <geometry height="200" y="1302" x="1050" width="850" Type="QRect"/>
+              <geometry Type="QRect" x="1350" y="702" width="450" height="100"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -191,7 +151,7 @@
             </item>
             <item ClassName="ImageItem" Type="Object">
               <objectName Type="QString">ImageItem5</objectName>
-              <geometry height="200" y="1702" x="200" width="850" Type="QRect"/>
+              <geometry Type="QRect" x="900" y="800" width="450" height="102"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -213,7 +173,7 @@
             </item>
             <item ClassName="ImageItem" Type="Object">
               <objectName Type="QString">ImageItem6</objectName>
-              <geometry height="200" y="1702" x="1050" width="850" Type="QRect"/>
+              <geometry Type="QRect" x="1350" y="800" width="450" height="102"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -234,8 +194,8 @@
               <center Value="1" Type="bool"/>
             </item>
             <item ClassName="TextItem" Type="Object">
-              <objectName Type="QString">TextItem7</objectName>
-              <geometry height="200" y="1102" x="1050" width="850" Type="QRect"/>
+              <objectName Type="QString">TextItem8</objectName>
+              <geometry Type="QRect" x="200" y="702" width="700" height="200"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -246,12 +206,15 @@
               <itemLocation Value="1" Type="enumAndFlags"/>
               <stretchToMaxHeight Value="0" Type="bool"/>
               <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">$D{registro1.matriculaA2}  $D{registro1.precisionA2}%</content>
+              <content Type="QString">$D{registro1.matriculaA1} 
+$D{registro1.matriculaA2}
+$D{registro1.matriculaB1}
+$D{registro1.matriculaB2}</content>
               <margin Value="4" Type="int"/>
-              <alignment Value="36" Type="enumAndFlags"/>
+              <alignment Value="33" Type="enumAndFlags"/>
               <autoWidth Value="0" Type="enumAndFlags"/>
               <autoHeight Value="1" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
+              <font Type="QFont" pointSize="12" family="Ubuntu" italic="0" underline="0" bold="0"/>
               <backgroundOpacity Value="100" Type="int"/>
               <backgroundMode Value="1" Type="enumAndFlags"/>
               <backgroundColor Value="#ffffff" Type="QColor"/>
@@ -263,8 +226,8 @@
               <allowHTMLInFields Value="0" Type="bool"/>
             </item>
             <item ClassName="TextItem" Type="Object">
-              <objectName Type="QString">TextItem8</objectName>
-              <geometry height="200" y="1102" x="200" width="850" Type="QRect"/>
+              <objectName Type="QString">TextItem4</objectName>
+              <geometry Type="QRect" x="200" y="650" width="400" height="50"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -275,12 +238,85 @@
               <itemLocation Value="1" Type="enumAndFlags"/>
               <stretchToMaxHeight Value="0" Type="bool"/>
               <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">$D{registro1.matriculaA1}  $D{registro1.precisionA1}%</content>
+              <content Type="QString">Matriculas Entrada:</content>
               <margin Value="4" Type="int"/>
-              <alignment Value="36" Type="enumAndFlags"/>
+              <alignment Value="33" Type="enumAndFlags"/>
               <autoWidth Value="0" Type="enumAndFlags"/>
-              <autoHeight Value="1" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
+              <autoHeight Value="0" Type="bool"/>
+              <font Type="QFont" pointSize="11" family="Ubuntu" italic="0" underline="0" bold="0"/>
+              <backgroundOpacity Value="100" Type="int"/>
+              <backgroundMode Value="1" Type="enumAndFlags"/>
+              <backgroundColor Value="#ffffff" Type="QColor"/>
+              <fontColor Value="#000000" Type="QColor"/>
+              <angle Value="0" Type="enumAndFlags"/>
+              <foregroundOpacity Value="100" Type="int"/>
+              <trimValue Value="1" Type="bool"/>
+              <allowHTML Value="0" Type="bool"/>
+              <allowHTMLInFields Value="0" Type="bool"/>
+            </item>
+            <item ClassName="ImageItem" Type="Object">
+              <objectName Type="QString">ImageItem4</objectName>
+              <geometry Type="QRect" x="900" y="1052" width="450" height="100"/>
+              <children Type="Collection"/>
+              <zOrder Value="0" Type="qreal"/>
+              <borders Value="0" Type="enumAndFlags"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Value="1" Type="int"/>
+              <isVisible Value="1" Type="bool"/>
+              <borderColor Value="#000000" Type="QColor"/>
+              <itemLocation Value="1" Type="enumAndFlags"/>
+              <stretchToMaxHeight Value="1" Type="bool"/>
+              <itemAlign Value="4" Type="enumAndFlags"/>
+              <image Type="QImage"></image>
+              <opacity Value="100" Type="int"/>
+              <datasource Type="QString">registro2</datasource>
+              <field Type="QString">fotomatriculaA1</field>
+              <autoSize Value="0" Type="bool"/>
+              <scale Value="1" Type="bool"/>
+              <keepAspectRatio Value="0" Type="bool"/>
+              <center Value="1" Type="bool"/>
+            </item>
+            <item ClassName="ImageItem" Type="Object">
+              <objectName Type="QString">ImageItem7</objectName>
+              <geometry Type="QRect" x="900" y="1150" width="450" height="102"/>
+              <children Type="Collection"/>
+              <zOrder Value="0" Type="qreal"/>
+              <borders Value="0" Type="enumAndFlags"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Value="1" Type="int"/>
+              <isVisible Value="1" Type="bool"/>
+              <borderColor Value="#000000" Type="QColor"/>
+              <itemLocation Value="1" Type="enumAndFlags"/>
+              <stretchToMaxHeight Value="1" Type="bool"/>
+              <itemAlign Value="4" Type="enumAndFlags"/>
+              <image Type="QImage"></image>
+              <opacity Value="100" Type="int"/>
+              <datasource Type="QString">registro2</datasource>
+              <field Type="QString">fotomatriculaB1</field>
+              <autoSize Value="0" Type="bool"/>
+              <scale Value="1" Type="bool"/>
+              <keepAspectRatio Value="0" Type="bool"/>
+              <center Value="1" Type="bool"/>
+            </item>
+            <item ClassName="TextItem" Type="Object">
+              <objectName Type="QString">TextItem7</objectName>
+              <geometry Type="QRect" x="200" y="1000" width="400" height="50"/>
+              <children Type="Collection"/>
+              <zOrder Value="0" Type="qreal"/>
+              <borders Value="0" Type="enumAndFlags"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Value="1" Type="int"/>
+              <isVisible Value="1" Type="bool"/>
+              <borderColor Value="#000000" Type="QColor"/>
+              <itemLocation Value="1" Type="enumAndFlags"/>
+              <stretchToMaxHeight Value="0" Type="bool"/>
+              <itemAlign Value="4" Type="enumAndFlags"/>
+              <content Type="QString">Matriculas Salida:</content>
+              <margin Value="4" Type="int"/>
+              <alignment Value="33" Type="enumAndFlags"/>
+              <autoWidth Value="0" Type="enumAndFlags"/>
+              <autoHeight Value="0" Type="bool"/>
+              <font Type="QFont" pointSize="11" family="Ubuntu" italic="0" underline="0" bold="0"/>
               <backgroundOpacity Value="100" Type="int"/>
               <backgroundMode Value="1" Type="enumAndFlags"/>
               <backgroundColor Value="#ffffff" Type="QColor"/>
@@ -293,7 +329,7 @@
             </item>
             <item ClassName="TextItem" Type="Object">
               <objectName Type="QString">TextItem9</objectName>
-              <geometry height="200" y="1502" x="1050" width="850" Type="QRect"/>
+              <geometry Type="QRect" x="200" y="1052" width="700" height="200"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -304,12 +340,15 @@
               <itemLocation Value="1" Type="enumAndFlags"/>
               <stretchToMaxHeight Value="0" Type="bool"/>
               <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">$D{registro1.matriculaB2}  $D{registro1.precisionB2}%</content>
+              <content Type="QString">$D{registro2.matriculaA1} 
+$D{registro2.matriculaA2}
+$D{registro2.matriculaB1}
+$D{registro2.matriculaB2}</content>
               <margin Value="4" Type="int"/>
-              <alignment Value="36" Type="enumAndFlags"/>
+              <alignment Value="33" Type="enumAndFlags"/>
               <autoWidth Value="0" Type="enumAndFlags"/>
               <autoHeight Value="1" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
+              <font Type="QFont" pointSize="12" family="Ubuntu" italic="0" underline="0" bold="0"/>
               <backgroundOpacity Value="100" Type="int"/>
               <backgroundMode Value="1" Type="enumAndFlags"/>
               <backgroundColor Value="#ffffff" Type="QColor"/>
@@ -320,9 +359,9 @@
               <allowHTML Value="0" Type="bool"/>
               <allowHTMLInFields Value="0" Type="bool"/>
             </item>
-            <item ClassName="TextItem" Type="Object">
-              <objectName Type="QString">TextItem10</objectName>
-              <geometry height="200" y="1502" x="200" width="850" Type="QRect"/>
+            <item ClassName="ImageItem" Type="Object">
+              <objectName Type="QString">ImageItem9</objectName>
+              <geometry Type="QRect" x="1350" y="1050" width="450" height="100"/>
               <children Type="Collection"/>
               <zOrder Value="0" Type="qreal"/>
               <borders Value="0" Type="enumAndFlags"/>
@@ -331,23 +370,38 @@
               <isVisible Value="1" Type="bool"/>
               <borderColor Value="#000000" Type="QColor"/>
               <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="0" Type="bool"/>
+              <stretchToMaxHeight Value="1" Type="bool"/>
               <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">$D{registro1.matriculaB1}  $D{registro1.precisionB1}%</content>
-              <margin Value="4" Type="int"/>
-              <alignment Value="36" Type="enumAndFlags"/>
-              <autoWidth Value="0" Type="enumAndFlags"/>
-              <autoHeight Value="1" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
-              <backgroundOpacity Value="100" Type="int"/>
-              <backgroundMode Value="1" Type="enumAndFlags"/>
-              <backgroundColor Value="#ffffff" Type="QColor"/>
-              <fontColor Value="#000000" Type="QColor"/>
-              <angle Value="0" Type="enumAndFlags"/>
-              <foregroundOpacity Value="100" Type="int"/>
-              <trimValue Value="1" Type="bool"/>
-              <allowHTML Value="0" Type="bool"/>
-              <allowHTMLInFields Value="0" Type="bool"/>
+              <image Type="QImage"></image>
+              <opacity Value="100" Type="int"/>
+              <datasource Type="QString">registro2</datasource>
+              <field Type="QString">fotomatriculaA2</field>
+              <autoSize Value="0" Type="bool"/>
+              <scale Value="1" Type="bool"/>
+              <keepAspectRatio Value="0" Type="bool"/>
+              <center Value="1" Type="bool"/>
+            </item>
+            <item ClassName="ImageItem" Type="Object">
+              <objectName Type="QString">ImageItem10</objectName>
+              <geometry Type="QRect" x="1350" y="1150" width="450" height="102"/>
+              <children Type="Collection"/>
+              <zOrder Value="0" Type="qreal"/>
+              <borders Value="0" Type="enumAndFlags"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Value="1" Type="int"/>
+              <isVisible Value="1" Type="bool"/>
+              <borderColor Value="#000000" Type="QColor"/>
+              <itemLocation Value="1" Type="enumAndFlags"/>
+              <stretchToMaxHeight Value="1" Type="bool"/>
+              <itemAlign Value="4" Type="enumAndFlags"/>
+              <image Type="QImage"></image>
+              <opacity Value="100" Type="int"/>
+              <datasource Type="QString">registro2</datasource>
+              <field Type="QString">fotomatriculaB2</field>
+              <autoSize Value="0" Type="bool"/>
+              <scale Value="1" Type="bool"/>
+              <keepAspectRatio Value="0" Type="bool"/>
+              <center Value="1" Type="bool"/>
             </item>
           </children>
           <zOrder Value="0" Type="qreal"/>
@@ -362,9 +416,8 @@
           <leftMargin Value="0" Type="int"/>
           <pageOrientation Value="0" Type="enumAndFlags"/>
           <pageSize Value="0" Type="enumAndFlags"/>
-          <gridStep Value="2" Type="int"/>
+          <gridStep Value="10" Type="int"/>
           <fullPage Value="1" Type="bool"/>
-          <oldPrintMode Value="0" Type="bool"/>
         </pageItem>
       </item>
     </pages>

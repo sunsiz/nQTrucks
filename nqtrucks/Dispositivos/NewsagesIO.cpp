@@ -51,61 +51,84 @@ NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
     m_semaforo=0;
 
     /** RELE */
-    m_OutPin10 = new DigitalPin(this);
-    m_OutPin11 = new DigitalPin(this);
-    m_ValuePin10=false;
-    m_ValuePin11=false;
+    m_OutPin2 = new DigitalPin(this);
+    m_OutPin3 = new DigitalPin(this);
+    m_OutPin4 = new DigitalPin(this);
+
+    m_ValuePin2=true;
+    m_ValuePin3=false;
+    m_ValuePin4=false;
 
     /** PINS **/
-    m_OutPin10->setPin(10);
-    m_OutPin10->setOutput(true);
-    m_OutPin10->setFirmata(this);
+    m_OutPin2->setPin(2);
+    m_OutPin2->setOutput(true);
+    m_OutPin2->setFirmata(this);
 
-    m_OutPin11->setPin(11);
-    m_OutPin11->setOutput(true);
-    m_OutPin11->setFirmata(this);
+    m_OutPin3->setPin(3);
+    m_OutPin3->setOutput(true);
+    m_OutPin3->setFirmata(this);
 
-    connect(m_OutPin10,SIGNAL(valueChanged(bool)),this,SLOT(setValuePin10(bool)));
-    connect(m_OutPin11,SIGNAL(valueChanged(bool)),this,SLOT(setValuePin11(bool)));
+    m_OutPin4->setPin(4);
+    m_OutPin4->setOutput(true);
+    m_OutPin4->setFirmata(this);
+
+
+    connect(m_OutPin2,SIGNAL(valueChanged(bool)),this,SLOT(setValuePin2(bool)));
+    connect(m_OutPin3,SIGNAL(valueChanged(bool)),this,SLOT(setValuePin3(bool)));
+    connect(m_OutPin4,SIGNAL(valueChanged(bool)),this,SLOT(setValuePin4(bool)));
     connect(this->m_ioFtdi, &FirmataBackend::protocolVersion ,this, &NewsagesIO::onIOConectado);
 
     //setSemaforo(SEMAFORO_VERDE);
 }
 
 /** PROPIEDADES *******************************************************/
-void NewsagesIO::setValuePin10(const bool &value){
-    if(m_ValuePin10!=value){
+void NewsagesIO::setValuePin2(const bool &value){
+    if(m_ValuePin2!=value){
         if(m_conectado){
             if(m_ioFtdi->isAvailable()){
-                m_ValuePin10=value;
-                m_OutPin10->setValue(m_ValuePin10);
-                emit ValuePin10Changed(m_OutPin10->value());
+                m_ValuePin2=value;
+                m_OutPin2->setValue(m_ValuePin2);
+                emit ValuePin2Changed(m_OutPin2->value());
             }
         }
     }
 }
 
-void NewsagesIO::setValuePin11(const bool &value){
-    if(m_ValuePin11!=value){
+void NewsagesIO::setValuePin3(const bool &value){
+    if(m_ValuePin3!=value){
         if(m_conectado){
             if(m_ioFtdi->isAvailable()){
-                m_ValuePin11=value;
-                m_OutPin11->setValue(m_ValuePin11);
-                emit ValuePin13Changed(m_OutPin11->value());
+                m_ValuePin3=value;
+                m_OutPin3->setValue(m_ValuePin3);
+                emit ValuePin3Changed(m_OutPin3->value());
             }
         }
     }
 }
+void NewsagesIO::setValuePin4(const bool &value){
+    if(m_ValuePin4!=value){
+        if(m_conectado){
+            if(m_ioFtdi->isAvailable()){
+                m_ValuePin4=value;
+                m_OutPin4->setValue(m_ValuePin4);
+                emit ValuePin3Changed(m_OutPin4->value());
+            }
+        }
+    }
+}
+
+
 /** END PROPIEDADES *******************************************************/
 /** FTDI ******************************************************************/
 void NewsagesIO::onIOConectado(){
     /** PINS **/
-    m_OutPin10->initialize();
-    m_OutPin10->setValue(m_ValuePin10);
-    m_OutPin11->initialize();
-    m_OutPin11->setValue(m_ValuePin11);
-    int last_status = (int)m_ValuePin10 + (int)m_ValuePin11;
-    setSemaforo(last_status);
+    m_OutPin2->initialize();
+    m_OutPin2->setValue(m_ValuePin2);
+    m_OutPin3->initialize();
+    m_OutPin3->setValue(m_ValuePin3);   
+    m_OutPin4->initialize();
+    m_OutPin4->setValue(m_ValuePin3);
+    setSemaforo(m_semaforo);
 }
 
 void NewsagesIO::setSemaforo(const int &_color){
@@ -131,8 +154,9 @@ void NewsagesIO::setSemaforoDeviceConnect(const bool &value){
         loadconfig();
         m_ioFtdi->setDevice(m_IODevice);
         if(m_ioFtdi->isAvailable()){
-            emit ValuePin10Changed(m_OutPin10->value());
-            emit ValuePin13Changed(m_OutPin11->value());
+            emit ValuePin2Changed(m_OutPin2->value());
+            emit ValuePin3Changed(m_OutPin3->value());
+            emit ValuePin4Changed(m_OutPin4->value());
         }else{
             setConectado(false);
             // SIN SEMAFOROOOO
@@ -149,23 +173,27 @@ void NewsagesIO::setSemaforoEstado(const int &_color)
     switch (_color) {
     case SEMAFORO_VERDE:
         m_semaforo = SEMAFORO_VERDE;
-        setValuePin10(false);
-        setValuePin11(false);
+        setValuePin2(true);
+        setValuePin3(false);
+        setValuePin4(false);
         break;
     case SEMAFORO_AMARILLO:
         m_semaforo = SEMAFORO_AMARILLO;
-        setValuePin10(true);
-        setValuePin11(false);
+        setValuePin2(false);
+        setValuePin3(true);
+        setValuePin4(false);
         break;
     case SEMAFORO_ROJO:
         m_semaforo = SEMAFORO_ROJO;
-        setValuePin10(true);
-        setValuePin11(true);
+        setValuePin2(false);
+        setValuePin3(false);
+        setValuePin4(true);
         break;
     default:
         m_semaforo = SEMAFORO_VERDE;
-        setValuePin10(false);
-        setValuePin11(false);
+        setValuePin2(true);
+        setValuePin3(false);
+        setValuePin4(false);
         break;
     }
     emit SemaforoEstadoChanged(getSemaforo());
