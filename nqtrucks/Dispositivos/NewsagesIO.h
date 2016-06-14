@@ -66,14 +66,14 @@ signals:
 
 private slots:
     void setValuePin10(const bool &value);
-    void setValuePin13(const bool &value);
+    void setValuePin11(const bool &value);
 
 private:
     QString m_IODevice;
     bool    m_ValuePin10;
     DigitalPin *m_OutPin10;
-    bool    m_ValuePin13;
-    DigitalPin *m_OutPin13;
+    bool    m_ValuePin11;
+    DigitalPin *m_OutPin11;
     bool    m_conectado;
 
 public:

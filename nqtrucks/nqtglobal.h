@@ -38,6 +38,7 @@
 #include <QSettings>
 #include <QVector>
 #include <QImage>
+#include <QDateTime>
 
 #include "opencv2/opencv.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
@@ -171,11 +172,8 @@ namespace Registros{              /** REPORTS **/
         ~MatriculaResults();
         int        tipo;//                 =0;                                                     //0 para calibracion, 1 para procesado
         int        id ;//                  =0;                                                     //id fuente de captura de foto
-
         Camara    camara;
-//        cv::Mat    OrigenFoto;//           =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //Imagen Original
-//        QImage     OrigenFotoQ;
-//        QByteArray OrigenFotoByte;//       =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
+
 
         cv::Mat    OrigenFotoPrewarp;//    =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
         QImage     OrigenFotoPrewarpQ;
@@ -203,10 +201,7 @@ namespace Registros{              /** REPORTS **/
 
         Tools *m_tools;
         void convertirFotos();
-
     };
-
-
 
         #define REGISTRO_ID                          0
         #define REGISTRO_FECHA                       1
@@ -227,7 +222,8 @@ namespace Registros{              /** REPORTS **/
 
 class SimpleMatriculas{
 public:
-
+    long long   id=0 ;//                  =0;                                                     //id fuente de captura de foto
+    QDateTime FechaRegistro;
     Bascula bascula;
     QVector<Registros::MatriculaResults> results = QVector<Registros::MatriculaResults>(2);
     void convertirFotos();
