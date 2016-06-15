@@ -10,7 +10,9 @@ SOURCES += \
     $$PWD/Dispositivos/Alpr/NewsagesAlprTask.cpp \
     $$PWD/Core/Daemon.cpp \
     $$PWD/Db/DatabaseManager.cpp \
-    $$PWD/Db/ReportManager.cpp
+    $$PWD/Db/ReportManager.cpp \
+    $$PWD/Db/QueryModel.cpp \
+    $$PWD/Maestros/RegistroPeso.cpp
 
 
 contains(CONFIG, zint){
@@ -24,7 +26,9 @@ HEADERS += \
     $$PWD/Dispositivos/Alpr/NewsagesAlprTask.h \
     $$PWD/Core/Daemon.h \
     $$PWD/Db/DatabaseManager.h \
-    $$PWD/Db/ReportManager.h
+    $$PWD/Db/ReportManager.h \
+    $$PWD/Db/QueryModel.h \
+    $$PWD/Maestros/RegistroPeso.h
 
 
 contains(CONFIG,zint){

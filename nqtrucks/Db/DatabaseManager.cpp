@@ -96,11 +96,10 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
         qDebug() << m_db.lastError();
       qDebug() << "Failed to connect." ;
     }else{
-        qDebug( "Connected!" );
+        qDebug( "Connected!" );        
         m_db.transaction();
         QSqlQuery qry(m_db);
         qry.prepare(qry_insert_simple);
-
         qry.bindValue(":pesobruto",         m_RegistroMatriculas[0].bascula.iBruto);
         qry.bindValue(":pesoneto",          m_RegistroMatriculas[0].bascula.iNeto);
         qry.bindValue(":pesotara",          m_RegistroMatriculas[0].bascula.iTara);

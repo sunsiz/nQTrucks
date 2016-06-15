@@ -42,6 +42,10 @@
 #include <QDir>
 #include <QTreeWidgetItem>
 
+/** MAESTROS **/
+//#include <QSqlQueryModel>
+
+
 namespace nQTrucks {
 class nQTrucksEnginePrivate;
 
@@ -150,6 +154,13 @@ public:
 public slots:
     void report_loadFromFile(const QString &_file);
     /** END REPORTS **/
+
+
+    /** MAESTROS **/
+//public:
+//    QSqlQueryModel *RegistrosPesos;
+//    QSqlQueryModel *RegistrosProcesados;
+    /** END MAESTROS **/
 
 
 
