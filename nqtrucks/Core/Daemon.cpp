@@ -163,6 +163,8 @@ void Daemon::onGuardarRegistroSimpleMatriculas(){
     connect( tareaDb, SIGNAL(workFinished()), hiloDb,  SLOT(quit()) );
     connect( tareaDb, SIGNAL(workFinished()), tareaDb, SLOT(deleteLater()) );
     connect( hiloDb,  SIGNAL(finished()),     hiloDb,  SLOT(deleteLater()) );
+    /** INFORMAR DE CAMBIOS EN ROWS **/
+    connect( tareaDb, SIGNAL(rowsPesoChanged()), this,SIGNAL(rowsPesoChanged()));
 
     hiloDb->start();
 

@@ -39,6 +39,7 @@ public:
     void setInit(bool init);
 signals:
     void initChanged(const bool &_init);
+    void rowsPesoChanged();
 private slots:
     void onStartStop(const bool &_init);
 private:

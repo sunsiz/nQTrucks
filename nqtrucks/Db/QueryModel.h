@@ -5,15 +5,12 @@
 
 #include <QSqlDatabase>
 #include <QSqlError>
-#include <QSqlQuery>
 #include <QSqlRecord>
 
 
 #include <QVariant>
 #include <QHash>
 #include <QBitArray>
-
-#include <QSqlTableModel>
 
 namespace nQTrucks {
     namespace Db {

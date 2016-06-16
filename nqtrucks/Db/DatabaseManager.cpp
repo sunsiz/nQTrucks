@@ -61,10 +61,15 @@ DatabaseManager::DatabaseManager(QObject *parent)
 DatabaseManager::~DatabaseManager(){
 
 }
+void DatabaseManager::commit_and_inform(){
+    m_db.commit();
+    emit rowsPesoChanged();
+}
+
 
 /** DB **/
 void DatabaseManager::initDb(){
-    qDebug() << "conexion inicial es: " << m_db.connectionName();
+    //qDebug() << "conexion inicial es: " << m_db.connectionName();
 
     if ( !QSqlDatabase::contains("nqtrucks")) {
         m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks");
@@ -72,12 +77,12 @@ void DatabaseManager::initDb(){
         m_db.setHostName(     "localhost" );
         m_db.setUserName(     "nqtrucks" );
         m_db.setPassword(     "nqtrucks" );
-        qDebug() << "conexion al crear es: " << m_db.connectionName();
+      //  qDebug() << "conexion al crear es: " << m_db.connectionName();
     } else {
         m_db = QSqlDatabase::database("nqtrucks");
-        qDebug() << "conexion al volver a usar es: " << m_db.connectionName();
+        //qDebug() << "conexion al volver a usar es: " << m_db.connectionName();
     }
-    qDebug() << "conexion al verificar es: " << m_db.connectionName();
+   // qDebug() << "conexion al verificar es: " << m_db.connectionName();
 }
 /** END DB **/
 
@@ -93,10 +98,10 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
 
     if (!m_db.isOpen() && !m_db.open() )
     {
-        qDebug() << m_db.lastError();
-      qDebug() << "Failed to connect." ;
+      //qDebug() << m_db.lastError();
+      //qDebug() << "Failed to connect." ;
     }else{
-        qDebug( "Connected!" );        
+        //qDebug( "Connected!" );
         m_db.transaction();
         QSqlQuery qry(m_db);
         qry.prepare(qry_insert_simple);
@@ -122,14 +127,15 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
         qry.bindValue(":precisionB2",       QString::number(m_RegistroMatriculas[0].results[1].MatriculaPrecisionB,'g',6));
 
          if( !qry.exec() ){
-           qDebug() << qry.lastError();
+           //qDebug() << qry.lastError();
             m_db.rollback();
          }else{
-            m_db.commit();
-            m_RegistroMatriculas[0].id = qry.lastInsertId().toLongLong();
-            qDebug() <<  "Inserted!: " << m_RegistroMatriculas[0].id;
-           /** Report Pesada **/
-            m_report_manager.printRegistroMatricula(m_db,m_RegistroMatriculas[0].id);
+            //m_db.commit();
+             commit_and_inform();
+             m_RegistroMatriculas[0].id = qry.lastInsertId().toLongLong();
+             //qDebug() <<  "Inserted!: " << m_RegistroMatriculas[0].id;
+             /** Report Pesada **/
+             m_report_manager.printRegistroMatricula(m_db,m_RegistroMatriculas[0].id);
 
             /** No Guardar Si Cualquiera de las 4 Matriculas es detectada Y BUSCAR SU PAREJA**/
             if ( m_RegistroMatriculas[0].results[0].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[0].MatriculaPrecisionB >80 ||
@@ -143,9 +149,10 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
                 qry.bindValue(":fotocamara2",       QVariant());
 
                 if (!qry.exec()){
-                    qDebug() << qry.lastError();
+                    //qDebug() << qry.lastError();
                 }else{
-                    m_db.commit();
+                    //m_db.commit();
+                    commit_and_inform();
                     /** Buscar Pareja **/
                         if (encontrarPareja()){
                          /** Si pareja **/                           
@@ -157,7 +164,7 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
             }
 
          }
-        m_db.close();
+        //m_db.close();
     }
     emit workFinished();
 }
@@ -219,11 +226,11 @@ bool DatabaseManager::buscarPareja(const long long &_id, const QString &_matricu
     qry.bindValue(":matriculabuscar", _matricula);
 
     if (!qry.exec()) { // make sure your query has been executed successfully
-        qDebug() << qry.lastError(); // show the error
+        //qDebug() << qry.lastError(); // show the error
     } else {
         /** Si existe la pareja, adquiero su id y el peso bruto **/
         if (qry.first()){
-            qDebug() << "Pareja: " << qry.record();
+           // qDebug() << "Pareja: " << qry.record();
             m_RegistroMatriculas[1].id = qry.value("id").toLongLong();
             //m_RegistroMatriculas[1].bascula.iBruto = qry.value("pesobruto").toFloat();
             m_RegistroMatriculas[1].bascula.iBruto = qry.value("pesobruto").toFloat()+300; //DEBUG
@@ -249,10 +256,11 @@ bool DatabaseManager::actualizarPareja(){
     qry.bindValue(":pesoneto", m_RegistroMatriculas[0].bascula.iNeto);
     qry.bindValue(":id0", m_RegistroMatriculas[0].id);
     if (!qry.exec()){
-        qDebug() << qry.lastError();
+        //qDebug() << qry.lastError();
         return false;
     }else{
-        m_db.commit();
+        //m_db.commit();
+        commit_and_inform();
     }
 
     /** Segunda pareja 0 **/
@@ -261,14 +269,12 @@ bool DatabaseManager::actualizarPareja(){
     qry.bindValue(":pesoneto", m_RegistroMatriculas[1].bascula.iNeto);
     qry.bindValue(":id0", m_RegistroMatriculas[1].id);
     if (!qry.exec()){
-        qDebug() << qry.lastError();
+       // qDebug() << qry.lastError();
         return false;
     }else{
-        m_db.commit();
+        //m_db.commit();
+        commit_and_inform();
     }
-
-
-
     return true;
 }
 
@@ -278,7 +284,7 @@ bool DatabaseManager::getFechaRegistro(const int &_id){
     qry.prepare(  qry_fecharegistro);
     qry.bindValue(":id", m_RegistroMatriculas[_id].id);
     if (!qry.exec()) { // make sure your query has been executed successfully
-        qDebug() << qry.lastError(); // show the error
+       // qDebug() << qry.lastError(); // show the error
     } else {
         while (qry.next()) {
              m_RegistroMatriculas[_id].FechaRegistro =  qry.value("fecha").toDateTime();

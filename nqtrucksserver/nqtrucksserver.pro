@@ -2,7 +2,7 @@ include(../common.pri)
 #QT += webkitwidgets
 TARGET = nqtrucksserver
 TEMPLATE = app
-QT += core gui dbus
+QT += core gui dbus sql
 CONFIG += console
 
 greaterThan(QT_MAJOR_VERSION, 4){

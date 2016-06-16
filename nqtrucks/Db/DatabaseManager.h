@@ -19,6 +19,7 @@ public:
     ~DatabaseManager();
 
 signals:
+    void rowsPesoChanged();
     void workFinished();
 
     /** DB **/
@@ -31,8 +32,10 @@ private:
 /** Registro Simple **/
 public:
     void setRegistroMatriculas(const SimpleMatriculas &RegistroMatriculas);
-public slots:
+public slots:    
     void guardarRegistroSimpleMatriculas();
+private slots:
+    void commit_and_inform();
 
 /** Busqueda de PAIR **/
 private:

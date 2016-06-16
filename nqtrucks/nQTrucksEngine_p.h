@@ -55,6 +55,9 @@
 #include <QTreeWidgetItem>
 #include "LimeReport"
 
+/** Maestros **/
+#include "Maestros/Maestros.h"
+
 namespace nQTrucks {
 
 class nQTrucksEnginePrivate : public QObject
@@ -109,6 +112,12 @@ private:
 private:
     LimeReport::ReportEngine *m_report_editor;
     /** END REPORTS **/
+
+    /** MAESTROS ****************************************************************************/
+public:
+    Maestros::Maestros *m_maestros;
+    /** FIN MAESTROS ************************************************************************/
+
 
 };
 

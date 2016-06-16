@@ -43,7 +43,7 @@
 #include <QTreeWidgetItem>
 
 /** MAESTROS **/
-//#include <QSqlQueryModel>
+#include <QSqlQueryModel>
 
 
 namespace nQTrucks {
@@ -157,9 +157,12 @@ public slots:
 
 
     /** MAESTROS **/
-//public:
-//    QSqlQueryModel *RegistrosPesos;
-//    QSqlQueryModel *RegistrosProcesados;
+public:
+    QSqlQueryModel *RegistrosPesos;
+public slots:
+    void sincronizar_maestros();
+private slots:
+    void reloadMaestros();
     /** END MAESTROS **/
 
 

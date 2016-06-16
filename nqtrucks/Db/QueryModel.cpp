@@ -7,11 +7,7 @@
 // DOES SOME FUN STUFF TO DISPLAY STUFF IN QML
 //--------------------------------
 
-#include <QFile>
-#include <QFileInfo>
-#include <QStandardPaths>
-#include <QDir>
-#include <QCoreApplication>
+#include <QSqlQuery>
 
 #include <QDebug>
 

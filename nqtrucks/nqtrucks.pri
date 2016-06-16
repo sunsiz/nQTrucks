@@ -12,7 +12,8 @@ SOURCES += \
     $$PWD/Db/DatabaseManager.cpp \
     $$PWD/Db/ReportManager.cpp \
     $$PWD/Db/QueryModel.cpp \
-    $$PWD/Maestros/RegistroPeso.cpp
+    $$PWD/Maestros/RegistroPeso.cpp \
+    $$PWD/Maestros/Maestros.cpp
 
 
 contains(CONFIG, zint){
@@ -28,7 +29,8 @@ HEADERS += \
     $$PWD/Db/DatabaseManager.h \
     $$PWD/Db/ReportManager.h \
     $$PWD/Db/QueryModel.h \
-    $$PWD/Maestros/RegistroPeso.h
+    $$PWD/Maestros/RegistroPeso.h \
+    $$PWD/Maestros/Maestros.h
 
 
 contains(CONFIG,zint){

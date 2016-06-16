@@ -6,30 +6,23 @@ namespace nQTrucks{
         RegistroPeso::RegistroPeso(QObject *parent)
             : QueryModel(parent)
         {
-            loadconfig();
             configQueries();
             setTable();
         }
 
-        RegistroPeso::loadconfig(){
-
-        }
 
         void RegistroPeso::configQueries(){
-            m_DefaultQuery = "select * from " ;//+ QString(appServer_tablename);
-            setCurrentQuery(m_DefaultQuery);
+            m_DefaultQuery = "select * from registros_matriculas ;" ;//+ QString(appServer_tablename);
         }
 
         void RegistroPeso::setTable(){
-                if (initDB()){
-                    if (setQuery(getCurrentQuery())){     //,db))
-                        while(canFetchMore() ) {fetchMore(); }
-                    }
+            if (setQuery(m_DefaultQuery))
+            {
+                while(canFetchMore() ) {
+                    fetchMore();
                 }
+            }
         }
-
-
-
 
 
 

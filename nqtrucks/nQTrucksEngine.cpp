@@ -73,6 +73,9 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
 
     m_report_editor = new LimeReport::ReportEngine(this);
 
+    /** MAESTROS **/
+    m_maestros = new Maestros::Maestros(this);
+
 
 }
 
@@ -241,6 +244,10 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)));
     /** END NEWSAGES ALPR **/
 
+    /** MAESTROS **/
+    reloadMaestros();
+
+
 }
 
 nQTrucksEngine::nQTrucksEngine(nQTrucksEnginePrivate &dd, QObject *parent)
@@ -374,13 +381,15 @@ void nQTrucksEngine::getFotoMatricula(const int &_device, const Registros::Camar
 /** END ALRP ****************************************************************************************************************/
 
 /** CORE ****************************************************************************/
-void nQTrucksEngine::setInitDaemon(const bool &_init)
-{
+void nQTrucksEngine::setInitDaemon(const bool &_init){
     Q_D(nQTrucksEngine);
     if (_init){
          d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara,d->m_alpr, this);
-        auto daemon_connect = connect(d->m_daemon,SIGNAL(RegistroChanged(SimpleMatriculas)),
-                this       ,SIGNAL(daemonRegistroChanged(SimpleMatriculas)));
+        auto daemon_connect = connect(d->m_daemon,SIGNAL(RegistroChanged(      SimpleMatriculas)),
+                                      this       ,SIGNAL(daemonRegistroChanged(SimpleMatriculas)));
+
+        auto daemon_rowchanged = connect(d->m_daemon,SIGNAL(rowsPesoChanged()),
+                                         this       ,SLOT(  sincronizar_maestros()));
          d->m_daemon->setInit(_init);
     } else{
         d->m_daemon->setInit(_init);
@@ -388,20 +397,34 @@ void nQTrucksEngine::setInitDaemon(const bool &_init)
     }
 }
 
-void nQTrucksEngine::report_desingReport()
-{
+void nQTrucksEngine::report_desingReport(){
     Q_D(nQTrucksEngine);
     d->m_report_editor->designReport();
 }
 /** END CORE ************************************************************************/
 
 /** REPORTS ************************************************************/
-void nQTrucksEngine::report_loadFromFile(const QString &_file)
-{
+void nQTrucksEngine::report_loadFromFile(const QString &_file){
     Q_D(nQTrucksEngine);
     d->m_report_editor->loadFromFile(_file);
 }
 /** END REPORTS *******************************************************/
+
+/** MAESTROS *********************************************************************************/
+
+void nQTrucksEngine::sincronizar_maestros(){
+    Q_D(nQTrucksEngine);
+    d->m_maestros->sincronizar();
+    reloadMaestros();
+}
+
+void nQTrucksEngine::reloadMaestros(){
+    Q_D(nQTrucksEngine);
+    RegistrosPesos = d->m_maestros->m_RegistroPeso;
+}
+/** END MAESTROS ************************************************************/
+
+
 
 
 /** *****************************************************************************************
