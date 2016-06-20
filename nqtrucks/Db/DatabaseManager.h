@@ -18,7 +18,7 @@ class DatabaseManager : public QObject{
     Q_OBJECT
 public:
    // DatabaseManager(QObject *parent=nullptr);
-    explicit DatabaseManager(QObject *_maestros=nullptr, QObject *parent=nullptr);
+    explicit DatabaseManager(Maestros::Maestros *_maestros=nullptr, QObject *parent=nullptr);
     ~DatabaseManager();
 
 signals:

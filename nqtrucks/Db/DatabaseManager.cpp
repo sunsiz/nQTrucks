@@ -12,26 +12,26 @@
 namespace nQTrucks{
 namespace Db{
 
-static const QString qry_insert_simple =  " INSERT INTO registros_matriculas( "
-                                          " pesobruto,  pesoneto,  pesotara, "
-                                          " fotocamara1, fotomatriculaA1, fotomatriculaB1, matriculaA1,  matriculaB1, precisionA1, precisionB1,"
-                                          " fotocamara2, fotomatriculaA2, fotomatriculaB2, matriculaA2,  matriculaB2, precisionA2, precisionB2 "
-                                          " ) "
-                                          " VALUES  ("
-                                          " :pesobruto,   :pesoneto,  :pesotara, "
-                                          " :fotocamara1, :fotomatriculaA1, :fotomatriculaB1, :matriculaA1,  :matriculaB1, :precisionA1, :precisionB1,"
-                                          " :fotocamara2, :fotomatriculaA2, :fotomatriculaB2, :matriculaA2,  :matriculaB2, :precisionA2, :precisionB2 "
-                                          " );";
+//static const QString qry_insert_simple =  " INSERT INTO registros_matriculas( "
+//                                          " pesobruto,  pesoneto,  pesotara, "
+//                                          " fotocamara1, fotomatriculaA1, fotomatriculaB1, matriculaA1,  matriculaB1, precisionA1, precisionB1,"
+//                                          " fotocamara2, fotomatriculaA2, fotomatriculaB2, matriculaA2,  matriculaB2, precisionA2, precisionB2 "
+//                                          " ) "
+//                                          " VALUES  ("
+//                                          " :pesobruto,   :pesoneto,  :pesotara, "
+//                                          " :fotocamara1, :fotomatriculaA1, :fotomatriculaB1, :matriculaA1,  :matriculaB1, :precisionA1, :precisionB1,"
+//                                          " :fotocamara2, :fotomatriculaA2, :fotomatriculaB2, :matriculaA2,  :matriculaB2, :precisionA2, :precisionB2 "
+//                                          " );";
 
-static const QString qry_delete_fotos =  " UPDATE registros_matriculas "
-                                         " SET "
-                                         " fotocamara1 = :fotocamara1, "
-                                         " fotocamara2 = :fotocamara2  "
-                                         " WHERE id =  :id0;";
+//static const QString qry_delete_fotos =  " UPDATE registros_matriculas "
+//                                         " SET "
+//                                         " fotocamara1 = :fotocamara1, "
+//                                         " fotocamara2 = :fotocamara2  "
+//                                         " WHERE id =  :id0;";
 
-static const QString qry_fecharegistro = " SELECT fecha "
-                                         " FROM registros_matriculas "
-                                         " WHERE id = :id ";
+//static const QString qry_fecharegistro = " SELECT fecha "
+//                                         " FROM registros_matriculas "
+//                                         " WHERE id = :id ";
 
 static const QString qry_buscarpareja =  " SELECT id,fecha,pesobruto,matriculaA1, matriculaB1 , matriculaA2, matriculaB2 FROM nqtrucks.registros_matriculas"
                                          " WHERE  "                      // FILTROS ESTATICOS //
@@ -59,46 +59,21 @@ static const QString qry_procesar_pareja =  " UPDATE registros_matriculas "
                                             " WHERE id   =  :id0;";
 
 
-DatabaseManager::DatabaseManager(QObject *_maestros, QObject *parent)
+DatabaseManager::DatabaseManager(Maestros::Maestros *_maestros, QObject *parent)
    : QObject(parent)
    , m_maestros(_maestros)
 {
     m_RegistroMatriculas.resize(2);
-    //initDb();
 }
 
 DatabaseManager::~DatabaseManager(){
-    //qry->clear();
-//    if (m_db.isOpen()){
-//        m_db.close();
-//    }
+
 }
 void DatabaseManager::commit_and_inform(){
-    //emit rowsPesoChanged();
-    m_db.commit();
+    //emit rowsPesoChanged();    
     qDebug() <<  "Inserted!: " << " emitidos cambios";
 }
 
-
-/** DB **/
-//bool DatabaseManager::initDb(){
-//    if ( !QSqlDatabase::contains("nqtrucks")) {
-//        m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks");
-//        m_db.setDatabaseName( "nqtrucks" );
-//        m_db.setHostName(     "localhost" );
-//        m_db.setUserName(     "nqtrucks" );
-//        m_db.setPassword(     "nqtrucks" );
-//        //m_db.
-//    } else {
-//        m_db = QSqlDatabase::database("nqtrucks");
-//    }
-//    if (!m_db.isOpen()){
-//        m_db.open();
-//    }
-
-//    return true;
-//}
-/** END DB **/
 
 /** REGISTRO SIMPLE **/
 void DatabaseManager::setRegistroMatriculas(const SimpleMatriculas &RegistroMatriculas)
@@ -107,66 +82,49 @@ void DatabaseManager::setRegistroMatriculas(const SimpleMatriculas &RegistroMatr
 }
 
 void DatabaseManager::guardarRegistroSimpleMatriculas(){
-    /** TODO First row always corrupt? **/
-//    m_db.transaction();
-//    QSqlQuery qry(m_db);
-    qry.prepare(qry_insert_simple);
-    qry.bindValue(":pesobruto",         m_RegistroMatriculas[0].bascula.iBruto);
-    qry.bindValue(":pesoneto",          m_RegistroMatriculas[0].bascula.iNeto);
-    qry.bindValue(":pesotara",          m_RegistroMatriculas[0].bascula.iTara);
+//    /** TODO First row always corrupt? **/
+    if (m_maestros->m_RegistroPeso->guardarRegistroSimpleMatriculas(m_RegistroMatriculas[0])){
 
-    qry.bindValue(":fotocamara1",       m_RegistroMatriculas[0].results[0].camara.OrigenFotoByte);
-    qry.bindValue(":fotomatriculaA1",   m_RegistroMatriculas[0].results[0].MatriculaFotoAByte);
-    qry.bindValue(":fotomatriculaB1",   m_RegistroMatriculas[0].results[0].MatriculaFotoBByte);
-    qry.bindValue(":matriculaA1",       m_RegistroMatriculas[0].results[0].MatriculaA);
-    qry.bindValue(":matriculaB1",       m_RegistroMatriculas[0].results[0].MatriculaB);
-    qry.bindValue(":precisionA1",       QString::number(m_RegistroMatriculas[0].results[0].MatriculaPrecisionA,'g',6));
-    qry.bindValue(":precisionB1",       QString::number(m_RegistroMatriculas[0].results[0].MatriculaPrecisionB,'g',6));
-
-
-    qry.bindValue(":fotocamara2",       m_RegistroMatriculas[0].results[1].camara.OrigenFotoByte);
-    qry.bindValue(":fotomatriculaA2",   m_RegistroMatriculas[0].results[1].MatriculaFotoAByte);
-    qry.bindValue(":fotomatriculaB2",   m_RegistroMatriculas[0].results[1].MatriculaFotoBByte);
-    qry.bindValue(":matriculaA2",       m_RegistroMatriculas[0].results[1].MatriculaA);
-    qry.bindValue(":matriculaB2",       m_RegistroMatriculas[0].results[1].MatriculaB);
-    qry.bindValue(":precisionA2",       QString::number(m_RegistroMatriculas[0].results[1].MatriculaPrecisionA,'g',6));
-    qry.bindValue(":precisionB2",       QString::number(m_RegistroMatriculas[0].results[1].MatriculaPrecisionB,'g',6));
-
-     if( !qry.exec() ){
-       qDebug() << qry.lastError();
-     }else{
-         commit_and_inform();
-         m_RegistroMatriculas[0].id = qry.lastInsertId().toLongLong();
-         /** Report Pesada **/
-         m_report_manager.printRegistroMatricula(m_db,m_RegistroMatriculas[0].id);
+        m_report_manager.printRegistroMatricula(m_db,m_RegistroMatriculas[0].id);
 
         /** No Guardar Si Cualquiera de las 4 Matriculas es detectada Y BUSCAR SU PAREJA**/
         if ( m_RegistroMatriculas[0].results[0].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[0].MatriculaPrecisionB >80 ||
-             m_RegistroMatriculas[0].results[1].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[1].MatriculaPrecisionB >80  )
-        {
-            m_db.transaction();
-            QSqlQuery qry2(m_db);
-            qry2.prepare(  qry_delete_fotos);
-            qry2.bindValue(":id0",                m_RegistroMatriculas[0].id);
-            qry2.bindValue(":fotocamara1",       QVariant());
-            qry2.bindValue(":fotocamara2",       QVariant());
+             m_RegistroMatriculas[0].results[1].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[1].MatriculaPrecisionB >80  ){
 
-            if (!qry2.exec()){
-                qDebug() << qry2.lastError();
-            }else{
-                commit_and_inform();
-                /** Buscar Pareja **/
-                    if (encontrarPareja()){
-                     /** Si pareja **/
-                     m_report_manager.printRegistroMatriculaProcesada(m_db,m_RegistroMatriculas[0].id,m_RegistroMatriculas[1].id);
-                    }
-                /** END BUSCAR PAREJA **/
-            }
 
-        }
+            if(m_maestros->m_RegistroPeso->limp)
 
-     }
-    emit workFinished();
+        //            m_db.transaction();
+        //            QSqlQuery qry2(m_db);
+        //            qry2.prepare(  qry_delete_fotos);
+        //            qry2.bindValue(":id0",                m_RegistroMatriculas[0].id);
+        //            qry2.bindValue(":fotocamara1",       QVariant());
+        //            qry2.bindValue(":fotocamara2",       QVariant());
+
+        //            if (!qry2.exec()){
+        //                qDebug() << qry2.lastError();
+        //            }else{
+        //                commit_and_inform();
+        //                /** Buscar Pareja **/
+        //                    if (encontrarPareja()){
+        //                     /** Si pareja **/
+        //                     m_report_manager.printRegistroMatriculaProcesada(m_db,m_RegistroMatriculas[0].id,m_RegistroMatriculas[1].id);
+        //                    }
+        //                /** END BUSCAR PAREJA **/
+        //            }
+
+        //        }
+
+    }
+
+}
+
+emit workFinished();
+
+
+
+
+
 }
 /** END REGISTRO SIMPLE **/
 
@@ -211,7 +169,7 @@ bool DatabaseManager::encontrarPareja()
                     return true;
                 }
             }
-    }
+
 
     return false;
 }
@@ -268,16 +226,16 @@ bool DatabaseManager::actualizarPareja(){
 
 bool DatabaseManager::getFechaRegistro(const int &_id){
     QSqlQuery qry(m_db);
-    qry.prepare(  qry_fecharegistro);
-    qry.bindValue(":id", m_RegistroMatriculas[_id].id);
-    if (!qry.exec()) { // make sure your query has been executed successfully
-       qDebug() << qry.lastError(); // show the error
-    } else {
-        while (qry.first()) {
-             m_RegistroMatriculas[_id].FechaRegistro =  qry.value("fecha").toDateTime();
-            return true;
-        }
-    }
+//    qry.prepare(  qry_fecharegistro);
+//    qry.bindValue(":id", m_RegistroMatriculas[_id].id);
+//    if (!qry.exec()) { // make sure your query has been executed successfully
+//       qDebug() << qry.lastError(); // show the error
+//    } else {
+//        while (qry.first()) {
+//             m_RegistroMatriculas[_id].FechaRegistro =  qry.value("fecha").toDateTime();
+//            return true;
+//        }
+//    }
     return false;
 }
 

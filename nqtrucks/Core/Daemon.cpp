@@ -7,12 +7,13 @@
 namespace nQTrucks {
 namespace Core{
 
-Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_newsagesIO, QVector<Devices::CamaraIP*> _camara, QVector<Devices::NewsagesAlpr*> _alpr, QObject *parent)
+Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_newsagesIO, QVector<Devices::CamaraIP*> _camara, QVector<Devices::NewsagesAlpr*> _alpr, Maestros::Maestros *_maestros, QObject *parent)
     : QObject(parent)
     , m_bascula(_bascula)
     , m_newsagesIO(_newsagesIO)
     , m_camara(_camara)
     , m_alpr(_alpr)
+    , m_maestros(_maestros)
     , m_init(false)
     , m_registrando(false)
     , m_saliendo(false)
@@ -155,7 +156,7 @@ void Daemon::onGuardarRegistroSimpleMatriculas(){
     emit RegistroChanged(m_RegistroMatriculas);
 
     hiloDb = new QThread();
-    tareaDb = new Db::DatabaseManager;
+    tareaDb = new Db::DatabaseManager(m_maestros);
     tareaDb->moveToThread(hiloDb);    
     tareaDb->setRegistroMatriculas(m_RegistroMatriculas);
 

@@ -12,6 +12,7 @@
 #include "Dispositivos/Alpr/NewsagesAlpr.h"
 
 #include "Db/DatabaseManager.h"
+#include "Maestros/Maestros.h"
 
 /* PUNTEROS **/
 #include <memory>
@@ -27,6 +28,7 @@ public:
                     Devices::NewsagesIO         *_newsagesIO,
                     QVector<Devices::CamaraIP*> _camara,
                     QVector<Devices::NewsagesAlpr*> _alpr,
+                    Maestros::Maestros             *_maestros,
                     QObject *parent=nullptr);
 
 private:
@@ -34,6 +36,7 @@ private:
     Devices::NewsagesIO *m_newsagesIO;
     QVector<Devices::CamaraIP*> m_camara;
     QVector<Devices::NewsagesAlpr*> m_alpr;
+    Maestros::Maestros             *m_maestros;
 
 public:
     void setInit(bool init);

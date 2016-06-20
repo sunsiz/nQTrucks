@@ -2,6 +2,7 @@
 #define REGISTROPESO_H
 
 #include <Db/QueryModel.h>
+#include "nqtglobal.h"
 
 namespace nQTrucks{
     namespace Maestros{
@@ -25,10 +26,8 @@ namespace nQTrucks{
 
         public:
         QDateTime getFechaRegistro(const long long &_id);
-
-
-
-
+        bool guardarRegistroSimpleMatriculas(SimpleMatriculas &RegistroMatriculas);
+        bool eliminaFotosCamara(const long long &_id);
 
         };
     } /** End namespace Maestros **/

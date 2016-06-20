@@ -384,7 +384,7 @@ void nQTrucksEngine::getFotoMatricula(const int &_device, const Registros::Camar
 void nQTrucksEngine::setInitDaemon(const bool &_init){
     Q_D(nQTrucksEngine);
     if (_init){
-         d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara,d->m_alpr, this);
+         d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara,d->m_alpr, d->m_maestros, this);
         auto daemon_connect = connect(d->m_daemon,SIGNAL(RegistroChanged(      SimpleMatriculas)),
                                       this       ,SIGNAL(daemonRegistroChanged(SimpleMatriculas)));
 
