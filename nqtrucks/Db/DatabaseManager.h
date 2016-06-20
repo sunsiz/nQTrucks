@@ -7,6 +7,8 @@
 #include <QSqlDatabase>
 //#include <QSqlQuery>
 
+#include "Maestros/Maestros.h"
+
 #include "ReportManager.h"
 
 namespace nQTrucks {
@@ -16,7 +18,7 @@ class DatabaseManager : public QObject{
     Q_OBJECT
 public:
    // DatabaseManager(QObject *parent=nullptr);
-    explicit DatabaseManager(QObject *parent=nullptr);
+    explicit DatabaseManager(QObject *_maestros=nullptr, QObject *parent=nullptr);
     ~DatabaseManager();
 
 signals:
@@ -25,6 +27,7 @@ signals:
 
     /** DB **/
 private:
+    Maestros::Maestros *m_maestros;
     bool initDb();
     QSqlDatabase m_db;
     //QSqlQuery *qry;

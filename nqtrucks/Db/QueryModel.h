@@ -6,11 +6,13 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlRecord>
-
+#include <QSqlQuery>
 
 #include <QVariant>
 #include <QHash>
 #include <QBitArray>
+
+#include <QDateTime>
 
 namespace nQTrucks {
     namespace Db {

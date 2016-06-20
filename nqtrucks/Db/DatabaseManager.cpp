@@ -59,43 +59,45 @@ static const QString qry_procesar_pareja =  " UPDATE registros_matriculas "
                                             " WHERE id   =  :id0;";
 
 
-DatabaseManager::DatabaseManager(QObject *parent)
+DatabaseManager::DatabaseManager(QObject *_maestros, QObject *parent)
    : QObject(parent)
+   , m_maestros(_maestros)
 {
     m_RegistroMatriculas.resize(2);
-    initDb();
+    //initDb();
 }
 
 DatabaseManager::~DatabaseManager(){
     //qry->clear();
-    if (m_db.isOpen()){
-        m_db.close();
-    }
+//    if (m_db.isOpen()){
+//        m_db.close();
+//    }
 }
 void DatabaseManager::commit_and_inform(){
     //emit rowsPesoChanged();
+    m_db.commit();
     qDebug() <<  "Inserted!: " << " emitidos cambios";
 }
 
 
 /** DB **/
-bool DatabaseManager::initDb(){
-    if ( !QSqlDatabase::contains("nqtrucks")) {
-        m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks");
-        m_db.setDatabaseName( "nqtrucks" );
-        m_db.setHostName(     "localhost" );
-        m_db.setUserName(     "nqtrucks" );
-        m_db.setPassword(     "nqtrucks" );
-        //m_db.
-    } else {
-        m_db = QSqlDatabase::database("nqtrucks");
-    }
-    if (!m_db.isOpen()){
-        m_db.open();
-    }
+//bool DatabaseManager::initDb(){
+//    if ( !QSqlDatabase::contains("nqtrucks")) {
+//        m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks");
+//        m_db.setDatabaseName( "nqtrucks" );
+//        m_db.setHostName(     "localhost" );
+//        m_db.setUserName(     "nqtrucks" );
+//        m_db.setPassword(     "nqtrucks" );
+//        //m_db.
+//    } else {
+//        m_db = QSqlDatabase::database("nqtrucks");
+//    }
+//    if (!m_db.isOpen()){
+//        m_db.open();
+//    }
 
-    return true;
-}
+//    return true;
+//}
 /** END DB **/
 
 /** REGISTRO SIMPLE **/
@@ -106,7 +108,8 @@ void DatabaseManager::setRegistroMatriculas(const SimpleMatriculas &RegistroMatr
 
 void DatabaseManager::guardarRegistroSimpleMatriculas(){
     /** TODO First row always corrupt? **/
-    QSqlQuery qry(m_db);
+//    m_db.transaction();
+//    QSqlQuery qry(m_db);
     qry.prepare(qry_insert_simple);
     qry.bindValue(":pesobruto",         m_RegistroMatriculas[0].bascula.iBruto);
     qry.bindValue(":pesoneto",          m_RegistroMatriculas[0].bascula.iNeto);
@@ -141,6 +144,7 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
         if ( m_RegistroMatriculas[0].results[0].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[0].MatriculaPrecisionB >80 ||
              m_RegistroMatriculas[0].results[1].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[1].MatriculaPrecisionB >80  )
         {
+            m_db.transaction();
             QSqlQuery qry2(m_db);
             qry2.prepare(  qry_delete_fotos);
             qry2.bindValue(":id0",                m_RegistroMatriculas[0].id);
@@ -171,7 +175,8 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
 bool DatabaseManager::encontrarPareja()
 {
     /** Que fecha final tenemos?**/
-    if (getFechaRegistro(0)){
+    //if (getFechaRegistro(0)){
+    m_RegistroMatriculas[0].FechaRegistro=m_maestros->m_RegistroPeso->getFechaRegistro(m_RegistroMatriculas[0].id);
         qDebug() << "Fecha registro Date: " << m_RegistroMatriculas[0].FechaRegistro.date();
         qDebug() << "Fecha registro: " << m_RegistroMatriculas[0].FechaRegistro;
 

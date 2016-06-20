@@ -18,7 +18,7 @@ namespace nQTrucks{
 
     void Maestros::sincronizar(){
         //m_RegistroPeso->beginResetModel();
-        m_RegistroPeso->syncTable();
+        //m_RegistroPeso->syncTable();
         //m_RegistroPeso->endResetModel();
     }
 

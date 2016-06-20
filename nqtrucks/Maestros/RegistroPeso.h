@@ -16,10 +16,20 @@ namespace nQTrucks{
         protected:
             void setTable();
             void refreshModel() {setTable();}
-            void configQueries();
+            void configQueries();            
 
         protected:
             QString m_DefaultQuery;// = "select * from " + QString(appServer_tablename);
+
+
+
+        public:
+        QDateTime getFechaRegistro(const long long &_id);
+
+
+
+
+
         };
     } /** End namespace Maestros **/
 } /** End namespace nQTrucks **/
