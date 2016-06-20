@@ -28,9 +28,6 @@ signals:
     /** DB **/
 private:
     Maestros::Maestros *m_maestros;
-    bool initDb();
-    QSqlDatabase m_db;
-    //QSqlQuery *qry;
     QVector<SimpleMatriculas> m_RegistroMatriculas;
     ReportManager m_report_manager;
 
@@ -39,14 +36,10 @@ public:
     void setRegistroMatriculas(const SimpleMatriculas &RegistroMatriculas);
 public slots:    
     void guardarRegistroSimpleMatriculas();
-private slots:
-    void commit_and_inform();
 
 /** Busqueda de PAIR **/
 private:
-    //QVariant m_FechaRegistro;
     QStringList m_MatriculasList;
-    bool getFechaRegistro(const int &_id);
     bool encontrarPareja();
     bool buscarPareja(const long long &_id, const QString &_matricula);
     bool actualizarPareja();

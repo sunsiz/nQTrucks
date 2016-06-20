@@ -4,24 +4,42 @@
 namespace nQTrucks{
     namespace Maestros{
 
-    static const QString qry_fecharegistro =  " SELECT fecha  FROM registros_matriculas WHERE id = :id ";
+    static const QString qry_fecharegistro =    " SELECT fecha  FROM registros_matriculas WHERE id = :id ";
 
-    static const QString qry_insert_simple =  " INSERT INTO registros_matriculas( "
-                                              " pesobruto,  pesoneto,  pesotara,  "
-                                              " fotocamara1, fotomatriculaA1, fotomatriculaB1, matriculaA1,  matriculaB1, precisionA1, precisionB1,"
-                                              " fotocamara2, fotomatriculaA2, fotomatriculaB2, matriculaA2,  matriculaB2, precisionA2, precisionB2 "
-                                              " ) "
-                                              " VALUES  ("
-                                              " :pesobruto,   :pesoneto,  :pesotara, "
-                                              " :fotocamara1, :fotomatriculaA1, :fotomatriculaB1, :matriculaA1,  :matriculaB1, :precisionA1, :precisionB1,"
-                                              " :fotocamara2, :fotomatriculaA2, :fotomatriculaB2, :matriculaA2,  :matriculaB2, :precisionA2, :precisionB2 "
-                                              " );";
+    static const QString qry_insert_simple =    " INSERT INTO registros_matriculas( "
+                                                " pesobruto,  pesoneto,  pesotara,  "
+                                                " fotocamara1, fotomatriculaA1, fotomatriculaB1, matriculaA1,  matriculaB1, precisionA1, precisionB1,"
+                                                " fotocamara2, fotomatriculaA2, fotomatriculaB2, matriculaA2,  matriculaB2, precisionA2, precisionB2 "
+                                                " ) "
+                                                " VALUES  ("
+                                                " :pesobruto,   :pesoneto,  :pesotara, "
+                                                " :fotocamara1, :fotomatriculaA1, :fotomatriculaB1, :matriculaA1,  :matriculaB1, :precisionA1, :precisionB1,"
+                                                " :fotocamara2, :fotomatriculaA2, :fotomatriculaB2, :matriculaA2,  :matriculaB2, :precisionA2, :precisionB2 "
+                                                " );";
 
-    static const QString qry_delete_fotos =   " UPDATE registros_matriculas "
-                                              " SET "
-                                              " fotocamara1 = :fotocamara1, "
-                                              " fotocamara2 = :fotocamara2  "
-                                              " WHERE id =  :id0;";
+    static const QString qry_delete_fotos =     " UPDATE registros_matriculas SET fotocamara1 = :fotocamara1, fotocamara2 = :fotocamara2 WHERE id =  :id0;";
+
+    static const QString qry_buscarpareja =     " SELECT id,fecha,pesobruto,matriculaA1, matriculaB1 , matriculaA2, matriculaB2 FROM nqtrucks.registros_matriculas"
+                                                " WHERE  "                      // FILTROS ESTATICOS //
+                                                " !procesado "
+                                                " AND(fotocamara1 IS NULL  AND fotocamara2 IS NULL)"
+                                                " AND ( "                       // FILTROS DINAMICOS //
+                                                " id != :id0 "
+                                                " AND "
+                                                " DATE(fecha) = DATE(:fechaabuscar) "  //DEBUG curdate()//
+                                                " ) "
+                                                " AND( "
+                                                " matriculaA1 = :matriculabuscar OR "
+                                                " matriculaB1 = :matriculabuscar OR "
+                                                " matriculaA2 = :matriculabuscar OR "
+                                                " matriculaB1 = :matriculabuscar "
+                                                " ) "
+                                                " ORDER by fecha DESC "
+                                                " LIMIT 1; ";
+
+    static const QString qry_procesar_pareja =  " UPDATE registros_matriculas  SET eparejado = :idpareja, pesoneto   = :pesoneto, procesado  = 1  WHERE id   =  :id0;";
+
+
 
 
         RegistroPeso::RegistroPeso(QObject *parent)
@@ -97,6 +115,7 @@ namespace nQTrucks{
             return false;
         }
 
+
         QDateTime RegistroPeso::getFechaRegistro(const long long &_id)
         {
             QSqlQuery qry(m_db);
@@ -111,6 +130,61 @@ namespace nQTrucks{
                 }
             }
             return _fecha;
+        }
+
+        bool RegistroPeso::buscarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas, const QString &_matricula){
+            /** TODO ENTRE FECHAS **/
+            QSqlQuery qry(m_db);
+            qry.prepare(qry_buscarpareja);
+            qry.bindValue(":id0", RegistrosMatriculas[0].id);
+            qry.bindValue(":fechaabuscar", RegistrosMatriculas[0].FechaRegistro.date());
+            qry.bindValue(":matriculabuscar", _matricula);
+
+            if (!qry.exec()) { // make sure your query has been executed successfully
+                qDebug() << qry.lastError(); // show the error
+            } else {
+                    /** Si existe la pareja, adquiero su id y el peso bruto **/
+                if (qry.first()){
+                    RegistrosMatriculas[1].id = qry.value("id").toLongLong();
+                    RegistrosMatriculas[1].bascula.iBruto = qry.value("pesobruto").toFloat()+300; //DEBUG
+                    return actualizarPareja(RegistrosMatriculas);         /** Actualizo a Procesado y
+                                                           * consigo el Peso Verificado
+                                                           * http://www.worldshipping.org/industry-issues/safety/WSC_Summarizes_the_Basic_Elements_of_the_SOLAS_Container_Weight_Verification_Requirement___February_2015.pdf **/
+                }
+            }
+            return false;
+        }
+
+        bool RegistroPeso::actualizarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas)
+        {
+            float neto = abs(RegistrosMatriculas[0].bascula.iBruto - RegistrosMatriculas[1].bascula.iBruto);
+            RegistrosMatriculas[0].bascula.iNeto = neto;
+            RegistrosMatriculas[1].bascula.iNeto = neto;
+
+            QSqlQuery qry(m_db);
+            qry.prepare(qry_procesar_pareja);
+            /** Primera pareja 0 **/
+            qry.bindValue(":idpareja", RegistrosMatriculas[1].id);
+            qry.bindValue(":pesoneto", RegistrosMatriculas[0].bascula.iNeto);
+            qry.bindValue(":id0", RegistrosMatriculas[0].id);
+            if (!qry.exec()){
+                return false;
+            }
+            /** Segunda pareja 1 **/
+            QSqlQuery qry2(m_db);
+            qry2.bindValue(":idpareja", RegistrosMatriculas[0].id);
+            qry2.bindValue(":pesoneto", RegistrosMatriculas[1].bascula.iNeto);
+            qry2.bindValue(":id0", RegistrosMatriculas[1].id);
+            if (!qry2.exec()){
+               qDebug() << qry2.lastError();
+                return false;
+            }
+            setTable();
+            return true;
+        }
+
+        QSqlDatabase RegistroPeso::getDb() const {
+            return m_db;
         }
 
 

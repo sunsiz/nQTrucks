@@ -14,6 +14,7 @@ namespace nQTrucks{
         public slots:
             void syncTable() {setTable();}
 
+            QSqlDatabase getDb() const;
         protected:
             void setTable();
             void refreshModel() {setTable();}
@@ -28,7 +29,8 @@ namespace nQTrucks{
         QDateTime getFechaRegistro(const long long &_id);
         bool guardarRegistroSimpleMatriculas(SimpleMatriculas &RegistroMatriculas);
         bool eliminaFotosCamara(const long long &_id);
-
+        bool buscarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas, const QString &_matricula);
+        bool actualizarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas);
         };
     } /** End namespace Maestros **/
 } /** End namespace nQTrucks **/
