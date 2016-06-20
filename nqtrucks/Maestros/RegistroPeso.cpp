@@ -16,12 +16,16 @@ namespace nQTrucks{
         }
 
         void RegistroPeso::setTable(){
-            if (setQuery(m_DefaultQuery))
-            {
-                while(canFetchMore() ) {
-                    fetchMore();
+            beginResetModel();
+            if(initDB()){
+
+                if (setQuery(m_DefaultQuery)){
+                    while(canFetchMore() ) {
+                        fetchMore();
+                    }
                 }
             }
+            endResetModel();
         }
 
 

@@ -1634,13 +1634,6 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="QCheckBox" name="runningCheckBox">
-     <property name="text">
-      <string>Running</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

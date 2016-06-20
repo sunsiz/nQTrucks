@@ -41,7 +41,6 @@ namespace nQTrucks{
 Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Configuracion)
-    , m_running(false)
     , engine(_engine)
 {
     ui->setupUi(this);
@@ -49,7 +48,6 @@ Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
     //engine  = new nQTrucks::nQTrucksEngine(this);
     m_matricularesults.resize(2);
 
-    connect(ui->runningCheckBox,SIGNAL(clicked(bool)),this,SLOT(isRunning(bool)));
 
     /** CAMARAS **/
     connect(engine,SIGNAL(CamaraIP1(Registros::Camara)),this,SLOT(onGetFoto1(Registros::Camara)));
@@ -96,17 +94,7 @@ void Configuracion::updateGui(){
     }
 }
 
-void Configuracion::isRunning(bool clicked)
-{
-    m_running=clicked;
-    engine->setInitDaemon(m_running);
-    //DEBUG NO BLOQUEAR ui->configTabWidget->setEnabled(!m_running);
-    if (m_running){
-        ui->runningCheckBox->setText("Running...");
-    }else{
-        ui->runningCheckBox->setText("Stoped...");
-    }
-}
+
 
 /** SETTINGS **/
 void Configuracion::loadconfig()
@@ -120,9 +108,6 @@ void Configuracion::loadconfig()
     }
     /** END DEFAULT UIS **/
 
-
-    /** INTERFACE **/
-    ui->configTabWidget->setEnabled(!m_running);
 
     /** CAMARAS **/
     ui->CamaraSelect->addItem(CAMARA1);

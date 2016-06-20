@@ -9,13 +9,14 @@ namespace nQTrucks {
 Desktop::Desktop(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Desktop)
+  , m_running(false)
 {
     ui->setupUi(this);
 
     /** KEYBOARD **/
     m_keyboard = new QProcess(this);
     m_keyboard->setProgram("/usr/bin/onboard");
-    m_keyboard->start();
+//    m_keyboard->start();
     /** END KEYBOARD **/
 
     m_control_center = new QProcess(this);
@@ -23,8 +24,10 @@ Desktop::Desktop(QWidget *parent) :
 
     /** APLICACION **/
     m_app_engine = new nQTrucksEngine();
-    m_app_config = new Configuracion(m_app_engine);
-    m_app_client = new Client(m_app_engine);
+
+    m_app_config    = new Configuracion(m_app_engine);
+    m_app_client    = new Client(m_app_engine);
+    m_app_registros = new RegistrosUi(m_app_engine);
 
     /** KEYBOARD SIEMPRE VIVO **/
     connect(m_keyboard,SIGNAL(finished(int)),this,SLOT(on_exit_Keyboard(int)));
@@ -33,14 +36,23 @@ Desktop::Desktop(QWidget *parent) :
     /** Listado de StackWidgets **/
     //ui->appWidget->addWidget(m_app_config);
     //ui->appWidget->setVisible(false);
+
+    /** DAEMON **/
+    connect(ui->runningCheckBox,SIGNAL(toggled(bool)),this,SLOT(isRunning(bool)));
+    loadconfig();
+
+
 }
 
 Desktop::~Desktop(){
     delete ui;
     m_keyboard->deleteLater();
     m_control_center->deleteLater();
-    m_app_engine->deleteLater();
     m_app_config->deleteLater();
+    m_app_client->deleteLater();
+    m_app_registros->deleteLater();
+    m_app_engine->deleteLater();
+
 }
 
 void Desktop::changeEvent(QEvent *e){
@@ -54,6 +66,13 @@ void Desktop::changeEvent(QEvent *e){
     }
 }
 
+void Desktop::loadconfig(){
+
+   /** INTERFACE **/
+   m_running = m_app_engine->appConfig()->value(QString("Daemon") + "/running","0").toBool();
+   ui->runningCheckBox->setChecked(m_running);
+}
+
 /** HARDWARE **************************************************************/
 /** KEYBOARD ***/
 void Desktop::on_exit_Keyboard(const int &arg1){
@@ -63,6 +82,7 @@ void Desktop::on_exit_Keyboard(const int &arg1){
 
 void Desktop::on_actionKeyboard_toggled(bool arg1){
     if (arg1){
+        m_keyboard->start();
         QDBusConnection dbus =QDBusConnection::sessionBus();
         QDBusMessage msg = QDBusMessage::createMethodCall("org.onboard.Onboard", "/org/onboard/Onboard/Keyboard" , "org.onboard.Onboard.Keyboard","Show");
         dbus.send(msg);
@@ -88,24 +108,28 @@ void Desktop::on_actionSystemSettings_triggered(){
 /** APPLICACION ***************************************************************/
 void Desktop::on_selectedAppChanged(){
 
+    ui->appWidget->removeWidget(ui->appWidget->currentWidget());
     switch (m_app) {
     case appConfig:
-        ui->appWidget->removeWidget(m_app_config);
         m_app_config->setMaximumSize(ui->appWidget->size());
         m_app_config->setSizePolicy(ui->appWidget->sizePolicy());
         ui->appWidget->addWidget(m_app_config);
         ui->appWidget->setCurrentWidget(m_app_config);
         break;
     case appClient:
-        ui->appWidget->removeWidget(m_app_client);
         m_app_client->setMaximumSize(ui->appWidget->size());
         m_app_client->setSizePolicy(ui->appWidget->sizePolicy());
         ui->appWidget->addWidget(m_app_client);
         ui->appWidget->setCurrentWidget(m_app_client);
         break;
+    case appRegistros:
+        m_app_registros->setMaximumSize(ui->appWidget->size());
+        m_app_registros->setSizePolicy(ui->appWidget->sizePolicy());
+        ui->appWidget->addWidget(m_app_registros);
+        ui->appWidget->setCurrentWidget(m_app_registros);
+        break;
     case appNone:
-        ui->appWidget->removeWidget(m_app_config);
-        ui->appWidget->removeWidget(m_app_client);
+
         break;
     }
 }
@@ -132,5 +156,32 @@ void Desktop::on_actionClient_toggled(bool arg1){
     on_selectedAppChanged();
 }
 /** END CLIENT **/
+
+/** Registros **/
+void Desktop::on_actionRegistros_toggled(bool arg1){
+    if (arg1){
+        m_app=appRegistros;
+    }else{
+        m_app=appNone;
+   }
+    on_selectedAppChanged();
+}
+/** END CLIENT **/
+
+
+/** DAEMON **/
+void Desktop::isRunning(bool clicked)
+{
+    m_running=clicked;
+    m_app_engine->appConfig()->setValue(QString("Daemon") + "/running",m_running);
+    m_app_engine->setInitDaemon(m_running);
+    //DEBUG NO BLOQUEAR ui->configTabWidget->setEnabled(!m_running);
+    if (m_running){
+        ui->runningCheckBox->setText("Running...");
+    }else{
+        ui->runningCheckBox->setText("Stoped...");
+    }
+}
+
 
 }

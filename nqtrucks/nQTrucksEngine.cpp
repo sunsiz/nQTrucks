@@ -415,12 +415,14 @@ void nQTrucksEngine::report_loadFromFile(const QString &_file){
 void nQTrucksEngine::sincronizar_maestros(){
     Q_D(nQTrucksEngine);
     d->m_maestros->sincronizar();
-    reloadMaestros();
+//    reloadMaestros();
+
 }
 
 void nQTrucksEngine::reloadMaestros(){
     Q_D(nQTrucksEngine);
     RegistrosPesos = d->m_maestros->m_RegistroPeso;
+    //RegistrosPesos->query();
 }
 /** END MAESTROS ************************************************************/
 

@@ -1,5 +1,12 @@
 #include "DatabaseManager.h"
-#include <QtSql>
+
+#include <QSqlError>
+#include <QSqlRecord>
+#include <QSqlQuery>
+#include <QVariant>
+#include <QHash>
+#include <QBitArray>
+
 #include <QDebug>
 
 namespace nQTrucks{
@@ -56,33 +63,38 @@ DatabaseManager::DatabaseManager(QObject *parent)
    : QObject(parent)
 {
     m_RegistroMatriculas.resize(2);
+    initDb();
 }
 
 DatabaseManager::~DatabaseManager(){
-
+    //qry->clear();
+    if (m_db.isOpen()){
+        m_db.close();
+    }
 }
 void DatabaseManager::commit_and_inform(){
-    m_db.commit();
-    emit rowsPesoChanged();
+    //emit rowsPesoChanged();
+    qDebug() <<  "Inserted!: " << " emitidos cambios";
 }
 
 
 /** DB **/
-void DatabaseManager::initDb(){
-    //qDebug() << "conexion inicial es: " << m_db.connectionName();
-
+bool DatabaseManager::initDb(){
     if ( !QSqlDatabase::contains("nqtrucks")) {
         m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks");
         m_db.setDatabaseName( "nqtrucks" );
         m_db.setHostName(     "localhost" );
         m_db.setUserName(     "nqtrucks" );
         m_db.setPassword(     "nqtrucks" );
-      //  qDebug() << "conexion al crear es: " << m_db.connectionName();
+        //m_db.
     } else {
         m_db = QSqlDatabase::database("nqtrucks");
-        //qDebug() << "conexion al volver a usar es: " << m_db.connectionName();
     }
-   // qDebug() << "conexion al verificar es: " << m_db.connectionName();
+    if (!m_db.isOpen()){
+        m_db.open();
+    }
+
+    return true;
 }
 /** END DB **/
 
@@ -94,78 +106,62 @@ void DatabaseManager::setRegistroMatriculas(const SimpleMatriculas &RegistroMatr
 
 void DatabaseManager::guardarRegistroSimpleMatriculas(){
     /** TODO First row always corrupt? **/
-    initDb();
+    QSqlQuery qry(m_db);
+    qry.prepare(qry_insert_simple);
+    qry.bindValue(":pesobruto",         m_RegistroMatriculas[0].bascula.iBruto);
+    qry.bindValue(":pesoneto",          m_RegistroMatriculas[0].bascula.iNeto);
+    qry.bindValue(":pesotara",          m_RegistroMatriculas[0].bascula.iTara);
 
-    if (!m_db.isOpen() && !m_db.open() )
-    {
-      //qDebug() << m_db.lastError();
-      //qDebug() << "Failed to connect." ;
-    }else{
-        //qDebug( "Connected!" );
-        m_db.transaction();
-        QSqlQuery qry(m_db);
-        qry.prepare(qry_insert_simple);
-        qry.bindValue(":pesobruto",         m_RegistroMatriculas[0].bascula.iBruto);
-        qry.bindValue(":pesoneto",          m_RegistroMatriculas[0].bascula.iNeto);
-        qry.bindValue(":pesotara",          m_RegistroMatriculas[0].bascula.iTara);
-
-        qry.bindValue(":fotocamara1",       m_RegistroMatriculas[0].results[0].camara.OrigenFotoByte);
-        qry.bindValue(":fotomatriculaA1",   m_RegistroMatriculas[0].results[0].MatriculaFotoAByte);
-        qry.bindValue(":fotomatriculaB1",   m_RegistroMatriculas[0].results[0].MatriculaFotoBByte);
-        qry.bindValue(":matriculaA1",       m_RegistroMatriculas[0].results[0].MatriculaA);
-        qry.bindValue(":matriculaB1",       m_RegistroMatriculas[0].results[0].MatriculaB);
-        qry.bindValue(":precisionA1",       QString::number(m_RegistroMatriculas[0].results[0].MatriculaPrecisionA,'g',6));
-        qry.bindValue(":precisionB1",       QString::number(m_RegistroMatriculas[0].results[0].MatriculaPrecisionB,'g',6));
+    qry.bindValue(":fotocamara1",       m_RegistroMatriculas[0].results[0].camara.OrigenFotoByte);
+    qry.bindValue(":fotomatriculaA1",   m_RegistroMatriculas[0].results[0].MatriculaFotoAByte);
+    qry.bindValue(":fotomatriculaB1",   m_RegistroMatriculas[0].results[0].MatriculaFotoBByte);
+    qry.bindValue(":matriculaA1",       m_RegistroMatriculas[0].results[0].MatriculaA);
+    qry.bindValue(":matriculaB1",       m_RegistroMatriculas[0].results[0].MatriculaB);
+    qry.bindValue(":precisionA1",       QString::number(m_RegistroMatriculas[0].results[0].MatriculaPrecisionA,'g',6));
+    qry.bindValue(":precisionB1",       QString::number(m_RegistroMatriculas[0].results[0].MatriculaPrecisionB,'g',6));
 
 
-        qry.bindValue(":fotocamara2",       m_RegistroMatriculas[0].results[1].camara.OrigenFotoByte);
-        qry.bindValue(":fotomatriculaA2",   m_RegistroMatriculas[0].results[1].MatriculaFotoAByte);
-        qry.bindValue(":fotomatriculaB2",   m_RegistroMatriculas[0].results[1].MatriculaFotoBByte);
-        qry.bindValue(":matriculaA2",       m_RegistroMatriculas[0].results[1].MatriculaA);
-        qry.bindValue(":matriculaB2",       m_RegistroMatriculas[0].results[1].MatriculaB);
-        qry.bindValue(":precisionA2",       QString::number(m_RegistroMatriculas[0].results[1].MatriculaPrecisionA,'g',6));
-        qry.bindValue(":precisionB2",       QString::number(m_RegistroMatriculas[0].results[1].MatriculaPrecisionB,'g',6));
+    qry.bindValue(":fotocamara2",       m_RegistroMatriculas[0].results[1].camara.OrigenFotoByte);
+    qry.bindValue(":fotomatriculaA2",   m_RegistroMatriculas[0].results[1].MatriculaFotoAByte);
+    qry.bindValue(":fotomatriculaB2",   m_RegistroMatriculas[0].results[1].MatriculaFotoBByte);
+    qry.bindValue(":matriculaA2",       m_RegistroMatriculas[0].results[1].MatriculaA);
+    qry.bindValue(":matriculaB2",       m_RegistroMatriculas[0].results[1].MatriculaB);
+    qry.bindValue(":precisionA2",       QString::number(m_RegistroMatriculas[0].results[1].MatriculaPrecisionA,'g',6));
+    qry.bindValue(":precisionB2",       QString::number(m_RegistroMatriculas[0].results[1].MatriculaPrecisionB,'g',6));
 
-         if( !qry.exec() ){
-           //qDebug() << qry.lastError();
-            m_db.rollback();
-         }else{
-            //m_db.commit();
-             commit_and_inform();
-             m_RegistroMatriculas[0].id = qry.lastInsertId().toLongLong();
-             //qDebug() <<  "Inserted!: " << m_RegistroMatriculas[0].id;
-             /** Report Pesada **/
-             m_report_manager.printRegistroMatricula(m_db,m_RegistroMatriculas[0].id);
+     if( !qry.exec() ){
+       qDebug() << qry.lastError();
+     }else{
+         commit_and_inform();
+         m_RegistroMatriculas[0].id = qry.lastInsertId().toLongLong();
+         /** Report Pesada **/
+         m_report_manager.printRegistroMatricula(m_db,m_RegistroMatriculas[0].id);
 
-            /** No Guardar Si Cualquiera de las 4 Matriculas es detectada Y BUSCAR SU PAREJA**/
-            if ( m_RegistroMatriculas[0].results[0].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[0].MatriculaPrecisionB >80 ||
-                 m_RegistroMatriculas[0].results[1].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[1].MatriculaPrecisionB >80  )
-            {
+        /** No Guardar Si Cualquiera de las 4 Matriculas es detectada Y BUSCAR SU PAREJA**/
+        if ( m_RegistroMatriculas[0].results[0].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[0].MatriculaPrecisionB >80 ||
+             m_RegistroMatriculas[0].results[1].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[1].MatriculaPrecisionB >80  )
+        {
+            QSqlQuery qry2(m_db);
+            qry2.prepare(  qry_delete_fotos);
+            qry2.bindValue(":id0",                m_RegistroMatriculas[0].id);
+            qry2.bindValue(":fotocamara1",       QVariant());
+            qry2.bindValue(":fotocamara2",       QVariant());
 
-                m_db.transaction();
-                qry.prepare(  qry_delete_fotos);
-                qry.bindValue(":id0",                m_RegistroMatriculas[0].id);
-                qry.bindValue(":fotocamara1",       QVariant());
-                qry.bindValue(":fotocamara2",       QVariant());
-
-                if (!qry.exec()){
-                    //qDebug() << qry.lastError();
-                }else{
-                    //m_db.commit();
-                    commit_and_inform();
-                    /** Buscar Pareja **/
-                        if (encontrarPareja()){
-                         /** Si pareja **/                           
-                         m_report_manager.printRegistroMatriculaProcesada(m_db,m_RegistroMatriculas[0].id,m_RegistroMatriculas[1].id);
-                        }
-                    /** END BUSCAR PAREJA **/
-                }
-
+            if (!qry2.exec()){
+                qDebug() << qry2.lastError();
+            }else{
+                commit_and_inform();
+                /** Buscar Pareja **/
+                    if (encontrarPareja()){
+                     /** Si pareja **/
+                     m_report_manager.printRegistroMatriculaProcesada(m_db,m_RegistroMatriculas[0].id,m_RegistroMatriculas[1].id);
+                    }
+                /** END BUSCAR PAREJA **/
             }
 
-         }
-        //m_db.close();
-    }
+        }
+
+     }
     emit workFinished();
 }
 /** END REGISTRO SIMPLE **/
@@ -217,8 +213,6 @@ bool DatabaseManager::encontrarPareja()
 
 bool DatabaseManager::buscarPareja(const long long &_id, const QString &_matricula){
     /** TODO ENTRE FECHAS **/
-
-
     QSqlQuery qry(m_db);
     qry.prepare(qry_buscarpareja);
     qry.bindValue(":id0", m_RegistroMatriculas[_id].id);
@@ -226,13 +220,11 @@ bool DatabaseManager::buscarPareja(const long long &_id, const QString &_matricu
     qry.bindValue(":matriculabuscar", _matricula);
 
     if (!qry.exec()) { // make sure your query has been executed successfully
-        //qDebug() << qry.lastError(); // show the error
+        qDebug() << qry.lastError(); // show the error
     } else {
         /** Si existe la pareja, adquiero su id y el peso bruto **/
         if (qry.first()){
-           // qDebug() << "Pareja: " << qry.record();
             m_RegistroMatriculas[1].id = qry.value("id").toLongLong();
-            //m_RegistroMatriculas[1].bascula.iBruto = qry.value("pesobruto").toFloat();
             m_RegistroMatriculas[1].bascula.iBruto = qry.value("pesobruto").toFloat()+300; //DEBUG
             return actualizarPareja();         /** Actualizo a Procesado y
                                                * consigo el Peso Verificado
@@ -243,7 +235,6 @@ bool DatabaseManager::buscarPareja(const long long &_id, const QString &_matricu
 }
 
 bool DatabaseManager::actualizarPareja(){
-
     float neto = abs(m_RegistroMatriculas[0].bascula.iBruto - m_RegistroMatriculas[1].bascula.iBruto);
     m_RegistroMatriculas[0].bascula.iNeto = neto;
     m_RegistroMatriculas[1].bascula.iNeto = neto;
@@ -251,47 +242,37 @@ bool DatabaseManager::actualizarPareja(){
     QSqlQuery qry(m_db);
     qry.prepare(qry_procesar_pareja);
     /** Primera pareja 0 **/
-    m_db.transaction();
     qry.bindValue(":idpareja", m_RegistroMatriculas[1].id);
     qry.bindValue(":pesoneto", m_RegistroMatriculas[0].bascula.iNeto);
     qry.bindValue(":id0", m_RegistroMatriculas[0].id);
     if (!qry.exec()){
-        //qDebug() << qry.lastError();
         return false;
-    }else{
-        //m_db.commit();
-        commit_and_inform();
     }
-
-    /** Segunda pareja 0 **/
-    m_db.transaction();
-    qry.bindValue(":idpareja", m_RegistroMatriculas[0].id);
-    qry.bindValue(":pesoneto", m_RegistroMatriculas[1].bascula.iNeto);
-    qry.bindValue(":id0", m_RegistroMatriculas[1].id);
-    if (!qry.exec()){
-       // qDebug() << qry.lastError();
+    /** Segunda pareja 1 **/
+    QSqlQuery qry2(m_db);
+    qry2.bindValue(":idpareja", m_RegistroMatriculas[0].id);
+    qry2.bindValue(":pesoneto", m_RegistroMatriculas[1].bascula.iNeto);
+    qry2.bindValue(":id0", m_RegistroMatriculas[1].id);
+    if (!qry2.exec()){
+       qDebug() << qry2.lastError();
         return false;
-    }else{
-        //m_db.commit();
-        commit_and_inform();
     }
+    commit_and_inform();
     return true;
 }
-
 
 bool DatabaseManager::getFechaRegistro(const int &_id){
     QSqlQuery qry(m_db);
     qry.prepare(  qry_fecharegistro);
     qry.bindValue(":id", m_RegistroMatriculas[_id].id);
     if (!qry.exec()) { // make sure your query has been executed successfully
-       // qDebug() << qry.lastError(); // show the error
+       qDebug() << qry.lastError(); // show the error
     } else {
-        while (qry.next()) {
+        while (qry.first()) {
              m_RegistroMatriculas[_id].FechaRegistro =  qry.value("fecha").toDateTime();
             return true;
         }
     }
-
     return false;
 }
 

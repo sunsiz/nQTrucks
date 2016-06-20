@@ -5,6 +5,7 @@
 #include <nqtglobal.h>
 
 #include <QSqlDatabase>
+//#include <QSqlQuery>
 
 #include "ReportManager.h"
 
@@ -24,8 +25,9 @@ signals:
 
     /** DB **/
 private:
-    void initDb();
+    bool initDb();
     QSqlDatabase m_db;
+    //QSqlQuery *qry;
     QVector<SimpleMatriculas> m_RegistroMatriculas;
     ReportManager m_report_manager;
 

@@ -51,11 +51,11 @@ public:
 
 private:
     Ui::Configuracion *ui;
-    bool m_running=false;
+//    bool m_running=false;
     void updateGui();
 
 private slots:
-    void isRunning(bool clicked);
+//    void isRunning(bool clicked);
 
     /** nQTrucks Lib **/
 private:

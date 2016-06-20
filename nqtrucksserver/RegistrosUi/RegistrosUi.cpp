@@ -27,103 +27,26 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
-#ifndef NQTRUCKSENGINE_P_H
-#define NQTRUCKSENGINE_P_H
-
-#include <QObject>
-#include <QSharedPointer>
-#include <QMetaEnum>
-#include <QLoggingCategory>
-
-
-#include<QVector>
-
-#include "nqtglobal.h"
-#include "nQTrucksEngine.h"
-
-#include "Dispositivos/CamaraIP.h"
-#include "Dispositivos/NewsagesIO.h"
-#include <QtSerialPort/QSerialPortInfo>
-#include <Dispositivos/Basculas/nQSerialPortReader.h>
-#include <Dispositivos/Alpr/NewsagesAlpr.h>
-
-#include <Core/Daemon.h>
-
-/** REPORTS **/
-#include <QApplication>
-#include <QDir>
-#include <QTreeWidgetItem>
-#include "LimeReport"
-
-/** Maestros **/
-#include <QSqlQuery>
-#include "Maestros/Maestros.h"
+#include "RegistrosUi.h"
+#include "ui_RegistrosUi.h"
 
 namespace nQTrucks {
 
-class nQTrucksEnginePrivate : public QObject
+
+RegistrosUi::RegistrosUi(nQTrucksEngine *_engine, QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::RegistrosUi)
+    , engine(_engine)
 {
-    Q_OBJECT
-    Q_DECLARE_PUBLIC(nQTrucksEngine)
-    Q_ENUMS(CameraType)
-
-public:
-    explicit nQTrucksEnginePrivate(QObject *parent=0);
-    virtual ~nQTrucksEnginePrivate();
-    nQTrucksEngine * q_ptr;
-
-    /** SETTINGS **/
-    void       setSettings(QSettings* value);
-    QSettings  *settings();
-private:
-    QSettings* m_settings;
-    /** FIN SETTINGS **/
-
-    /** CAMARAS **/
-public:
-    QStringList getCameraTypes();
-    QVector<Devices::CamaraIP*> m_camara;// = new Devices::CamaraIP(0,settings(), this);
-    /** FIN CAMARAS **/
-
-    /** NEWSAGES I/O **/
-public:
-    Devices::NewsagesIO *m_newsagesIO= new Devices::NewsagesIO(settings(),this);
-    QStringList getIODevices();
-signals:
-    /** END NEWSAGES I/O **/
-
-    /** BASCULAS **/
-public:
-    QStringList getBasculaTypes();
-    QStringList getSerialDevices();
-private:
-    Devices::nQSerialPortReader *m_basculaReader1= new Devices::nQSerialPortReader(settings(),this);
-    /** END BASCULAS **/
-
-    /** ALPR **/
-    QVector<Devices::NewsagesAlpr*> m_alpr;
-    /** END ALPR **/
-
-    /** CORE **/
-private:
-    Core::Daemon *m_daemon;
-    /** END CORE **/
-
-    /** REPORTS **/
-private:
-    LimeReport::ReportEngine *m_report_editor;
-    /** END REPORTS **/
-
-    /** MAESTROS ****************************************************************************/
-public:
-    Maestros::Maestros *m_maestros;
-    /** FIN MAESTROS ************************************************************************/
-
-
-};
-
+    ui->setupUi(this);
+    ui->tableRegistrosView->setModel(engine->RegistrosPesos);
 
 }
 
-#endif // NQTRUCKSENGINE_P_H
+RegistrosUi::~RegistrosUi()
+{
+    delete ui;
+}
 
+
+}

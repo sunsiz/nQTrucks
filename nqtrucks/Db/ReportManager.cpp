@@ -24,7 +24,6 @@ void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, const long l
         QPrinter _default_printer;
         _default_printer.setPrinterName(QPrinterInfo::defaultPrinter().printerName());
 
-        if (_db.isOpen()){
             /** Registro 1 **/
             QSqlQuery* m_matriculas = new QSqlQuery(_db);
             m_matriculas->prepare(" Select *"
@@ -41,7 +40,6 @@ void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, const long l
             m_report->loadFromFile(m_Informe_Peso);
             m_report->dataManager()->addModel("registro1",matriculasModel,true);
             m_report->printReport(&_default_printer);
-        };
     }
 }
 
@@ -52,7 +50,6 @@ void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, con
         QPrinter _default_printer;
         _default_printer.setPrinterName(QPrinterInfo::defaultPrinter().printerName());
 
-        if (_db.isOpen()){
             /** Registro 1 **/
             QSqlQuery* m_registro1 = new QSqlQuery(_db);
             m_registro1->prepare(" Select *"
@@ -80,7 +77,6 @@ void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, con
             m_report->dataManager()->addModel("registro1",registroModel1,true);
             m_report->dataManager()->addModel("registro2",registroModel2,true);
             m_report->printReport(&_default_printer);
-        };
     }
 }
 

@@ -98,10 +98,12 @@ namespace nQTrucks {
                 qDebug() << "conexion al volver a usar es: " << m_db.connectionName();
             }
             qDebug() << "conexion al verificar es: " << m_db.connectionName();
-            if (!m_db.isOpen() && !m_db.open() ){
-                qDebug() << m_db.lastError();
-                qDebug() << "Failed to connect." ;
-                return false;
+            if ( !m_db.isOpen() )
+            {
+                if (!m_db.open()) {
+                    qWarning() << "Unable to connect to database, giving up:" << m_db.lastError();
+                    return false;
+                }
             }
             return true;
         }
@@ -113,7 +115,7 @@ namespace nQTrucks {
             if (initDB()) {
                 QSqlQuery query(m_db);
                 ret = query.exec(_query);
-                query.clear();
+                //query.clear();
             }
 
             if (!ret){

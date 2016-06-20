@@ -68,6 +68,13 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QCheckBox" name="runningCheckBox">
+      <property name="text">
+       <string>Running</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QToolBar" name="systemToolBar">
@@ -81,12 +88,12 @@
     <bool>false</bool>
    </property>
    <property name="allowedAreas">
-    <set>Qt::LeftToolBarArea|Qt::TopToolBarArea</set>
+    <set>Qt::LeftToolBarArea</set>
    </property>
    <property name="iconSize">
     <size>
-     <width>32</width>
-     <height>32</height>
+     <width>64</width>
+     <height>64</height>
     </size>
    </property>
    <property name="toolButtonStyle">
@@ -106,6 +113,7 @@
    <addaction name="separator"/>
    <addaction name="actionConfiguracion"/>
    <addaction name="actionClient"/>
+   <addaction name="actionRegistros"/>
   </widget>
   <action name="actionSystemSettings">
    <property name="icon">
@@ -191,7 +199,20 @@
     <string>Configuración de nQTrucks</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::PreferencesRole</enum>
+    <enum>QAction::ApplicationSpecificRole</enum>
+   </property>
+  </action>
+  <action name="actionRegistros">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normalon>:/temp/icons/system/devices/stock_new-24h-appointment.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Registros</string>
    </property>
   </action>
  </widget>
