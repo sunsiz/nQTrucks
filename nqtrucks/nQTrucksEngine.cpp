@@ -246,6 +246,7 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** MAESTROS **/
     reloadMaestros();
+    connect(d->m_maestros->m_RegistroPeso,SIGNAL(rangoFechasChanged(QVector<QDate>)),this,SIGNAL(rangoFechasChanged(QVector<QDate>)));
 
 
 }

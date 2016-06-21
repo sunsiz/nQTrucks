@@ -32,9 +32,10 @@
 
 #include <QMainWindow>
 
+#include <QSortFilterProxyModel>
+
 #include "nQTrucksEngine.h"
 #include "nqtglobal.h"
-
 
 
 namespace Ui {
@@ -57,7 +58,16 @@ private:
     /** nQTrucks Lib **/
 private:
     nQTrucksEngine *engine;
-    /** END nQTrucks Lib **/    
+    /** END nQTrucks Lib **/
+
+
+/** FECHAS **/
+private:
+    //QDate m_hoy;
+    QSortFilterProxyModel *flt_fecha;
+private slots:
+    void rangoFechasChanged(const QVector<QDate> &_fechaMinMax);
+    void on_calendarioWidget_clicked(const QDate &date);
 };
 
 }

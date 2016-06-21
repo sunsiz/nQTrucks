@@ -62,6 +62,8 @@ signals:
 private slots:
     void onPesoNuevo(const Bascula &_nuevaPesada);
     void onBasculaChanged(const Bascula &_pesoRT);
+private:
+    int m_tolerancia_minima;
     /** FIN PESO ***********************************************************************************************/
 
     /** CAMARAS **/

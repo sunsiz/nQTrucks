@@ -30,6 +30,8 @@
 #include "RegistrosUi.h"
 #include "ui_RegistrosUi.h"
 
+#include <QStandardItemModel>
+#include <QDebug>
 namespace nQTrucks {
 
 
@@ -39,14 +41,58 @@ RegistrosUi::RegistrosUi(nQTrucksEngine *_engine, QWidget *parent)
     , engine(_engine)
 {
     ui->setupUi(this);
-    ui->tableRegistrosView->setModel(engine->RegistrosPesos);
+
+
+    ui->tableRegistrosView->verticalHeader()->setVisible(false);
+
+    flt_fecha = new QSortFilterProxyModel(this);
+    flt_fecha->setSourceModel(engine->RegistrosPesos);
+    flt_fecha->setFilterKeyColumn(1);
+    flt_fecha->setDynamicSortFilter(false);
+
+
+
+    ui->tableRegistrosView->setModel(flt_fecha);
+
+    connect(engine,SIGNAL(rangoFechasChanged(QVector<QDate>)),this,SLOT(rangoFechasChanged(QVector<QDate>)));
+
+
+    for (int i = 0; i < engine->RegistrosPesos->columnCount(); i++){
+        ui->tableRegistrosView->hideColumn(i);
+    }
+
+    ui->tableRegistrosView->showColumn(8);
+    ui->tableRegistrosView->model()->setHeaderData(8, Qt::Horizontal,"Matricula1");
+    ui->tableRegistrosView->showColumn(9);
+    ui->tableRegistrosView->model()->setHeaderData(9, Qt::Horizontal,"Matricula2");
+    ui->tableRegistrosView->showColumn(15);
+    ui->tableRegistrosView->model()->setHeaderData(15,Qt::Horizontal,"Matricula3");
+    ui->tableRegistrosView->showColumn(16);
+    ui->tableRegistrosView->model()->setHeaderData(16,Qt::Horizontal,"Matricula4");
+
+
+    on_calendarioWidget_clicked(QDate::currentDate());
+
 
 }
 
-RegistrosUi::~RegistrosUi()
-{
+RegistrosUi::~RegistrosUi(){
     delete ui;
 }
 
+void RegistrosUi::rangoFechasChanged(const QVector<QDate> &_fechaMinMax){
+    ui->calendarioWidget->setMinimumDate(_fechaMinMax[0]);
+    ui->calendarioWidget->setMaximumDate(_fechaMinMax[1]);
+    ui->calendarioWidget->setDateRange(_fechaMinMax[0],_fechaMinMax[1]);
+}
+
+
+void nQTrucks::RegistrosUi::on_calendarioWidget_clicked(const QDate &date){
+    flt_fecha->setFilterRegExp(QRegExp(date.toString("yyyy-MM-dd").prepend("^").append("(.*)"),
+                                    Qt::CaseSensitive,
+                                    QRegExp::RegExp));
+    qDebug() << "Calendario fecha:"  <<  date.toString("yyyy-MM-dd");//Qt::SystemLocaleShortDate);
+
+}
 
 }

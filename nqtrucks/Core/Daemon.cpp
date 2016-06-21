@@ -39,14 +39,20 @@ void Daemon::setInit(bool init)
 }
 
 void Daemon::onStartStop(const bool &_init){
-    m_bascula->connectPort(_init);
-    m_newsagesIO->setSemaforoDeviceConnect(_init);
     m_registrando=false;
     m_saliendo=false;
     m_balpr1=false;
     m_balpr2=false;
     m_bfoto1=false;
     m_bfoto2=false;
+
+    m_bascula->connectPort(_init);
+    m_newsagesIO->setSemaforoDeviceConnect(_init);
+
+    if(_init){
+        m_tolerancia_minima=m_bascula->reloadTolerancia_minima();
+    }
+
 }
 
 /** PESO *****************************/
@@ -98,8 +104,8 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
 }
 
 void Daemon::onBasculaChanged(const Bascula &_pesoRT){
-    int peso_minimo=40;
-    if (_pesoRT.iBruto > peso_minimo){
+    //int peso_minimo=m_bascula->reloadTolerancia_minima();
+    if (_pesoRT.iBruto > m_tolerancia_minima){
         if (!m_saliendo && !m_registrando){
             //TODO  no machakar el IO
             m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);

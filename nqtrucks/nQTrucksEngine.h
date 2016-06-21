@@ -163,6 +163,8 @@ public slots:
     void sincronizar_maestros();
 private slots:
     void reloadMaestros();
+signals:
+    void rangoFechasChanged(const QVector<QDate> &_fechaMinMax);
     /** END MAESTROS **/
 
 

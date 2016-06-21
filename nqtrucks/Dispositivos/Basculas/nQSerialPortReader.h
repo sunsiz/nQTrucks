@@ -55,10 +55,16 @@ public:
     };
 
     /** SETTINGS **/
+
 private slots:
     void setBasculaType(const int &_TipoBascula);
     void setBasculaPort(const QString &_IODevice);
     void setBasculaMuestras(const int &_muestras);
+    int  getBasculaMuestras() const;
+    void setTolerancia_minima(const int &_tolerancia_minima);
+public slots:
+    int  getTolerancia_minima() const;
+    int  reloadTolerancia_minima();
 private:
     QSettings *m_settings;
     void loadconfig();
@@ -91,10 +97,11 @@ private slots:
 
     /** INTERFACE ESTABILIZADA **/
 private:
-    int  m_muestras=0;
-    int  m_BasculaMuestras=100;
-    bool m_inicio_peso=false;
+    int        m_count_muestras=0;
+    int        m_BasculaMuestras=1;
+    bool       m_inicio_peso=false;
     Bascula    m_bascula_estable;
+    int        m_tolerancia_minima=10;
 signals:
     void BasculaPesoNuevo(Bascula _nuevaPesada);
 private slots:

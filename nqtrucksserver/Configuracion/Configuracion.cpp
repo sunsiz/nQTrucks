@@ -132,9 +132,9 @@ void Configuracion::loadconfig()
     QStringList l_BasculaDevices = engine->getSerialDevices();
     ui->BasculaDevicesComboBox->addItems(l_BasculaDevices);
 
-    engine->appConfig()->beginGroup(BASCULA);
-    ui->BasculaTipoComboBox->setCurrentIndex(engine->appConfig()->value("tipo","0").toInt());
-    engine->appConfig()->endGroup();
+    ui->BasculaTipoComboBox->setCurrentIndex(engine->appConfig()->value(QString(BASCULA) + "/tipo","0").toInt());
+    ui->BasculaErrorMinimo->setValue(        engine->appConfig()->value(QString(BASCULA) + "/tolerancia_minima","10").toInt());
+    ui->BasculaFactorEstable->setValue(      engine->appConfig()->value(QString(BASCULA) + "/factor_estable","1").toInt());
     /** END BASCULAS **/
 
     /** ALPR  **/
@@ -303,8 +303,10 @@ void Configuracion::on_desconectarBascula_clicked()
 
 void Configuracion::on_guardarBascula_clicked()
 {
-    engine->appConfig()->setValue(QString(BASCULA) + "/device",ui->BasculaDevicesComboBox->currentText());
-    engine->appConfig()->setValue(QString(BASCULA) + "/tipo",QString::number(ui->BasculaTipoComboBox->currentIndex()));
+    engine->appConfig()->setValue(QString(BASCULA) + "/device",            ui->BasculaDevicesComboBox->currentText());
+    engine->appConfig()->setValue(QString(BASCULA) + "/tipo",              QString::number(ui->BasculaTipoComboBox->currentIndex()));
+    engine->appConfig()->setValue(QString(BASCULA) + "/tolerancia_minima", QString::number(ui->BasculaErrorMinimo->value()));
+    engine->appConfig()->setValue(QString(BASCULA) + "/factor_estable",    QString::number(ui->BasculaFactorEstable->value()));
 }
 
 void Configuracion::on_BasculaConectada(bool conectada)

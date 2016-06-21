@@ -32,7 +32,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QCalendarWidget" name="calendarWidget">
+  <widget class="QCalendarWidget" name="calendarioWidget">
    <property name="geometry">
     <rect>
      <x>10</x>

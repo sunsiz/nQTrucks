@@ -39,6 +39,8 @@ namespace nQTrucks{
 
     static const QString qry_procesar_pareja =  " UPDATE registros_matriculas  SET emparejado = :idpareja, pesoneto   = :pesoneto, procesado  = 1  WHERE id   =  :id0;";
 
+    static const QString qry_fecha_min_max   =  " SELECT MIN(DATE(fecha) as fechamin, MAX(DATE(fecha) as fechamax FROM nqtrucks.registros_matriculas; ";
+
 
 
 
@@ -54,9 +56,24 @@ namespace nQTrucks{
             m_DefaultQuery = "select * from registros_matriculas ;" ;//+ QString(appServer_tablename);
         }
 
+        void RegistroPeso::setFecha_min_max()
+        {
+            QSqlQuery qry(m_db);
+            qry.prepare(qry_fecha_min_max);
+            if(qry.exec()){
+                while (qry.next()) {
+                    m_fecha_min_max[0] =  qry.value("fechamin").toDate();
+                    m_fecha_min_max[1] =  qry.value("fechamax").toDate();
+                    emit rangoFechasChanged(m_fecha_min_max);
+                }
+            }
+
+        }
+
 
         void RegistroPeso::setTable(){
             beginResetModel();
+            setFecha_min_max();
             if(initDB()){
 
                 if (setQuery(m_DefaultQuery)){
@@ -184,10 +201,6 @@ namespace nQTrucks{
                 }
             }
             return false;
-        }
-
-        QSqlDatabase RegistroPeso::getDb() const {
-            return m_db;
         }
 
 

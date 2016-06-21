@@ -14,23 +14,31 @@ namespace nQTrucks{
         public slots:
             void syncTable() {setTable();}
 
-            QSqlDatabase getDb() const;
         protected:
             void setTable();
             void refreshModel() {setTable();}
-            void configQueries();            
+            void configQueries();
+        private:
+            QVector<QDate> m_fecha_min_max= QVector<QDate>(2);
+            void setFecha_min_max();
 
         protected:
             QString m_DefaultQuery;// = "select * from " + QString(appServer_tablename);
 
-
-
         public:
-        QDateTime getFechaRegistro(const long long &_id);
-        bool guardarRegistroSimpleMatriculas(SimpleMatriculas &RegistroMatriculas);
-        bool eliminaFotosCamara(const long long &_id);
-        bool buscarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas, const QString &_matricula);
-        bool actualizarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas);
+            QDateTime getFechaRegistro(const long long &_id);
+            bool guardarRegistroSimpleMatriculas(SimpleMatriculas &RegistroMatriculas);
+            bool eliminaFotosCamara(const long long &_id);
+            bool buscarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas, const QString &_matricula);
+            bool actualizarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas);
+
+
+        signals:
+            void rangoFechasChanged(const QVector<QDate> &_fechaMinMax);
+        public slots:
+            QVector<QDate> getRangoFechas() const{return m_fecha_min_max;}
+
+
         };
     } /** End namespace Maestros **/
 } /** End namespace nQTrucks **/

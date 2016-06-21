@@ -16,7 +16,6 @@
 
 namespace nQTrucks {
     namespace Db {
-
         class QueryModel : public QSqlQueryModel{
             Q_OBJECT
         public:
@@ -31,6 +30,7 @@ namespace nQTrucks {
 
         public slots:
             Q_INVOKABLE bool setQuery(const QString &query);//, const QSqlDatabase &_db);
+            QSqlDatabase getCurrentDb() const;
 
         //DATABASE MANAGER
         protected:

@@ -131,6 +131,9 @@ namespace nQTrucks {
             return m_db.lastError();
         }
 
+        QSqlDatabase QueryModel::getCurrentDb() const {
+            return m_db;
+        }
 
 
 

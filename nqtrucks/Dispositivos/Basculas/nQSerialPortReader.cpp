@@ -43,42 +43,61 @@ nQSerialPortReader::nQSerialPortReader(QSettings *_appsettings, QObject *parent)
     connect(this, SIGNAL(BasculaChanged(Bascula)),this,SLOT(MuestrearBascula(Bascula)));
 }
 
-nQSerialPortReader::~nQSerialPortReader()
-{
+nQSerialPortReader::~nQSerialPortReader(){
     if(m_serialPort->isOpen()){
         m_serialPort->close();
     }
     m_serialPort->deleteLater();
 }
 
-void nQSerialPortReader::setBasculaType(const int &_TipoBascula)
-{
+void nQSerialPortReader::setBasculaType(const int &_TipoBascula){
     if (m_type != _TipoBascula){
         m_type = _TipoBascula;
-        m_settings->setValue("tipo",QString::number(m_type));        
+        m_settings->setValue(QString(BASCULA) + "/tipo",QString::number(m_type));
     }
 }
 
-void nQSerialPortReader::setBasculaPort(const QString &_IODevice)
-{
+void nQSerialPortReader::setBasculaPort(const QString &_IODevice){
     if (m_serialPortName != _IODevice) {
         m_serialPortName = _IODevice;
         m_settings->setValue(QString(BASCULA) + "/device",m_serialPortName);
     }
 }
 
-void nQSerialPortReader::setBasculaMuestras(const int &_muestras)
-{
+void nQSerialPortReader::setBasculaMuestras(const int &_muestras){
     if(m_BasculaMuestras != _muestras){
         m_BasculaMuestras = _muestras;
-        m_settings->setValue(QString(BASCULA) + "/muestras",m_BasculaMuestras);
+        m_settings->setValue(QString(BASCULA) + "/factor_estable",m_BasculaMuestras);
     }
 }
 
+void nQSerialPortReader::setTolerancia_minima(const int &_tolerancia_minima){
+    if(m_tolerancia_minima != _tolerancia_minima){
+        m_tolerancia_minima = _tolerancia_minima;
+        m_settings->setValue(QString(BASCULA) + "/tolerancia_minima",m_tolerancia_minima);
+    }
+}
+
+int nQSerialPortReader::getTolerancia_minima() const{
+    return m_tolerancia_minima;
+}
+
+int nQSerialPortReader::reloadTolerancia_minima(){
+    setTolerancia_minima(m_settings->value( QString(BASCULA) + "/tolerancia_minima", "10"          ).toInt());
+    return getTolerancia_minima();
+}
+
+
+int nQSerialPortReader::getBasculaMuestras() const{
+    return m_BasculaMuestras;
+}
+
 void nQSerialPortReader::loadconfig(){
-    setBasculaPort(m_settings->value(       QString(BASCULA) + "/device",  "/dev/ttyUSB0").toString());
-    setBasculaType(m_settings->value(       QString(BASCULA) + "/tipo",    "0"           ).toInt());
-    setBasculaMuestras(m_settings->value(   QString(BASCULA) + "/muestras","100"         ).toInt());
+    setBasculaPort(m_settings->value(       QString(BASCULA) + "/device",            "/dev/ttyUSB0").toString());
+    setBasculaType(m_settings->value(       QString(BASCULA) + "/tipo",              "0"           ).toInt());
+    setBasculaMuestras(m_settings->value(   QString(BASCULA) + "/factor_estable",    "1"           ).toInt());
+    setTolerancia_minima(m_settings->value( QString(BASCULA) + "/tolerancia_minima", "10"          ).toInt());
+
 }
 void nQSerialPortReader::connectPort(const bool &_value){
     if(m_serialPort->isOpen()){
@@ -90,14 +109,11 @@ void nQSerialPortReader::connectPort(const bool &_value){
         m_serialPort->setPortName(m_serialPortName);
         connectBasculaType(m_type);
     }
-
-
 }
 
 
 /** LOGICA **/
-void nQSerialPortReader::connectBasculaType(int _type)
-{
+void nQSerialPortReader::connectBasculaType(int _type){
     switch (_type) {
     case BasculaType::NEWSAGES0:
         m_serialPort->setBaudRate(QSerialPort::Baud9600);
@@ -113,8 +129,7 @@ void nQSerialPortReader::connectBasculaType(int _type)
 }
 
 
-void nQSerialPortReader::handleError(QSerialPort::SerialPortError serialPortError)
-{
+void nQSerialPortReader::handleError(QSerialPort::SerialPortError serialPortError){
     qDebug() << "Error Serie: " << serialPortError;
     if (serialPortError == QSerialPort::ReadError) {
         emit BasculaStatus(false);
@@ -124,8 +139,7 @@ void nQSerialPortReader::handleError(QSerialPort::SerialPortError serialPortErro
 
 /** Funciones de lectura segun Tipos **/
 
-void nQSerialPortReader::ReadType0()
-{             
+void nQSerialPortReader::ReadType0(){             
     m_serialData = m_serialPort->read(1);
     switch (charInicio) {
     case 0:
@@ -158,21 +172,21 @@ void nQSerialPortReader::ReadType0()
 }
 
 
-
 void nQSerialPortReader::MuestrearBascula(const Bascula &_bascula){
     if (m_inicio_peso){
         if((_bascula.bEstado) & (_bascula.iBruto !=0)){
-            m_muestras++;
-            if(m_muestras == m_BasculaMuestras){
+            m_count_muestras++;
+            if(m_count_muestras == getBasculaMuestras()*10){
                 m_inicio_peso=false;
                 m_bascula_estable = _bascula;
                 emit BasculaPesoNuevo(m_bascula_estable);
+                setBasculaMuestras(m_settings->value(   QString(BASCULA) + "/factor_estable","1"           ).toInt());
             }
         }
     }else{
         if(_bascula.iBruto==0){
             m_inicio_peso=true;
-            m_muestras=0;
+            m_count_muestras=0;
             m_bascula_estable={};
         }
     }
