@@ -39,7 +39,8 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
               /** Buscar Pareja **/
                if (encontrarPareja()){
                 /** Si pareja **/
-                 m_report_manager.printRegistroMatriculaProcesada(m_maestros->m_RegistroPeso->getDb(),m_RegistroMatriculas[0].id,m_RegistroMatriculas[1].id);
+                   m_maestros->m_RegistroPeso->syncTable();
+                   m_report_manager.printRegistroMatriculaProcesada(m_maestros->m_RegistroPeso->getDb(),m_RegistroMatriculas[0].id,m_RegistroMatriculas[1].id);
                }
             }
         }
@@ -57,6 +58,7 @@ bool DatabaseManager::encontrarPareja()
 
     if (!rowDate.isNull()){
         m_RegistroMatriculas[0].FechaRegistro=rowDate;
+        //m_RegistroMatriculas[0].FechaRegistro=m_maestros->m_RegistroPeso->getFechaRegistro(m_RegistroMatriculas[0].id);
         qDebug() << "Fecha registro: " << m_RegistroMatriculas[0].FechaRegistro;
         qDebug() << "Fecha registro Date: " << m_RegistroMatriculas[0].FechaRegistro.date();
 
@@ -82,17 +84,16 @@ bool DatabaseManager::encontrarPareja()
          * Buscamos por cada matricula que tenemos en esa fecha,
          * hasta encontrar coincidencia **/
         for (QStringList::iterator it =  m_MatriculasList.begin(); it != m_MatriculasList.end(); ++it) {
-            QString matriculaabuscar = *it;
-            qDebug() << "[[" << matriculaabuscar << "]]";
+            QString matriculaabuscar = *it;           
             /** consultar bd **/
             if (m_maestros->m_RegistroPeso->buscarPareja(m_RegistroMatriculas,matriculaabuscar)){
                 return true;
             }
-
         }
     }
     return false;
 }
+
 
 
 

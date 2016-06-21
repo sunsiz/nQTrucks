@@ -37,7 +37,7 @@ namespace nQTrucks{
                                                 " ORDER by fecha DESC "
                                                 " LIMIT 1; ";
 
-    static const QString qry_procesar_pareja =  " UPDATE registros_matriculas  SET eparejado = :idpareja, pesoneto   = :pesoneto, procesado  = 1  WHERE id   =  :id0;";
+    static const QString qry_procesar_pareja =  " UPDATE registros_matriculas  SET emparejado = :idpareja, pesoneto   = :pesoneto, procesado  = 1  WHERE id   =  :id0;";
 
 
 
@@ -125,8 +125,9 @@ namespace nQTrucks{
             if (!qry.exec()) { // make sure your query has been executed successfully
                 qDebug() << qry.lastError(); // show the error
             } else {
-                while (qry.first()) {
+                while (qry.next()) {
                     _fecha =  qry.value("fecha").toDateTime();
+                    return _fecha;
                 }
             }
             return _fecha;
@@ -134,22 +135,23 @@ namespace nQTrucks{
 
         bool RegistroPeso::buscarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas, const QString &_matricula){
             /** TODO ENTRE FECHAS **/
+             qDebug() << "BUSCANDO:  [[" << _matricula << "]]";
             QSqlQuery qry(m_db);
             qry.prepare(qry_buscarpareja);
             qry.bindValue(":id0", RegistrosMatriculas[0].id);
             qry.bindValue(":fechaabuscar", RegistrosMatriculas[0].FechaRegistro.date());
             qry.bindValue(":matriculabuscar", _matricula);
 
-            if (!qry.exec()) { // make sure your query has been executed successfully
-                qDebug() << qry.lastError(); // show the error
-            } else {
-                    /** Si existe la pareja, adquiero su id y el peso bruto **/
-                if (qry.first()){
+            if (qry.exec()) { // make sure your query has been executed successfully
+                /** Si existe la pareja, adquiero su id y el peso bruto **/
+                while (qry.next()){
                     RegistrosMatriculas[1].id = qry.value("id").toLongLong();
                     RegistrosMatriculas[1].bascula.iBruto = qry.value("pesobruto").toFloat()+300; //DEBUG
-                    return actualizarPareja(RegistrosMatriculas);         /** Actualizo a Procesado y
-                                                           * consigo el Peso Verificado
-                                                           * http://www.worldshipping.org/industry-issues/safety/WSC_Summarizes_the_Basic_Elements_of_the_SOLAS_Container_Weight_Verification_Requirement___February_2015.pdf **/
+                    return actualizarPareja(RegistrosMatriculas);
+                    /** Actualizo a Procesado y
+                    * consigo el Peso Verificado
+                    * http://www.worldshipping.org/industry-issues/safety/WSC_Summarizes_the_Basic_Elements_of_the_SOLAS_Container_Weight_Verification_Requirement___February_2015.pdf
+                    **/
                 }
             }
             return false;
@@ -160,27 +162,28 @@ namespace nQTrucks{
             float neto = abs(RegistrosMatriculas[0].bascula.iBruto - RegistrosMatriculas[1].bascula.iBruto);
             RegistrosMatriculas[0].bascula.iNeto = neto;
             RegistrosMatriculas[1].bascula.iNeto = neto;
-
+            qDebug() << "Actualizando Parejas";
             QSqlQuery qry(m_db);
+            QSqlQuery qry2(m_db);
             qry.prepare(qry_procesar_pareja);
+            qry2.prepare(qry_procesar_pareja);
+
             /** Primera pareja 0 **/
             qry.bindValue(":idpareja", RegistrosMatriculas[1].id);
             qry.bindValue(":pesoneto", RegistrosMatriculas[0].bascula.iNeto);
             qry.bindValue(":id0", RegistrosMatriculas[0].id);
-            if (!qry.exec()){
-                return false;
+            if (qry.exec()){
+                qDebug() << "actualizando pareja 1";
+                /** Segunda pareja 1 **/
+                qry2.bindValue(":idpareja", RegistrosMatriculas[0].id);
+                qry2.bindValue(":pesoneto", RegistrosMatriculas[1].bascula.iNeto);
+                qry2.bindValue(":id0",      RegistrosMatriculas[1].id);
+                if (qry2.exec()){
+                    qDebug() << "actualizando pareja 2";
+                    return true;
+                }
             }
-            /** Segunda pareja 1 **/
-            QSqlQuery qry2(m_db);
-            qry2.bindValue(":idpareja", RegistrosMatriculas[0].id);
-            qry2.bindValue(":pesoneto", RegistrosMatriculas[1].bascula.iNeto);
-            qry2.bindValue(":id0", RegistrosMatriculas[1].id);
-            if (!qry2.exec()){
-               qDebug() << qry2.lastError();
-                return false;
-            }
-            setTable();
-            return true;
+            return false;
         }
 
         QSqlDatabase RegistroPeso::getDb() const {
