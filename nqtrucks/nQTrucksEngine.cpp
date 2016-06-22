@@ -451,9 +451,15 @@ void nQTrucksEngine::sincronizar_maestros(){
 
 }
 
+void nQTrucksEngine::updateEmpresa(const QVector<QString> _empresaVector){
+    Q_D(nQTrucksEngine);
+    d->m_maestros->m_Empresa->actualizarEmpresa(_empresaVector);
+}
+
 void nQTrucksEngine::reloadMaestros(){
     Q_D(nQTrucksEngine);
-    RegistrosPesos = d->m_maestros->m_RegistroPeso;
+    RegistrosPesos  = d->m_maestros->m_RegistroPeso;
+    Empresa         = d->m_maestros->m_Empresa;
     //RegistrosPesos->query();
 }
 

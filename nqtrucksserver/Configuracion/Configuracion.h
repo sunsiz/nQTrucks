@@ -141,11 +141,14 @@ private slots:
     /** CONFIG **/
 
     void on_reportsTreeWidget_doubleClicked(const QModelIndex &index);
+    void on_guardarEmpresa_clicked();
+    void reloadEmpresa();
 
 private:
     void loadconfig();
     /** END CONFIG **/
-   // Tools *m_tools;
+    // Tools *m_tools;
+
 };
 
 }

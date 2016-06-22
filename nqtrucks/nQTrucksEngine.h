@@ -159,8 +159,10 @@ public slots:
     /** MAESTROS **/
 public:
     QSqlQueryModel *RegistrosPesos;
+    QSqlQueryModel *Empresa;
 public slots:
     void sincronizar_maestros();
+    void updateEmpresa(const QVector<QString> _empresaVector);
 private slots:
     void reloadMaestros();
 signals:

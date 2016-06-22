@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "Maestros/RegistroPeso.h"
+#include "Maestros/Empresa.h"
 
 namespace nQTrucks{
     namespace Maestros{
@@ -17,6 +18,7 @@ namespace nQTrucks{
         void eliminarMaestros();
     public:
         RegistroPeso *m_RegistroPeso;
+        Empresa      *m_Empresa;
     signals:
 
     public slots:

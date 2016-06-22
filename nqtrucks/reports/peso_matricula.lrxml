@@ -1,374 +1,777 @@
 <Report>
-  <object ClassName="LimeReport::ReportEnginePrivate" Type="Object">
+  <object Type="Object" ClassName="LimeReport::ReportEnginePrivate">
     <objectName Type="QString"></objectName>
     <pages Type="Collection">
-      <item ClassName="LimeReport::PageDesignIntf" Type="Object">
+      <item Type="Object" ClassName="LimeReport::PageDesignIntf">
         <objectName Type="QString">page1</objectName>
-        <sceneRect height="3070" y="-50" x="-50" width="2200" Type="QRect"/>
-        <bspTreeDepth Value="5" Type="int"/>
-        <font weight="50" family="Ubuntu" pointSize="11" stylename="" underline="0" italic="0" Type="QFont"/>
-        <sortCacheEnabled Value="0" Type="bool"/>
-        <stickyFocus Value="0" Type="bool"/>
-        <minimumRenderSize Value="0" Type="qreal"/>
-        <pageItem ClassName="PageItem" Type="Object">
+        <sceneRect height="3070" width="2200" Type="QRect" y="-50" x="-50"/>
+        <bspTreeDepth Type="int" Value="5"/>
+        <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+        <sortCacheEnabled Type="bool" Value="0"/>
+        <stickyFocus Type="bool" Value="0"/>
+        <minimumRenderSize Type="qreal" Value="0"/>
+        <pageItem Type="Object" ClassName="PageItem">
           <objectName Type="QString">label</objectName>
-          <geometry height="2970" y="0" x="0" width="2100" Type="QRect"/>
+          <geometry height="2970" width="2100" Type="QRect" y="0" x="0"/>
           <children Type="Collection">
-            <item ClassName="TextItem" Type="Object">
+            <item Type="Object" ClassName="TextItem">
               <objectName Type="QString">TextItem1</objectName>
-              <geometry height="100" y="300" x="200" width="1700" Type="QRect"/>
+              <geometry height="50" width="1000" Type="QRect" y="200" x="902"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="0" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
               <content Type="QString">Fecha: $D{registro1.fecha}</content>
-              <margin Value="4" Type="int"/>
-              <alignment Value="33" Type="enumAndFlags"/>
-              <autoWidth Value="0" Type="enumAndFlags"/>
-              <autoHeight Value="0" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
-              <backgroundOpacity Value="100" Type="int"/>
-              <backgroundMode Value="1" Type="enumAndFlags"/>
-              <backgroundColor Value="#ffffff" Type="QColor"/>
-              <fontColor Value="#000000" Type="QColor"/>
-              <angle Value="0" Type="enumAndFlags"/>
-              <foregroundOpacity Value="100" Type="int"/>
-              <trimValue Value="1" Type="bool"/>
-              <allowHTML Value="0" Type="bool"/>
-              <allowHTMLInFields Value="0" Type="bool"/>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="33"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
             </item>
-            <item ClassName="TextItem" Type="Object">
+            <item Type="Object" ClassName="TextItem">
               <objectName Type="QString">TextItem2</objectName>
-              <geometry height="100" y="200" x="200" width="1700" Type="QRect"/>
+              <geometry height="200" width="500" Type="QRect" y="602" x="902"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="0" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
               <content Type="QString">Registro: $D{registro1.id}</content>
-              <margin Value="4" Type="int"/>
-              <alignment Value="33" Type="enumAndFlags"/>
-              <autoWidth Value="0" Type="enumAndFlags"/>
-              <autoHeight Value="0" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
-              <backgroundOpacity Value="100" Type="int"/>
-              <backgroundMode Value="1" Type="enumAndFlags"/>
-              <backgroundColor Value="#ffffff" Type="QColor"/>
-              <fontColor Value="#000000" Type="QColor"/>
-              <angle Value="0" Type="enumAndFlags"/>
-              <foregroundOpacity Value="100" Type="int"/>
-              <trimValue Value="1" Type="bool"/>
-              <allowHTML Value="0" Type="bool"/>
-              <allowHTMLInFields Value="0" Type="bool"/>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="129"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
             </item>
-            <item ClassName="TextItem" Type="Object">
+            <item Type="Object" ClassName="TextItem">
               <objectName Type="QString">TextItem3</objectName>
-              <geometry height="100" y="400" x="200" width="1700" Type="QRect"/>
+              <geometry height="200" width="500" Type="QRect" y="802" x="902"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="0" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
               <content Type="QString">Peso Bruto:   $D{registro1.pesobruto}</content>
-              <margin Value="4" Type="int"/>
-              <alignment Value="33" Type="enumAndFlags"/>
-              <autoWidth Value="0" Type="enumAndFlags"/>
-              <autoHeight Value="0" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
-              <backgroundOpacity Value="100" Type="int"/>
-              <backgroundMode Value="1" Type="enumAndFlags"/>
-              <backgroundColor Value="#ffffff" Type="QColor"/>
-              <fontColor Value="#000000" Type="QColor"/>
-              <angle Value="0" Type="enumAndFlags"/>
-              <foregroundOpacity Value="100" Type="int"/>
-              <trimValue Value="1" Type="bool"/>
-              <allowHTML Value="0" Type="bool"/>
-              <allowHTMLInFields Value="0" Type="bool"/>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="129"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
             </item>
-            <item ClassName="ImageItem" Type="Object">
+            <item Type="Object" ClassName="ImageItem">
               <objectName Type="QString">ImageItem3</objectName>
-              <geometry height="500" y="602" x="200" width="850" Type="QRect"/>
+              <geometry height="500" width="850" Type="QRect" y="1000" x="198"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="1" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="1"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
               <image Type="QImage"></image>
-              <opacity Value="100" Type="int"/>
+              <opacity Type="int" Value="100"/>
               <datasource Type="QString">registro1</datasource>
               <field Type="QString">fotocamara1</field>
-              <autoSize Value="0" Type="bool"/>
-              <scale Value="1" Type="bool"/>
-              <keepAspectRatio Value="0" Type="bool"/>
-              <center Value="1" Type="bool"/>
+              <autoSize Type="bool" Value="0"/>
+              <scale Type="bool" Value="1"/>
+              <keepAspectRatio Type="bool" Value="0"/>
+              <center Type="bool" Value="1"/>
             </item>
-            <item ClassName="ImageItem" Type="Object">
+            <item Type="Object" ClassName="ImageItem">
               <objectName Type="QString">ImageItem4</objectName>
-              <geometry height="500" y="602" x="1050" width="850" Type="QRect"/>
+              <geometry height="500" width="850" Type="QRect" y="1000" x="1048"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="1" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="1"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
               <image Type="QImage"></image>
-              <opacity Value="100" Type="int"/>
+              <opacity Type="int" Value="100"/>
               <datasource Type="QString">registro1</datasource>
               <field Type="QString">fotocamara2</field>
-              <autoSize Value="0" Type="bool"/>
-              <scale Value="1" Type="bool"/>
-              <keepAspectRatio Value="0" Type="bool"/>
-              <center Value="1" Type="bool"/>
+              <autoSize Type="bool" Value="0"/>
+              <scale Type="bool" Value="1"/>
+              <keepAspectRatio Type="bool" Value="0"/>
+              <center Type="bool" Value="1"/>
             </item>
-            <item ClassName="ImageItem" Type="Object">
+            <item Type="Object" ClassName="ImageItem">
               <objectName Type="QString">ImageItem1</objectName>
-              <geometry height="200" y="1302" x="200" width="850" Type="QRect"/>
+              <geometry height="200" width="850" Type="QRect" y="1500" x="198"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="1" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="1"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
               <image Type="QImage"></image>
-              <opacity Value="100" Type="int"/>
+              <opacity Type="int" Value="100"/>
               <datasource Type="QString">registro1</datasource>
               <field Type="QString">fotomatriculaA1</field>
-              <autoSize Value="0" Type="bool"/>
-              <scale Value="1" Type="bool"/>
-              <keepAspectRatio Value="0" Type="bool"/>
-              <center Value="1" Type="bool"/>
+              <autoSize Type="bool" Value="0"/>
+              <scale Type="bool" Value="1"/>
+              <keepAspectRatio Type="bool" Value="0"/>
+              <center Type="bool" Value="1"/>
             </item>
-            <item ClassName="ImageItem" Type="Object">
+            <item Type="Object" ClassName="ImageItem">
               <objectName Type="QString">ImageItem2</objectName>
-              <geometry height="200" y="1302" x="1050" width="850" Type="QRect"/>
+              <geometry height="200" width="850" Type="QRect" y="1500" x="1048"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="1" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="1"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
               <image Type="QImage"></image>
-              <opacity Value="100" Type="int"/>
+              <opacity Type="int" Value="100"/>
               <datasource Type="QString">registro1</datasource>
               <field Type="QString">fotomatriculaA2</field>
-              <autoSize Value="0" Type="bool"/>
-              <scale Value="1" Type="bool"/>
-              <keepAspectRatio Value="0" Type="bool"/>
-              <center Value="1" Type="bool"/>
+              <autoSize Type="bool" Value="0"/>
+              <scale Type="bool" Value="1"/>
+              <keepAspectRatio Type="bool" Value="0"/>
+              <center Type="bool" Value="1"/>
             </item>
-            <item ClassName="ImageItem" Type="Object">
+            <item Type="Object" ClassName="ImageItem">
               <objectName Type="QString">ImageItem5</objectName>
-              <geometry height="200" y="1702" x="200" width="850" Type="QRect"/>
+              <geometry height="200" width="850" Type="QRect" y="1898" x="200"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="1" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="1"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
               <image Type="QImage"></image>
-              <opacity Value="100" Type="int"/>
+              <opacity Type="int" Value="100"/>
               <datasource Type="QString">registro1</datasource>
               <field Type="QString">fotomatriculaB1</field>
-              <autoSize Value="0" Type="bool"/>
-              <scale Value="1" Type="bool"/>
-              <keepAspectRatio Value="0" Type="bool"/>
-              <center Value="1" Type="bool"/>
+              <autoSize Type="bool" Value="0"/>
+              <scale Type="bool" Value="1"/>
+              <keepAspectRatio Type="bool" Value="0"/>
+              <center Type="bool" Value="1"/>
             </item>
-            <item ClassName="ImageItem" Type="Object">
+            <item Type="Object" ClassName="ImageItem">
               <objectName Type="QString">ImageItem6</objectName>
-              <geometry height="200" y="1702" x="1050" width="850" Type="QRect"/>
+              <geometry height="200" width="850" Type="QRect" y="1898" x="1050"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="1" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="1"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
               <image Type="QImage"></image>
-              <opacity Value="100" Type="int"/>
+              <opacity Type="int" Value="100"/>
               <datasource Type="QString">registro1</datasource>
               <field Type="QString">fotomatriculaB2</field>
-              <autoSize Value="0" Type="bool"/>
-              <scale Value="1" Type="bool"/>
-              <keepAspectRatio Value="0" Type="bool"/>
-              <center Value="1" Type="bool"/>
+              <autoSize Type="bool" Value="0"/>
+              <scale Type="bool" Value="1"/>
+              <keepAspectRatio Type="bool" Value="0"/>
+              <center Type="bool" Value="1"/>
             </item>
-            <item ClassName="TextItem" Type="Object">
+            <item Type="Object" ClassName="TextItem">
               <objectName Type="QString">TextItem7</objectName>
-              <geometry height="200" y="1102" x="1050" width="850" Type="QRect"/>
+              <geometry height="200" width="600" Type="QRect" y="1700" x="1050"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="0" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">$D{registro1.matriculaA2}  $D{registro1.precisionA2}%</content>
-              <margin Value="4" Type="int"/>
-              <alignment Value="36" Type="enumAndFlags"/>
-              <autoWidth Value="0" Type="enumAndFlags"/>
-              <autoHeight Value="1" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
-              <backgroundOpacity Value="100" Type="int"/>
-              <backgroundMode Value="1" Type="enumAndFlags"/>
-              <backgroundColor Value="#ffffff" Type="QColor"/>
-              <fontColor Value="#000000" Type="QColor"/>
-              <angle Value="0" Type="enumAndFlags"/>
-              <foregroundOpacity Value="100" Type="int"/>
-              <trimValue Value="1" Type="bool"/>
-              <allowHTML Value="0" Type="bool"/>
-              <allowHTMLInFields Value="0" Type="bool"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{registro1.matriculaA2}</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="132"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="1"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
             </item>
-            <item ClassName="TextItem" Type="Object">
+            <item Type="Object" ClassName="TextItem">
               <objectName Type="QString">TextItem8</objectName>
-              <geometry height="200" y="1102" x="200" width="850" Type="QRect"/>
+              <geometry height="200" width="600" Type="QRect" y="1700" x="200"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="0" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">$D{registro1.matriculaA1}  $D{registro1.precisionA1}%</content>
-              <margin Value="4" Type="int"/>
-              <alignment Value="36" Type="enumAndFlags"/>
-              <autoWidth Value="0" Type="enumAndFlags"/>
-              <autoHeight Value="1" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
-              <backgroundOpacity Value="100" Type="int"/>
-              <backgroundMode Value="1" Type="enumAndFlags"/>
-              <backgroundColor Value="#ffffff" Type="QColor"/>
-              <fontColor Value="#000000" Type="QColor"/>
-              <angle Value="0" Type="enumAndFlags"/>
-              <foregroundOpacity Value="100" Type="int"/>
-              <trimValue Value="1" Type="bool"/>
-              <allowHTML Value="0" Type="bool"/>
-              <allowHTMLInFields Value="0" Type="bool"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{registro1.matriculaA1}</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="132"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="1"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
             </item>
-            <item ClassName="TextItem" Type="Object">
+            <item Type="Object" ClassName="TextItem">
               <objectName Type="QString">TextItem9</objectName>
-              <geometry height="200" y="1502" x="1050" width="850" Type="QRect"/>
+              <geometry height="200" width="600" Type="QRect" y="2100" x="1050"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="0" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">$D{registro1.matriculaB2}  $D{registro1.precisionB2}%</content>
-              <margin Value="4" Type="int"/>
-              <alignment Value="36" Type="enumAndFlags"/>
-              <autoWidth Value="0" Type="enumAndFlags"/>
-              <autoHeight Value="1" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
-              <backgroundOpacity Value="100" Type="int"/>
-              <backgroundMode Value="1" Type="enumAndFlags"/>
-              <backgroundColor Value="#ffffff" Type="QColor"/>
-              <fontColor Value="#000000" Type="QColor"/>
-              <angle Value="0" Type="enumAndFlags"/>
-              <foregroundOpacity Value="100" Type="int"/>
-              <trimValue Value="1" Type="bool"/>
-              <allowHTML Value="0" Type="bool"/>
-              <allowHTMLInFields Value="0" Type="bool"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{registro1.matriculaB2}</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="132"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="1"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
             </item>
-            <item ClassName="TextItem" Type="Object">
+            <item Type="Object" ClassName="TextItem">
               <objectName Type="QString">TextItem10</objectName>
-              <geometry height="200" y="1502" x="200" width="850" Type="QRect"/>
+              <geometry height="200" width="600" Type="QRect" y="2098" x="200"/>
               <children Type="Collection"/>
-              <zOrder Value="0" Type="qreal"/>
-              <borders Value="0" Type="enumAndFlags"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
               <parentName Type="QString">label</parentName>
-              <borderLineSize Value="1" Type="int"/>
-              <isVisible Value="1" Type="bool"/>
-              <borderColor Value="#000000" Type="QColor"/>
-              <itemLocation Value="1" Type="enumAndFlags"/>
-              <stretchToMaxHeight Value="0" Type="bool"/>
-              <itemAlign Value="4" Type="enumAndFlags"/>
-              <content Type="QString">$D{registro1.matriculaB1}  $D{registro1.precisionB1}%</content>
-              <margin Value="4" Type="int"/>
-              <alignment Value="36" Type="enumAndFlags"/>
-              <autoWidth Value="0" Type="enumAndFlags"/>
-              <autoHeight Value="1" Type="bool"/>
-              <font weight="50" family="Ubuntu" pointSize="14" stylename="" underline="0" italic="0" Type="QFont"/>
-              <backgroundOpacity Value="100" Type="int"/>
-              <backgroundMode Value="1" Type="enumAndFlags"/>
-              <backgroundColor Value="#ffffff" Type="QColor"/>
-              <fontColor Value="#000000" Type="QColor"/>
-              <angle Value="0" Type="enumAndFlags"/>
-              <foregroundOpacity Value="100" Type="int"/>
-              <trimValue Value="1" Type="bool"/>
-              <allowHTML Value="0" Type="bool"/>
-              <allowHTMLInFields Value="0" Type="bool"/>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{registro1.matriculaB1} </content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="132"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="1"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
+            </item>
+            <item Type="Object" ClassName="ImageItem">
+              <objectName Type="QString">ImageItem7</objectName>
+              <geometry height="400" width="600" Type="QRect" y="210" x="200"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <image Type="QImage">89504e470d0a1a0a0000000d494844520000017b0000011b0802000000b4a8b3060000000970485973000021d5000021d501049cb49d0000200049444154789cecbd777464d77de7f9fdddfb5e455401859c3ba0bbd9cd66ce411229919218154c4ab26589b26549b6d65a9d95e5b31eefd8eb19fb8ce6eceed8da9935c7d6cc91ad60899444314acc397622d9ec0c74038d9c43a150b9debdbffde3bd02d0241b440305a0c3fd10ec460355afee4bdf77ef2f92528a886030180c2b8f454446710c06c3ea20d67a000683e11cc2288ec160583d8ce2180c86d5c3288ec160583d8ce2180c86d5c3288ec160583d8ce2180c86d5c3288ec160583d8ce2180c86d5c3288ec160583d8ce2180c86d5c35aeb01184a06830180d9fb1708200020104cea9ce1b4c0cc71ce1e082030c3d15af5f60f4ec6e39a154183f55a0fcd60f0308a73d6c0de17f3c8d8d48f7ff5f4eb6f1ecae70acc1ac46b3d3683c1c328ce5903318841998cf3c8536fddff9bb75fddd53e353dcdccc4664965385d308a73d6c004564a3ffdd2fe9ffc6a77773fef3d383636950201c68863386d308a7366c3deff6066add5aeb70ffff0fe97dee998cae50387dae37d83334a9b536c388d3097e3990db1066957753a7b867ef6d08bafbddd952b10138fc6536f1dec9a4ea4b5b1e3184e1b8ce29ce11098c1ca99989a78e0373b1e7afc7832190502a080c3be675e7e737874726e226430ac354671ce74088c54b6f0e8d37b7f78df9ed1695bc1af49021adaf7f6c1f1c3dd43f97c76ad0769307818c539e3e079131666ad738e7ae18dfdf7feeb8bbd23427180c9011c8660d8e96ce573af1c9d984a813583013d1b276830ac094671ce445cdf1333b48673a8a3eb073f7dfe6067c6d17e4014bf7c0081c4732fed1e199dd48c6208329bf01cc31a6214e78cc3951b77b6c28343133ffde5f32fbc7aaca0fc000006fbc13698180270fa87265fdcb13f99ce10ab62cc8e511cc39a6114e74c840128ada7a6d30f3db5e7470f1ecce83ad64166016890725f43d0520415d7ffdb83af0d0c4f384e0eda2190c9b132ac214671ce4498596772cef3afeffffe0f9e4865c3808f481318906001770dc5c25170103ad89179fc857de99c6632d31bc31a6314e70c83a1c1e4287de848f7f7ffe7333da3658e0a3084a679c90cc400336900ccd2e1ea9ffd72cfe0484203046d42900d6b88519c330c6238ccc77a47febf1f3df9e68149a600039e59e7043716669545c33adc35f9c4f36fe7b25986c3506b306e830180519c330e66677c72fa5f7efeec034f1c2de80858ccbaae4efe267274d92f1e7e7d707852a942b1808ec1b00618c539c398c9647ff3ec8e7fb96f57ae1063ed9bb744a205964b1ad6def6a9fb1e7bbd5020532ec7b08618c53963606647a997771cfabfee7d643a1f2696ef79c9c914874194e7e8bffe62f7e18e3e37f1b3382732f31dc3aa6214e7cc805933ab635d03fff91f1fee192cb00ebc9fe3e964f2419a05d83738c4dfffc1a363e309e602380f66a3388655c628ce690f33bb81c24c078f74ef7e6714a29c8818a7e2eb260d160af6c3cf77fce8fe5772b91cab028cdfcab0ea18c539ed21b746ba00f1d6f35a9b1a22ac825a0304a2455a641800339410e95cecde9fee7af295838a2d66c5c68a6c585d8ce29cfe10b9e997848deb1aeebae552c1057081d859743551024b22b0b699838393e21f7ef054df609cc154acad6330ac0e46714e7f0820221224fdb6fdb93baeafab66a000a8534ac964002c188261ed3d3cfdcf3f7d726a3aad94c3e0d9b63366ca6358698ce29c41901062cba6a65b3fb649782a945ff40c655e810bd6995cf0678feefbc903cf65731acc6e552f2663d331ac384671ce30c241ebf39fbab62a5220302d18837332988552d6e864f087f7bdf5f0e3bb1ca599dd9e560c233a8615c628ce198625b07d4bd3ad1fd9687101bcb496aa82211cc7eeeaa77ffcf1ab8f3ebbd3d10c66cf606430ac24f26ffee66fc83cd9ce1c08b02d2b1cf03ff3f29ba9bcc590008805810958dc24c56b0dac588c4f65bbfb86aa63be4deb9b4830dc79130166c26358198ce29c69104921426581e1d1897d874635fb089aa8002f77fc944e25392cc6a7528303a30d5581b675b5208620b895bbb048fd32184e01a338671a0c12ecf3c98ab2e02b3b0e4da6c0a41879620bf4debc870f466b8c4ea407fafbebab421bd6350a10313398bcd25de6da309412a338671cc404019405ad786afa8dbd9de032c02612b414812030151c313c9e3edad51b0cd0e6b67a490e119190c6cc6728394671d6167e8f46bcf7272742ccd082d90e88b26070d75b4726a6c0241962a9f31101406b1a9b4a1f3cd25970d26d1b9acbc2e1a241c75c1b8652621467cd603031c3fb4fb176b4d60c26cf7e72b2934204414258d22e0b87b2b9fc6b7bda1d15f4fa342c512088211d654d26f9ad7d9d3dddbdcdcd35b5d551a2b936c3279a7596fc4186731da3386b0631819849bb29993d03135d3de3c1803f18f47bcea405df0d90df678782b4ff4867df50166ef18a659d4a0264ae20dabba75fdf7108705a5b6a83015b101101e4adb078d91f633897318ab386309370fbd64da7f28fedec7971df504b6d597d6590482ce6a626a0225a66f9ec5776ee2f383684e045a75a9d6440ac95e53881b169f5eceb47ded8bdaf3ae66facafb224133b200130911bb663ae19c352308ab37678c5429dac937de1ade1c7778ff54e3b4db5656df5519f2d17358d20961695478393f1e9fd87fa950e2e5b080882dc2a16acacc1e199275ed879b8fd484b537d2c5629a514c4c40a50a0259b8d0ce7344671d61466c5bcefd8e46f760ef44ce71d16b672363686abca43e415a958783641002265217f80de397c6c6c5c01d6b28d2c6e600f6b80897205dfe1e389c79eda73f4687fa42c148d0405b40093b0e0d996d94bb7f0e295e7175d7ed7f8d77666540ca7666228cc75be3017ffaa621467ad60b0d65af78ecc3cf45aefeeee19c7b2409849e5d6d5865b6b23b625980168409cfcfc30110b21aa2aa30527fbe6deae6cce0712205e9663dbb35b0b8664f8340793d9c0be8ec9071fdff1fceb6f4d25b3b61db0a5c5d042304881ddf8644f249935936210b3fb2314efeab5951bd6acf3857c3c31e338b0a42012455937d7ffea611467cdd0acc612a927de1c78e1c0781a1282089467b284b3a931521ef2436802112da01d6e95090ada56654578783c71b46b422902bb8bb2e5274951b18b390170b43534967de1b5ae5f3fbaef8d5d6f8ec5a71d8d4241170a394769068a366608169ec78d67732698a181d9c285ab7cc911336bcd070e75ff977b1f3cd63dd4dc50190d07849460cf0eee56ea30f7c24a631467cd4867f3af1d1c7b64f740bc600b124c70efed6432b3a12edc5c1592528a0f088a994d20a7aa8a729b0a070f758dc60b9a4a35a7e0795f0290608b399075fcc787f32fec387adfc36f3cfaf49b3bf61ee9ec1a1c1a8dcf2453994c2e93c9e70b39060b22084d60902626021593b5567f5aa199d5d0c8c40f7ef2dc7dbf6d7f65f7f1c9f854635d456579445a9a48bab53fcc8db00a18c5597d188cbc5207ba277ffd5a5f5f5c6b4120223011832897d721c95b9aa265211f8199e4c94f0f3331315c1752656579323373b0632093765d5dcb3fad276c8158b07047c9a42d5090399c48caaededc6b6f0e3efefcbe479ed9fde44b07f6ecebefe81a1b1e9d89273289e94c329dc9e5f3601660212d903849e3f395b3f230336692d95f3efaca4f1e7a73346ee755f89d2363c7bb8663e5bedada5830e02fde01e64658719656eec0b05458335829dd3732f3f4eec1f6e1ac268b981873360f2dac7d5df1eeedc9ea68d0670be205b2b8bd19836bc1ad8e85efbaedaace9ea9879fea4ae68879ae31f052d757f33f9799b41b0c480c1600040344c49a1801e6c8e48c333943878e0d13f70b910b05ece6faaa8debca36ae0fb7adab6daa8bd556c562e5655595e15834e4b36dd7b24c82bcc521b8e8dd2fc943d0abee0ce87c3ef7fa9e83bff8cdfee303d01420264de117768df6f53ff2275f9dbcf31357b434944b4b1064713637bb05a34125c6cc71561366b006a666f24feeea7d7eff4416368848e8f941c604ca645550e82d2db150d04631a5f224d0ec2285c195159168d8d7dd3334349674343104664bb32f97b90f9ab7b5793f0401d2b5370342c3ce39d678bc70ac3bbe6befc0332f1f79e285432fbd7ef4cd7d03dd7dc3a3e35393f1995426252de9f359820844450b3463b664c6326126b0d67ce868ef0f7efadc0b3b46f22ac4c52d33d36452ed7ee768223d53130bd556570ae92dfdd8d33c735f941ea338ab0a73219355afec1f7c6857dfb49280241013cd5a5801d7a74cc9787a534ba4ae2220a55ceced4744444df5959254c7f1a1f1e91c6b21bc72a2ab7b8a3d9b9400012498831aa15c21303e4dc77a133bf7763ffdd28157771fdfdfdedb3b3c393939ed14381c0e5a36116b8008b4fca86666000a5a0f8ec57ff2ab977ef99b43d3992093e5baff0904723459f982ff9d03dd5d7d7dd5b1705d75d4e7f313bca5aab92f5602a338ab09e70af9bd4727ef7fa96720291942104368f70a9f7f0e882997d782d4b696f2b2808d85dc55736f72172752a2b93ee6e8fcd1aebe44d2015b10ab9f023e7fe65574b7b3e7e6d76ce51d7b22aedbbb13afecec787d47fbd1aea989a9542a93f4fb64241c04f1821eba450e81193c9348fef6d9b77f78ffcefe314bb3bf686b772751449060c55a1cef9f3e70b8bb90cb34d6c5a2e59153296f6638358ce2ac34ae09453184564ed760f2fe17badb47720e491043ccdd8f2740a40526a7339b1ba3f59561291757f8c69d19300743bed6a6aa4462bcab77289d116e26d49aac11c8f33dbbf73913182c9814410312f033423319dfd1ee99d7f674be7da8b77f684a4855591e0e04fc6eb4d15287cd60cee79d9d6fb5dffba397f7b5a71d1d7483063c619eabfe5360168cd0585cedde73742a31192df735d6c5a410984ba935ad044b86519c958601d2acc1989ac9fefa85ae378e261ccb8220d7c682f73159903bf1cf6bede4b397b4d584fcb2b8297c500832110922112d0bb634566532d33dbd23992c8125a1540eac5381def58dbbb312b000e90e98411a22a7ace1b1fcfef6a1431dfdf1e999b290bfba322204bdc7a4b3f0f867158a59eb633d63fff8e3179e79b52fef9471518fdfb329099280609639e53b78b4bff3f8a0259d96c69a40c02a5a731613ff6d58144671561a661098b3b9fc133bfb9fda3b9682a5dd65ce820f70d7d6303e9dda581b6aaa0e094271e9f58167cb9395eaca685b6b6d3a39ddd5339ecd4b4d82c1001397c62c5b6208a4a5a368682cb7ff487fffc04430404df531db7697570cccb6b75970f4eca68ea89189e99f3ef0d27d0f1f4c64827aa1a0e7f92a4c1a76df60f2607b572e33dd581f8b5544e119d6de6d33372c0da338ab0043f1ce4383bf78a56fbc2095a4b9c5c2fb1f78cf474c0c87293133b37d5d553460931073def00fc27d3657c5a2eb5b6bc746878f0fc5738eebbae25239824a0bc19505d290d99ce8ee8f1fedea67e534d7c7caca8244629ef3e8a4a36710a059e75399fc932fefbdf75f9f1d1a25e64031eff403779b98096c4d250a473aba878626a2517f736395282a9db953968f519c92734212233333b87738f1a3a78f1d9fd24a0a3011b973fc05a26c3cdb01939c4c14cafd387f5d859420c607253dcc3dae5d7b452c16d9b0ae76223ed2d53d5028d804c9736d1a4eabf3ee9a6b0588c15c503c3a9e3d7aac5f39b9f5ebaa2ba265980d3c5a6862c80ce528675ffbe0fffd4f4fec6b4f3b08013616147800c543470406090d4a674467cf7477dfa0147a7d738ddf27dc2c8e12eff4b987519c52e3c60013002680d989cfe47ff4c491b7067205b298ded750fcbe78e90b4ad3d4646a7b6b79acdc2266120b046d9eb8592f709fea6a625bdaeaf2f95447e760a120dd7912310882c0a50ad7290144b3a666066996f1994257ef00ebec86d69a6824382f0fe17d07cc0c86568323d37fffcf8f3dfdea78de09335b1f38337acf6f5de39a2fafadc1b1cc918e81e44ca2b529565e113577caf2318a536abc580e66d7c95d50f73f77e4b9c3c92c048ba5dcdb4494cbb09ace5e7961bd100cc879a7eb839709ee5d5a5511dcbea5a53c2af71feac81648b3e5ead9e9dbf9975ca3b23593723a7bc646c7465b1a63b5d5159ea5dd1bf609c793c1ac0b6393d3fff4c3e71e78f4d0742ea4599efa019f95270248693115cf761e1bb0acec15976cf6d976a9f6ef9cc5284e89f1aac5b0022bcdfaa957fb7ebd6328c1c4c45a88251c68017204c613d9960a5f535d99108200f6ba842f727b2408e5e591f337356cd95277aca76b7c629a60b11ba1779a4c704e60d685471a7226c5c77ae36313539bd757d5564749cc1785f9e85c36ff8bdfeefafe8fde188ffb54096a86b9b2ec3437043f7bdb25176cdd20d720b2e96cc3284e8921775dc560d6bb0f8ffcf4b99eb1a4d096d002c416e894339c9840c4054d637d93176ead8d868220c5d0454beaa2ce9d3b19f007e5a6d6ba6bae68d3ce7467e7b1bc139c735a9f6eb8fe21b845a0452e879e81619fe56cdbd2148d04dc8062e0045b98d6fcf6c1eebffcbb07fb4624b3bf24d337414e7d35befcb90bbef8d91b827e9fb953968f519c52c3dafd7f6832fdafbf3dd639ad952d5850d16272ca1000161a349312f199f12bb73509c1c4022488c522b5a2588b41da96555f597ed5a59bafb874c3c4f8d0f0c8a4561691229aad4a21dd556131784780b41b20b4eaba54945416828572446fef5855ccbf715d75c06f0b31ebaf668095e6f1c9996ffdd5bfbe7d38afd9d60b59bb16fc48069176cb8608529150eed61b9abefb8d3bab6311410b9bed0d8bc2284e89711bc1e4f2fce3270fefe94ee684d0de55baf483cc04165a0b1e992854fa545b7315040484d73973d1b8b223049585826dcd0d1fbf61fb7557aecbe5c7c6c6faf3d934c14f10441a44802080a089bddb6f2da7416e210fa674863b8e1edfb2b976436ba36d599e6d1ecc4c05e5fca7ff76ff834f1c735444bbf56e96641027d26ef17882b6edc2351745ffe39fdfd5d65a2b842453dab91418c5293dacf8e1d78e3c752091c84b9cac1acce2b7060234b14f0b3884fed1996d8d655515c1a263e7949fba6e6ab694280b07db5a6b3e79c305b77cec82c6c6602a353a191f77540190c412c480c3442009d2cbda87e5e3da74d84e66d5c060cf6517b5d6554785ab362830d32f1e79e53ffde353a95c85860508308196969a2004b4144c5458576fffcd776fbdfed23661594473796186e56014a7c430f48e0383f7bf36349ac1f2e506f39616eefa613ac74343f16bcfaff55900c9259c3b0213b4db2e4b4a11f0db8db555d75dbee5773f7ddd5db75cbcae5168673c959e74f219b06b2d12c4b4f815dc4ae016fb6162cd726428a9f253975cb82e12f68124581f3936f0b5effc783c5eae1198ddc9252625b825a2ad4c75d9f49f7de5eadfbfeb464b4240144d46e64e592e46714a4cef68f2c74f75744d2a25242ff1317b224c4ccc24dc3b5e30a633ac9289f337d55ad6c255904fbe492622418026906b1022b27db2b62676ed15dbbef8d91beebefdca4bceaff25b9999e964360387050bbd784375e9a162c2373b8aac23473bd73745b76d69b57d562a53f8fa9ffdbfef1c654d117277084b1faa608270423273e7476bfef2cfef09fa2d22e919c1b80435340c4671968fdbc757839de964ee67cfb4bfd99fc94230dc79c1b2cb9b9f582d868934f3c054566a67734b9528369971d56d7173aa62017477cb244044240549412484b4a4f0dbc2e6ac2d7316e70ab9694b66a5cc0a2aa0583ccccd66276fc527dda0426f2ee686177a3382d25e5a04126059e0d0e1f663375cb7b5b23cfcb77fff6f0f3c399ce33240cebdec54b6e9555924e1bac6a495bee622f9c37ff8df63d1901056b15be1a27a161a3e10d25a1bc5592eac192a9bd78fbed2f9c8eef1d12cab15f4693000c95c17c23d1f5d7fe3c5cd96e51020c86258253a95acb5575d0240c151236389cee3fd078f1d3fd03170b863646838399d62a7509657998213700accbae8fe07989ce29ac6cbe42ac5906621802593b4d377dfbae1c357b6fedddf3f3a12af61585a28b718ea296f0f445a10724cb065b6b58eeffb1fdfbc6c6b0b8884f09574f006a338cb87c1ac1cedec3838f2b317bb8f4d388ef0c28289b1bcaebcef8360720449ad259cd60a79cf8d1bafde56edb3ddc97f299d29ecc5bcb09bad04ad00660887693a99ee1f183b7478a0ab7fb0bd63ec70e7e0f88cc866ad5c4ee5f28ea3181a5a68c062b697d539eb3d9097faae88b4df7602d6643a1b7150a6b5c06c94ce29ee282001b7e7045747a7fef6bbb77ced773f262d0958c61d5e728ce22c1766ad54a17d60fac74f75bed39fcbbb912b2b96ac446ead702184668bd4d64aff976fda78d1961a9f6595faf398d98d9f7637ac415e7a3783b5ce7b25539972f9c2b1e303ef1c3cbeff704ffbb1a9bee1dc443c3b3593c864b5e628938f4b7728dce81b162494606240812d160a2c89bd9cb653dd4d802058e854d09ffceadd97fd3fffe11e9b49d8d66ca32e4309318ab31c1880d67a703cf5b3678fbdda114fb3ad3d371083043395c08ef3ae8f2412acdce42d86f039eaa2c6c0176fdeb86d7da5df9e755d2de784ce15b5c25c1b0966d660cd2022373dccb5d3b0665d7c8b0490ce397d83637bf676bcf446fb81f6f1c189ec54bc90c909a5ed79661d4671b672aaccfaa0189a20190a6e2a3e93164b9b52ba262dc72ffa6ebabaf67f7eff2f1a6a22cc2021dda0244369318ab344181a0cb03335937bf4b5fedfbc3536956716ee5d546295590062f693beb821f4d90fb56e5f1f0b066d41b3f1c1a55d11f089fb75928d33035a03f97ca1a76fe4f5b78ebcbaab7d5ffb64cf406e3a8182b6c06048f256406b7fe111985840a42ed898fae17ff9d6e5179d4726796a2531beaaa5c160cdd0b9bcde7968f489b74787925a7b3d17564f6e008048318d257203e3337e4b444376c016c2959c12d718a513bf4e3a1e1040644b51152bbbe8fcb69b3f74d165e737564610943a9fcb673279cd042ad0e9b166213892720d55fc57dfb9e3e3375c2ac452429c0c8bc728ce9260801da5d5e19ec4c33bfbda47334a0826022dc159b25c08a488265285aec1443299f349110ad83ecb75eb96f6a3de5b24f8fd5fe3fa7fdcf25ab645cd8d55d75db9edea4bd6d55751b6909b984c3a4e9abd6ac76b8c14ba3a9cf9e6ef5ff5475ffc44c02709f23490c1b319a3384b81c1cc7a6832f3d8cebe5d9d891c59589b10316237b988042092393e3e9aea1d9ec966b5cfa650d0b6a470338f56205ef6645b2bce801800090890241242527565f4b24b366fdb542d457e3c9e49cc149825a0e6c5d1ac36040e58d9cf7e72c39f7feb33b18af0d262b80da784519cc5c2ee139edde6911c4f669f7f67e8b98313d305e15a18c92d53b1ca920378d6692290702026669ce343d343e3a9642acfc4019f65c9d98ca093798de6020c1714a645acaa663744345b84900844822088a8b13e76f9c52dd59581b1a9e1d1b119ad196c17f3b656e9d815179dca42e6ba4bcbfff27ffd74dbba462984c96358058ce22c160211b45b75229b2dec3a3cf2d89e91a1a42eb65bc31a2658d3ec5f442091d3189ecab5f7c77b475393f18ce3147cb665fba5105e43049efbcb2be2feae2d2d7f44274ef75c61f4ea9d86fdf6055b5bd63547c7c7c6fafa261d580480f4aa4d76dc8fb3446e4b8bfc8b6f7df2faabcef7f9661bc5185696b55f489f29b855b698b5a3747b5ffce93dc3bd130565cd7aa357d7607c52581369128a28aff0565fba6320d9d2e5df501f5d5f57b6a136d4521b89450204b076d513c532a6b3e35fd9bb8e8858583ee29b3f74592c5cd65cf3e24f1fdb9f73c25a5bab979f4e2c295f599efd83cfdf78e375db83017bbedbdee8ce8a6214e7146090d2dc3f967a7c77df81a18c23a4db7860adc775026e66935b534641264007c70a4746c66381a9c6a8bfb9c6df52176c280f5597fb6b62c148c8f2d90410b166d644022b590566b6eb13110956575cb2a9a6badc0ad04f1f7c3395add2ab742099a0fd32fd999bb77ef6b6cb2b22c1f9bf3272b3d218c55934cccc3c9d2abcb27f64cff1992c4916c59a504b82186ede8084b68815a800413c3bf55866149ff727bb4d2f8927b2984c650f8f24c35db2226857046575b95d1df53556841bab83ebeacba3414bbab50ae7dd7834e77c02e00d8db9d84bf714c749b35e2c802000677d4bc377be71a790e227bf3894c85b1a36bcb8c952ca8f6bca769790c4b045fa235735dc73f7879b1b63428879b1456661b5e218c559240ced6473cedec323cfef1d9b2e88796ef0255ea36e576d5ba9adf5810db5c1433da99e784159e092649ccfc3cb55248048c1cee7682aab69326f0da57d1622be7855d8aaaf08d446657d55b8a132d45819ae88047d16492941c4ac493391d0e435aae0a28bec5d1f728ac3126e27a9f54db5dffa83dbd349fee943ed798e307965a24b9923e6558b268041a90bcf0b7ffd4b375c72fe069fcf3ad17864e466c5318ab330ccee039d515068ef9b7e7c77dfc88c6221976fb82186c5bab542de7269dd456dd5cfeeec89bf3536a588e58aad2ebcc9053388855500171c4e15f4682a777434ebb7100e4e47fca22ae0ab0ccaba987f5d63794b7da42e160a5824500048b300dcfa58b258f174c977a95b4e5993a00d2d35ffcb1fde3438967ae6b5218783602a612a1680e2e485899c862a7dcfdd577df4baede150d0fd59493fc8f00118c5f94034989869289e79e48dbe23e32a6fc9e2ba6319d2c00073cc87ebb7c4ae39bfb622ecbfee9286e363d99d5d33f9158fc5e5629e353301441a94272e284ace6034a18f236d81033e517678ba222ceac3564b65706373a4b9aebc3616f4db82c1c48e57867db600fba9e3add1480a29b66d69fcee373e311e7f6ccf8129b00685b894591a6e4eaa13b2139fbff5d24f7de2caf26819d369d620f0dcc078c71780190c68663d93558fbe7efcc543f10c8416deadb20c08800fea8a0de1cf7eb8adb632284897857cb6a0fef1d474daad2eecd980b9f45185c26d42ec2db778f629ef064db3263824730ac99c339ed283f17ce768e6adeec4ae8eb1bd1dc383c371216559d06fd9168062890ce259bbf0a9e0ae74dc4a60b555e1584568c78efde99cd4e42b6a7a496c2b82004b246fbda1f59bf7dcb4a5ad494a49731b37d7ffea611467610840aea05ed83bf0c0aea18443cb5c4a70d1972458b755fb3ef7e1d62d2d55520a90900295e5be742adf3b9aca2877fa30db0cbbd4ccdf22cdcbc0a279bf763b28101428ab3193e7c90c0fc79daea1ecdecef8db1d2313539948c82e0bf981d9f9921b8fb848e52906e9100144242c5bd65695179cccaebddfdf5b500000200049444154bd051d80dba478e9b82b33414c448a2871f1d6c0b7fef0a60f5db9cd67fb8abb6ce466b5318ab3004480623ed43bf5c3273ac632924b50bd4010b470501b14775e5dffa1ed4d3ee94e660431d99668ac0c0f4f4d0f4d651d08450408717a44fab825d61528cb14cf3ba349757824fdc6c191c39dc3969fcac27ebf2540c5b9d3a92f55dc4e3821bfafa632dc737cf4586fd2eb8dbee44659046277139a285d5795fbe32f5e7bf7ed1f0985fca045966735941ea338278559b3ca4f27d57fbdefedae247b2b91e56c50834908e60ac9375f5879e7751bc2410269e1363c11005128605547fdc3a389d144ce61126b17c7fc1edc298cdb7b4668c89cc6b4a306136aefd1a97d478673b9427d75d86f8309ec36913aa55e5af04cc915d1b24885b5e3cd3d8994c364010e412dc9e0e81027892c164e2490fedd3b2ffcc6973e5153554e6e878dd3e5a89e7318c559889ca37ffcf0be3dfdf93cd944cb766b1024949fe9c27aff1fdeb62d16f5038220dd4601de5dc02a16f55595f93bfbe23319cd2458ac4137ccf7c39db9b06b046230936648ad6546e9b1943ad89be81c988c450335d1a014c2cba73a95edbb594dd2a6ca8a88e3a477bfd5e1e8307bb6dd53561c42019421b2fd327bcb0daddff9e61d9b5aeb05cdcacde97048cf458ce29c14cdfcd41bdd0fbc3192b202c5829bb32cfe88b98655e546015b79bdb1dafaa33b36afab2b8720374884dd593e8320404210d557954583a2b73f95c8688605f2ee3bb1d86e0da567f67399dc2c4dd750ecae33c96191630c4e16f61e1bcd64732db5657ebf55ece14745f3152f6093626837db1310a1a02f52166aef1aecee9b21b6ddccf8531c2f0342b020a88bb646ffec8f3f76dd65e7bb3258eab2418653c328ce49e91b9efce787de99241f404cac492ee93069262d980413013189dfb9a6e1ba8b5b84600151ecdce2d950bd646b08826ea90dd685aceeee785229254060c1b4a43abea565ee769d4d5ff5969b442c44324f9d7dc9f854b2a926541620084544c568c785e4722e199608a0582c62db62c75b4752198be72638a720160426a29606fae32f5ef5b93b3f624b49244de9e235c728ce4989868355e5fee30393a9022bedd39e9fda5d5a2dde32ea0989260eebc28ddb22bf77eb0596d7e2f124f78f9b6820aca6ba68a44c74f64da50a5024bd864aee2b4e5b880aa0de8964ffe04455d45f158d58de34c8cb3158ccd889c89254591e9c4accbc7d6880b59f8b217c8b1f888053115277dfb6f9db5fbb351a0a98d4f0d304a3382787d05213bc747d657fffc4585a29d6273ea317e701667283417ca42fad0f7efdb31786fdc5a9cd825b10ac05b0aebedca7b24363c984c3cc20c83320628d84821c8d17bafae291806cacb224319104166fd961228e44c23e29f71fee1919cfb267395efc8e73c0d61fbba6f1df7ffbf6e6869a85f4ddb0ba18c53929c4ac09d132ff655b6bf233a989443eef6880984e25c49698217cecb404ed6fdcb1b9b9b64c901664150ff9fb1ef9e2f39898a137b556b75607470613895cc16126926740863391222b9ec5e8443212b46a2b233e69176d288bc2b5fcc4ca8389e9e9b7f6f7e41cfb54244359d2d9be29f4dd6fdc70cde59b89a471879f3e18c53939040129840c06aced1b2b23014c4ea6d259e5b004c0c5c8e305e24588a159d8a4a25add7d7ddd7517b7486909e15684c082f70f11049110c222705d5570734b796a7c269e563907cc0caf84b180d7c4d6ab4d789a4811b19b7c8578c6191ecf5484ecda58d09220b7a71411a068a11aad9e38f97dd2678bce9ef1fe911930e97969ecefff3600604b649baac5d77fef92dffdec87082c85658afb9d3e18c55980396ba66dd3fabaf2f5b5d199783a99cae71de5b52220412796d13b61d143100a21cbb9f9a29acfdfd4e69382842cfe7a31c7dcbb5188108b062fde5aeb4721914817342b47b0374076e75caed3fa74b9ad8ac3604d5349353299ac08c9da0a9f6d599e2d87f803da5d7af509b9b2323a9d4cee3dd49bca10b35c7076c94424485744e90bb76cface1f7f3a14f20b51e256a586656214675110480aaaa9089db7ae5c203f9dc8a5b28e12c2bd7778de017cd7d3d4c7ce151b427ff2a9ede1800f422ca9ab2c339820fc16b6aeaf39af29e25305275bc828472906bb460f767d33cbdfd31243028226d2b989d1646d79a0ba3260095d4c6b5870b4a4dd499c6dc96899afab77f4e8f12987e57b3475fe3f95e47cc047375d57fb37dfbdabaea6dcf5b59b09ce6985519cc5e05db382100efa3636965784e474329bca688719c5baeaf35eeb219837c7ac3fba6d4b53cc07298b99d6a7fae10c92ae6759822aa3bef3d75735c6aca88f82162bcd05a598d5f243a257022a96589f49398964b6a13a5851e693f203e71dae99dc939758b46c3a3ebdefe04022a9f8ddeeed5905d780f25bcec5e795fdd5b73f71d1d656b7f3d4bc037eda1d9c7313a3388b64d6b74b019f68aa093556045426373d93cd28e6b9ce50eea28a0942685d1dc4576eda78e9e62a212483c4127b21152daeec2ea4946d89869ac8451b2bb7b694d744644550066d6109cd5a69c5ecc5e7cd1bcec9b6bb0a3761d133ee308dc6b33a975bdf108d84fc34bb603df93ba9384449282f0f76f58e1c3b3ea1b43cb18a855736444009d22d75eabb5fbbe1f68f5f459240c24dca9a1dc54aeda3e154308ab358e685e8094b8ada0a7f6b4dd0623d35934be51cf73620cf4601c15426f4ad97d5dd7af57abf6d132dbf5f1d1109224124890481a44479d8d7d65479c1faca2d0d65eb6a038de5becaa05d66934d0ce5b0f60a073341cc85b2b8733526afb8e78986ef15323d13204893181d4b07fd5857170df8ec05173b5e703081dce356160926d3890347fae309c590f3dec8c444a425a97030fd879fbbf81bf77c32e8f34310301b626cfce2a7114671968800a2117f4b43b42c2866529999b472e61a01904fe7afdf1cbdfb864d9511ff926c370be0194188dce67314b0644d79a0adbe62fbbacaedad91cdf5c1b6bae086da605365b0326c857c105a4369ad945b880600a0010962e156fe9dbd025632d8874005164393a98658a0b12a6809b1c80b8f0824a8b2a2ec707b5f4777dcd1f6bc410a2210b4b4d277dcd8fc7f7cfb77aa63114fdc8d47fcb4c4d4005c0a0440080055e5c18f5ed2585fee7f76eff0eeee44220396125a9f57637feada7535e5be1555732ada49dc623a7e5bd4c542b5b120404a732aab26673263f1f4483c3b39539848e4c7a79de96c3e9eca4c251c4de44093743568ae12fbcac104256834a57ebbb3bfb93ab8b9b142ca456a3111c99686da8f5cd5f6c6dbc33d439a8bc589099ac182f2176eb1fffc4f3eddd4503b5b977ec9552e0c2b8a519c25e12e09180087fdf2b2cdd5b1f26075e5f04bef8c8d259dca206ebfa6adada9c29258b92983db21944070837398a9582382892c29a261ab3ce45f5f57ae59e5f22a9975e2492791ca4da7b213f1fc64223791cd4da4d5683c3b9351d90229126ea48f5b3bdd3381b8591db3ff5a1e04d2421e1cc83eb9abafe6e65065d435b5d0071610240609fad8872e78e2c56383a32305c56ede8320482eac6fc4bffbd61d176f6f95245cbf1eb3dbb9c148ce6987519c2533db7b494a4bb4355444c3beda32df8bfb062fdd5879f9d63abfdf22ac60d3b777db5e5d97f3acb9c98be371637548f8453060d7c62c00ccd04acfa432a97c612a55184f64c7a773bdc3c9def1ccc0547a26cf05b2a03d932f13980579b389e5dfc00c960ee9170f4f6d6b1ef9d8e5cd9614cca2b8983bb9919b8858af6fadbbe1caf56f1f1a1b1c538a2d901642d7f872dff9a39beeb8e96a5b7ad1da7307c770fa611467991091043488abcb031fbba461437da8beb22c1ab601b7f6c2ea8d045eb6675109317b0b0b31af7a2111842562e5e172ad1bab496b9d779c78223b9ec80dc5b35dc33307bae3bd13d9ac220da199dc698e3b635876ff0a6f3d3a9da38777f46e69ad585f570ea101b9e0b6bd5db12df9c98f5df4f8ab9dc313e35a03ac09935ffcfc959fbbf34301cbe6d56d5e6e581ac672bc5cb8b8bc02099f6dd7c5caca02b6f08a148bb53bb4ef8d947b1f97945b2cc39622120ad4c5422d35e18df5e16d2dd18d75656592b3e96cd6d10c410ad0e0d2c4ee6ab7e0613ca390cf5eb2a9da92453ff88207cb9dba9547233d7d83873b86b2792164fad60f37ffc5b73fd3585f499e1dda5cc9a73b4671960bcdd514c7acfbdc2bf382d53fb4f42e7139d98b30ebcc21b73e2881480a0afbadea0affbadae09686685b43d4263d9dc8e41d285992199b1753e48acbd878a6a5d2d7525f4e9c073e30209b009282cbcbfcafed3a303a9e387fb3fdb77ff63b176d5b27a52062b0380d63200defc2284e09f0b465aec21cc32bb575baa4562e4cb10ca7ab3c82bcdc82607d65784b73795b73c4123a3e9dcde7a1b41b612d5814dfb2e8aa37c50f72bd4902443945a3e3f16b2fa80f582c848539c539e97163706579e8f0d1ee89f1a17ff7a777dcf4a18bfd3e8b840080124721185604a338cba768b23de16bf657a73bc5027e73b6672fd80790168583be8658f0fca66863cc3f3a91989951206fb6230022685ac24cceb3cb68c133190a8afcf60d3524e4bcdcf7054cc890c4052777f1052db77ef4ca8af2b26272ec1970a80d00486b6d14c7f0fe306bd771cd9cc917fa4693bf7ce9d8eece9934249360af2314e3035cdb27d9b6db9c8f747398ffee4b9735d79509e083d756ac99f54c3acbac22a19090f652f7cdb03618c5319c0c76abdcb8ada4981d475322997de59da19fbfd83dc5b626d26efb2d667dea9790ab5604b6a13e7371e5d7eed86e4b096031c52518ec8ece5cba671c66e96b3839aee6784612cb124e5519dd724df39fdd754193adec8223352d3934508001099003ebe5c39307bb2698d99d317d50f433bbf631a336672246710c278366eb3113b995bf24a43fe80f5cb1adf2df7ff9a2b64a6da7d3c26b85a7bda4792ed69eff20182028f79bc982f5e0cbc732f9821b66c0bc70e4a4eb093475b6ce488ce2183e90595f9cdb80856c29373586fffa2bd75edce023c76168b0945ab05b01ebd4e3040b8c83a3ea95fd036eaa0658af74929761ad308a63582434afd9932461d7c6ecffed0f2ebb7e8baf4c6b160ec8b532aba535d54a64f1dc5b23a96c9ea141d2cc5fce568ce218160f171b6681484a465d547ee7ee2b6ebfa0bcdc21ef57fcae8a598b45837b26d4ae43c350307273166314c7704a785ac0ac59da420623a1c05d9fdcf6c94b634162c55a108ba5c985a46456bfb67f28e7686255c2111b4e2b8ce21816cf6ca01d91b066bba4574742bff3918d1fda120d10336bbda48c794d9c27ea995007bb278dde9cc518c5312c1702aaa2814f5fb7615bbd2559795d184e75235a6aa2b1947a79df503aeb947c9086d304a33886654390b6b5b131fa3b1f6a6d8e8925198e01624d9cd67c60247db877925903ded70739cb0d671246710ccb8788c967898bd6557ffcc28688edae8a4e6da623980166121333eaad23a3d95c81d938c8cf428ce218968fdb2c8ba32179d579d517b5862d68afdaf0a96c82419a289d51c7fb13135349d68ad904179f6d18c5312c1f37e84f90f035d644afdf5e5b1b8680433885590a13044bc13a64a3be3ce4b3ada2d018bd39ab308a632805e4264351c0272f6cadb87a4345804fad062803046d0b3eaf21f0f1eb5aabaa2244c2ad30645657671346710c25c12d93c344545311bc7e5bcde6ba10b1a645ab05110bd22d15bedbae683a6f7da5201433a7ce8caa6686456214c75012dc1c084120dbb2b6acafbaf6fc9a0abbb82c72d33bf95d75b3d82b58c10020986301baedb2baabb7374841047142a530c3d982511c43692122190e062ed958b5ad2124b5e3d58126b7f7ccdc94870037ef9c09827548e2a35b2b3f7a4963d0b68968de2b8dde9c5518c531941e22b4d4955dbe3956199673ca7162588d57d6822569f2031736fbeebcb6b922e483dba9c6d86ece528ce21856020ef8e4851bab37379449adbc6e7bef5e1d1183046ba1755bb9fcdd0fb735564798884999489cb318a3388652c30426626aac896c6b8e446c40c3fdc9bb9648c44cd0d556e1f337aedfd61a9b33121be3cdd98b511c43a929b68308faacf35b2a9a63412826661053b1ae28313184840e3ab9cf5cd772e5d64a4b0a41521011a4a95e7c166314c7b0321011a8adb1626b4b59c00648339889890531313169c7d67cdb6575b75cddeaf7d92c64b1a6ba690573366314c7b0828483d685add1c60a9b89dd9aa40cd2240096cc576e087ef686cdd14800c25edd1eed8635c39c66c30a2288ce5f5fb5b921689316ccae8b9ca0a4a33794e3f76e6aab8d0ae186eb186bf1b981511cc3ca521ef16f6a0a57852ca1b402312073542d72f77c72f386c6726109cdcaed7dbed62335ac0646710c2b8b249cd7505117f60310602615b0b29fbfa1edf24dd57ecb06fc0060f4e69cc1288e61452190585f1fab0b0b414a307c8e73e3c5d51fbea22110b0098208826c22b9d6e334ac1246710c2b889b16150cca6deb2a6ac2b60d7d51b5fd85ebdaaa436101e906ea14d3358d1de79cc0288e612561160c01b1a129521991cd11e74b776eabaf8db025a0d53c2fb859549d2b586b3d00c3d90d3101cc8d95e18de5fac2cb5b373544a45002f49e36784674ce09486b6d423c0d2b053393628672b87f64a22a1609077c420863b83967318a635841180034319835c00c2672e5864ca1ad7313b3aa32ac2cc4026008019038b13e8ee11cc4288e61052166f6a4858a59e12e0c3609e2e72246710c2bc9022b76a336e724c63b6e3018560fa338068361f5308a633018560fa338068361f5308a633018560fa338068361f5308a633018560fa338068361f5308a633018560fa338068361f5308a633018560fa338e708cbafe9c9eff966950760381b30999ccb87999941440c14ff60767f21c4e9a0e9ccd0c492c18adddac32006dccebc20a2c50c920168cc360fa7f7fc964ef23d03c4500402e489ef60eda59033ad5d2bceb9e1baaa38370a7de22399dd0a63ee419bff3a2e36db2a26ae6af7e413c33dbe2b3afe338b1228ce7b0ef7b985bbf34a6bad1d68efea6566669652fa7cbeb51d1e0080c05213ef3dd4fec6ae9d5a83bcbb852ba2d14fddfac96838b4988db85d35f1fef274b2faa1de9d4910cc2756a720775b54bc8dd7eae261f2348716563c4f3bdfef3544a4b5cee572f31e304a6b86b0033e7982ce9ef3946c8eb304b961e6b340a4dc07fee8f8f8bdfffd9ff6eed939bb7a60e6bbeebaeb9e7bee391d4487a104c4ce5def3c78ffafb4ce172b63714b63d32d377e188b501c0d009ae0ea06e3fd1ef2ef7736bd260dccee6be6ce3883e116d0816688352c96c38c471e7978f7ee3d4aabd9d3b76e5deb97bffca5b2b2e8eccb08deaebc7792e7eefef7bef7bdb7df7e5b6bed1e2dcd74fec557fffd7ffe0fabb41b670825509c9191915ffef297a7fa2e22baf9e69b376fde6c5967f6ca8e41003be06cbe90c96431af9bade3386b38b0132080b5d2a0428eb4a321bc35825aac79259e48fdf6f147a746c7980479abab39a494dbb79f7fe38d37bedfca8898754f77dfabafbe363939315fa64020160c271889fdfe17bf18f2af8934d3f8f8f8af7ffdd0c0403fb3bb0a42ac2af695af7c39149a2fc4eeb415d95c6e7c62aa2c1caa8c55cc6d828888f2f97c369b554ab9cb3112d64c4e9db8c634944271a6a6a61e7df451a59ce2736ff6107b57f3bc87c2fceb9bb66cd9d2d6d6b6fc019c0678cf78068140eceeb106ebb51e9807b104b426d6440c62d25e9f6f5aace2a43299a79f7db1bfab9319f43eeda54467d7f1abaebe261408bc67e24a8078edf59d0ffcfac1e9f8e489771f110b265551d378f7e73eb7ea8ac30094e6df3ef9d4e8f83833133333955794ff9f7ffdd7e76dddea19bbb47654219dce1deb3cfada1b6fecd9f3665e896f7cedab1ffbc8f527cc72dc17030c4120406b565ab0519c77519af98510522905c0bbd3bc3f0593d7dc1e806b453b91b3e44cb06b29015924181a040da949a8d3c26c0cb82b1676cb0c13a0a968ffe5459f02060403f3cee1ac58b93f1a1d9f3cdcd17ee9851712c4bc1512313895491eeb6e4f26a7df253700336977e36b321960d6631313cfbff4623e9f75c092281c0a7ffdeb5fbff0820b040980187a7864e4570ffeea8dd7778e8d8c384a835059d7aaf509aaeafa0904092124d8610862a1a49fe03b2b2c07a5a4348a33cfd9a101021391f74df161f8de67e959d286d17de007fd81a6f51b279379050826b2182a5f5fd7787af8aa5684139f1f6a667aeae0fe03975e78d1fc3bcc3dc79d9dc70707061da5de73ebadcdf3df3520baf3d23d7b76675333a16099924ab07dcfefffde2db77c5c086f92ae350f8f8d3fffc2abd39363c42419cc10fcee47273134e9a6f59bc633e4b022ed5ef67ae3c6a6b3e5a95a324aa03852ca8a8aa8e384bd0b8c90cfab996412ac8b479b996420140a05e6a6cd446cfb249f36eb8e654044541d8b7efb1b5f21620683051301909a21ce912b8ed2e974e7b1e3a94cb62c149ad31c66d6fad0c1c363c363273b106b78809452e56591cfdffd39d6acd9a928affef8276e12dee8090011b1109a24794f47c1044dd074a2581209a26ffdc957c1c4a466a7f500046be3ab9a4f0914a7a6a6fa9bdffc13226fa2ae94ea1b1afee18fee834a5b9a01d20461f9afbaf6fa8f7ef8dab9d93671dba636cb12ee93a4502864b3d94c2ee728b60405fc3ebf3f1008f866373b0b336badb53e41aa2ccb220233b2d96c269349e70ab625c3417f385ca6b5d27a5ed3122229059100d871542e97cb64b385826349e90ff883c1a065c959e7b1dbcf2b97cf6632f974262ba5f0fbed6020e0f7fbc5bc8131133194765833bb8b0d773d2948c21359ad7571e1e98e034208290400ad399fcf6732995ca10090df670503419fcf77f2f9116b8d8253c8e5724a398ea37279c792c2e7b37db6ed0ff82d6991eb925e4998882c9b9d3c3100720af9c1c181befefe6d5b36cfffe8e999446757672231cddeba9a8410ac177ed23000f7aac8e70b8e720a0527ef2829c867db7ebfcfeff3b967fcbdd7c6bbacf54424a504e02895c964b2b91c6bedf3d965e1b0654966befaeaab4182d8717542394ad836332be530b366568e43ace6e29040606847398582fb1142082104989472983518c530002622b66df76d4a6b3dff0200a494ee64cabd00b2d96c3a9b073818f007028180df4f2728370a85423a93c9e6f24a6b9f6d05fcfe80df6f59d6495c84a494ca170a857c5e2995cee599210505fd3ef73ff7b0ac3e25509c8a58ec861b6e9c3dfd5af381f6a3e267bf86939aed1c22a4b56e43db0d377c0460d743caac99b5663d32363a34383a383438d0dbdb35309848e968805a9a6a9b9a5a36b56da8afaf8fc52abd282a6206e50ab9e35d3d434383f026b744822ebde4927038d8dd3f7470dffe635d1dc707262b2bca2fbb60cbadb7dedad171646c7c022082d62cca22914d6d1bcbcac25353937dbdbd5d5d5dc77afb27a692b170a0b1a971cb96cde76dde545559298400546226dd79bca7b7a7b3bb7bb0b3673018b61bebab36b6b66ed9b2a5a9b1b12c5c4610ee7598cee78f76b44f8d4f3031b16b22d1adadeb366edc288460e6c1c1c18e8e8ed98bc3f2d94d4dcdad2d4dc9e4cc40ff60d7f1eeaeeeeee1f171b06ca88db5ad5fbf69d3a6d6d656bfdf4f7442845e329d1c1f9f989c9a1e1b191e1c1e4e2613f14472742c110e051aaacb6b6b6a9ad7b5363535d7d756070221d78752bac50bc15b418040c4a2b271e3584f87244d0c064d8c4fecddbb77db962dc5d73380cee33dfd7d834a69cfb120ec8aaacac4d4a4760acce204d33503600d9dc96427262626262647464686474793c9e4d8e4f4e4743210f0d5555534d6d63637373737353634d4b9fb38bb817c3ebf63c70ea554f1875c5555ddb6655336933972b4eb48fbe181fe817cbed0d45073db273fd1d2b2eee8b1f6b1d149a53caf3f8302e1c875575e96770a078fb44f8e8f13d0d3db5fc8e5c104d24c02e07c36d37ef8904f14dc27d3c68d1b1b1b1b2dcb3a78f0d0e4d4a4e7f082062312abbce2d28b19505af50f0e751d3b0af66208a4946d1bd73734364c2766fafb877aba8ff7f4f577f50c6b14d6b534b5addfb0edbc4dadadeb6cdb06742e9f1b1a1c39dedd7da4e3d8c0f0d84c265b531959d7d4d8b671e3e64d6d559595528ad97805ad7522313531393d313e3e34323a363a924aa7bb06c71da5ca7cbe75cdb50db5f5cdad2d0d8d8dd555957e9f0588d53435954071e83da15304305878b11b5e48dcec8b19c4cccc94c9668eb4773cffe2cb3b76ed9e1c1d65cd000b964cfc06b414764343c375d75f7be38d1fddd8b6de67fb0804e6543afbe8e3cf3cf1dbc748e5ddcfb56debfbfff0f78e56fff26ff7ed7f673fe7334c00db6353931fb9f1c33fbfeffed777ec24306968a24d5bb77fe9cb5f8a04ad679f7df6cdddbbc7c726144333096249140c453ff9f19beebaebd30d8df583c383cfbff4f2238ffe766a6c9c95eb8b20066c9fd5b6a9ed8edb6ffff0f5d795472b988940f1e9c4cfefffc59e37dee079c6a92f7ce10b5ffdea577d3e9fd67ac78e1df7de7befecaf2215b13b3ff3d94f7cf4c6175f7af9c5175eeceeed518e23c06030b16d59e79db7e5f6dbefbcfefa6ba3d1c8ecbbb4d67bf71f78e0c1077bbb8e4f4d4c11abd98983f71728102edbbaedbc1b6fbce19aabaea9aa8ac945c5132f92d993080609d005176cdf3339949e8933041889e4ccb1ce63e96c261c0cb83780d2aaeb68c7e8c8b0b72a21ae6da86d6d6e39f0ce7446e588df3536cd8053281c39d271ff030f1ceb684fc4e34a390c0042784f1802eb60307cdee6ad9ff8c4cd575f73656565e5ec4438954a7def7bdfcbe7f3ee3085c095d75cffa57bbeb467cfeec71e7f627868d06222a69a9aaa2b2ebdbcb965fdc30f3ff2d2cbafe5b3b96260b4a859bfed9a2b2f4d65733fbaefc17776bc2cc1da0d7d2410c0a4c198898f3df8ebfb1ffab577d5ffe99ffee9adb7de6a59d6cf7ffef337df7c532905b729a0145b2eb8e2f24b2f21209bcdbfb173cffff8eff782bd694e2814fcdad7fef0aaabae7eeeb9579f79eeb981817ead1c62ad197b7691607bdbf95bbff8c52f5c75c5154e3eb363cfee279e78f2c0fe83b96c8e400c378889aaaa6a6ebae9639fbaedd6e69666218a8f16d24f3cfdf48b2fbd32d03390cc24a0b586e4e2d26e2731419697575c74c9c537dd7cc325175e108d94afe6ba6fe56261ded72acc6e7c26b34ea566de787de72f7ef9ebee9e1ea50b600d08026b725cd78ad6f9fe8181871e7ae4c8d1ce2ffffe172ebee802dbf28300224d422c9e72b0000020004944415483a41b1bcfcccc7d0303cf3cf3dc817d7bb593172cc112a4ca424100ac995c8f2e9126761ca7e3e8d18e837bdf7cf36dd20c1692b420379e9d33a9c4a38f3d06e23beebcedfefbef7ffe8517153bd04424b4ebef8156f97cc7e1f60732f96020fcd11b3f22dc099bd69ac1eed26e766fe7456333f3bb8ec4f8d8f8a38f3cf49b279fcaa6d30466121a2484164ceaff67efbda3e4bcae3bc17bdffb42557557eaea1cd001dd8dd0c881882448308099122551a224dba2e5a4993d9edd39f6788f353a3b67ceeed833eb997334331edbb265ad4545528c602645221139030d3480ce395555570edff7bdbb7fbcefabae0e004109c4ee40be47a741557df5defb5eb8ef86dfbdd7129d9d972626a684251e7870b7cbe52e34d8d3dd7ff2c809ce89011728a32bd0f1580300a552f193a74e7677774f4f471e7ff491f2501922bf55775891b04488545de6eb58b9fcf8b1a3801600e6f3f9e1a1e18181fe15cb964999772616efe9e98fc566ecc1115bbf7e8399cba37d8ae7378f888661f4f6f59f3c7a4c160e46644892a12292ed6cce645267ce9dbed6736562ea0b4f3df96430189c051616cf3f603c9ddefff19177df7a231a9e561c218d2b9c718600480ce6aa77821080315b5396a61c42949e3ac9d6194751f040d9289df9e84792ec9f5091370121081900538411999a8abef6ea5befbcf35e2c1963f2864660808c80287fe5d2c5effed7f0bff937ff7a7a62e4fbdfff41381291123d3962121244c3536fbef986aee94f3ffd5430e0931237027e74e868d7e54b8c800108640080820019dac1375674267260fffe81beee679ef9d2dd77dfe32d2dbdb948975b409f01c7c139ff147fe8d8f8452e973f7cf8c4f33ffee9c8c830080b010572002c0b8574cd43940f4f850d3307681986b87cf1fc2f5e520281c0d29666e96b47909b40ea2f48046fbffbc1d52b5784610132424012c8585d2880c051ea70c4108811c663d123070f0cf7f7922990a15c0a405b56401016996fbcfd5624163bb86f1f900580080828d8ec050f44303c3874e6cc994d1b37f8fd3ef931498db1684b15efc27982ab61e42f5ebc98884472a9344304044e04c0901823929882e9e9f0cf5f7cb1635547535363e1e74cd77564160a2400a682a2210103134c6945b2adf5f1d8ccded75fab0c95eddebddbedbe9920864fb3b60092e328646cddb6edd8f1134884400c69263c7da5ab6b797bbb7ce3c1c1c1d1912112061027244d53d7ad5ed575a9d359bb395c58b221601c551518824580c0b8c2982a80405864192888501e4c48a5532fbef88b60a0ec89271e974689b9932c88d8c8c858381e0d87a795825e0ec8550db822977d1e20090188d96e38810cc092c29a6dc2b1ad3908e8a03e901cd5756e2b05748eadd512dae114767f96254e9c38198fc5e3f128720492c06bf943c6500089e989911f3eff7c746a62261ce5b273db42280a4b914ea54f9e3cb17efdeac0ba7532080501995282a8209988a8282e8ba1c6c1302dca1b36f0120185181a187aedf5bd814060ebd62d0c6ead027e5dbaf51c8716156e00406e082222e8ede97bebad7746474648c8dd2398e2dab076edd66d9b3da54134b3972e771d397224129e4240d334ba2e771d3c70a0a1b64677b9d0bea866a746083a7feebc252c460880aa4b511495217a3c6e9437a374d60322422c3c158f842dd3628c6b2e0d40e473a6204220bb4dc26c26b77fdf3e222100344dd515259f372c53cac33663b14c63747468746cd4eff3913c708eede0666629974d8f0e0f0acb222445557445332d336f98402441cc08800c060607cf9d3f5f5757a3691a001220e33c505e56bba4aebabcd21bf073cd631230918b4d87bbae758f8d0c5b968980083413091f387870cddab54beaddb77c1ba18c521066c7ca951e4f49361597118eb158eceab59e543a535ae2b12cabbbbb7b786494e45646a8a9a9696e6ce8edbee2844acc232663211445292b0bd5d556975794fb034145755bc8c8ccc5a626bbbb7b46c7474dc390873f93ceeeddbbf7ee5dbb42c1c0bc9997e7331e9e8a464806d82a8aaaab0a2257f41242856cc4e6bc611012289c37363624673a185ab96c66646880848944482810b8ae87caabbd5e1f1122097f5968be8d5fbe30491e57889cb53997ec2f9fcff7f5f55996650168aae6527926675886c190900421021203de79e61c7210888ac27445b588b2b91c935724221020d0d0d0e0d8d8c4bab582d90a1771aed7d636d4d754545494b97d6516aa1e0d3399ccd4d8d8b52b57262727e4cd484003fdfd274f9ce8e8e808f8e74fe06744b79ee32c2ec0d3ecb7a6691d3f7ebcbfbf978403d0205cb962e537bff9dcf2652d802a0873db8ead5e6fc94f7efe336e11002662b1ce0b1746eeded9d2d20af6cd8405698288800412545457ad5cd551575b5de2760389a52dad88241d49726321000912207c7edf8a152bdbda9602c0c54b5d5d972f67336919fe8d400a43204108cbdadbd7ad5debf7f9c6c7c68e1d3b199e0e3b6f4100188bce4c4f4d417bbb8c24b611c7c56f7b7d92867355516b1a9ad6ac5e5d5156164fa6ce9ebf30d8df63e50dd994004206e7ce9d79e0fe7b55554544c6b0bda5e9d9af7fb5adadbda1ae3ae0f72372898b8dce440f1d3efafa6baff7f6f4c8cb9c102f5fbe3c353559575bc3f92d59688459180e232486acaaa27c797bebd933a7e5159c378ca1a1e181a1a195cb9645a3d1bede9e786c46fe060956ae5c190cfaa5d519e447365854b6ca902c5561ad2dcd5f7bf699f6b6b69ada3abfcfc738ca70fcc874f8f889d33f7df185a1c17eb4fd8fd43f30d0d3d35bb669c3bc59b76528b21880c7e3696a6e6a6f6bab08853857b8eeae2c0f61b1a852f48608e8d2d4271eba6feba60d0cc4607fef0ffef11ff259cbd941e0f6faefddfdc0da35ab8100c86a5e52a7aaeabcbe01106ddd8a9c56e7dcc544649916d794969696d5ab5797077c03c3e3473e3e9c4ac40144813131044150ea0d6cddbeb9aeba3a9dc99e3977bef75a379009929112a4539968642697333c6e459aacefdbb9c5ebd9b1b4a5a9a6bac253e22310402884181f9f387060ff4f7ffaf364222e8791cfe5878686c7c726fcbec0edb11f7f36761ce9ab99ff89fc14c391e895ee6bf164a2f02563ece13d0fb42d6d4454100431e6f3fa76dd77ef6b6fbf9588cc70600030363e7ef55a77734b2bc0fcc68988802a2a2bbefccc97b66fdf5a1e2a5315553ad153a9ccc2d1692e6df3964dcf7cf14bcd8d4d8474b1f3f2df7fef1faf7675092848314008d5d555bfffbbcfad5eb5dae5764f4f4d9796fa5f7ce1c52233012592e9997802f057897b46c1906143e3922f7ee9996d776df679bde96cf6d0e1232ffcfc6703fd7d328903003082e1e161cb92b23d30c4352b96ad5bb582332684300c236fa4e3c94c269b77e9eae64d1bfafbfa0606062dd390e728994c4c4e4c1a86798b38ce3c4e8a80e872e95bb7dc75e6d469b4af009a9a9cece9ed5dd1dede3f38d43f38281c5896a228ab56adf2797dc8d8622217111022d3147579dbd2654b9b14ce2c0196696432f9782a9335f26e5ddbb479e3f9ce735313a3b94c0e018984611afd7dbd9b376db8ce81218fdbbd79d3a6c79f78bcadadcde7f521a261990c1902000ac0797e7a01488aa2b6b634b6b60002b955549892871c00100a425015575b4bf3f68daba54f12e913d37d2c7e030910cd8dcdcf7cf18bdbb66c2e29f14c4d4550d0c103fbb3d90cd8fa181180a6bbf6ec79e0e9a73f57555e91cde59a9a0fffd33ffd706a7c64567d478827e2d94cd6e3760102237cf4e17b5c8a06c82cb272d9ac699913d11921c8a5aa5bb76d3d7efad4d993a70b93150e472627a7962f5f3edbdc67499f0dc7716e83391f38ff8e8c8d4f87a3240af84040c62c337fe6cc19c6543b3c022032137179dc89a80d8d9f89258686474cb3104be1b428e57be40f3e78ff430fdcebf5fa1098406088d7c3b3d454d7eed8beb3adb5952103a08e952b5b5a9afb7b7bb286e58c9204e0eeddbb376fda8cc81030142adfba75db9b6fbc994a250bed24b2663ceda03f3ea5404a48a525de4d9befba67e70eafa784807c25255b366f3e75f2d4f0e090254c7054ea5432094592a3ca956822dedf7bad7f60646a722a998c2753b94c2eaf698aafd43dd03f80602108fbd704c964d29a0b03b945646bb5aaaaad5ab5caebf527920969a7989989f6f7f527d3e9de8181e1d1515bea23aaadab6d6e6ed275b7b4c02db018d80632e9228f27120303037d0343931353a96422994ee60cc3a56b25ae92d18141b02c44022269364fc4e338d7665cdce8928686c71e7b74c3fa0d8cd96e60cd0e1e265810928ab6ae25435d09c1b61f3b464874e05648ce7f23cecec67568f1af74ddb575cb96cd1b37fabc5e22a8aa086ddbb1edd4a913d96ccaf90902b2f2aaaaa79f7eb2b6ba82215394928e8e95aded6d53e3230ef0470009d3c80961c9e12390aa28e31313d77afa8647c722e1c96c261789c50581ae2a1e5d8d4563c5c3c86432e974ea06e3bcb5749be2b68b5f6562722a9148147f2b8478e3f5bd0a57988cf921460886994f44639c71298de673b99999999c915fec68632018d8be7d6749891765de035aa89f179ec5fafafab6d656792713314dd342a1a0a669d97caea03410e2ae7bef43945e43e49c0702fe92d292628e43822c2721ceafb058c1b260c78a95a51e0fa12d20077cbe50a85255756198b68d928a0e1209d312e7ce9efde0a37d03fddd1313e1782266e473400a39b87a8612833fab2c2c7a0e6f2131c62b2a2bda97b59e3e7d4a62ad72b9ecd0d060e7e5cbbdbdbdc9b82dbd13d0ea356bcacb43b390ce45cc940420b2b96c67e7e58f3e3ad0dfdf373e31914824cd7c0e4000314024108c8120691f91c67614c202585c9f5755adb575e98a152bd81cc09b64128ebe533c029cd568a52e04d2e25124a5db8c71161332bf914569e11365a1505bebd280cf6fbb4380bc8120531428a86240c058dbb2f69aaa6adb4982a4ebbad71fb05d7d645bcb4914de85e2f1e4c7878f1e3f7e746070281c8e245271610a0e6021031200340f7e5370b7dd1ebabd9922080020954c19f97cb14f8784e8e9e90500dbe523fd470020dddf4848202c61e4f256de4036073b20194b436d6d795988735b9d5e8c07389b06b9cf1f08f8fdf6938808a82a0ae388609be30849d33db535b5c54ba3285ce1bc58984100273692e6767433849e92928a8a0ab22d5208008c33a6e9c0141bda48ce6b489180c44707f6ffe2c55ff475f798a6216c64001340888c801111914002c21b5fb9b79010113dee928e55ab4e9d3e65bb05014647460e1cdc3fd83f484e2c95ee722d5fb1c2e7f3173cbb60bfdcecb147c04c2e7bf2d4c99fffec856bd77a8dbc73bb100063021440866499965970abcc19ca82c11192eef15455d59694942efc1601c9f197155a93061869e27136ccecdde5f8471d66b418cf2a1ecfec6501d2743e872a42a1b24000193a5c8d114a8ff6ec838c437beb528edce17e05abd0622d924824e3afbcbef783f73e1c1b1b14160090401424004800076080d2cfb170fe6e13dd263b0ed97f10887ca56eb7aecf3ba8e44ca1dc4be46c416953214001600a4b9085766e97424f8400a1b2324dfbc47791279823d3912b0e3862ee13b6891381e9f39432bc9e51fc5725640a5335a751dbb82d6881efc476b48ac191b1ffe7c73f1deaef512cdb1aae2a5a754dfdd2f636af2f6811208ade6b57ae5eba4496799b180e0000b85cee8e8e551e4f49269d967a47787aeaf8b163462e5f600c0d0d0d0df5f5da3c0beb5c120463e393bf78e995cb97af909010235414a5aeb6a665696b892f48a870103d573a7bbabbf3f9dc270e0c8198a27097fb3ad16d8bdb7d9c7f68c1f6b0cd1c36b8ebba2d5cb7cd79e472e95a71828ec51ba332bfafb0f3d011b5ae3374b1ffc0e177de7b6f7c7814d1c6a268aad2debe6c694b8be02e016819d96b972ef4f6f6dec60d32876eab5625615c7e7f5073b9886603fe19638f3cf574281442c6a46a3a8f7b132043685952e7727b72f945d25c699a7a9396760214c8c0b6732efa80b40da9746b19cc825e6ca3e52c77bede1e9628533c74e4684f5f9f0e36b858d3b4bb36dff5ec97bf1c2c2b53548d004cc37cf59557babb2e8b595fc7ed2045e1f575d56dad4bcf9fbf28c79bcfe5f3e108146400c4e5cb96575654e0f5e35a092897cb5dbad475e9d25521ec69d0346ddbb66d4f3cfe584d7595aab92430e1273fca0ef4f7d9b8e21b912d58588cdd7c528e4f6eb128c2ea131fbef10e42c48269c9f9c8f96de168007076b380e0742677f8f089c9f1090041c0894cced5e7bef13b9b376df1fbbdc4b82088cf847f9c8cf4f6f52ccc1d737be836598e01c01159a8aebeae2c54d6df3b0bc325a2cab2e0a38f3ca46aaa1461c8f91cc0ceed0240aaa2b8743d97378b1a2f16763e71061dd386cd5566858bb943275bb2facce504db875a18c2e21797ed95e567cf9e46b264ae6f41e4f3fb76eddad5d1b1126dd3a5e81f18999a9eb2ec20c9dba658010078bddeb5ebd69e3f7f418e554a6b00b64142d3f465cb960503811b687b0890cbe6babb7b0c23cf649013417930b879e3a6756bd629aabd6ce3935323a393e98c018408e206b7020100312494c68b4f3b1b8b3d2d2536c1c1e4f8a98cf1bffa427c2a3fe8f45438323d250c0311051003565951fef09e4702013f2172204b502c3a75e5da801d87f1ff05dd0e6833cd5ee288c0aa2a2b1a1a1b5597c7d9058c88de7befdd91e1a1528fdbeb717b3d25fe52fb7fbe92120e189e9a3272598fdbf56ba49bc1823881e008388b18cc50065bdccc3ad3afb76864372021ab85fee6b34e24426088148b4ea393090a915982f2669e48901024209dce1c397efcf4d973c22ad6cc08e016e603b175ce856fed7697b4af58c1346dbef048404875f5750d0d0d9aa6cf9bd6797ab5659989440267b35da16158866120021103826c2ef3d1befd7dfdbd4426d826152224b27d5c34b77194660b660745dd906601d0cc190e009020b280a1aa93b4cb130061323e13894ce7f23939f56473b4b9edcdb5e3485de8a677cb4d4a51f329994c99660e10019884111a96810c1189010aa2683cfee6dbef8e8f8e14b72ed16485cbff57e8f753d16dce318c00a028caae7b765db870f16ad76599988e10074786ffe22fffe2ee1d3b3a3a56372e69d434cd10e6d0f068d7d5ab5d9d9d2ae75ffbdab3e5e5e5bf5eef457ab86df85b64696d8bd24dc89c54f09cc2afc27be648563792fbe537585d51d9c5bb05100740a2786ce6f5bd7b19b2d6a52df1446aff818f0f1dfe389198b173f4cc11036f15d399b5f7ce23ce79754575cbd2a5dd97bbe61ad751085ab172456d4d0db21be70a42ce79696929003a187e119d097ff8d187aa5b6f6f5d9a88270e1d3a7ce4f0c7f1c8b4133180d26ce4709bf9cd63c17e78231167d195b331b90842776981f2f2583ccc89240fcba4536fbcf3b6a2aaab5774cc6452e565c1bacaaa4f4cd77d531be4d73bef9e128faaaa08525947249a8ec4fed377bffbc4238fd4d7548f8e0dbff9f62f4f1c3fb1a01bb253e7ddcca6ffb5e97621000124ff94477ce5b2b6271e7de487e1c8f4d41449008eb0c6c6c75fdfbbf79df7de57b8c2012cc49c69e5f386c8e75b97369ba6b59832f5d9d0758d3c37f8c92de876e1452d3f261004b469e3a65fee3fa87245265a24c3eab9d2f3dffefaefb88a2844269dcde5b2c839e70a5ac58a27bb3583b347b8785b08100c04d6ae5e7dedd2a5b9063574bbdd6dad6d65c1a0938ef6ba6a95dbedeee858b977ef5e29382090b0cc2b972ff5f7f5ea8a62904866f39691678016724eb26402220894394b7fddb75c7c53f94adcf5f575fd3dd70ad710020e74f7fecddffe9daee9a6a0c79e78e2ab5ff87c30e05fa4399cfdcf9ba25fef15aaaa2aaa2babfb7abb0dc320e00484963879e8e899d36799c6d134d2e99c91c9aa9a4266b1b84936ecfbb6608e3f1bad6ac18583c57f113555ddf3e0035ffeca3365e52100662271402ed0c8e653b1c44c34128e866722d39978ccca644898f2570bdafb15c9b9216f3cfe9ba15f9ff1dda466864074cf3d772f6f6b4579d1020080b0f2d94424158e2467664c235b1e2adfbaeddec6e6d6e2e1e573a6f884f4579f82ae37efc498d757ba7cc532eed2e65e9454df505f5757a7a8eaf5d84d414bd3356dc58ae51b36acb7f375110270cb10e944323c33939889532e5fe2f23ef4c89315350d02b940001002216f9804d70795dcac8e526c4b2b34c6cacbcbb76edaa4ebee591589809922974ac6a291546c66269630ae53b403e7fdfb1993dbaddfffe0ee507939304664215808649846361e4b4fcfa46612a699ada8ab7dec739f578a2a1a99820c4b7cc677f82cdda610759aff0f69baf6b9c71ff9b33ffd93d655ab253a4b0643da395040d6157370070b5aba35e3b955f46b5a741c5ab42e25d92161e8f77bbff36fbfbda4a111883bbd3200068844dceb2b7becf1c71f7c68b7ee763bcb2a007062722a9f376ec1e03e61e4a0294a6d7575c39225f3a6a2bdadadb6b6d679ea13a8a6aaea9bdff8c69a556b50ae3e0842cb0e44402c292df9c2334fefd8b9cded76211123446204eab58151613fff6bd35c500702e9ba7bcba6f58f3efaa0aaa9c55f3092a10d8cc4ad94226f9a16e91101b76dddfcf5af7fcde70d328e00dc062523582810796545f5ef3ff7cdcd1b3760913d349e4c456309213d7b9fbd39f933881d17a4aa4a7d6d4326e363000044c874bdd4e7f33bee1f3ba85e535d776ddab46eddba53274efcf2c38f4e9fbb303313e308c2c8319581a296badcd535d5ebd7aedbba65ebca95cb01000818c3327fb0a2ae41582600488496db1784f946659288d4d26079b07649c131858ae62d0b2080258434b00920bdb434505dcf3d4186422012306f4968be9780717f797586147b1501dc253e5fa987c844445de565a18a50ed12193547800c84bbd407081210aa79bc65b54b8adb0b5554bb5d6e2299814546d50b6fa0b4b2a121950ca0b0ebcd864265088c0431a6353635ffd57ff9cb975e7a73ffa17de1e971334b8c33dded5ab162f9534f3db679e386eedea150a8a2ac76098265a399144508222024aca9f007eaeac890352610887ce5157073d927755d0bd556a7b20602ca74501cc9e37580940004acacbc72d3e66d899459d8b89aaab5af5c1d2c0b826d552102e6f1f9833575ee6c5e82e90450657595ce39202a8aba7cc58a6f7fe7cfdf78e7dd83070e8e8c8c98669e004b3c252b57b47ffea927d7ad5b333c1e29afa8ce6632c296a5155555814c40859085aaebf396b043bc0043656501bf8fe617632469eb2af19795d534e6ccbcdc1b8050535d6991a11097ce1c44c600aa2aab7fffb9dfeb58b9fad5bdaf0df40d1ad93c09139188a9baa2b8d000322d61798365a1da25a645d289c650ad29af9205061847bfcf17acad9bf55f00f883e58ac2882c002663324b5daef2aa3ab23d738c00340555b77b76dc00aaca43e5e5a1da26bb2607121295facb647c9faaea8f3cfce89225cd6fbdfdcef11327a2f1049a19e46aa9d7bbbe63dd377ee7eb0d0d35672f5eaea86dc8e573721888c0b80a2400197d1ad7d8af462884b8b5fa1b09325108e058a86b4dc0883808c670a15465cbfc244c8281a1212b9fb78c9ca2e97a49695528e4d234874fd988568bc892284d89c44590e66706c08a7553b22da616a18022d820c2d0f0e889739de94c0a1d47b9c7a36fdfb2a932544e8c01010362049c1908b3c2a7209239b76c231b002030224e02800944318b83b50f171229cc7659085956a69066539e5199841ded5f20814560cac06ac76f2e2ca172c66c351b851004c2b2c4f474381e8b21636565a1b2b2324481000298254dc7f61fe4409c08194741268249c00125565ada25f8dc79bbeeb29230094c442e11e1c4108063c14a4432c9a2652372c9714421826048cc7e906c30a763cde600600986c88b92ccc828dc6c3e1f894452a904222f2b2b0bf87d9c310461015ac811ede87104e0408c84b4f65ae0442a40e15bc16cadbc586522021285bd018e770a41a13c23c5f6584ae4815d599e2c61c6e38999e84c3e97638c692e4f5959d0e376cbf45e02b97002e111801171418c090459f11d0bc950e55f468460210200070422b2000516f2782010802086a4ccdea64482048125fdfed22f6597971028fd52240459089437687c62329588967a7d9e126fa82c286f4a0128b302166aad2000030128efbecf96e7dc7a8e0382800907488df65192cad2757438227212cdda4e0a4046b2702402a00027ed99cc204b209db40547a6135737c71a26633c6506a759e81901bcf5e1a1fffedfff2e1719956b0688a150e03bdff9f3b5abd6cb06c8bee0e6188f641d5b66835f64325bb960364c031009d89ced62fbe2ed77947241718360a730149665e64dc3322dcb22cbb20841e19c33ce38d314ceb9ca39978904657a30b0731f08fbf5edf38d8832c8c13eee36ac05099d281c01020965de42b22daf3785f9b043281081401071860e40bc30af0820c8b9366797a6c84538fb74919dd7e6fa733707d9736c476c14e54396bc5c207170de5a1e57706e150440db892fa78b88a0b87db976763811ce81253ab38784b280159b3328f98276eb853486058f882444b0a0506306015190332f38bb370010652d1399e71f48109023683847c1865ecf194601a606b335e064e4bd1d2b08365c0005ca621208c8012c24593b9eec5b8600248b941708e17c7be96740b75eab1276e6433b9892106406801b7487884e6e46f997d97f404a0a85e40692af3304e1342e503eba609ee4d2928dc8002a92ad1801472150c698081088021929c89cdc6a480806c01c48be73475a8eb22be535426005bee2e41c955b9600808170d2f3ca7d54b475c8ca1bb9542a393535dddddd7db5a76f6c6c647232321ec9589651132a0904caaaab2a96b7373737b75654569595855cba06cc16d8108980a3cca55274a2501e579439c60091d9a926019048b23c270cb128f8f9139715442e97cd65d3e199a4a6e975b5558885eba4e0f8b0aff0025b9de5bf4527527205215371da5f17eedad9e52399ced181403a97811da72b909ce346088c39e5ff24a31280b3c2971d1a35db3e3a7f989d39a9a85f79529190f802530902705bb4c24542ab242770ca0f0a4044b008142af469cf8ccd7bb1c06be4574e8d1a8959b43730daac74ee40a4d06c67d5423b618a335cb4f1640416122272674a3848602008707a92dd2115429fe7acc26741b79ee3308082f4e1bc12de18700220b7556112a4f04d32ff63b1a7dad63f240f4260722d68a181d96ec3e11373d20fdb2a0c08db5fcf04a0250f857ddd1302f2f9a863fb987274ee54473a70ee327bb33a2fe44831888c642dfe2c0000200049444154c8d9640288110a322d311d0d5fbadc79e8e0c1b367cfc7a25121081d5d83010c2568187a2f12fbe05d521435505ef1877ff42f77dfbd653606cf96b7e6267a022824a02b1a37da1a28b3f1dcb3d7f1276c2f1202b29974329d8a46229d57ae9cbd78fee2f94b3b77dcf7c7ffe2f73847a7bfc2ea3a9c850a5d170e24d9ecc21eb13c211caec3f09c27178c515e3992efd84b50f8cad674d1e13d85659b2b8300380a9f2da4cc9941a9ae11125b303dd21c347bb28bfece4e262722293611003247deb44d9a735e7216825d7cfce5c6b67bc4790b663f8358605b44c5e374389a7c8edb738e859d6567c39c7b56501ac1e75c0b9f197d16789c796b22ff7cc2abcc73d3a023df2df6332c6eb7f067c1b373f066b399b701c08e8d4489922260b65facf01304a95acfeb76b1f68abe98cb1c8b1f9a7d9a11116573b96bddddefbcf7febe7d0793b128576cdb837d9b130700697d2426908465e0f8f8e84c220560cda6dd5fd076f1e7459fd9f7a933362c5a9c4f581422ca9be6fe43070e1e3c74a9f3f24c3c4ec214a8e4ac79b1408b4cc6822e8af6f34d08558b2f69d1da2f986c98d7d7759b5830820533c81016f5e27e928d63deebcdee2236f7891b6dac85e77e61a758fccc0218f74226085018032e78a478e0701be836638e7fd38900f2b9dcc9b3677efca31f775dba0c808c31b0a571009019144848f6671b7f910854a0e5cdd5748350c8cf86d2d9ec87078f9c387a142da9a3dd6404c83fd33fd3e2f4cf1ce7b692611897ae5cf9e1f3cf5fb97499177c3a208d7edce3f3560483a55e3f3005c832b2995422119d8964b3194497ee29b135c1db75e4d14648a16dfc911a3382c0db8287ff67ba13e94ee5384484995c261e4f64d239a6f0a0afd4e3f128cacd604f8af4660202ca64b3e9743a9e4c09428f4bf39596ba3d6ec68ad5939b1c93980e475e7ee5b5eeaeab4e0529dbdbe5f59434b7b7ad5eb36ed58a15b5b5358c2b2428954c8c8c0c5db972a5a7e7dad0f098a7d4076401aa76638024442e9fcf65b3b97c3e9dc95b823c2eb5b4c4ed717bb8aadc44a40639b60422825c2e1f8dc5d2999c4b57837eafcbed96167b4684761d4e0060209d7f8e214008c11873264d1a3ac830cd4c266398463a93cfe60db7a67adcbac7e3d1e754b65d74daed72b7f1443c99ca32cefcde528fc7ad288a631999678e29b280cc9f6dcae7f389643299ce5a96e5d2546f69a9c7e3e60affa48593d352b0219165894c269348a553999c4b53827eafdbed2e0a2a9e6f21420242c8e5f3d94cc630f2c974ce12e4d6156f89c7e572ab9afa6977ce9d44770ec7a102a082c44c3c76b9eb5a4f7ff7c4d8c44c34a168fa92daca9a9aea9696a6fa86c6223f2b2eb8aba58113e409ec1fe81f1a1e9a1c9f0a87c313e1a84958e675d55655d5d4d5343735d6d7d5ebba06f08989b56d320ce3ccd973c78e1c211245dd622010dcbe7dcb238f3edcdad6a66bbab423100142cdf2656df7dc7df7c0e0c0b9b3672b4365d2b06899c6e4d4e4d8f854787a2a3c1d89c763c9542a124f9ba608f83c95a140654579755d5d6363635930a070451a0fa527e5d4a953939393b27701e076bb3b56adf6794bfbfafb3b2f76f60f0c856712be52575363833f10402152d9dcd4c40480d4f648200259c303036fbff396ccdba269dabdf7decb38922562c9f8d8f86478726a727a3a1209e7b299482c9d4865fda57a99cf57162aaba9ad6d6a6caca9a9525575be579e8425209198b972a57b787878786c742232a3286a4375656d6ded8a65edf5b5354470f1e2c5c9a9e9d9b9e3fceebb777a5c9acc0f2bdf319fcf8f8d8ff50f0c4c4e4e8e4f4c4e4512f9bce12b715757846aeaea5a9a9b96d4d7b9dd6ec0d98523a20f3ef8c0a9594e44cc53ead97cd76685f3f1b1d16bdddd4343a313d3e1482c59ea7135d6552f6968686f6fadaca85415058adc044430150e4f4e4e8c8f4f46a29158249ace25a72229c3a28057af2c2b0b959557d7d62c59b2a4aabc5c515598c3aa7f2318d09dc3719090501060dfc0c0fbeffdf2d0c787864686991040200038c3d2d2d265cb96efdab52b9937f975eda6921d59c3a3e31f1f3e76ecc4d1ae2b5db944da1216b3bd5726638adfef5bb572c58e9d3b366cd8505e5efec936450000c864b21ffdf297463e3f9b3b125073e99beedaf4cc33cf34343420620152e720375055d5a52d4b97b62c95972a9148a6923ffcf14fbbbb7bc6474732c9b42021880a580f06a0bbd49abafaf5ebd73db0fbfed6a52daaa6ca1112d1cb2fbf7cfcf871391e0bb0b2a2ea0fbef5bf702ef6befe7ae7d933b9bc61278e7379015164d304c222611776925804a40b678f769d3f221bacacacbce79ebb39e7c94cfad0b1631f7cf0e1e8e060783a62099311013161831d101886ca2b3b3a566edfb665fbb6ad9e120f2b2a3e6b5ae6c0c0f0be7d1f1e3cf8f1d0f08865992610222ac04bbcbe0debd7ee79e0bec6a6c6975f79f9d8b113855fa91edf9af51b3c2e9734859110e168f8c48993c74e9eb870e1522c1225cb2260026c837c89d7bb7c59fbf6ad5bb76edd525955c5b9bd0d84107ffdd77f9d4c26118848414655f58d4d4b5b478707de7beffdf3e7ce47235189352240c659457968f3a68d0f3ef8d0f265cbdc2e1d1cfc413e6ffeece73fbfd673b5af7b209b4e9210d247414e389caaba2a6a6ad6ac5d73ffae9d1d2b3b7497fb3782cd14d19dc37124266b6474ecf99ffdfce30ff759468e1501a98410f178e2e4c9136363a315d5b5c2c820890506111b51d1dbd7f7b3175ede7fe8602699612808083800d920202168263a73f8f091dededec9c9a93d7b1eaaaaaafee4e1114d4d4d5feaba4c021cfb2f21b1c6258dbb77df57dfd0e0d4ea5d6407ce0122026532990f3e3c60645276553f04602491620c0401e4b2b9deee9ee1a1a189f18967bef4a5e5cb97c9027b006059b2281b20a000cc19c6d5debeb3a78e5ee9bc88c214c8910019b7809169916581e43284008c98c90811908169590c51480d4896f9cae672972e5f3b7de21497711e0896cd3e6da82308313539b66f72e2cad5ae7426f3c0830f943ac54285101313133ff9c9cf0e1f3e94cde680009114e90127118f450f1d3a383e36f2e8638f255259d3c99d0c006099a268c6a6a6a75e7af9e57dfb0f4e4c4d4904291209b41c7c8048c4674e9e3cdedfd7373e31feb9cf3d555555cd182f9e19042108199939237fb9abeb8d575ebad479b9e014b7711e96353d31f9defbef4f47669efb9ddf6e6b6de15c9116b9bc61bcfffe47a9c434091b172f2318c8d65c299fcf0c0ff64d8c8f8c0e0f7ee1e92f6edcb8dee39a0d62f84da03b87e32051cec8bdfaeaab87f71f30cd1ca074300300f22268e6e8e8f0c4e43809072a3c4f09279a9e0efff4672f7ef4e13e53e414e4484ca0a970bd2c183408ac4c269e49821082707474ecadb7de2e2df5eed9b3a7a4a4e4c6c3334db3afaf3f954c01b3418c00a0b8b4f6e52b562e5f8ed7979216fa6e011953dc0c1232832a72051863444c5832ce5ebabdf246fee8d1a39aa6ff5ef973353535e8907c510040846c3a75e2e8c7bd572f0309422631d8c055525c42640aa06f401bfd2b6c38ac5d1d1b100039200360c898a26812d781009c318b73018c5b2608d346a71011d2d8c8e80b2fbc505f5fbf7edd3ace1811e572b9b7de7ef7c081438691754e2ada8bc6901123d3ba7af51ab07722e1c81cc7b6b3b088984a655e7af5b5d7f6be99cb66992d74a0a6e91e9f9771259b4aa7d269200b08a6a722efbcf3aedfef7becb1c77c732bc31582e6d289e4ded75eefba7405a080d1923d4a18309a79e3cca9d32bdbdbab2b43814010010482608ca9aa83e145648a409581c584490eae86119839e3c2b94e4d738742c1e5edcbe6e71ebda3e9cee1388470e56af7fefdfbcc5cda0eae0094961a7789a7aaba4e58d64c643a361313c264d7c1fa90b03ef8e0c3a3478f0acbe0326411597979f5fd0fdcdfded696274a46a68f9f3a71f6d459d3b400616262e2c0c103ed6d6d1dab56d957da3c3985ec7a014258c3c3830c0a15a31188fc417f735b4b69a9f7536c3822005454ad6ac992a54b5bcb2b2b3c25a5c41446229b4876755dbe7af54a369b9265264cd33876e2d8bdf7dd5b5151a9aac5c62609b6a55c363dd87315c84204415c427905612058112cf5909942614d8c8d64930989f445428b833f100a9655cbb49fe5657ec7fe0d8c615979594b4b73434d9d3f18004517006064868746ce9e39138d44e4814580b19191f7df7b77f5aa954cd585b0fa07fbde7bef5dc3ccdbc0622402e08cf9fc3e5f5905094c44a6138958f7b5ab3437ad825d0a170409387de6f45b6fbe934e67141bc88be5a18abbefbe67f98a654c55a3d3e163c74f5eb8783697cd3080782cfefe7b1f7474aceae8f02aca9c99915111e944ecf2c59890090911c14e7a2f6c89080901cc7cf6c891c33b766c0d06cbe49c222063bcaebeb1b9b5adb22258e2f309d038909949f65cbb7af1d2a54432c590018025f2972f9ebfd479a9a5b1d9e576ddeceaffcf4f770ec701a08ff6ed8bc566101c20260057785b5beb238f3c5253536791181b19deb7ffc0850b17c95a245324004e4e4d1f387820934a03d871599aaa7ce1e9a7f7ec7930581624825c365d5f5f9f8ca5baba2ecb2ebaaf5debecbcd0b2b4d9ed76cf62eb679bb431eb4258c3a3e3ceb724dbf795faaa2b2a3963378f7141246fa9e79bbffd959aea504d75752010d0654108a45c363b3034f2daab7b0f7f7c3097cf4a775232993a77e1e2ba356be757aab5e78c8469205382a1f2f5ebd7b7362f29f1b8f32695042a42413f919949a77ef2a31f5dbb1293657f118400d6b672dd979e7c1c152441baa6324402f0e8ae6d9b3776b435373434949795793ca58c7142212c233c1dddd7d4f4c61b7ba727270b3d1f3f71622696a8285784300e1f3e129e8ecc262d42501475f9ca150f3eb4bbb2b206054e4d8e7db86ffff90b9d96959f9f22006c6bfa2b2fbf9c4cc4b9132f54525abafdee1d5ffeca972a2a2a18422e9b6b59da64fe3877f6cc19b9398686474e9d3edbdcd4e2f3cf4fa60580401601b93c256bd6ae5db36a85eef2745db976fcc4f1c44cb478a9868686a6a6c22d2dad9c2300e92a7bf64b9f6fa8afabaea90ef8fd2e974baa5546de18191e7affc30ff7bef5a691b5ab502493c9ee6bd722d148adbbf62657ff0ea03b87e32492c98b17ce5986614bbe4088581e0afed66f7d7de3c68d9aaa014266554759b02c93ca5cbd7a75d1337eee42e7d8d884104242da093158167cf8e107027e3f0220a2cbe55ebe7cf9c68d1bbaba2ec99fa452e9debebe6834ea71bb1d2e56dc3421120934414c8613ced80064d01328c8159a158e6e86d0ed763fb6e73e4dd71c640e66b2f95822898cb52e6dd979f7d69e9eab43030360dfd7d0dfd797cbe500bc8bb485c018abaa59f2d4e79fdab665636528a46a9a655a84a8280c1066a2b137bc5e0079f183402281a150e5a60d1d0ab7f39bca9772bbb475ab3a3843ae3089e4310c3396ca640dc3170c3cf0d003173b3b23e1b0700a84ceccc4c7c7262aca8342d0b9f39dc5010044585155f3f8238fdd7bef4e4dd381206fe42bab6b32997feaba7c691e425f4a1663e3e39d9d978a3d80151595f7ddbbabaa3224c3d07497deb1726547c7eaab5dd7329904105a96b878e1e2c30f3de4f3fb8a56cb8eb322008fc7b36bd7aecf7dfef3f5b5358aaa6dda385ae276bdf7de7bf9ec6c69e95c2e178d460dc3e05c47109ac21e7b748fc7e391ea1909ca9b662295b684a86b58b273e7ce33172f5cebbaaaa0e4d2303131118bc59cfc41bf1174e7709cf1f1c999688c48900cea03501475c3868debd7add7544d2eb0dbed5abd7ad5baf5eb7a7a7a84989fb78d00baae5c4da733855a4544180a960f0e0e0dc1b0adcd93b02ccbb20aca1110e0f0f0d87438525757378b229f2594b56a91d0edd28afb9251cb1254f7690a47102030ae8c8d8d5cecbc3a30d03f351d4e24d3a96c5e61e875a9996c3a168f919367010132a9945db572615b046e4fc97df7eed8f3c0bd3e9f57ea0f4c6576242039561cb063b88190a1acfb43445cea17408044c898aa2ab164b2a7fbcab5ab7d63a363f1c44c3a93cb99c2e352758f363834509ca68fc84aa5e2083c9b354646468a454e55e16d4b5bb66cdea06b1a201300baea5adbb16ae3dad52383fdc9646ade7410e299b3e77286519843444464f158e2dcf98bcc9963212095caa2c21d0812f6f6f52593c985c903e57d15282f7ff489c75a5b9a902908624943dd86f5ebcf9c39333c3458e8480891cd6665fd0c224442b7db3d159ebe7ca9b3b7676072722a914aa5b2790051a2aba66946c23199bc42b690c964f2375107e74ea23b87e3f40c8c66f24e201b210130ae2e5bd1a1eb2e90bb0110907c01df92a6267769692a1e9ba7581986313236615ae66cf20780c1c1c1ef7ef7bb85d018244108c964ba2049014238128b2792b31eea627276b782bca632e0e4fab58f713e9f4aa7e28b0846d727222b1a8dbefada1b674e9f8c4466928954369bb584250090803146482066a3f510906e9875b42c18dc75f70e9fb7148915f1180910219439b30000a4cb05b1001b44243b1b0c23109974f6e4c9936fbff7cbb191a1582c9149a70cd31442101203469c4800ceb5c290100094cd656766a245d21f783c9ee6a606afdf2f0505995841d7d5c6a646bf3f308fe3c8791b1818b4a3a2ed59a2d1b1e17ff8fef715ced01e2111502c91c8a65276e408403c119f49c4c5825858024485d5d5d7b53635db699980718e159595e5155523834345e1f1b3094a0920954abcf5cedb873e3e3235359d4ea53299ac6599820864722854489062179fb06138b7b302efff1fe8cee138b17446904cf842c41049202aaaab1499e35e01404085a1a27918d719c8f0a5d9f5360c339e4c23591630041381215aa954b2bf2f29c16f52e42ea43db10d9740d95cca30645de305c9c311101881c538afabad2590881b694562d1e8ccf0e0a0250cce8b1782e637223f2522a2f1a9e9bff91f7f7be6ccd954320924ecd85000002486960041a438793f00c0e96b71628cf98381254b1ac90e6998ed1411ecaca60e448880c9c4348c0a1987247fa26422fedefbbf7cf9a5572727a74c330f80b257810c050a42418239d952edf6a5988740822cd3287e5b45513cee126e7b70ec7e0850d7dd7327ca09952691cb66ec7034e79b5c26373438e0889034f72776a60cb260647c7ab5616a854a0cc4000c22a6286a6d4d9dcbe5969005db34ce55545d02b1c803e02c8ea0e9f0cc3f7cfffb274f1c8d46674800113186c256d498490c2c60b6dbfc066b7287d39dc371ea2a023a830c3159c30890313041e49084403e9b430d909160b4482a694dd3423e4f0f476159dc620291015836a60208988d6bb6b73938ffc873eedcfcd791551867edcbdab8a69879c100e40d974c263b3bbb0606065b5a9ac1feb0e0842d26e9ec25cb325f78e117878f1c33b279ceed041f9e124f63534b7d7d33292e429a898c5dbb72311e9961d719c9dc763928255cd31dadee86f62424245936610ec0dfb4ac2bd7fa5e78f1a5c989492099240cb8aa56575537b5b4b9bd0141a060fec2e9d393e363320795d3970040c618e79a65e60b1d1b86914aa56cbcddace10b6662894c2e47f3383a2000784a3c0b3453029029fea8c88deefc46668461943573c552064a910c901307459f0704a6d92432f37b1242bcf6faeb070f1fce26624852af034dd75a5a96d6d6370bd58588b944f8cae58bd35353b0a838fc9b41770ec709f903a0a8022d4e0a230b409896d975b5f7e10708b970d422ca64b2535363e9548c00e6951be60af3057d0a688252c4140b8510dc13aafcdc534f72c64c722a4014ef37040428f5785a5a5a16ab54ed3c854ce1545f5fdfd8b8a4b7bbdfe64e004288cece4bfbf61da8a9a976bb5d60074c2c946e64710f88c562fb3eda671979c6088018e292e6a6dffadad7d7ac59a3aaaa7c97b3e74f3f1f198fcfc46ea64a150198c0092c99c9fc86fc4610326994628ec558523a9df9f8f0d1f1f10959248300dc25a57bf63cfcb9a79ef0794b195788209fcffee7e8f4e4e40458f387a5aa5aa9d73b139df555a5d399a1e19164325d5a526257d444cce673bd7d3d33b1e82c0f72e61f81d5352cb14828b3e12618aaaabe67f7fdbadb0376f1a9e2e8536988020662ddaa359a32ebc54320018c1130000be644e1cdcfd353fc7f044d86c3fb0f1cc82413088c500090c7e3fee37ff5c7ebd7add7745da646e9edbbf68378381c9e265baffa4da43b87e3343535aaba870308244648c04cc3387deaf874e4e98a5005302212443430d077e6f4997cde008285b91f96b5b51f3df0712e9e4522446248dcca3ff1d0eea0cf4b8c1589c35494ee0f005055153b4fd8e2620202a0b7d4f7f0430ffff5d5bf61458fa552c977df7ddfe5723dfae89e40d0bf98b70b00804010516f6f6f7c266ae3f40054555dd6dab663fb565dd70180802c0b4647c6c7c72648dcbcf74bccaa8937fe092103b28874348a1fcce57257ae5c462006b288146b6e69bcf7eeed4beaeba54f86d0eaec1a9989ce08612e104fc8e576d5d554c7a391c217a6655dbbd673ecd889ddf7ed428604600a71f0e323274f9dcd65736cce0c4b49885adb96012a45b500c9a5f035cbdbefba6ba3133852ac58393c882c4d73290ab7ac82655dc8cd43480c6f962910c0c0d0502a1967c214c8010111972f5fb6eb9e9d9ae642c601c8348c783c31343844829c0475bf8962ce6daa1e731bc8edd1562d5fa67217a025336ea210d363a3dffbdbbf9d9a9e94ec667878f8d5575e3d7be62c01380534667715035cbb66adc7ef15c818714e0c9032c9e44f7ff22201736bba5bd7ddbacba3bb3cbacba569baaea4d3f1442caa2a4c617c5101a7586257757ddbb6ed6dcbda2d20e1e47e2612d3d3933f7afec77ff1977f75e0d0e1782225668bda0a41626272e2c89123fff12fff6a6468241c8910c9fc610a001700796158e43040a2aeaeaee3274ea492498685b7fb846d8d804eb2b805161f2202464cb5c1bf840448963532dc6f5816914912da68e613b1998235940159a6650a4b66d42582543afde6bb1ff4f60d2e5047100015856fdcb8410ed3c9580f2323233ff9c98f5edffb7aefe0f0d59efe9ffef4177fff837fea1b1cb42ddb454394ff2c6d6e6c6a6a1404c22919313a3efec1471fc4e3332e5d73e9badbe572e9ba4bd75dbae6d2f4543637383e49047cd1bad2082043476e8e1020198b91652710929ebd4cce40c619121081a09191910fdeff70261293308b9b6cf9cea33b47c621c25df7ee3c72e41066e4f541023193cdeddb7fa8f3f2d5a5adad8cd1a5ae9ea98971400b383af68439dbb76949ddceed3b5f7de55583320000849665befed6defe91fec71f7db8adb5adbeb68e21c6e2894b97ba4e9c3a75faf4a95df7ecf8fa57bfaa2ada82d600e6ee2d06545555fe877ff07bffe13ffc5fd3d31185711be40222934d1f3b76ecf8a993be60a0aeaebebeaad2ad6a03a391a9e9f158782c97cf81657eee734f9695579b821466f3917cde3873a1f3c5575f7de8fedd1e97ebf4f9732fbdf4cae50b9d4c08696a415a145b48200d16e82466b54f319ba7561190e6d24afd7e509865080e0288710e274f9ffec1f3cf7ff58b5fd05c7affe048d05b120c86864746481ad0007a7a7a5e79fd75cde56a6a6818191d79f1a5bd878e1dcee5538be60a6188f7dfbffbe5575e4e2553b64f1f08c0ecefebff6ffff57fa0a29210869547028511032ab6c880032dd714febbcf3df7ed7fffefb8200e404879c3f8f8f0d1f0d4d4237b1e59b7765d755525636c221219e81fb870fec2c1c3479a962dfbd6ef7c7d5e780a212208e14483d37c9e8d05d16cee3283bf2c283897c211120188aeab3d3ffac9cf1fdd73bfd71fbc70f9ea0b2fbe78eac409c7e4fc29f0577718dd391c0781b66dbd6bcdba35274e9c20536e15600c2dcb1c1f1b1d1f1b03fb124655f700e7d9548adb5142458d207cf5d92ff7f6749f3973da14162386c4c832ce9c3e7df2d44985734eb6df839009222012e6d69b1fa4caf9fab5abfff73ffbd3fffc7fff97a9e9884ca68d4082211008cb8c4d4fc7a7c35d32090d9100b480ab241094ce9ed1fbb66f2af17a33e938824002062c3a39f1fdbfffdef7fffe7b429040c690eb9c01e768d9356dd80d7d5573277011f2684a555585dbedcd987167020105fdf89f7ef8c3e77fa80273fbcbffcf7fff6f57af5e79e1c239e74764e48d83070e1e3c70d002b20814810a631a578959735df504408c614d75d5d7bef6b5ef7defef65ad0e0682c80ec3a47c5642c8050997ae932584612d147290b12d776d7ef2d147df7be36d749c774636dfd979f972a78c8db210599e4010c84c198d4b97fe4a159a169b4c12ad8d8de5017f321a0512126565e4b3dfffc7efffe8873f20e032cb0743e45cb12c0b7f8339ce9da35501a0aaa87ff4fb7fd0b4a4bec8c232fb2d1123424dd357ad5abb6acd0699977fbe1d18b8cfeffde3fff55f2e5bbe82982e733c302015c0855c1132f18174789242a038fee19b1e23e38ab676edbaffed4ffef5f2552b555d97701724e0401c90391738121228088a468201998c657286df5bf2c5cf3fad7097f376c40934818a4015b94ea0016cd87c575bc75a605cba500844366f5a0becb5052aecfd454e122222dbb679534d4d0d153580041a430d890322679c29dbb76dada9a9956e2100e064ff4f25a611308655b5355b76dce30f5614379fcde5253c52d7f5471f7ee8feddf7022220235b83b3049a821121684ca9aaacdefdc0230d0d4b17996d4404f4e8ae3f78eeb92d3bb7a247331821239521076024a4dd5890d048e860311248162e0ea0fa445a4c7706f007fc0f3cb85bf3b864964602e0882a57091812316132c69b5a976fdab6139852902a2dcbba85359affa7a03b8ae320b0a6c6c66ffff9b75b97b5baec2c6d85e208a028cceff3edd8bee599679eaea9a9b4af37e480b391bb88c400eb6b6bff8f7ff7edcf3ffd54a8aa52732b8ca90012ede668620488c855d5e52ed574d74d5f932875185d736dd9bce5df7de73b5ff9da57eb97b6b87da58aae01770afe49ef3e10230b41100350158f8bfb55c119fff2979e7af4e1074a3d5ece35000069b960808c692525eb376f7ee2c9271b9b9a812bc4b884108f876399bc41b34360ce4064c8faf50ca4246180ab57ae78e4e1071a1a1b54552d3e6e5c2080600218626b6bdb1ffdd1b76a6beb154d07c6c889fe46005d55eaeaeb9f7df6d90d1b376bba5ed4351f1a1e134e049ccfe7fd17dffad6b35f7db6b2b2d2e571739571c615545555759594b4b4b73df7cde776ddb3d35584db0600ce8b537c90dfeffdb33ffd93dffdc66f372f6928e410bf0600002000494441542929619c17dce70c00050a60085ce19adbe5f1b8dd9c158ab748ae85c5f3b3283bc2d96798fd24a02c4df7f4d34f3ffec4a3814080290a21309030080264baab646547c757bef295652b57594c15d2b6cc58343a9392417cbf31aeab3b48abb2f707b6b42cfdabfff89fded8fbc6a18f0f4f47c2645980c054a5a1b6e6de5d3b77eed8815cefeaee6f6a6e937189485016f06bba4a6449e73403a5b2bcea5f7deb8f9e78e4c1fdfbf69f3e737e3a1ccee6b20c882123e09c739fcf535151bdbcbd7dc7ceedaaa67dc2e08a860900880c11aa2aabbef1b5af3ebae7a13367cf9c3b77aebfb72f1c4d58a681609240c18018d7144557d5dadaaae5ad6dcbdbda094569a9e70ffff0f796b6b51d38b46f686842580601718507fc81cd9b37ee79f0a1b250c5956bd796b42cb52c6157b4619c332421083154555dd7d28ee80444315e5b5d45421063345f5a93565044c69f7aec8925754bde7ef7edabd7aee5b3165806110167804a30185019e9babe65eb166f20f0e69bef5cbdda954ec62d9338e7bacbddd6d6b267cf436bd6ac3a73aeb3aea14177b96c202500575569660500863c140a7ee3b7bf7ef78e1d274e9ebc72b52b1a4d028a9aeaaad5ab3b366ed8585d557de8e3c3a944bcd890535f5d59a22905780b4725e0f53ff3f417eed9be73ff810367ce9c199f98cc65f3425804821847a694bab4aaaadaf6f6b6eddbb707037e221b805cdfdc924c65006c8d4773e91515e5c550052272e96a6d75cd744bdbac6848a2d4ef678c23305d557fffb96fb6342efdf0e0c1c1fe01cbcc83b090a99e92d2f56bd73cf1f823ff6f7b67f61dc775dff9dfefdeda7a6f2c8dad01920041702725aeda658f2ddb71e271ec99e49c99e4615ef24fcc99f937e6216f937896938cb3da9665d9962d59a2c44d942811207680c4d6e87dabf5dedf3c5455a341828a64398805d5e71cb21bddd555b76eddfad65d7ecbc8f0f0ebbfbe76e4f004828b4024415555a6aaf499bac95f70fe157272fe7e20a5576fb597971eb4db0d86d0dfdf9f1f19d675cd4f4764ba9ee389cebc201225745553d45d991b89008424b41ca75cae6e6c6c3ab689485c31b299cc683ea76b06e71c009031fc1cbd45221252d896bd592856cb65db6e4b22e4a0a9c95cae2f93492512319531493c48ef804c1298766b7d63bb5aa9b89e9bc9a40706067b322985714968b9aee3795d362b908a199c0111b44dc7f53363855faa9c25348ec0baf3de3e523c3f3b9727dd4aa5bcb5516eb7aa4288583c69c413438303a9445c55750012243d216bb55a6173b3d1682aaa3634343490ebd35495805c216dc7139d197b224d550d4d63807e65bb9ec378a0e9424ac7130864a82a432649b4dae60ffefa7fffe8473f69b71b9d325e7df6d9fffedffe6b3c16476444becd2610093f188debb9d54ab55028369a0d929ea219d99edefede9e542aa1289da10d229204acb7da229ce943220ea0ab9aa1abddf5e00a61799e27bc8e231c12ea9aa2ab2a0b126c2211399e532e5736d6d66cc749a5d2c323f94c3ac5190290e3799613861423600071435715e59115b803cc81551c2029482243203f876c57af35783ef94b0614c61526c05d09b883ecd4bed90ef9b6828481474e9040bc3318fb5c25a5d0b0d04f2e8b1086a9f463b5483f308d443f8e1705636194447e8ec0ced9519802163ba3a5b090fe29fad1f9025909575c3ad9db25c01ed2d9493a1b980b23eb18168789778921db3d32a060f7c8c08f580a04e81bfeec84160e6c819101a0e33833b3739eebe48787d399b4a6eba12290e33aa572f1ddebd7fefeeffef1e1cac34ea62a89f0177ff1177ff2fdefe99aee3b796160b317ec3b4c16da712be9d841f91d3cece4f00aaba173db07267aac3b8235f9992d7d67972079a71f49be63d815d6d52e33e6e0d220740c27d1af4e40a030ed3c7c5924e7e08caa1e058121ef38232076260a09d0cff7eed39529fc911d743c6a0001197485f9f25f8276fab95b4a502a204209612b0fb5c097074648001288059e942480989f3d32d847f0866128a71d73ea2ed161d8e57015fc32cccb87b44732e54e3d00809fb29642d3c970d3ce6a31e2cead16fea4e3a740d0995786a023d1f1774322b21df38d377ef5d66f7e73e9e90b274e4e0d0d0d82aa1121032a158bb7df7fffd6ad5be56271276d2e4232953a7dfa34e73cd85f97ef45579983570afe2174f26d028469bf1182b15da0fdfe8f1e71130902ae4238280c1cc3762ab2abae82d7f08b8ece4027cd3760a772c2c5cf2f87e41c5cc5f1a35405f9dcb0ebc601df432a34960f239207731b8fae7075edaed36e423b8d6083df4953c1b0cb10ee13c25e4220209d1e1984028a616e5908d6ad113b19ad1f9d89ecbef13a92d33933941464b1fe8473095219774ff474beeae84e70a775eda7935f8ba8238b9d7b11839e08a027687d73ab50dc78f5673f79f5b59f689aca55c37736108ee3384e4749831d20bb72e5eae1438738dfdbf61276753d3108b60118fae28625e8ac541375ff227c44759fadaf0c2cbce6fe593d7ef047ba37fe39fa55e74ff253d037ec6a50bfa356f405e0202b0e74cb4cd7e73b0d1761f7cb275cf3eeaf423bb55db7dc23db7c6682de75a7e7b0bb84c10061d71d013b4dfab1523e619de5d137216cafcdf72ae0dee7888fbcc1ae8a0d05fd912d1fdd2f1158a6c56470037a8eeb05892510893886c334000094c88f4e4efef177be934926fdbc314fd87977d584a5dfe520bfb351d7c78f9cc51e5b775da7c78ffbc9fdc4ce55c6c7aaed4bc101569c7f6d1000a494524a2281889c2b9f3271d56782883c218000512a8a72b00c1a76402206c29fb5f5e74a20e8f85167204380882c99c94c4c1efb0fdffdeef163938f04af88f8fde7605eb027e51b0b27f67ecb678a6ddb1b1b1bed76db308c81815c22916c349a2b2b2bb55a35954a4d4c4ca4d3e97f792f9f915abdfef1bd69e9512a1d3f7fee2c7e9600a5fbc62315db19d37dfaaad675edc5179fcb66d3e552b154ae365bcd56abe5392e0070aee9462c998af5f6f50c0e8c1c9d3c76e9e25347c7c71555ddb7b472b66d6f6f6fd7eb755dd7fbfbfb337b84468ef8541c40c521a2a5a5a552a90414a4e90e5d758133363830e0e7a2fb943b1342f80f52226ab7dbefbf7ffbe1c3b55caeffb9e79e4d2613b55aedce9d0f565656c7c64673b9dc6ec5f99d480355abd5b7de7adbb1ddb1b1e173e7cefd2b0cf73f6f39a5949b9b9b0f1f3ef43b2504a470a6c762a954a6bfaf2f11331e0d32b3d7e10c23f6ed6f7febead567cba542a158aa379aad66d3751c24649cc7e2f1542ade9feb1b1c1ce9efed5714c6158ebfe3ba78623df897fea38f3e9a9b9bcb66b3cf3cf34c3a9d7e42137a7c279df1e0efdd73e2df8403a83888383b3bfbe1877781c0f54dd824484640a0abfa954b17c6c6c660a71fd49982a18ed53b11799e5bd82e6e6f6f7b9e73e9e225000090527af57aa35c2e6b9a663bae9f1746082185f043d84068d011beff4c4fe09d920040277112917f1047781e7b74d4162e31771a75a70bf4892dbcb3421ca499f4e79afdf454884fb849bae6aa769f99e779ababab6fbef5a6a4208320e74c4fc4e289d4406ee4dce99387f283aabfa284b0fb343b416b883134f4d8c848223f324c5df5e0af43fb6bf39ee7d66af5fb73738d66fbfcb953e944f233dec5d475523bbf0ccf26ac952eafa74e674d08afd56a94cb65c698ebba9d6bb4532314ae1712edee87521838a933a3fca516a003a83800e0baae695a086824e3a94c9afb4ba31255558bc7e3dd5b86bd9feec51b0940954ae997bf7ca3582c67b3e95071c0306267ce9ccee7f3a954aa27db03e09bc22320755c05ba5c43f7941b7aec6de7491ddc84a17204edd9f715782c924fb8c01d8680efdc233bd39bdde7b44b88a8139f2a58b9c1b0e43b3fe9040cee9e690fbfde7d6644e4baae655a12986e18a954d2116eb9522d14b65756362ad5fad7bff2cce8f0505830ecbee5fc15420a3fef884128dc7ee9d02f4fab65deb879ebfeec0263cab1c9f17432b94705ef8d2f1d9d85a5eeded1ce6a66a0f39d8b189a53109161e8c78e4d65323df178acafaf07c3453f08ac72021b9cc0b626b0a5f263eeb0ae2bb187de7dd938988ae3c3194e8c1fbe74f152c72082214fa513a13a1011784248e1014955558105f63b44d06a99cbcb4b9e10a954a2f340370cfdf4e933524ace99d2898c0b24497ad20fb444427842788aaa3254c22e43f75ab59f39d7014045610c7df7f570492668e7203c9784e0aa8ac869ef587ec1c69284e7ba00a869466851463b5b8442e1b774c7711882a22a1018b009d793ae2b545551156567bd16c88f074a0042784208864c5115ff06dbb1587bac408a8287c7c6ae5ebdec0a6f667ee9c38f3e6e379b2b4bf30f8f1e1accf5ab2af7adea082491b44c5b370cc602ab94c7ba15c18b24129e600c38571cdb5d5fdf2c974a7d7dbd2cd00280c7e68fc23a7fbcde28ccc62b3dd79344aaaab020e8a27f5e9248861a21019890245c97318cc5625353c727278f2182a2f0f0b8be39360180ebda52484d33200839cf02e5f14d32411281e70922e29c333fe1f9136af2607360150789804126953e72f870d06d000a9cbe8110a0d56aafae3c5c5c5969b51b0c40e15a2295bd7ae542bbd59cbd3f572a97484a042c952bbffef55baac2f2f9e15c2e3737375fabd593c9c4f8f8b89f89313c1eab355a853b1f3c7cf0d0714d4d370673f973e74ec7c3748b9ee73d7cf870f5e15aa552761d07198b19c6c8c8c8c4c4782accc949408562f1def45ca5540429806b478f8ec7f4dd516508004910952bb5d9d9f952b1e0d8b6044c2432f9b1d1892363a944ccefc3d7eaf5d9b9d976bb3d9acf27b33d1f7d345ddade9e3a7af8fc536788b050ac4e4fdf2b95aab665c7e27a26d377eae4b1c1817ece18114892e552edfefc62a1b0e9b98ec298aae9c3c323674e9f320cfd496302869849a726c6c7012193e9a9379ad3d31f49cfaa964b96696a4a8a483e5c5f9f5f5c68d6ab66cbd274434bc40f8d8d9d3c764ce1813497cb957bf7a611616868584f24eedd9b6e56aba36323aaa2aead6f56ab7586685bd6ad1b37e289582e37383535b5b1b1b1b8b88888f97c7e6262c21f2f379bcdfbf7ef379bad743a353939994aa524c942a1b8bcb2522a152dd31252aa9a9a4967cf9c3eddd79fe1a02060ad56faf0ce3dc6d9707e2816cfdc7aff8ee7da27a726c7c6c6565656b7b7b763b1d891238773b99caf928eebcd2fae2c2e2ed95603a45455bd6f3077f4e8b15c5f8607beb9d2b29cf9a5e5a5a515db6a2391aaaa996cf6f8d4d4f0d0d0974f700eaee2f896b43bd93942fb7f7f5c5d6b346fddb87defe37be57ad3722d9521312596ea3973f644a150b879fbb66d99520201b45bedebd7afeb9a8270299dcecccccc3c78f0707070a0afafcf571c7f26a552adffeacd77dacd86d56e0a108c335d5b7cb0b9f947dffabaa169446059d6cfdff8d5e676d9364d6404801c597a7671b3507ce6f2c56c3603049b9b5bef5c7b777661d1b66df040a0b2b0b83a3498b33ccfa34eca13293cf7fed2ea7bd7ae170b8566bb2d4972c61545b93f3bbb7c74f2caa5a78607fa00b0d56a7df4f1f4fad6e6d367cf6f551a4b2b2be49989847a1ecf2dadacbefeb35f576a15cb32a52399aaa8aafef0e1c3cb572e9e3c3e01806b1b5befbd7b636979b9ddb690246328259c3aed9e383e0560ec1510192148a247be455f2699e8cda4144410b2ed389e10b6ebdefef0de9d0fee144b45d7b5c8265553b9ca6666e6571f6cbcf4c2d564cc20a246b379f3f66d21447ef41031f5def40c926779aeeb3aeb6b6b9eed229265991fdebdcb189c38716a7272726d6dedfaf5eb8878f9f2e5a3478ffa05324debdebde9cdcdadd1d1fcd0d0703a9df61c71f7a3bbb76f7f603aae94420aa9288aae2af30bcb7ff887df1c19cc21b246bd7dfdfa0da628c71ac74b95faf2f272dcd0fb7b7b72b9fe8585f99999fbbdbdbdd96c36379023f2ea4df3dab59bd33373957a5548c1845415a668c69d0f669e7fe6d2f9b32701b865dbefddfaf0e6adf75bcd86141e4722c4fe81dce0e0e0f0d0d0bede12bf1f1c58c50100222a6c1767e7e63a436ecdd007fafb0d435f5e59f9e0eedd7aad9c48a69fbe7066603057a9352dcbd5752d93cd9c3c39552a959616178948d5f4d3a74e288ad2d7df4f04b6edb4db6dcbb265980cc2b7a86f356ad54a239f1f3d77f654a150585c596d341b77eede3d757ce2e4d43122e609592c577a72bd53e313d94cb25cae7e3c3dbbbd55921f4de7fafa2e3c7dd6749c8f3e9e999b9d372d538dc5a74e1f67aa36373b7f7f6e19c021d7b732264162ab5479e38db7b7371e10f26c7f6e72fc88d9361717574bc572ab753766a8a9672e26e30929a465db2dd3fa7876be5dafdb9660aaea11179ef8d96b6f6c6eac916a9c3a7b667c78f8c146e1dec733cb2b4b5a4ccff5f5a452a9d9d9c5fb33739663e70687ce9c3e914a1af55a23194ff8b96efdda7d6c5e193ba96c08a85cad6c6f17854b0ca92793d00dedeefdf96b376f54b6b73c011313478e8c1dde286ccfdc9f6db6b7cd9bad444c7bf1f9ab084052da96d9b21d7b79d971a46d3b86a1c6e389be9ea198ae3f5879d06c360c433b7af4682c161b1a1a4244d775dbed7638a7bb73f56ddb36cdb6e338febc3e1158663b99889f383dde9feb336d7b616179f3e1eacaeaf2edf7ef0cbef235a63249d032dbc8f8dcdc7cb55e979ec098ee4fd03b8edb6eb71389849412082cdbbb76edd6eddbefb7db6d1e4f9e993a9249a5975656d6571e34ea8d5f9a6e6f5fefe8f040b15cb9fedecd7abd188ba78f9f3a79e450be6d998e90f164e21342f11f600eb2e208215657560b8592273c5de592a06f28f7d5175fca0f0dd56af55abdca90a68e1d79e6d2c57436edb9c293948cc752f1587f6fefcacacad2e222f809e45e7e1911154569369b8f1f45921482c8f3ce9c3975f599ab03fd7d6dcb7cf567bf9c5b58f01cebdabbd7a726a738a398a17ef395af8e8c8c2593318d73c711bd3d7dafbdf67aad5629140a4288b5cde2f2ea9a659b86a63dffecd533674e30553b7d6cfcd51fbfd6a8b705a09f034a78e2c30fa7b7d6d655c67223f9575ef9ea406fd613727a74f1dadbefd66be5e98fef8de6874e1d3f06080c8103d6aa95a1fedeefbcf8523a9d3234363d3dbdb9b1c135e5e499335ffbca0b495d1d3fda8a19fab56bef3d7cb0b6bcb236756cbc5aa958a62509cf9d3a79f9c2538aa60a2110a4ae29a1b83c7eab9010ded6d6d6bbefbd576bd6d736d6d7d73611289bcd0ce6729e47f7a6674adb0572e5d5cb97af5c7e3a934edab6c88fe67ff18bd79a6ef3d6fbb74f1e3f96ebeb0500648052d8edf6f8f8f8c54b17354d4d2713e974727bb4d8a8d75aad8661c42e5fbedcd7d7a7288aefbeff2f8100c8393b77f6ecf9b367b37dfd9aaa49294e1d9dfcdb1ffe43a9b435333dfd8d7ff7155555fd2d8510b54a756c6cf4e5975f54152d167b3c653b2ead3c9cbe3fd76cb66346ec6b5f79f1f8f1714dd52e9c3bfbd39ffe727ee17ead56f8f92f7ef3e7ffe9fbf55aa35e2e13c74ca6f7c5179eeb49a73c21a494aaa67c4e07e02f2807597100c0b66dc775a5241389008c548c48101043c69011c9a5d58d6476eed4a9a9fe4c26ce39631cb8a2697a3299648c0921745d4b866b22ad566b0f2b0c02643c1e8b9f383135961f5498128beb67cf9c5a5b5fb7a5d8dcdc942414e09aaa9f3e714ae1acd96e97ea2d86602898491a5b76cb751ccff3eaf55aabd920c9fafb0726c68ff466fb00307934be72fad8ed5bb711840426115ccf9b9e9e4572b9963a7ff6d4783ecf382384d3c78f160b1b376f142a95d2f676d11e1ff7175114204078feb9ab278f1fd315558278fbddebc8a4aae9579e3ad39b4a0342bfa64f8c1fbe7deb8346bd512c6d9f383ec13832c618e1bdfb0b7a227e726a32954c32ec5ef77da48f13646a5fdfd828148b528263bb428a542af1f4d317c60e1d5adfdcaa15b7c9f132e9cc85a7ce0c0de438638938bd70f1ecf407b71e160a66abbdb2b212280e1147eacd66ce9f3b796a6a02184764c830d13635c6108831168fc73bd765b70fc193404551f2f91100725c596b36413a8cc96c32d9a815cd760b08c26960c9106331fda5179e9b9c18076000a25cae3cb2bb52a9689a759070e4d0f8d4e4784f364b80b1b876e5d9cbf3cbcb0a9885cd876dd302ce91318658abd56fdcbc73fedc89c1810145f9f479220e1a07597114453979f2d4d5ab57c28813a4283c93492383fe5c7f7f6ea050d8a895cb6fbff5ce7b37ee1c3a347af5d2d3e363f9ae45a84ff508620c39a358c28827d39c6bfe14f5d0403f034460ae6db79a4d359bb13defeebd8f6766ee15b6abb6e9a95cbaae6b5bb6ca18204920b7dd76ad16824ca6d28611f7c3b6280c87068701146436238684aee75976d39394d0d491a121ae200131c26432d193cd2a8a06d2b35b4dd7757cbf4e0405b932349457740d0018299beb5b8cb867b5fff19f7ea21a2a43c925b44dd7753d869e745d5d377203c34a6cce6e36b7361ffce2675bef5c7bf7c489a967af5ccea6937cc760670f484acf7524613c93393e397eeac4b17c3e6f18bad56ab98e2b817a7bfb53c914f79da1080d2d9e1b1ed92c164978d56a351cb07121b9114ff6f7e51857c2fc9f04001219ed319a0bff7862243d0220296963b370f3e6872bab0f6d6191e3298c99b629a5f0133a60271a286232991c1919618cf919ba1ed91d22d62b65c734152e0f1f1e4c24e27e2411007ef4483ea6a89eeb398ebd5d28e4fa7a7b07870b1b0fa459bb79ebe6dd8f3fca8f8e5cbdf4d4c4a1c38acabf7c83aa03ad3848904a26478647c2ebbab3747a74e208c14b6fbdf3deeaca03b04cd3b2ee37ca2babab7ff627df3b941f410e4452ee04d5919d5806a1d1d7ae964d44866ee8aa86c8001149e89aa12bbc2584a67221813cf1e39fffeae3f76f599e2089bd3d999ede1ecfb68bdb25e1380814387d3324245d57037f686408984cc409c1f5101010d17504799ec255ae70401eacbef9412c150e084250cb761cd70da2e5a018cc0dc4e33115999fe85b78129048ca62619b2b102e33a3c24008b22cdb75dd0be74f21d1cddb1fd46b45e1b9d562f9e6b51b85cde2f7fff80fb2e9206ede6e0f2f86008aaa9e397dfa6b5fff3a220232ae709523434e08aeeb00498529c0989f97c58f8e4108080ab9045c569b41083e04e08cd2e9647f7f3f633cbc766caf590f7f862608720a00e4a7b1200229a5242181fcde8bf43efcf8deafdf7cbb5aa908002315ebcff56a5c79b0b1018e17ba8263e748c96432994c86ede5d1b48512c8f184941215629a9fd899214304a62aa81bccf3a4c2b9f0446f36f9fd7fffca2f7ef1f6dac6bae79aed86333b5daf94ca5f79f9c5f3674e7dfe46fe85e3202b0e21004a0ca2b2ec0a20a92a7c6a7272fcc891e2f6f6dceccc8d9b1f9a8da6dd2c2d2cce0ff567b5780280314922085fd2897a129aeaee6a7f48c81acd96695b84e4875eafd66baeb09902c02911579bb6f9c18df75dc74a66327ffa27df1b1d1956385f5f5b7ff5b59fae6f6c494000a66a0ae70c80d5eb75db31093320a5042a96aabe11876f05a76a2a204314c2b51acd1ae1906f912b8468352dd79100cc88250d3dd66eb6fc9365dd7163000c436bd6498f25ffecfbff31998c6110fecbb75541ddd00c4365c8af5ebd70fea9b35b9b1befdff9706666deb6dab373b35b5b57d2c9143278dca1d4373de4aa128fc7770c64c2b8668a6a2072f044b35e77844d48488c8008a1562d735505d4d2a974c70c27a8ed5dfedcd46dd418ae4232e6af43220920499230c808deb29c62a9e9db850360b5d19e5f5829164baa6abcf8ec33172e9e4b270c00f85fffe7870f9617779b4b0655f50963342454f5185775d7738bdb65c77662ba062425f24aa5de324d00e18166c4e39c69f9fce87ffeb3ef972bb5f9fb73efdfb9b3b55d286c6e2e2eac1c1d1f4f26e24f3ac441e5603a227720222965a71553d04e2591e04886ca4787875f7af92be72f9ee5319d8857eb6d4fc8a0ff0e20016aad364990e0a7aedfbbd34e42d42aa552a9e43a2e812740ce2f3e701d02098974afa61a8b4b0f38d9aa629c3c7662f2f0444cd31940b5dedcdaaa70090c249048c412b15882808aa562a3d1224f0000485a585804213a41ba344d1d1a1a11925c572c2caf082980a404592c6d6f6faf23f3b8c633e994aeed9aec0cd6ea2411c9a1e111cf63962dd637370706fa7203fd03b9c1dcc0f0606e6020d79f4ea7193240c91113317d62fcc877ffe8db87f2830a27c6a0d1680929f70a2404be179bd8bb8a686030a7c7e2c4717b7bbb56a949e912482069b6ccf5d5552021411e191d46904f0af41e18db059dcd604d0cc123204782e50148a8966a441225b8b6b7b1b5d5b61a047e2e1761b6ea56aba148911fc91d9f1aef4d2715e48d46b3d968d06f934d81b2d9aca16b44dedcea7aa36d4a092015225c5a5e6ab65c49a8e8eac0602f81c71074950f0df43ff7dcd5e75f785ed5356460599665599ffdb85f780e721f4748f9706df3ce9dbb00614426c0febe9ed1fc70a95cab375b7d7dbd715d6b349bb5c2160a9b13c675c3cfd5890c3ca6a2148d5a63f9c1ead040bf655a612cca471e88c43830e06fbff31e53b433278e3d78b87aebc62dc73225e0d4e409448a1b31624c41592aad17abc5642cbeb2b6feeef55bae102ae3448c000786867afbfa36b7369b8de69b6fdf602aebcda6dfba7e677675857725cfd554f5ea958bf7e797b8d59abe773f9be97dfafc8946abfdf6b5ebb3b3f302f9d8a14363f9e1c75670767c952e5ebc78e3c6879ee55cbb76a32fd777642ccfb9d26c9b734b2b66abf1d4a9a99e9ebee5075baee7e687061445d9d8d86a996d210191e9868688487b4f401082d85d37484048446c70a07f78245f296e5bb6f9773f7afd3b7ff48da3f97cb95affe1dfffa310449cf7f60f1cf5a76909e05133eb607ac71f6f1241ad565b5d5d4d24121ec95422363a3a8ac801e9dec2e2f8bdf96313a30b0b4b6fbd7d8d2371c681908071a6728501c76ab9512997737dbd8d56fbd76fbe592d97c3f8a19f692e974e4f1d5d5a98b7169adbeb1b3ffdd99b5f7fe5f9fe4cfa839985377ef6463c8602d42b97aec454a3659b73f3f3e3a323f184de6ab5b70a5bd22344d47545531f5f023bf81c3cc52100f0730049492b2babcbcbab520a4565244120bb7ae9c2e8687e6d6dedf59fbf61396e22956cb76cc76c23c76c4f66ead8b89fc33b9f1f4da7b39562c9b5ac1ffcd55fa79289e3274e5eb97c29cc7612dc707e070a89e9ba6159ce8ffff9d59fbffa9af43c091e11e9a9de8b17cf232a470e8f647b7ab64bb5a5d58dfff1977f958c252bf59acec1afe2cf0000082649444154d030e2ad7ab56dd996e566b3e9c9a3139b1b1b954a6975e1fe5f2fad12938eeba6922957da9da92885c1f8f8e12b572eddbd73b3da68fef34f5f7fe3d7bf743df25c4f4196edeb7ffadcb9e1a11c802422229402a4e85841223018cd0fbef0c2d577dfbd516bd6ffe70ffe568fa5e28958a554519873f2d8c4b993c785947373f36fbffd5e3c165335c56c371dbbcd10c646f3f99161cef99e830dff586c2f29420085e173cf5cae962b2babcbe5ededfffb83bf49184abd694940646a3a99fdd637bfa62840a12f2849d89dc80901201e8f0f0c0eadadafdb96fdeaabafbdfefacf7b72c3ffe5cffff4707e706878607d6b4bb6cdbffb9bff173714212500338c846d36250900ece9c90c0e0cce2dad961bb51ffefd4f7ab229d3356ddb36f41858420861db762c16db253b7bf5e4a404df142b934d9f387bb6526f60a9b8b830f397cbb30657eb9663a8c03c18393c76f9d2450051ab35fee1473fe64089644ab876bbd944a26c4fcf91f143a9d4a7f70b3b381c30c5f16d5e211e4b74c71310004492083c424d572549ce793c11934056bbad72d2d3b14c3af3f2cb2f1e3e34a6285c4ac9907def3bdffa877f7eadd9aaa95cf1a4e2bb17c5e3f14c26954cc4194300a9283c168bc793c9a3934713a9e4f2c252ad5c7519722d99caa6bffaf28b037d3d8c31cef9f7fef8bbfff4939fd71a1524b0ac667e3877f2f8b176a3797fe65ec25019939ce3d9d3a76ccb79f7e69d96d906e171544646462e5f7afa9db77ee3797622112712883c1153fee06b2f65d2f13b773f6a5b2608327406466c7820f7cce50b278e4faa0af7a77e92a9443a9b4ec463c1fc2b22022a8c5ef9da0b994ce2c6cdf72dc7f184ed5a2219571289446e702066e89e271882a669aee792b4385352e9dec363f9975e7a21934a3e3e7d8b88aaa2249309455553b1d8ae3b15319c94e543b9deef7cfb1bef5c7b776169ce365dce2095ccb8d21d3b7ce8e5179f1b3f348cc889a4a22899744655ac582c4181ddb83f2a649cab67cf9fdbaad41eacac3369034743d70098aaa9dffad6375f7dfd17ad6a439283a00e0df54c4d1ddfdede5a995f4cc6139ca1aaaae7cf9f3785989999351bed76db64aaf2fc3397181373d3338ee33a8e4d448ac2138904e7dc300c493288394de4bb56653299443c1126f0e017cf9deecba6ae5fbfbeb6b6d56859a4b004579209fddc89e3cf3ffb6c2211231224bd543cd636cd56abc919c5e389de6cf6e285a7ce9c3cf9a534c73980b91c241199a6e5f9f32021815f1f81a271c38879aed76a99c552a9d56a2a0acba4337db9fe98ee27d50b1d8d49b64cf3c18355d71508ecc891d144dc304d5b4ac918d7754351b8e779b66d7b9e505445d78d66a3512a965aadb69e4c0e0de5d2711d1947e04482002cdb2916cbc57231118f8f8d0cebba66db8eebb85c613123c615158804c972a5be59d816ae9d4ea5868706b9c2cdb609008c63229ee804d91452365bededed42a3d1e08a96edebedef49c7749da16ffb2b85704dcb965232c44422c576269083699066bb5da954aa953201d7757d60a02f934e734442b42ca752ad952b15e1da807c687820d7dbebe781db2bbd8cb46dd3b25d00d035c530e24f888548442449566ab5c2c6b665d9aaaef7f5f5e772198ec050f13d233dcf334d534aa9283c1e8f87c50e463d04643af6e666c16c341c4ff6f4f78d0e0f294804acd536571fac7b9e9988a7f2f9014551adb6293ca97066c40da6a840e049592c95cac56d29697028d7d393218f6cc721824422ceb9e279a2dd6e1391a2288944a2e3882ba5b46ddbf33c44d4344dd3543f30081109cfa9d5eb1b1bdb424a23a60f0ce4b2a90400223244e60951af372bd56abd56671c92f1d4c8c8b061e8be8a7d093d390f9ee27456347635fa20f84de05c1ce48c845debdc8f9bd2d2ceff3b910860af6d76fd8dfe6a6d98fe65279a813f9142c1baf263d1fc103a39c209005898d565cf20c4c18a8c04897e7a16ff1fc0eec8e9c10db3d725f65575e7c43bceeb611486a09690042011b14f8ca9da7d2e4fb4d6f1bf250004e9076e0ec36df8f3bbdd7ba0b0fc7b953c0c43d41d6c847077e476ecbce2ae7a089cbf1050221000ffecb6bf7257d9fccb1decbebb15859ef8e1e70432fc023f4f82b32f340749713ea1a107ee85e1f7b8bb4d77838ffe7047983e752dd14edc8720c08aaf3d81f850a7b5e1233fdb311cf275077712483ce14080e1a9f97f0427f989bfdaf9314098eb0ac3f79de150589040aa4122ed5aaefe6d080c7988114a245f2a65b0bafd69433750905c2bb8c1bbcbbb13ec1480c2c40d6185906f9bd915c12cd8dda73fa7ee5adddd1e82670c0394815077eb4e6762baab097e097b373e0749713e99f0990db0fb11f4c94fe6ee2e0c3ef6e1273dc99fbccd23fba4dd6fbab7ebbe35fec5033d5e4ef874d2b36b6bdc791bfcd951a6df851f50a0a480bf95947797b1136db16bc73b8abdc39ed71a9e70b93ff5d1777dd27dac3d1b0c8452fef90bf085e7cba338111111fff67c490793111111ff26448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17f448a131111b17ffc7fa656f98f5154a2b70000000049454e44ae426082</image>
+              <opacity Type="int" Value="100"/>
+              <datasource Type="QString">empresa</datasource>
+              <field Type="QString">logo</field>
+              <autoSize Type="bool" Value="0"/>
+              <scale Type="bool" Value="1"/>
+              <keepAspectRatio Type="bool" Value="1"/>
+              <center Type="bool" Value="1"/>
+            </item>
+            <item Type="Object" ClassName="TextItem">
+              <objectName Type="QString">TextItem11</objectName>
+              <geometry height="50" width="1000" Type="QRect" y="500" x="902"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">Certificado de Báscula : $D{empresa.certificado}</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="33"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
+            </item>
+            <item Type="Object" ClassName="TextItem">
+              <objectName Type="QString">TextItem12</objectName>
+              <geometry height="50" width="1000" Type="QRect" y="350" x="902"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{empresa.direccion1}</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="33"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
+            </item>
+            <item Type="Object" ClassName="TextItem">
+              <objectName Type="QString">TextItem13</objectName>
+              <geometry height="50" width="1000" Type="QRect" y="400" x="902"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{empresa.direccion2}</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="33"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
+            </item>
+            <item Type="Object" ClassName="TextItem">
+              <objectName Type="QString">TextItem14</objectName>
+              <geometry height="50" width="1000" Type="QRect" y="450" x="902"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{empresa.direccion3}</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="33"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
+            </item>
+            <item Type="Object" ClassName="TextItem">
+              <objectName Type="QString">TextItem15</objectName>
+              <geometry height="50" width="1000" Type="QRect" y="550" x="902"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">OCA ENAC: $D{empresa.enac}</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="33"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
+            </item>
+            <item Type="Object" ClassName="TextItem">
+              <objectName Type="QString">TextItem16</objectName>
+              <geometry height="50" width="1000" Type="QRect" y="300" x="902"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">CIF: $D{empresa.nif}</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="33"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
+            </item>
+            <item Type="Object" ClassName="TextItem">
+              <objectName Type="QString">TextItem17</objectName>
+              <geometry height="50" width="1000" Type="QRect" y="250" x="902"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{empresa.razon}</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="33"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="0" pointSize="11" underline="0"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
+            </item>
+            <item Type="Object" ClassName="BarcodeItem">
+              <objectName Type="QString">BarcodeItem17</objectName>
+              <geometry height="200" width="500" Type="QRect" y="602" x="1402"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{registro1.id}</content>
+              <barcodeType Type="enumAndFlags" Value="20"/>
+              <testValue Type="QString">1</testValue>
+              <foregroundColor Type="QColor" Value="#000000"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <whitespace Type="int" Value="10"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <barcodeWidth Type="int" Value="0"/>
+              <securityLevel Type="int" Value="0"/>
+              <pdf417CodeWords Type="int" Value="928"/>
+              <inputMode Type="enumAndFlags" Value="1"/>
+            </item>
+            <item Type="Object" ClassName="BarcodeItem">
+              <objectName Type="QString">BarcodeItem18</objectName>
+              <geometry height="200" width="500" Type="QRect" y="802" x="1402"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{registro1.pesobruto}</content>
+              <barcodeType Type="enumAndFlags" Value="20"/>
+              <testValue Type="QString">99999</testValue>
+              <foregroundColor Type="QColor" Value="#000000"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <whitespace Type="int" Value="10"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <barcodeWidth Type="int" Value="0"/>
+              <securityLevel Type="int" Value="0"/>
+              <pdf417CodeWords Type="int" Value="928"/>
+              <inputMode Type="enumAndFlags" Value="1"/>
+            </item>
+            <item Type="Object" ClassName="BarcodeItem">
+              <objectName Type="QString">BarcodeItem19</objectName>
+              <geometry height="200" width="250" Type="QRect" y="1700" x="800"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{registro1.matriculaA1}</content>
+              <barcodeType Type="enumAndFlags" Value="20"/>
+              <testValue Type="QString">ALP123456</testValue>
+              <foregroundColor Type="QColor" Value="#000000"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <whitespace Type="int" Value="10"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <barcodeWidth Type="int" Value="0"/>
+              <securityLevel Type="int" Value="0"/>
+              <pdf417CodeWords Type="int" Value="928"/>
+              <inputMode Type="enumAndFlags" Value="1"/>
+            </item>
+            <item Type="Object" ClassName="BarcodeItem">
+              <objectName Type="QString">BarcodeItem20</objectName>
+              <geometry height="200" width="250" Type="QRect" y="1700" x="1650"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{registro1.matriculaA2}</content>
+              <barcodeType Type="enumAndFlags" Value="20"/>
+              <testValue Type="QString">ALP123456</testValue>
+              <foregroundColor Type="QColor" Value="#000000"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <whitespace Type="int" Value="10"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <barcodeWidth Type="int" Value="0"/>
+              <securityLevel Type="int" Value="0"/>
+              <pdf417CodeWords Type="int" Value="928"/>
+              <inputMode Type="enumAndFlags" Value="1"/>
+            </item>
+            <item Type="Object" ClassName="BarcodeItem">
+              <objectName Type="QString">BarcodeItem21</objectName>
+              <geometry height="200" width="250" Type="QRect" y="2100" x="800"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{registro1.matriculaB1} </content>
+              <barcodeType Type="enumAndFlags" Value="20"/>
+              <testValue Type="QString">ALP123456</testValue>
+              <foregroundColor Type="QColor" Value="#000000"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <whitespace Type="int" Value="10"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <barcodeWidth Type="int" Value="0"/>
+              <securityLevel Type="int" Value="0"/>
+              <pdf417CodeWords Type="int" Value="928"/>
+              <inputMode Type="enumAndFlags" Value="1"/>
+            </item>
+            <item Type="Object" ClassName="BarcodeItem">
+              <objectName Type="QString">BarcodeItem22</objectName>
+              <geometry height="200" width="250" Type="QRect" y="2100" x="1650"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">$D{registro1.matriculaB2}</content>
+              <barcodeType Type="enumAndFlags" Value="20"/>
+              <testValue Type="QString">ALP123456</testValue>
+              <foregroundColor Type="QColor" Value="#000000"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <whitespace Type="int" Value="10"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <barcodeWidth Type="int" Value="0"/>
+              <securityLevel Type="int" Value="0"/>
+              <pdf417CodeWords Type="int" Value="928"/>
+              <inputMode Type="enumAndFlags" Value="1"/>
+            </item>
+            <item Type="Object" ClassName="TextItem">
+              <objectName Type="QString">TextItem4</objectName>
+              <geometry height="90" width="1700" Type="QRect" y="100" x="200"/>
+              <children Type="Collection"/>
+              <zOrder Type="qreal" Value="0"/>
+              <borders Type="enumAndFlags" Value="0"/>
+              <parentName Type="QString">label</parentName>
+              <borderLineSize Type="int" Value="1"/>
+              <isVisible Type="bool" Value="1"/>
+              <borderColor Type="QColor" Value="#000000"/>
+              <itemLocation Type="enumAndFlags" Value="1"/>
+              <stretchToMaxHeight Type="bool" Value="0"/>
+              <itemAlign Type="enumAndFlags" Value="4"/>
+              <content Type="QString">TICKET BÁSCULA</content>
+              <margin Type="int" Value="4"/>
+              <alignment Type="enumAndFlags" Value="132"/>
+              <autoWidth Type="enumAndFlags" Value="0"/>
+              <autoHeight Type="bool" Value="0"/>
+              <font family="Ubuntu" italic="0" Type="QFont" bold="1" pointSize="11" underline="1"/>
+              <backgroundOpacity Type="int" Value="100"/>
+              <backgroundMode Type="enumAndFlags" Value="1"/>
+              <backgroundColor Type="QColor" Value="#ffffff"/>
+              <fontColor Type="QColor" Value="#000000"/>
+              <angle Type="enumAndFlags" Value="0"/>
+              <foregroundOpacity Type="int" Value="100"/>
+              <trimValue Type="bool" Value="1"/>
+              <allowHTML Type="bool" Value="0"/>
+              <allowHTMLInFields Type="bool" Value="0"/>
             </item>
           </children>
-          <zOrder Value="0" Type="qreal"/>
-          <borders Value="0" Type="enumAndFlags"/>
+          <zOrder Type="qreal" Value="0"/>
+          <borders Type="enumAndFlags" Value="0"/>
           <parentName Type="QString"></parentName>
-          <borderLineSize Value="0" Type="int"/>
-          <isVisible Value="1" Type="bool"/>
-          <borderColor Value="#000000" Type="QColor"/>
-          <topMargin Value="0" Type="int"/>
-          <bottomMargin Value="0" Type="int"/>
-          <rightMargin Value="0" Type="int"/>
-          <leftMargin Value="0" Type="int"/>
-          <pageOrientation Value="0" Type="enumAndFlags"/>
-          <pageSize Value="0" Type="enumAndFlags"/>
-          <gridStep Value="2" Type="int"/>
-          <fullPage Value="1" Type="bool"/>
-          <oldPrintMode Value="0" Type="bool"/>
+          <borderLineSize Type="int" Value="0"/>
+          <isVisible Type="bool" Value="1"/>
+          <borderColor Type="QColor" Value="#000000"/>
+          <topMargin Type="int" Value="0"/>
+          <bottomMargin Type="int" Value="0"/>
+          <rightMargin Type="int" Value="0"/>
+          <leftMargin Type="int" Value="0"/>
+          <pageOrientation Type="enumAndFlags" Value="0"/>
+          <pageSize Type="enumAndFlags" Value="0"/>
+          <gridStep Type="int" Value="10"/>
+          <fullPage Type="bool" Value="1"/>
         </pageItem>
       </item>
     </pages>
-    <datasourcesManager ClassName="LimeReport::DataSourceManager" Type="Object">
+    <datasourcesManager Type="Object" ClassName="LimeReport::DataSourceManager">
       <objectName Type="QString">datasources</objectName>
       <connections Type="Collection"/>
       <queries Type="Collection"/>

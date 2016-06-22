@@ -9,17 +9,17 @@ namespace nQTrucks{
     }
 
     void Maestros::crearMaestros(){
-        m_RegistroPeso = new RegistroPeso(this);
+        m_RegistroPeso  = new RegistroPeso(this);
+        m_Empresa       = new Empresa(this);
     }
 
     void Maestros::eliminarMaestros(){
         m_RegistroPeso->deleteLater();
+        m_Empresa->deleteLater();
     }
 
     void Maestros::sincronizar(){
-        //m_RegistroPeso->beginResetModel();
-        //m_RegistroPeso->syncTable();
-        //m_RegistroPeso->endResetModel();
+        m_RegistroPeso->syncTable();
     }
 
     }

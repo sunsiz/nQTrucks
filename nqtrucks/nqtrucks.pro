@@ -78,7 +78,7 @@ unix:{
 }
 
 #** LimeReport **#
-unix{
+unix:{
     DEPENDPATH  += $${GLOBAL_INCLUDE}/nQLReport/include
     INCLUDEPATH += $${GLOBAL_INCLUDE}/nQLReport/include
 
@@ -101,10 +101,10 @@ unix{
 
 
 # ***nQLReport ***#
-unix{
+unix:{
     INCLUDEPATH     += $${DEST_INCLUDE_DIR}
     DEPENDPATH      += $${DEST_INCLUDE_DIR}
-    PRE_TARGETDEPS  += $${DEST_INCLUDE_DIR}
+    #PRE_TARGETDEPS  += $${DEST_INCLUDE_DIR}
     LIBS += -L$${DEST_LIBS} -llimereport
     LIBS += -L$${DEST_LIBS} -lQtZint
     EXTRA_DIR_REPORTS = $$PWD/reports

@@ -33,6 +33,8 @@
 #include <QDebug>
 #include <QDesktopWidget>
 
+#include <QTableView>
+
 #include "alpr.h"
 #include "prewarp.h"
 
@@ -148,6 +150,7 @@ void Configuracion::loadconfig()
 
     updateGui();
     updateCalibracionGui();
+    reloadEmpresa();
 
 
 }
@@ -423,8 +426,7 @@ void Configuracion::on_vPlankC_valueChanged(int value){
 }
 
 
-void Configuracion::on_guardarPlanK_clicked()
-{
+void Configuracion::on_guardarPlanK_clicked(){
     int index = getAlprIndex();
     switch (index) {
     case 0:
@@ -443,13 +445,45 @@ void Configuracion::on_guardarPlanK_clicked()
     /** END PLANKs **/
 /** END CALIBRACION *******************************************************************/
 
-void Configuracion::on_reportsTreeWidget_doubleClicked(const QModelIndex &index)
-{
+void Configuracion::on_reportsTreeWidget_doubleClicked(const QModelIndex &index){
     qDebug() << index.data(Qt::UserRole).toString();
     engine->report_loadFromFile(index.data(Qt::UserRole).toString());
     engine->report_desingReport();
 }
 
-
-
+void Configuracion::on_guardarEmpresa_clicked(){
+    QVector<QString> empresa_info = QVector<QString>(7);
+    empresa_info[0] = ui->empresa_razon->text();
+    empresa_info[1] = ui->empresa_nif->text();
+    empresa_info[2] = ui->empresa_direccion1->text();
+    empresa_info[3] = ui->empresa_direccion2->text();
+    empresa_info[4] = ui->empresa_direccion3->text();
+    empresa_info[5] = ui->empresa_certificado->text();
+    empresa_info[6] = ui->empresa_enac->text();
+    engine->updateEmpresa(empresa_info);
+    reloadEmpresa();
 }
+
+void Configuracion::reloadEmpresa(){
+    QTableView *flt_empresa = new QTableView();
+    flt_empresa->setModel(engine->Empresa);
+    if (flt_empresa->model()->rowCount()){
+        flt_empresa->selectRow(0);
+        if(flt_empresa->currentIndex().isValid()){
+            int  row       = flt_empresa->currentIndex().row();
+            ui->empresa_razon->setText(      flt_empresa->currentIndex().sibling(row,1).data().toString());
+            ui->empresa_nif->setText(        flt_empresa->currentIndex().sibling(row,2).data().toString());
+            ui->empresa_direccion1->setText( flt_empresa->currentIndex().sibling(row,3).data().toString());
+            ui->empresa_direccion2->setText( flt_empresa->currentIndex().sibling(row,4).data().toString());
+            ui->empresa_direccion3->setText( flt_empresa->currentIndex().sibling(row,5).data().toString());
+            ui->empresa_certificado->setText(flt_empresa->currentIndex().sibling(row,6).data().toString());
+            ui->empresa_enac->setText(       flt_empresa->currentIndex().sibling(row,7).data().toString());
+        }
+    }
+}
+
+
+
+} //end Namespace
+
+

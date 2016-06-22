@@ -31,6 +31,7 @@ void DatabaseManager::setRegistroMatriculas(const SimpleMatriculas &RegistroMatr
 
 void DatabaseManager::guardarRegistroSimpleMatriculas(){
     if (m_maestros->m_RegistroPeso->guardarRegistroSimpleMatriculas(m_RegistroMatriculas[0])){
+        m_maestros->m_RegistroPeso->syncTable();
         m_report_manager.printRegistroMatricula(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[0].id);
         /** No Guardar Si Cualquiera de las 4 Matriculas es detectada Y BUSCAR SU PAREJA**/
         if ( m_RegistroMatriculas[0].results[0].MatriculaPrecisionA >80 || m_RegistroMatriculas[0].results[0].MatriculaPrecisionB >80 ||

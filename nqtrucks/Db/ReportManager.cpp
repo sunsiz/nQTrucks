@@ -24,6 +24,14 @@ void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, const long l
         QPrinter _default_printer;
         _default_printer.setPrinterName(QPrinterInfo::defaultPrinter().printerName());
 
+            /** Registro Empresa **/
+            QSqlQuery* m_empresa = new QSqlQuery(_db);
+            m_empresa->prepare(" Select * from empresa where idempresa = 1");
+            m_empresa->exec();
+            QSqlQueryModel* empresaModel = new QSqlQueryModel();
+            empresaModel->setQuery(*m_empresa);
+
+
             /** Registro 1 **/
             QSqlQuery* m_matriculas = new QSqlQuery(_db);
             m_matriculas->prepare(" Select *"
@@ -38,7 +46,9 @@ void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, const long l
             /** Report **/
             LimeReport::ReportEngine *m_report = new LimeReport::ReportEngine();
             m_report->loadFromFile(m_Informe_Peso);
+            m_report->dataManager()->addModel("empresa",empresaModel,true);
             m_report->dataManager()->addModel("registro1",matriculasModel,true);
+
             m_report->printReport(&_default_printer);
     }
 }
@@ -49,6 +59,14 @@ void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, con
     if (!QPrinterInfo::defaultPrinter().isNull()){
         QPrinter _default_printer;
         _default_printer.setPrinterName(QPrinterInfo::defaultPrinter().printerName());
+
+            /** Registro Empresa **/
+            QSqlQuery* m_empresa = new QSqlQuery(_db);
+            m_empresa->prepare(" Select * from empresa where idempresa = 1");
+            m_empresa->exec();
+            QSqlQueryModel* empresaModel = new QSqlQueryModel();
+            empresaModel->setQuery(*m_empresa);
+
 
             /** Registro 1 **/
             QSqlQuery* m_registro1 = new QSqlQuery(_db);
@@ -74,6 +92,7 @@ void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, con
             /** Report **/
             LimeReport::ReportEngine *m_report = new LimeReport::ReportEngine();
             m_report->loadFromFile(m_Informe_PesoProcesado);
+            m_report->dataManager()->addModel("empresa",empresaModel,true);
             m_report->dataManager()->addModel("registro1",registroModel1,true);
             m_report->dataManager()->addModel("registro2",registroModel2,true);
             m_report->printReport(&_default_printer);

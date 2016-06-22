@@ -13,6 +13,7 @@ SOURCES += \
     $$PWD/Db/ReportManager.cpp \
     $$PWD/Db/QueryModel.cpp \
     $$PWD/Maestros/RegistroPeso.cpp \
+    $$PWD/Maestros/Empresa.cpp \
     $$PWD/Maestros/Maestros.cpp
 
 
@@ -30,6 +31,7 @@ HEADERS += \
     $$PWD/Db/ReportManager.h \
     $$PWD/Db/QueryModel.h \
     $$PWD/Maestros/RegistroPeso.h \
+    $$PWD/Maestros/Empresa.h \
     $$PWD/Maestros/Maestros.h
 
 
