@@ -26,7 +26,7 @@ DatabaseManager::~DatabaseManager(){
 /** REGISTRO SIMPLE **/
 void DatabaseManager::setRegistroMatriculas(const SimpleMatriculas &RegistroMatriculas)
 {
-    m_RegistroMatriculas[0] = RegistroMatriculas;
+    m_RegistroMatriculas[0] = RegistroMatriculas; //[0] es el ultimo registro registrado = salida si pareja
 }
 
 void DatabaseManager::guardarRegistroSimpleMatriculas(){
@@ -40,7 +40,7 @@ void DatabaseManager::guardarRegistroSimpleMatriculas(){
                if (encontrarPareja()){
                 /** Si pareja **/
                    m_maestros->m_RegistroPeso->syncTable();
-                   m_report_manager.printRegistroMatriculaProcesada(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[0].id,m_RegistroMatriculas[1].id);
+                   m_report_manager.printRegistroMatriculaProcesada(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[1].id,m_RegistroMatriculas[0].id);
                }
             }
         }

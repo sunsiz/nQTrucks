@@ -37,7 +37,7 @@ namespace nQTrucks{
                                                 " ORDER by fecha DESC "
                                                 " LIMIT 1; ";
 
-    static const QString qry_procesar_pareja =  " UPDATE registros_matriculas  SET emparejado = :idpareja, pesoneto   = :pesoneto, procesado  = 1  WHERE id   =  :id0;";
+    static const QString qry_procesar_pareja =  " UPDATE registros_matriculas  SET emparejado = :idpareja, pesoneto = :pesoneto, procesado  = 1, entrada =:entrada  WHERE id   =  :id0;";
 
     static const QString qry_fecha_min_max   =  " SELECT MIN(DATE(fecha) as fechamin, MAX(DATE(fecha) as fechamax FROM nqtrucks.registros_matriculas; ";
 
@@ -188,13 +188,15 @@ namespace nQTrucks{
             /** Primera pareja 0 **/
             qry.bindValue(":idpareja", RegistrosMatriculas[1].id);
             qry.bindValue(":pesoneto", RegistrosMatriculas[0].bascula.iNeto);
-            qry.bindValue(":id0", RegistrosMatriculas[0].id);
+            qry.bindValue(":id0",      RegistrosMatriculas[0].id);
+            qry.bindValue(":entrada",  false);
             if (qry.exec()){
                 qDebug() << "actualizando pareja 1";
                 /** Segunda pareja 1 **/
                 qry2.bindValue(":idpareja", RegistrosMatriculas[0].id);
                 qry2.bindValue(":pesoneto", RegistrosMatriculas[1].bascula.iNeto);
                 qry2.bindValue(":id0",      RegistrosMatriculas[1].id);
+                qry2.bindValue(":entrada",  true);
                 if (qry2.exec()){
                     qDebug() << "actualizando pareja 2";
                     return true;

@@ -1628,7 +1628,10 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab">
+       <widget class="QWidget" name="Informes">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <attribute name="title">
          <string>Informes</string>
         </attribute>

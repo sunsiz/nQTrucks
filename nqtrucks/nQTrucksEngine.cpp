@@ -76,6 +76,10 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
     /** MAESTROS **/
     m_maestros = new Maestros::Maestros(this);
 
+    /** Report Manager **/
+    m_report_manager = new Db::ReportManager(this);
+    /** END Report Manager **/
+
 
 }
 
@@ -138,14 +142,21 @@ QStringList nQTrucksEnginePrivate::getIODevices()
 //        {
 //            if(info.description()=="NewsagesIO")
 //            {
+
+        if (info.vendorIdentifier()==0x1a86)
+        {
+            if(info.productIdentifier()==0x7523)
+            {
                 if (!info.isBusy())
                 {
+//                    if(info.serialNumber()=="")
+//                    {
                         listIODevices.append(info.systemLocation());
+//                    }
                 }
-//            }
-//        }
+            }
+        }
     }
-
 
     return listIODevices;
 }
@@ -177,19 +188,24 @@ QStringList nQTrucksEnginePrivate::getSerialDevices()
                     + QObject::tr("Product Identifier: ") + (info.hasProductIdentifier() ? QString::number(info.productIdentifier(), 16) : QString()) + "\n"
                     + QObject::tr("Busy: ") + (info.isBusy() ? QObject::tr("Yes") : QObject::tr("No")) + "\n";
 
-//        if (info.manufacturer()=="Newsages NewsTechs")
-//        {
-//            if(info.description()=="NewsagesIO")
-//            {
-//                if (!info.isBusy())
-//                {
+         /*
+          *
+ "Port: ttyUSB0\nLocation: /dev/ttyUSB0\nDescription: USB2.0-Serial\nManufacturer: 1a86\nSerial number: \nVendor Identifier: 1a86\nProduct Identifier: 7523\nBusy: No\n"
+          * */
+
+        if (info.vendorIdentifier()!=0x1a86)
+        {
+            if(info.productIdentifier()!=0x7523)
+            {
+                if (!info.isBusy())
+                {
 //                    if(info.serialNumber()=="")
 //                    {
                         listDevices.append(info.systemLocation());
 //                    }
-//                }
-//            }
-//        }
+                }
+            }
+        }
     }
     return listDevices;
 
@@ -409,6 +425,21 @@ void nQTrucksEngine::report_loadFromFile(const QString &_file){
     Q_D(nQTrucksEngine);
     d->m_report_editor->loadFromFile(_file);
 }
+    /** Report Manager **/
+void nQTrucksEngine::printReport(const int &_ReportId, const QVector<long long> &_vectorRows){
+    Q_D(nQTrucksEngine);
+
+    switch (_ReportId) {
+    case 0:
+        d->m_report_manager->printRegistroMatricula(d->m_maestros->m_RegistroPeso->getCurrentDb(),_vectorRows[0]);
+        break;
+    case 1:
+        d->m_report_manager->printRegistroMatriculaProcesada(d->m_maestros->m_RegistroPeso->getCurrentDb(),_vectorRows[0],_vectorRows[1]);
+        break;
+    }
+
+}
+    /** END Report Manager **/
 /** END REPORTS *******************************************************/
 
 /** MAESTROS *********************************************************************************/
@@ -425,6 +456,7 @@ void nQTrucksEngine::reloadMaestros(){
     RegistrosPesos = d->m_maestros->m_RegistroPeso;
     //RegistrosPesos->query();
 }
+
 /** END MAESTROS ************************************************************/
 
 

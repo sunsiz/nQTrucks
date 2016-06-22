@@ -31,6 +31,7 @@
 #include "ui_RegistrosUi.h"
 
 #include <QStandardItemModel>
+#include <QModelIndex>
 #include <QDebug>
 namespace nQTrucks {
 
@@ -43,16 +44,36 @@ RegistrosUi::RegistrosUi(nQTrucksEngine *_engine, QWidget *parent)
     ui->setupUi(this);
 
 
-    ui->tableRegistrosView->verticalHeader()->setVisible(false);
 
+    /** FILTRO CALENDARIO **/
     flt_fecha = new QSortFilterProxyModel(this);
     flt_fecha->setSourceModel(engine->RegistrosPesos);
     flt_fecha->setFilterKeyColumn(1);
     flt_fecha->setDynamicSortFilter(false);
 
+    /** Filtro Procesado **/
+    flt_procesado = new QSortFilterProxyModel(this);
+    flt_procesado->setSourceModel(flt_fecha);
+    flt_procesado->setFilterKeyColumn(19);
+    flt_procesado->setDynamicSortFilter(false);
+    flt_procesado->setFilterRegExp(QRegExp(QString::number(ui->selectProcesados->isChecked()),Qt::CaseSensitive, QRegExp::RegExp));
+
+    /** FILTRO SI ES PROCESADO, enseñame solo la entrada **/
+    flt_entrada = new QSortFilterProxyModel(this);
+    flt_entrada->setSourceModel(flt_procesado);
+    flt_entrada->setFilterKeyColumn(21);
+    flt_entrada->setDynamicSortFilter(false);
+    flt_entrada->setFilterRegExp(QRegExp(QString::number(ui->selectProcesados->isChecked()),Qt::CaseSensitive, QRegExp::RegExp));
+
+    /** FILTRO FINAL **/
+    flt_final = new QSortFilterProxyModel(this);
+    flt_final->setSourceModel(flt_entrada);
 
 
-    ui->tableRegistrosView->setModel(flt_fecha);
+    ui->tableRegistrosView->verticalHeader()->setVisible(false);
+    ui->tableRegistrosView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableRegistrosView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableRegistrosView->setModel(flt_final);
 
     connect(engine,SIGNAL(rangoFechasChanged(QVector<QDate>)),this,SLOT(rangoFechasChanged(QVector<QDate>)));
 
@@ -71,7 +92,7 @@ RegistrosUi::RegistrosUi(nQTrucksEngine *_engine, QWidget *parent)
     ui->tableRegistrosView->model()->setHeaderData(16,Qt::Horizontal,"Matricula4");
 
 
-    on_calendarioWidget_clicked(QDate::currentDate());
+    on_calendarioWidget_clicked(QDate::currentDate());    
 
 
 }
@@ -83,7 +104,8 @@ RegistrosUi::~RegistrosUi(){
 void RegistrosUi::rangoFechasChanged(const QVector<QDate> &_fechaMinMax){
     ui->calendarioWidget->setMinimumDate(_fechaMinMax[0]);
     ui->calendarioWidget->setMaximumDate(_fechaMinMax[1]);
-    ui->calendarioWidget->setDateRange(_fechaMinMax[0],_fechaMinMax[1]);
+    ui->calendarioWidget->setDateRange(  _fechaMinMax[0],_fechaMinMax[1]);
+    ui->tableRegistrosView->resizeColumnsToContents();
 }
 
 
@@ -94,5 +116,50 @@ void nQTrucks::RegistrosUi::on_calendarioWidget_clicked(const QDate &date){
     qDebug() << "Calendario fecha:"  <<  date.toString("yyyy-MM-dd");//Qt::SystemLocaleShortDate);
 
 }
+
+}
+
+void nQTrucks::RegistrosUi::on_selectProcesados_clicked(bool checked){
+   // procesados 19
+   // emparejado 20
+   // entrada 21
+    flt_procesado->setFilterRegExp(QRegExp(QString::number(checked),Qt::CaseSensitive, QRegExp::RegExp));
+    flt_entrada->setFilterRegExp(QRegExp(QString::number(checked),Qt::CaseSensitive, QRegExp::RegExp));
+}
+
+void nQTrucks::RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &index){
+    int  row        = index.row();
+    long long id    = index.sibling(row, 0).data().toLongLong();
+    QTime hora      = index.sibling(row, 1).data().toTime();
+    float pesobruto = index.sibling(row, 2).data().toFloat();
+    bool procesado  = index.sibling(row, 19).data().toBool();
+//    long long id2   = index.sibling(row, 20).data().toLongLong();
+
+
+
+
+//    qDebug() << "row:       " << row;
+//    qDebug() << "id:        " << id;
+//    qDebug() << "procesado: " << procesado;
+//    qDebug() << "id2:       " << id2;
+
+}
+
+void nQTrucks::RegistrosUi::on_imprimirInforme_clicked(){
+
+    if( ui->tableRegistrosView->currentIndex().isValid()){
+        int  row       = ui->tableRegistrosView->currentIndex().row();
+        bool procesado = ui->tableRegistrosView->currentIndex().sibling(row, 19).data().toBool();
+        QVector<long long>  vectorRows = QVector<long long>(2);
+        vectorRows[0]  = ui->tableRegistrosView->currentIndex().sibling(row, 0).data().toLongLong();
+        vectorRows[1]  = ui->tableRegistrosView->currentIndex().sibling(row, 20).data().toLongLong();
+        engine->printReport(procesado,vectorRows);
+
+//        qDebug() << "row:       " << row;
+//        qDebug() << "id:        " << vectorRows[0];
+//        qDebug() << "procesado: " << procesado;
+//        qDebug() << "id2:       " << vectorRows[1];
+    }
+
 
 }

@@ -108,12 +108,12 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionKeyboard"/>
    <addaction name="actionSystemSettings"/>
    <addaction name="separator"/>
    <addaction name="actionConfiguracion"/>
    <addaction name="actionClient"/>
    <addaction name="actionRegistros"/>
+   <addaction name="separator"/>
   </widget>
   <action name="actionSystemSettings">
    <property name="icon">

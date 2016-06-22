@@ -54,6 +54,7 @@
 #include <QDir>
 #include <QTreeWidgetItem>
 #include "LimeReport"
+#include "Db/ReportManager.h"
 
 /** Maestros **/
 #include <QSqlQuery>
@@ -119,6 +120,10 @@ public:
     Maestros::Maestros *m_maestros;
     /** FIN MAESTROS ************************************************************************/
 
+    /** Report Manager **/
+private:
+    Db::ReportManager *m_report_manager;
+   /** END Report Manager **/
 
 };
 

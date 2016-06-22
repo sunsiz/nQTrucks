@@ -44,7 +44,7 @@ void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, const long l
 }
 
 
-void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, const long long &_row2, const long long &_row1)
+void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, const long long &_row1, const long long &_row2)
 {
     if (!QPrinterInfo::defaultPrinter().isNull()){
         QPrinter _default_printer;

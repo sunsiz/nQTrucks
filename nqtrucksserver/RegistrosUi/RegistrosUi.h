@@ -60,14 +60,20 @@ private:
     nQTrucksEngine *engine;
     /** END nQTrucks Lib **/
 
-
 /** FECHAS **/
 private:
     //QDate m_hoy;
+    QSortFilterProxyModel *flt_final;
     QSortFilterProxyModel *flt_fecha;
+    QSortFilterProxyModel *flt_entrada;
+    QSortFilterProxyModel *flt_procesado;
+
 private slots:
     void rangoFechasChanged(const QVector<QDate> &_fechaMinMax);
     void on_calendarioWidget_clicked(const QDate &date);
+    void on_selectProcesados_clicked(bool checked);
+    void on_tableRegistrosView_clicked(const QModelIndex &index);
+    void on_imprimirInforme_clicked();
 };
 
 }

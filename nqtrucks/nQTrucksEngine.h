@@ -167,7 +167,10 @@ signals:
     void rangoFechasChanged(const QVector<QDate> &_fechaMinMax);
     /** END MAESTROS **/
 
-
+    /** Report Manager **/
+public slots:
+    void printReport(const int &_ReportId, const QVector<long long> &_vectorRows);
+    /** END Report Manager **/
 
 
     /** nQTrucksEnginePrivate **/
