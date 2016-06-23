@@ -41,6 +41,8 @@ Desktop::Desktop(QWidget *parent) :
     connect(ui->runningCheckBox,SIGNAL(toggled(bool)),this,SLOT(isRunning(bool)));
     loadconfig();
 
+    connect(m_app_engine,SIGNAL(registrandoChanged(bool)),ui->runningCheckBox,SLOT(setDisabled(bool)));
+
 
 }
 
@@ -69,6 +71,13 @@ void Desktop::changeEvent(QEvent *e){
 void Desktop::loadconfig(){
 
    /** INTERFACE **/
+   ui->actionConexiones->setVisible(false);
+   ui->actionConfiguracion->setVisible(false);
+   ui->actionKeyboard->setVisible(false);
+   ui->actionSystemSettings->setVisible(false);
+   ui->actionRegistros->setVisible(false);
+   ui->actionClient->setVisible(false);
+
    m_running = m_app_engine->appConfig()->value(QString("Daemon") + "/running","0").toBool();
    ui->runningCheckBox->setChecked(m_running);
 }
@@ -111,24 +120,63 @@ void Desktop::on_selectedAppChanged(){
     ui->appWidget->removeWidget(ui->appWidget->currentWidget());
     switch (m_app) {
     case appConfig:
+
+            //m_app_client=nullptr;
+            ui->actionClient->setChecked(false);
+
+            //m_app_registros=nullptr;
+            ui->actionRegistros->setChecked(false);
+
+            //m_app_config    = new Configuracion(m_app_engine);
+
         m_app_config->setMaximumSize(ui->appWidget->size());
         m_app_config->setSizePolicy(ui->appWidget->sizePolicy());
+
         ui->appWidget->addWidget(m_app_config);
         ui->appWidget->setCurrentWidget(m_app_config);
         break;
+
     case appClient:
+            //m_app_registros=nullptr;
+            ui->actionRegistros->setChecked(false);
+
+            //m_app_config=nullptr;
+            ui->actionConfiguracion->setChecked(false);
+
+            //m_app_client = new Client(m_app_engine);
+
         m_app_client->setMaximumSize(ui->appWidget->size());
         m_app_client->setSizePolicy(ui->appWidget->sizePolicy());
+
         ui->appWidget->addWidget(m_app_client);
         ui->appWidget->setCurrentWidget(m_app_client);
         break;
+
     case appRegistros:
+            //m_app_config=nullptr;
+            ui->actionConfiguracion->setChecked(false);
+
+            //m_app_client=nullptr;
+            ui->actionClient->setChecked(false);
+
+            //m_app_registros  = new RegistrosUi(m_app_engine);
+
         m_app_registros->setMaximumSize(ui->appWidget->size());
         m_app_registros->setSizePolicy(ui->appWidget->sizePolicy());
+
         ui->appWidget->addWidget(m_app_registros);
         ui->appWidget->setCurrentWidget(m_app_registros);
         break;
+
     case appNone:
+            //m_app_client=nullptr;
+            ui->actionClient->setChecked(false);
+
+            //m_app_registros=nullptr;
+            ui->actionRegistros->setChecked(false);
+
+            //m_app_config=nullptr;
+            ui->actionConfiguracion->setChecked(false);
 
         break;
     }
@@ -137,6 +185,7 @@ void Desktop::on_selectedAppChanged(){
 
 /** CONFIGURACION APP **/
 void Desktop::on_actionConfiguracion_toggled(bool arg1){
+
     if (arg1){
         m_app=appConfig;
     }else{
@@ -172,15 +221,34 @@ void Desktop::on_actionRegistros_toggled(bool arg1){
 /** DAEMON **/
 void Desktop::isRunning(bool clicked)
 {
+    ui->appWidget->removeWidget(ui->appWidget->currentWidget());
     m_running=clicked;
+    ui->actionConfiguracion->setVisible(!m_running);
+    ui->actionSystemSettings->setVisible(!m_running);
+
+    ui->actionClient->setVisible(m_running);
+    ui->actionRegistros->setVisible(m_running);
+
+
     m_app_engine->appConfig()->setValue(QString("Daemon") + "/running",m_running);
     m_app_engine->setInitDaemon(m_running);
     //DEBUG NO BLOQUEAR ui->configTabWidget->setEnabled(!m_running);
     if (m_running){
+//        m_app_config    = new Configuracion(m_app_engine,this);
+//        m_app_client    = new Client(m_app_engine,this);
+//        m_app_registros = new RegistrosUi(m_app_engine,this);
+
         ui->runningCheckBox->setText("Running...");
     }else{
+
+
+
         ui->runningCheckBox->setText("Stoped...");
     }
+}
+
+void Desktop::registrandoChanged(const bool &_registrando){
+
 }
 
 

@@ -167,6 +167,7 @@ private slots:
     void reloadMaestros();
 signals:
     void rangoFechasChanged(const QVector<QDate> &_fechaMinMax);
+    void registrandoChanged(const bool &_registrando);
     /** END MAESTROS **/
 
     /** Report Manager **/

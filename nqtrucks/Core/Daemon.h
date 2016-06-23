@@ -40,6 +40,9 @@ private:
 
 public:
     void setInit(bool init);
+    bool registrando() const;
+    void setRegistrando(bool registrando);
+
 signals:
     void initChanged(const bool &_init);
     void rowsPesoChanged();
@@ -55,6 +58,7 @@ private:
    SimpleMatriculas m_RegistroMatriculas;
 signals:
     void RegistroChanged(const SimpleMatriculas &_results);
+    void registrandoChanged(const bool &_registrando);
 /** END REGISTRO **/
 
 

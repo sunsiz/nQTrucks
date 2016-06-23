@@ -53,7 +53,8 @@ namespace nQTrucks{
 
 
         void RegistroPeso::configQueries(){
-            m_DefaultQuery = "select * from registros_matriculas ;" ;//+ QString(appServer_tablename);
+            //m_DefaultQuery = "select * from registros_matriculas ;" ;//+ QString(appServer_tablename);
+            m_DefaultQuery = "SELECT id ,fecha, pesobruto, pesoneto , matriculaA1, matriculaB1, matriculaA2, matriculaB2, procesado, emparejado, entrada from registros_matriculas;";
         }
 
         void RegistroPeso::setFecha_min_max()

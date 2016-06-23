@@ -39,7 +39,7 @@ void Daemon::setInit(bool init)
 }
 
 void Daemon::onStartStop(const bool &_init){
-    m_registrando=false;
+    setRegistrando(false);
     m_saliendo=false;
     m_balpr1=false;
     m_balpr2=false;
@@ -55,12 +55,24 @@ void Daemon::onStartStop(const bool &_init){
 
 }
 
+bool Daemon::registrando() const
+{
+    //emit registrandoChanged(m_registrando);
+    return m_registrando;
+}
+
+void Daemon::setRegistrando(bool registrando)
+{
+    m_registrando = registrando;
+    emit registrandoChanged(m_registrando);
+}
+
 /** PESO *****************************/
 void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
 {
-  if((m_init) && (!m_registrando)){
-      // Bloqueo Registro
-      m_registrando=true;
+    if((m_init) && (!m_registrando)){
+        // Bloqueo Registro
+      setRegistrando(true);
       m_saliendo=false;
       //Activo Semaforo rojo
       m_newsagesIO->setSemaforo(SEMAFORO_ROJO);
@@ -122,7 +134,7 @@ void Daemon::onBasculaChanged(const Bascula &_pesoRT){
 
 /** DB **/
 void Daemon::onGuardarRegistroSimple(){
-    if (m_registrando){
+    if (registrando()){
         //consigue matriculas
         m_balpr1=false;
         m_balpr2=false;
@@ -175,7 +187,7 @@ void Daemon::onGuardarRegistroSimpleMatriculas(){
 
     hiloDb->start();
 
-    m_registrando=false;
+    setRegistrando(false);
     m_saliendo=true;
 }
 

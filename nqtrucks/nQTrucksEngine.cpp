@@ -407,6 +407,7 @@ void nQTrucksEngine::setInitDaemon(const bool &_init){
 
         auto daemon_rowchanged = connect(d->m_daemon,SIGNAL(rowsPesoChanged()),
                                          this       ,SLOT(  sincronizar_maestros()));
+        auto daemon_registrando = connect(d->m_daemon,SIGNAL(registrandoChanged(bool)),this,SIGNAL(registrandoChanged(bool)));
          d->m_daemon->setInit(_init);
     } else{
         d->m_daemon->setInit(_init);
