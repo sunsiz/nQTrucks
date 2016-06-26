@@ -52,8 +52,8 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
 
 
     /** Daemon Types **/
-    qRegisterMetaType<Registros::Simple>            ("Registros::Simple");
-    qRegisterMetaType<Registros::Matriculas>        ("Registros::Matriculas");
+    //qRegisterMetaType<Registros::Simple>            ("Registros::Simple");
+   // qRegisterMetaType<Registros::Matriculas>        ("Registros::Matriculas");
     qRegisterMetaType<SimpleMatriculas>             ("SimpleMatriculas");
 
     /** Bascula Types **/
@@ -71,7 +71,7 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
     m_alpr[0] = new Devices::NewsagesAlpr(0,settings(),this);
     m_alpr[1] = new Devices::NewsagesAlpr(1,settings(),this);
 
-    m_report_editor = new LimeReport::ReportEngine(this);
+    m_report_editor = new LimeReport::ReportEngine(this);  /** MEMORY LEAK **/
 
     /** MAESTROS **/
     m_maestros = new Maestros::Maestros(this);

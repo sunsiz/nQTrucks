@@ -63,10 +63,10 @@ void Client::on_SemaforoEstadoChanged(int _color){
         ui->semaforoVerde->setChecked(true);
         break;
     case SEMAFORO_AMARILLO:
-        ui->semaforoAmarillo->setChecked(true);
+        ui->semaforoAmarillo->setChecked(true); /** MEMORY LEAK **/
         break;
     case SEMAFORO_ROJO:
-        ui->semaforoRojo->setChecked(true);
+        ui->semaforoRojo->setChecked(true); /** MEMORY LEAK **/
         break;
     default:
         ui->semaforoVerde->setChecked(true);
@@ -84,7 +84,7 @@ void Client::on_BasculaConectada(bool conectada){
 
 void Client::onBascula(Bascula _bascula){
     ui->BasculaLcd->display(_bascula.iBruto);
-    ui->BasculaEstable->setChecked(_bascula.bEstado);
+    ui->BasculaEstable->setChecked(_bascula.bEstado); /** MEMORY LEAK **/
 }
 
 void Client::onDaemonRegistroChanged(const SimpleMatriculas &_result)
@@ -95,8 +95,8 @@ void Client::onDaemonRegistroChanged(const SimpleMatriculas &_result)
 
     if ( _result.results[0].MatriculaPrecisionA >= _result.results[1].MatriculaPrecisionA){
         ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.results[0].MatriculaFotoAQ));
-        ui->MatriculaA->setText(_result.results[0].MatriculaA);
-        ui->MatriculaPrecisionA->setText(_result.results[0].MatriculaPrecisionAs);
+        ui->MatriculaA->setText(_result.results[0].MatriculaA);/** MEMORY LEAK **/
+        ui->MatriculaPrecisionA->setText(_result.results[0].MatriculaPrecisionAs);/** MEMORY LEAK **/
     }else{
         ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.results[1].MatriculaFotoAQ));
         ui->MatriculaA->setText(_result.results[1].MatriculaA);
@@ -105,8 +105,8 @@ void Client::onDaemonRegistroChanged(const SimpleMatriculas &_result)
 
     if ( _result.results[0].MatriculaPrecisionB >= _result.results[1].MatriculaPrecisionB){
         ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(_result.results[0].MatriculaFotoBQ));
-        ui->MatriculaB->setText(_result.results[0].MatriculaB);
-        ui->MatriculaPrecisionB->setText(_result.results[0].MatriculaPrecisionBs);
+        ui->MatriculaB->setText(_result.results[0].MatriculaB);/** MEMORY LEAK **/
+        ui->MatriculaPrecisionB->setText(_result.results[0].MatriculaPrecisionBs);/** MEMORY LEAK **/
     }else{
         ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(_result.results[1].MatriculaFotoBQ));
         ui->MatriculaB->setText(_result.results[1].MatriculaB);

@@ -43,12 +43,12 @@ nQSerialPortReader::nQSerialPortReader(QSettings *_appsettings, QObject *parent)
     connect(this, SIGNAL(BasculaChanged(Bascula)),this,SLOT(MuestrearBascula(Bascula)));
 }
 
-nQSerialPortReader::~nQSerialPortReader(){
-    if(m_serialPort->isOpen()){
-        m_serialPort->close();
-    }
-    m_serialPort->deleteLater();
-}
+//nQSerialPortReader::~nQSerialPortReader(){
+//    if(m_serialPort->isOpen()){
+//        m_serialPort->close();
+//    }
+//    m_serialPort->deleteLater();
+//}
 
 void nQSerialPortReader::setBasculaType(const int &_TipoBascula){
     if (m_type != _TipoBascula){

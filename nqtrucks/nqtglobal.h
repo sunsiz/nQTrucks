@@ -38,6 +38,7 @@
 #include <QSettings>
 #include <QVector>
 #include <QImage>
+#include <QBuffer>
 #include <QDateTime>
 
 #include "opencv2/opencv.hpp"
@@ -88,10 +89,53 @@ namespace nQTrucks
     class Tools: public QObject{
         Q_OBJECT
     public:
-        explicit Tools(QObject *parent=nullptr);
-        /*static*/ QImage     convertMat2QImage(   const cv::Mat    &_cvimage);
-        /*static*/ cv::Mat    convertQImage2Mat(   const QImage     &_qimage);
-        /*static*/ QByteArray convertMat2ByteArray(const cv::Mat    &_cvimage);
+        explicit Tools(QObject *parent=nullptr):QObject(parent){}
+
+        inline QImage convertMat2QImage(const cv::Mat &_cvimage){
+            QImage qtImg= QImage();
+            if( !_cvimage.empty() && _cvimage.depth() == CV_8U ){
+                if(_cvimage.channels() == 1){
+                    qtImg = QImage( (const unsigned char *)(_cvimage.data),
+                                    _cvimage.cols,
+                                    _cvimage.rows,
+                                    //_cvimage.step,
+                                    QImage::Format_Indexed8 ).copy();
+                }
+                else{
+                    cv::cvtColor( _cvimage, _cvimage, CV_BGR2RGB );
+                    qtImg = QImage( (const unsigned char *)(_cvimage.data),
+                                    _cvimage.cols,
+                                    _cvimage.rows,
+                                    //_cvimage.step,
+                                    QImage::Format_RGB888 ).copy();
+                }
+            }
+            return qtImg;
+        }
+        inline cv::Mat  convertQImage2Mat(   const QImage     &_qimage){
+            QByteArray baScene; // byte array with data
+            QBuffer buffer(&baScene);
+            buffer.open(QIODevice::WriteOnly);
+            _qimage.save(&buffer,"JPG");
+
+            const char* begin = reinterpret_cast<char*>(baScene.data());
+            const char* end = begin + baScene.size();
+            std::vector<char> pic(begin, end);
+            buffer.close();
+            baScene.clear();
+            return cv::imdecode(pic,CV_LOAD_IMAGE_COLOR).clone();
+        }
+
+        inline QByteArray convertMat2ByteArray(const cv::Mat    &_cvimage){
+            QImage qtImg = convertMat2QImage(_cvimage.clone());
+            QByteArray baScene; // byte array with data
+            QBuffer buffer(&baScene);
+            buffer.open(QIODevice::WriteOnly);
+            qtImg.save(&buffer,"JPG");
+            buffer.close();
+            return baScene;
+        }
+
         //static cv::Mat    convertByteArray2Mat(QByteArray _Bytearray);
         //static QByteArray resizeByteArray2ByteArray(QByteArray _ByteArray, const int &_w, const int &_h);
     };
@@ -152,24 +196,21 @@ struct Prewarp{
 namespace Registros{              /** REPORTS **/
     class Camara{        
     public:
-        Camara();
-        ~Camara();
-        cv::Mat    OrigenFoto;//              =cv::Mat::zeros(fotoSize, CV_8UC3 );                 //Imagen Original
+        Camara():OrigenFoto(new cv::Mat){}
+        cv::Mat    *OrigenFoto;//              =cv::Mat::zeros(fotoSize, CV_8UC3 );                 //Imagen Original
         QByteArray OrigenFotoByte;//          =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
         QImage     OrigenFotoQ;
-        void convertirFotos();
-        Tools *m_tools;
-    };
+        inline void convertirFotos(){
+            Tools *m_tools  = new Tools; /** MEMORY LEAK **/
+            OrigenFotoByte  = m_tools->convertMat2ByteArray(OrigenFoto->clone()); /** MEMORY LEAK **/
+            OrigenFotoQ     = m_tools->convertMat2QImage(OrigenFoto->clone());
+        }
 
-    class Simple{
-        public:
-        Bascula bascula;
     };
 
     class MatriculaResults{
     public:
         MatriculaResults();
-        ~MatriculaResults();
         int        tipo;//                 =0;                                                     //0 para calibracion, 1 para procesado
         int        id ;//                  =0;                                                     //id fuente de captura de foto
         Camara    camara;
@@ -199,23 +240,20 @@ namespace Registros{              /** REPORTS **/
         float      MatriculaPrecisionB;//  =0;                                                     // Precision del OCR        
         QString    MatriculaPrecisionBs;// ="0%";
 
-        Tools *m_tools;
-        void convertirFotos();
+        inline void convertirFotos(){
+            Tools *m_tools        =  new Tools;
+            OrigenFotoPrewarpQ    =  m_tools->convertMat2QImage(OrigenFotoPrewarp.clone());
+            OrigenFotoBlancaQ     =  m_tools->convertMat2QImage(OrigenFotoBlanca.clone());
+            OrigenFotoRojaQ       =  m_tools->convertMat2QImage(OrigenFotoRoja.clone());
+
+            MatriculaFotoAByte    =  m_tools->convertMat2ByteArray(MatriculaFotoA.clone());
+            MatriculaFotoAQ       =  m_tools->convertMat2QImage(MatriculaFotoA.clone());
+
+            MatriculaFotoBByte    =  m_tools->convertMat2ByteArray(MatriculaFotoB.clone());
+            MatriculaFotoBQ       =  m_tools->convertMat2QImage(MatriculaFotoB.clone());
+        }
     };
 
-        #define REGISTRO_ID                          0
-        #define REGISTRO_FECHA                       1
-        #define REGISTRO_PESO_BRUTO                  2
-        #define REGISTRO_PESO_NETO                   3
-        #define REGISTRO_PESO_TARA                   4
-        #define REGISTRO_CAMARA1                     5
-        #define REGISTRO_CAMARA2                     10
-
-        struct sMatriculas{
-            QString key[255]={0};
-            QString v[255]={0};
-            QString l[255]={0};
-        };typedef sMatriculas Matriculas;
 
 } // namespace Registros /** END REPORTS **/
 /** END SETTINGS **/
@@ -226,7 +264,6 @@ public:
     QDateTime FechaRegistro;
     Bascula bascula;
     QVector<Registros::MatriculaResults> results = QVector<Registros::MatriculaResults>(2);
-    void convertirFotos();
     };
 
 

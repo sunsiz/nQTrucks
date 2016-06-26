@@ -19,10 +19,6 @@ DatabaseManager::DatabaseManager(Maestros::Maestros *_maestros, QObject *parent)
     m_RegistroMatriculas.resize(2);
 }
 
-DatabaseManager::~DatabaseManager(){
-
-}
-
 /** REGISTRO SIMPLE **/
 void DatabaseManager::setRegistroMatriculas(const SimpleMatriculas &RegistroMatriculas)
 {

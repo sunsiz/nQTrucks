@@ -46,7 +46,7 @@ class nQSerialPortReader : public QObject
     Q_ENUMS(BasculaType)
 public:
     explicit nQSerialPortReader(QSettings *_appsettings=0,QObject *parent=nullptr);
-    ~nQSerialPortReader();
+    //~nQSerialPortReader();
 
     enum BasculaType
     {

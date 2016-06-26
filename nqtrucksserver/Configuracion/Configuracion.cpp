@@ -105,7 +105,7 @@ void Configuracion::loadconfig()
     /** DEFAULTS UI **/
     for(m_matricularesults_iterator = m_matricularesults.begin(); m_matricularesults_iterator != m_matricularesults.end(); m_matricularesults_iterator++)
     {
-        m_matricularesults_iterator->convertirFotos();
+        m_matricularesults_iterator->convertirFotos(); /** MEMORY LEAK **/
 
     }
     /** END DEFAULT UIS **/
@@ -257,7 +257,7 @@ void Configuracion::on_semaforoRojo_clicked(){
 }
 
 void Configuracion::on_SemaforoConnect(bool status){
-    ui->semaforoConectado->setChecked(status);
+    ui->semaforoConectado->setChecked(status);/** MEMORY LEAK **/
 }
 
 void Configuracion::on_SemaforoEstadoChanged(int _color){
@@ -268,11 +268,11 @@ void Configuracion::on_SemaforoEstadoChanged(int _color){
         break;
     case SEMAFORO_AMARILLO:
         qDebug() << "SEMAFORO AMARILLO";
-        ui->semaforoAmarillo->setChecked(true);
+        ui->semaforoAmarillo->setChecked(true); /** MEMORY LEAK **/
         break;
     case SEMAFORO_ROJO:
         qDebug() << "SEMAFORO ROJO";
-        ui->semaforoRojo->setChecked(true);
+        ui->semaforoRojo->setChecked(true); /** MEMORY LEAK **/
         break;
     default:
         qDebug() << "SEMAFORO VERDE INDETERMINADO";
@@ -314,7 +314,7 @@ void Configuracion::on_guardarBascula_clicked()
 
 void Configuracion::on_BasculaConectada(bool conectada)
 {
-    ui->BasculaStatus->setChecked(conectada);
+    ui->BasculaStatus->setChecked(conectada);/** MEMORY LEAK **/
     if (!conectada){
         ui->BasculaLcd->display("-------");
         ui->BasculaLcd2->display("-------");
@@ -328,7 +328,7 @@ void Configuracion::onBascula(Bascula _bascula)
     ui->BasculaLcd->display(_bascula.iBruto);
     ui->BasculaLcd2->display(_bascula.iTara);
     ui->BasculaLcd3->display(_bascula.iNeto);
-    ui->BasculaEstable->setChecked(_bascula.bEstado);
+    ui->BasculaEstable->setChecked(_bascula.bEstado); /** MEMORY LEAK **/
 }
 
 /** END BASCULAS **/
@@ -372,11 +372,11 @@ void Configuracion::updateCalibracionGui(){
     ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_matricularesults[index].camara.OrigenFotoQ));
     ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_matricularesults[index].MatriculaFotoAQ));
     ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_matricularesults[index].MatriculaFotoBQ));
-    ui->MatriculaA->setText(m_matricularesults[index].MatriculaA);
+    ui->MatriculaA->setText(m_matricularesults[index].MatriculaA);/** MEMORY LEAK **/
     ui->MatriculaB->setText(m_matricularesults[index].MatriculaB);
     ui->FotoBlancosA->setPixmap(QPixmap::fromImage(m_matricularesults[index].OrigenFotoBlancaQ));
     ui->FotoRojosA->setPixmap(QPixmap::fromImage(m_matricularesults[index].OrigenFotoRojaQ));
-    ui->LongMatriculaA->setText(m_matricularesults[index].MatriculaPrecisionAs);
+    ui->LongMatriculaA->setText(m_matricularesults[index].MatriculaPrecisionAs); /** MEMORY LEAK **/
     ui->LongMatriculaB->setText(m_matricularesults[index].MatriculaPrecisionBs);
 }
     /** ALPR 1 **/

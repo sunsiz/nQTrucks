@@ -13,7 +13,7 @@ class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
     explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, Registros::MatriculaResults *_results=0,  QSettings *_appsettings=0, QObject *parent = 0);
-    ~NewsagesAlprTask();
+    //~NewsagesAlprTask();
 signals:
     void workFinished();
 private:

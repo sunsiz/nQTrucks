@@ -110,7 +110,7 @@ namespace nQTrucks{
                 qry.bindValue(":precisionA2",       QString::number(RegistroMatriculas.results[1].MatriculaPrecisionA,'g',6));
                 qry.bindValue(":precisionB2",       QString::number(RegistroMatriculas.results[1].MatriculaPrecisionB,'g',6));
 
-                if(qry.exec()){
+                if(qry.exec()){ /** MEMORY LEAK **/
                     RegistroMatriculas.id = qry.lastInsertId().toLongLong();
                     setTable();
                 }else{
@@ -160,7 +160,7 @@ namespace nQTrucks{
             qry.bindValue(":fechaabuscar", RegistrosMatriculas[0].FechaRegistro.date());
             qry.bindValue(":matriculabuscar", _matricula);
 
-            if (qry.exec()) { // make sure your query has been executed successfully
+            if (qry.exec()) { /** MEMORY LEAK **/ // make sure your query has been executed successfully
                 /** Si existe la pareja, adquiero su id y el peso bruto **/
                 while (qry.next()){
                     RegistrosMatriculas[1].id = qry.value("id").toLongLong();

@@ -36,7 +36,7 @@ using namespace nQTrucks;
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    QApplication app(argc, argv); /** MEMORY LEAK **/
     QDesktopWidget dw;
     Desktop w;
 
@@ -51,5 +51,5 @@ int main(int argc, char *argv[])
     //w.setMaximumSize(dw.width(),dw.height());
     w.showMaximized();
 
-    return app.exec();
+    return app.exec(); /** MEMORY LEAK **/
 }

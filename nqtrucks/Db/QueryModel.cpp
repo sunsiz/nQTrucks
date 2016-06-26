@@ -26,6 +26,7 @@ namespace nQTrucks {
         {
             if (m_db.isOpen()){
                 m_db.close();
+                QSqlDatabase::removeDatabase(m_db.connectionName());
             }
         }
 
@@ -59,7 +60,7 @@ namespace nQTrucks {
         //Consulta default
         bool QueryModel::setQuery(const QString &query)//,const QSqlDatabase &_db)
         {
-            QSqlQueryModel::setQuery(query, m_db);
+            QSqlQueryModel::setQuery(query, m_db); /** MEMORY LEAK **/
             if (this->query().record().isEmpty())
             {
                 //qWarning() << "QueryModel::setQuery() - " << this->query().lastError();
@@ -87,7 +88,7 @@ namespace nQTrucks {
         {
             qDebug() << "conexion inicial es: " << m_db.connectionName();
             if ( !QSqlDatabase::contains("nqtrucks")) {
-                m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks");
+                m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks"); /** MEMORY LEAK **/
                 m_db.setDatabaseName( "nqtrucks" );
                 m_db.setHostName(     "localhost" );
                 m_db.setUserName(     "nqtrucks" );
@@ -100,7 +101,7 @@ namespace nQTrucks {
             qDebug() << "conexion al verificar es: " << m_db.connectionName();
             if ( !m_db.isOpen() )
             {
-                if (!m_db.open()) {
+                if (!m_db.open()) {                /** MEMORY LEAK **/
                     qWarning() << "Unable to connect to database, giving up:" << m_db.lastError();
                     return false;
                 }

@@ -64,10 +64,10 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
 
 }
 
-NewsagesAlpr::~NewsagesAlpr()
-{
- m_results.detach();
-}
+//NewsagesAlpr::~NewsagesAlpr()
+//{
+// m_results.detach();
+//}
 
 void NewsagesAlpr::setFotoCamara(const Registros::Camara &_camara) {
     m_results[0]->camara = _camara;
@@ -212,14 +212,14 @@ void NewsagesAlpr::processFoto(const Registros::Camara &_camara)
 
         /** conectar respuestas con padre **/
         /** Ejecutar Procesos **/
-        hilo1->start();
-        hilo2->start();
+        hilo1->start(); /** MEMORY LEAK **/
+        hilo2->start(); /** MEMORY LEAK **/
     }
 
 }
 
 void NewsagesAlpr::onProcesarFotoFinished(){
-    m_results[2]->convertirFotos();
+    m_results[2]->convertirFotos(); /** MEMORY LEAK **/
     emit ReplyMatriculaResults(*m_results[2]);
     qDebug() << "Device:"           << m_results[2]->id << endl
              << "\t Matricula1:"    << m_results[2]->MatriculaA

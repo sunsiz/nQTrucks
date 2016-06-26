@@ -19,7 +19,6 @@ class DatabaseManager : public QObject{
 public:
    // DatabaseManager(QObject *parent=nullptr);
     explicit DatabaseManager(Maestros::Maestros *_maestros=nullptr, QObject *parent=nullptr);
-    ~DatabaseManager();
 
 signals:
     void rowsPesoChanged();

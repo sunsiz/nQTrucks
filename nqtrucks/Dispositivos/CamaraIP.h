@@ -49,7 +49,7 @@ class CamaraIP : public QObject
 
 public:
     explicit CamaraIP(int nDevice=0, QSettings *_appsettings=0, QObject *parent = 0);
-    ~CamaraIP();
+    //~CamaraIP();
 
     enum CameraType
     {
@@ -78,7 +78,7 @@ private:
 private:
     QUrl setCamaraURL();
     QNetworkAccessManager *m_netmanager;
-    Registros::Camara m_RegistroCamara;
+    Registros::Camara     *m_RegistroCamara;
 public slots:
     void sendCamaraIPFotoRequest();
 
