@@ -13,13 +13,14 @@ class ReportManager : public QObject{
    Q_OBJECT
 public:
     explicit ReportManager(QObject *parent=nullptr);
+    ~ReportManager();
 
-private:
-    QString m_Informe_Peso          = QApplication::applicationDirPath()+"/reports/peso_matricula.lrxml";
-    QString m_Informe_PesoProcesado = QApplication::applicationDirPath()+"/reports/peso_procesado.lrxml";
 public:
     void printRegistroMatricula(         const QSqlDatabase &_db, const long long &_row1);
     void printRegistroMatriculaProcesada(const QSqlDatabase &_db, const long long &_row1, const long long &_row2);
+private:
+    QString informe_Peso          = QApplication::applicationDirPath()+"/reports/peso_matricula.lrxml";
+    QString informe_PesoProcesado = QApplication::applicationDirPath()+"/reports/peso_procesado.lrxml";
 };
 
 }
