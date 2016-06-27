@@ -136,7 +136,8 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
         buffer.close();
         cv::Mat *_decode = new cv::Mat;
         cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,_decode); /** MEMORY LEAK **/
-        _decode->copyTo(*m_RegistroCamara->OrigenFoto);
+        cv::resize(*_decode,*m_RegistroCamara->OrigenFoto,fotoSize);
+        //_decode->copyTo(*m_RegistroCamara->OrigenFoto);
         _decode->release();
         delete _decode;
 
