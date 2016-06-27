@@ -86,6 +86,7 @@ namespace nQTrucks {
         //DATABASE MANAGER
         bool QueryModel::initDB()
         {
+            bool ret=false;
             qDebug() << "conexion inicial es: " << m_db.connectionName();
             if ( !QSqlDatabase::contains("nqtrucks")) {
                 m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks"); /** MEMORY LEAK **/
@@ -101,12 +102,9 @@ namespace nQTrucks {
             qDebug() << "conexion al verificar es: " << m_db.connectionName();
             if ( !m_db.isOpen() )
             {
-                if (!m_db.open()) {                /** MEMORY LEAK **/
-                    qWarning() << "Unable to connect to database, giving up:" << m_db.lastError();
-                    return false;
-                }
+                ret = m_db.open();                /** MEMORY LEAK **/
             }
-            return true;
+            return ret;
         }
 
         // Ejecutar Consultas: Create drop select,Insert, etc.

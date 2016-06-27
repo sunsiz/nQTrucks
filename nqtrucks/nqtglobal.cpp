@@ -47,19 +47,18 @@ QString nQTrucks::extractClassName(QString className)
 
 namespace nQTrucks {
     namespace Registros{
-        MatriculaResults::MatriculaResults(){ /** MEMORY LEAK **/
-            tipo                 =0;                                                     //0 para calibracion, 1 para procesado
-            id                   =0;                                                     //id fuente de captura de foto
-
-            MatriculaDetectedA   =false;                                                 // Coincide con un patron de busqueda?
-            MatriculaA           ="";                                                    // STring de la matricula
-            MatriculaPrecisionA  =0;                                                     // Precision del OCR
-            MatriculaPrecisionAs ="0%";
-
-            MatriculaDetectedB   =false;                                                 // Coincide con un patron de busqueda?
-            MatriculaB           ="";                                                    // STring de la matricula
-            MatriculaPrecisionB  =0;                                                     // Precision del OCR
-            MatriculaPrecisionBs ="0%";
+        MatriculaResults::MatriculaResults()
+            : tipo(0)                                                     //0 para calibracion, 1 para procesado
+            , id(0)                                                     //id fuente de captura de foto
+            , MatriculaDetectedA(false)                                                 // Coincide con un patron de busqueda?
+            , MatriculaA("")                                                    // STring de la matricula
+            , MatriculaPrecisionA(0)                                                     // Precision del OCR
+            , MatriculaPrecisionAs("0%")
+            , MatriculaDetectedB(false)                                                 // Coincide con un patron de busqueda?
+            , MatriculaB("")                                                    // STring de la matricula
+            , MatriculaPrecisionB(0)                                                     // Precision del OCR
+            , MatriculaPrecisionBs("0%")
+        { /** MEMORY LEAK **/
         }
     } /** end Namespace **/
 } /** end namespace **/

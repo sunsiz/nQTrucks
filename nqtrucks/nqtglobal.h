@@ -204,6 +204,7 @@ namespace Registros{              /** REPORTS **/
             Tools *m_tools  = new Tools; /** MEMORY LEAK **/
             OrigenFotoByte  = m_tools->convertMat2ByteArray(OrigenFoto->clone()); /** MEMORY LEAK **/
             OrigenFotoQ     = m_tools->convertMat2QImage(OrigenFoto->clone());
+            delete m_tools;
         }
 
     };
@@ -251,6 +252,7 @@ namespace Registros{              /** REPORTS **/
 
             MatriculaFotoBByte    =  m_tools->convertMat2ByteArray(MatriculaFotoB.clone());
             MatriculaFotoBQ       =  m_tools->convertMat2QImage(MatriculaFotoB.clone());
+            delete m_tools;
         }
     };
 
