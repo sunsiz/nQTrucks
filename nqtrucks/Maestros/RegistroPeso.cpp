@@ -86,14 +86,14 @@ namespace nQTrucks{
             endResetModel();
         }
 
-        bool RegistroPeso::guardarRegistroSimpleMatriculas(SimpleMatriculas &RegistroMatriculas){
+        bool RegistroPeso::guardarRegistroRegistroMatriculas(Registros::RegistroMatriculas &RegistroMatriculas){
                 QSqlQuery qry(m_db);
                 qry.prepare(qry_insert_simple);
-                qry.bindValue(":pesobruto",         RegistroMatriculas.bascula.iBruto);
-                qry.bindValue(":pesoneto",          RegistroMatriculas.bascula.iNeto);
-                qry.bindValue(":pesotara",          RegistroMatriculas.bascula.iTara);
+                qry.bindValue(":pesobruto",         RegistroMatriculas.m_bascula->getIBruto());
+                qry.bindValue(":pesoneto",          RegistroMatriculas.m_bascula->getINeto());
+                qry.bindValue(":pesotara",          RegistroMatriculas.m_bascula->getITara());
 
-                qry.bindValue(":fotocamara1",       RegistroMatriculas.results[0].camara.OrigenFotoByte);
+                qry.bindValue(":fotocamara1",       RegistroMatriculas.results[0].camara->getOrigenFotoByte());
                 qry.bindValue(":fotomatriculaA1",   RegistroMatriculas.results[0].MatriculaFotoAByte);
                 qry.bindValue(":fotomatriculaB1",   RegistroMatriculas.results[0].MatriculaFotoBByte);
                 qry.bindValue(":matriculaA1",       RegistroMatriculas.results[0].MatriculaA);
@@ -102,7 +102,7 @@ namespace nQTrucks{
                 qry.bindValue(":precisionB1",       QString::number(RegistroMatriculas.results[0].MatriculaPrecisionB,'g',6));
 
 
-                qry.bindValue(":fotocamara2",       RegistroMatriculas.results[1].camara.OrigenFotoByte);
+                qry.bindValue(":fotocamara2",       RegistroMatriculas.results[1].camara->getOrigenFotoByte());
                 qry.bindValue(":fotomatriculaA2",   RegistroMatriculas.results[1].MatriculaFotoAByte);
                 qry.bindValue(":fotomatriculaB2",   RegistroMatriculas.results[1].MatriculaFotoBByte);
                 qry.bindValue(":matriculaA2",       RegistroMatriculas.results[1].MatriculaA);
@@ -151,7 +151,7 @@ namespace nQTrucks{
             return _fecha;
         }
 
-        bool RegistroPeso::buscarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas, const QString &_matricula){
+        bool RegistroPeso::buscarPareja(QVector<Registros::RegistroMatriculas> &RegistrosMatriculas, const QString &_matricula){
             /** TODO ENTRE FECHAS **/
              qDebug() << "BUSCANDO:  [[" << _matricula << "]]";
             QSqlQuery qry(m_db);
@@ -164,7 +164,7 @@ namespace nQTrucks{
                 /** Si existe la pareja, adquiero su id y el peso bruto **/
                 while (qry.next()){
                     RegistrosMatriculas[1].id = qry.value("id").toLongLong();
-                    RegistrosMatriculas[1].bascula.iBruto = qry.value("pesobruto").toFloat()+300; //DEBUG
+                    RegistrosMatriculas[1].m_bascula->setIBruto(qry.value("pesobruto").toFloat()+300); //DEBUG
                     return actualizarPareja(RegistrosMatriculas);
                     /** Actualizo a Procesado y
                     * consigo el Peso Verificado
@@ -175,11 +175,11 @@ namespace nQTrucks{
             return false;
         }
 
-        bool RegistroPeso::actualizarPareja(QVector<SimpleMatriculas> &RegistrosMatriculas)
+        bool RegistroPeso::actualizarPareja(QVector<Registros::RegistroMatriculas> &RegistrosMatriculas)
         {
-            float neto = abs(RegistrosMatriculas[0].bascula.iBruto - RegistrosMatriculas[1].bascula.iBruto);
-            RegistrosMatriculas[0].bascula.iNeto = neto;
-            RegistrosMatriculas[1].bascula.iNeto = neto;
+            float neto = abs(RegistrosMatriculas[0].m_bascula->getIBruto() - RegistrosMatriculas[1].m_bascula->getIBruto());
+            RegistrosMatriculas[0].m_bascula->setINeto(neto);
+            RegistrosMatriculas[1].m_bascula->setINeto(neto);
             qDebug() << "Actualizando Parejas";
             QSqlQuery qry(m_db);
             QSqlQuery qry2(m_db);
@@ -188,14 +188,14 @@ namespace nQTrucks{
 
             /** Primera pareja 0 **/
             qry.bindValue(":idpareja", RegistrosMatriculas[1].id);
-            qry.bindValue(":pesoneto", RegistrosMatriculas[0].bascula.iNeto);
+            qry.bindValue(":pesoneto", RegistrosMatriculas[0].m_bascula->getINeto());
             qry.bindValue(":id0",      RegistrosMatriculas[0].id);
             qry.bindValue(":entrada",  false);
             if (qry.exec()){
                 qDebug() << "actualizando pareja 1";
                 /** Segunda pareja 1 **/
                 qry2.bindValue(":idpareja", RegistrosMatriculas[0].id);
-                qry2.bindValue(":pesoneto", RegistrosMatriculas[1].bascula.iNeto);
+                qry2.bindValue(":pesoneto", RegistrosMatriculas[1].m_bascula->getINeto());
                 qry2.bindValue(":id0",      RegistrosMatriculas[1].id);
                 qry2.bindValue(":entrada",  true);
                 if (qry2.exec()){

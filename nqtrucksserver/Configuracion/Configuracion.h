@@ -93,7 +93,7 @@ private slots:
     void on_desconectarBascula_clicked();
     void on_guardarBascula_clicked();
     void on_BasculaConectada(bool conectada);
-    void onBascula(Bascula _bascula);
+    void onBascula(const Registros::Bascula &_bascula);
     /** END BASCULAS **/
 
 

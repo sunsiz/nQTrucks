@@ -68,11 +68,11 @@ private slots:
     /** BASCULAS **/
 private slots:
     void on_BasculaConectada(bool conectada);
-    void onBascula(Bascula _bascula);
+    void onBascula(const Registros::Bascula &_bascula);
     /** END BASCULAS **/
 
 private slots:
-    void onDaemonRegistroChanged(const SimpleMatriculas &_result);
+    void onDaemonRegistroChanged(const Registros::RegistroMatriculas &_result);
     /** END ALPR **/
 
     /** CONFIG **/

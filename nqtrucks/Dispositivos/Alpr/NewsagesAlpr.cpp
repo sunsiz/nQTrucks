@@ -70,10 +70,10 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
 //}
 
 void NewsagesAlpr::setFotoCamara(const Registros::Camara &_camara) {
-    m_results[0]->camara = _camara;
-    m_results[1]->camara = _camara;
-    m_results[2]->camara = _camara;
-    emit ReplyOriginalFoto(m_results[0]->camara);
+    m_results[0]->camara->setCamara(_camara);
+    m_results[1]->camara->setCamara(_camara);
+    m_results[2]->camara->setCamara(_camara);
+    emit ReplyOriginalFoto(*m_results[0]->camara);
 }
 
 /** SOLO CALIBRACION ***************************************************************************************/
@@ -90,7 +90,7 @@ void NewsagesAlpr::calibrarFoto(const Registros::Camara &_camara){
         hiloCalibrar2 = new QThread();
 
         /** Crear tareas **/
-        m_results[1]->camara = _camara;
+        m_results[1]->camara->setCamara(_camara);
         tareaCalibrar1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results[1], m_settings);
         tareaCalibrar2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results[1], m_settings);
 
@@ -105,10 +105,10 @@ void NewsagesAlpr::calibrarFoto(const Registros::Camara &_camara){
             tareaCalibrar1->workFinished();
             });
 
-        connect( hiloCalibrar1,  SIGNAL(started()),      tareaCalibrar1, SLOT(calibrar()) );
-        connect( tareaCalibrar1, SIGNAL(workFinished()), hiloCalibrar1,  SLOT(quit()) );
-        connect( tareaCalibrar1, SIGNAL(workFinished()), tareaCalibrar1, SLOT(deleteLater()) );
-        connect( hiloCalibrar1,  SIGNAL(finished()),     hiloCalibrar1,  SLOT(deleteLater()) );
+        connect( hiloCalibrar1,  &QThread::started,               tareaCalibrar1, &NewsagesAlprTask::calibrar );
+        connect( tareaCalibrar1, &NewsagesAlprTask::workFinished, hiloCalibrar1,  &QThread::quit );
+        connect( tareaCalibrar1, &NewsagesAlprTask::workFinished, tareaCalibrar1, &QObject::deleteLater );
+        connect( hiloCalibrar1,  &QThread::finished,              hiloCalibrar1,  &QObject::deleteLater );
         std::unique_ptr<QMetaObject::Connection> pconnCalibrar1{new QMetaObject::Connection};
         QMetaObject::Connection &connCalibrar1 = *pconnCalibrar1;
         connCalibrar1=connect( hiloCalibrar1, &QThread::finished, [=](){
@@ -126,10 +126,10 @@ void NewsagesAlpr::calibrarFoto(const Registros::Camara &_camara){
             tareaCalibrar2->workFinished();
             });
 
-        connect( hiloCalibrar2,  SIGNAL(started()),      tareaCalibrar2, SLOT(calibrar()) );
-        connect( tareaCalibrar2, SIGNAL(workFinished()), hiloCalibrar2,  SLOT(quit()) );
-        connect( tareaCalibrar2, SIGNAL(workFinished()), tareaCalibrar2, SLOT(deleteLater()) );
-        connect( hiloCalibrar2,  SIGNAL(finished()),     hiloCalibrar2,  SLOT(deleteLater()) );
+        connect( hiloCalibrar2,  &QThread::started,               tareaCalibrar2, &NewsagesAlprTask::calibrar );
+        connect( tareaCalibrar2, &NewsagesAlprTask::workFinished, hiloCalibrar2,  &QThread::quit );
+        connect( tareaCalibrar2, &NewsagesAlprTask::workFinished, tareaCalibrar2, &QObject::deleteLater );
+        connect( hiloCalibrar2,  &QThread::finished,              hiloCalibrar2,  &QObject::deleteLater );
         std::unique_ptr<QMetaObject::Connection> pconnCalibrar2{new QMetaObject::Connection};
         QMetaObject::Connection &connCalibrar2 = *pconnCalibrar2;
         connCalibrar2=connect( hiloCalibrar2, &QThread::finished, [=](){
@@ -168,7 +168,7 @@ void NewsagesAlpr::processFoto(const Registros::Camara &_camara)
         hilo2 = new QThread;
 
         /** Crear tareas **/
-        m_results[2]->camara = _camara;
+        m_results[2]->camara->setCamara(_camara);
         tarea1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results[2], m_settings);
         tarea2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results[2], m_settings);
 
@@ -177,10 +177,10 @@ void NewsagesAlpr::processFoto(const Registros::Camara &_camara)
         tarea2->moveToThread(hilo2);
 
         /** conectar hilos con proceso **/
-        connect( hilo1,  SIGNAL(started()),      tarea1, SLOT(procesar()) );
-        connect( tarea1, SIGNAL(workFinished()), hilo1,  SLOT(quit()) );
-        connect( tarea1, SIGNAL(workFinished()), tarea1, SLOT(deleteLater()) );
-        connect( hilo1,  SIGNAL(finished()),     hilo1,  SLOT(deleteLater()) );
+        connect( hilo1,  &QThread::started,               tarea1, &NewsagesAlprTask::procesar );
+        connect( tarea1, &NewsagesAlprTask::workFinished, hilo1,  &QThread::quit );
+        connect( tarea1, &NewsagesAlprTask::workFinished, tarea1, &QObject::deleteLater );
+        connect( hilo1,  &QThread::finished,              hilo1,  &QObject::deleteLater );
 
         std::unique_ptr<QMetaObject::Connection> pconn1{new QMetaObject::Connection};
         QMetaObject::Connection &conn1 = *pconn1;
@@ -194,10 +194,10 @@ void NewsagesAlpr::processFoto(const Registros::Camara &_camara)
         });
 
 
-        connect( hilo2, SIGNAL(started()), tarea2, SLOT(procesar()) );
-        connect( tarea2,SIGNAL(workFinished()), hilo2, SLOT(quit()) );
-        connect( tarea2, SIGNAL(workFinished()), tarea2, SLOT(deleteLater()) );
-        connect( hilo2, SIGNAL(finished()), hilo2, SLOT(deleteLater()) );
+        connect( hilo2, &QThread::started,               tarea2,&NewsagesAlprTask::procesar );
+        connect( tarea2,&NewsagesAlprTask::workFinished, hilo2, &QThread::quit );
+        connect( tarea2,&NewsagesAlprTask::workFinished, tarea2,&QObject::deleteLater );
+        connect( hilo2, &QThread::finished,              hilo2, &QObject::deleteLater );
 
         std::unique_ptr<QMetaObject::Connection> pconn2{new QMetaObject::Connection};
         QMetaObject::Connection &conn2 = *pconn2;

@@ -40,15 +40,8 @@ nQSerialPortReader::nQSerialPortReader(QSettings *_appsettings, QObject *parent)
 {
     m_serialPort = new QSerialPort(this);
     emit BasculaStatus(false);
-    connect(this, SIGNAL(BasculaChanged(Bascula)),this,SLOT(MuestrearBascula(Bascula)));
+    connect(this, &nQSerialPortReader::BasculaChanged,this,&nQSerialPortReader::MuestrearBascula);
 }
-
-//nQSerialPortReader::~nQSerialPortReader(){
-//    if(m_serialPort->isOpen()){
-//        m_serialPort->close();
-//    }
-//    m_serialPort->deleteLater();
-//}
 
 void nQSerialPortReader::setBasculaType(const int &_TipoBascula){
     if (m_type != _TipoBascula){
@@ -154,15 +147,15 @@ void nQSerialPortReader::ReadType0(){
             m_serialBuffer += QString::fromStdString(m_serialData.toStdString());
         }else{
             charInicio=0;
-            m_bascula.bEstadoAnterior = m_bascula.bEstado;
-            if(m_serialBuffer.mid(1,1) != "E"){m_bascula.bEstado= false;
-            }else m_bascula.bEstado=true;
+            m_bascula.setBEstadoAnterior(m_bascula.getBEstado());
+            if(m_serialBuffer.mid(1,1) != "E"){m_bascula.setBEstado(false);
+            }else m_bascula.setBEstado(true);
 
-            m_bascula.iBruto = m_serialBuffer.mid(4,8).toFloat();
-            m_bascula.iTara = m_serialBuffer.mid(14,8).toFloat();
-            m_bascula.iNeto = m_serialBuffer.mid(24,8).toFloat();
+            m_bascula.setIBruto(m_serialBuffer.mid( 4,8).toFloat());
+            m_bascula.setITara( m_serialBuffer.mid(14,8).toFloat());
+            m_bascula.setINeto( m_serialBuffer.mid(24,8).toFloat());
 
-            if (m_serialBuffer.mid(24,8).contains("-")){m_bascula.iNeto = -m_bascula.iNeto;}
+            if (m_serialBuffer.mid(24,8).contains("-")){m_bascula.setINeto(abs(m_bascula.getINeto()));}
             emit BasculaChanged(m_bascula);
         }
         break;
@@ -172,22 +165,22 @@ void nQSerialPortReader::ReadType0(){
 }
 
 
-void nQSerialPortReader::MuestrearBascula(const Bascula &_bascula){
+void nQSerialPortReader::MuestrearBascula(const Registros::Bascula &_bascula){
     if (m_inicio_peso){
-        if((_bascula.bEstado) & (_bascula.iBruto !=0)){
+        if((_bascula.getBEstado()) & (_bascula.getIBruto() !=0)){
             m_count_muestras++;
             if(m_count_muestras == getBasculaMuestras()*10){
                 m_inicio_peso=false;
-                m_bascula_estable = _bascula;
+                m_bascula_estable.setBascula(_bascula);
                 emit BasculaPesoNuevo(m_bascula_estable);
                 setBasculaMuestras(m_settings->value(   QString(BASCULA) + "/factor_estable","1"           ).toInt());
             }
         }
     }else{
-        if(_bascula.iBruto==0){
+        if(_bascula.getIBruto()==0){
             m_inicio_peso=true;
             m_count_muestras=0;
-            m_bascula_estable={};
+            m_bascula_estable.clearBascula();
         }
     }
 }

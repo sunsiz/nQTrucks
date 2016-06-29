@@ -45,7 +45,7 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
 {
 
     /** CONECTIONS **/
-    connect(m_netmanager, SIGNAL(finished(QNetworkReply*)), this , SLOT(camaraNetworkReplyFinished(QNetworkReply*)));
+    connect(m_netmanager, &QNetworkAccessManager::finished, this , &CamaraIP::camaraNetworkReplyFinished);
 
     /** CONFIG **/
     loadconfig();
@@ -135,9 +135,13 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
         std::vector<char> pic(begin, end);
         buffer.close();
         cv::Mat *_decode = new cv::Mat;
+        cv::Mat *_resize   = new cv::Mat;
         cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,_decode); /** MEMORY LEAK **/
-        cv::resize(*_decode,*m_RegistroCamara->OrigenFoto,fotoSize);
-        //_decode->copyTo(*m_RegistroCamara->OrigenFoto);
+        cv::resize(*_decode,*_resize,fotoSize);
+        m_RegistroCamara->setOrigenFoto(_resize);
+
+        _resize->release();
+        delete _resize;
         _decode->release();
         delete _decode;
 

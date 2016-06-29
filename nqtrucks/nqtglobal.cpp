@@ -47,19 +47,73 @@ QString nQTrucks::extractClassName(QString className)
 
 namespace nQTrucks {
     namespace Registros{
-        MatriculaResults::MatriculaResults()
-            : tipo(0)                                                     //0 para calibracion, 1 para procesado
-            , id(0)                                                     //id fuente de captura de foto
-            , MatriculaDetectedA(false)                                                 // Coincide con un patron de busqueda?
-            , MatriculaA("")                                                    // STring de la matricula
-            , MatriculaPrecisionA(0)                                                     // Precision del OCR
-            , MatriculaPrecisionAs("0%")
-            , MatriculaDetectedB(false)                                                 // Coincide con un patron de busqueda?
-            , MatriculaB("")                                                    // STring de la matricula
-            , MatriculaPrecisionB(0)                                                     // Precision del OCR
-            , MatriculaPrecisionBs("0%")
-        { /** MEMORY LEAK **/
-        }
+
+
+    /** BASCULAS ********************************************************************************************************/
+    Bascula::Bascula(QObject *parent):QObject(parent){this->clearBascula();}
+    void Bascula::setBascula(const Bascula &value){
+        this->setBEstado(        value.m_bEstado);
+        this->setBEstadoAnterior(value.m_bEstadoAnterior);
+        this->setIBruto(         value.m_iBruto);
+        this->setITara(          value.m_iTara);
+        this->setINeto(          value.m_iNeto);
+    }
+    void Bascula::clearBascula(){
+        this->setBEstado(        false);
+        this->setBEstadoAnterior(false);
+        this->setIBruto(         0);
+        this->setITara(          0);
+        this->setINeto(          0);
+    }
+
+    /** END BASCULAS *****************************************************************************************/
+
+    /** CAMARA **********************************************************************************************/
+    Camara::Camara(QObject *parent):QObject(parent){
+        m_OrigenFoto = new cv::Mat;
+    }
+
+    void Camara::setCamara(const Camara &value){
+        setOrigenFoto(value.getOrigenFoto());
+
+    }
+
+    cv::Mat *Camara::getOrigenFoto() const{
+        return m_OrigenFoto;
+    }
+
+    void Camara::setOrigenFoto(cv::Mat *value){
+        m_OrigenFoto->release();
+        delete m_OrigenFoto;
+        m_OrigenFoto = new cv::Mat(*value);
+    }
+
+    QByteArray Camara::getOrigenFotoByte() const{
+        return m_OrigenFotoByte;
+    }
+
+    QImage Camara::getOrigenFotoQ() const{
+        return m_OrigenFotoQ;
+    }
+
+    /** END CAMARA **********************************************************************************************/
+
+    MatriculaResults::MatriculaResults()
+        : tipo(0)                                                    // 0 para calibracion, 1 para procesado
+        , id(0)                                                      // id fuente de captura de foto
+        , MatriculaDetectedA(false)                                  // Coincide con un patron de busqueda?
+        , MatriculaA("")                                             // STring de la matricula
+        , MatriculaPrecisionA(0)                                     // Precision del OCR
+        , MatriculaPrecisionAs("0%")
+        , MatriculaDetectedB(false)                                  // Coincide con un patron de busqueda?
+        , MatriculaB("")                                             // STring de la matricula
+        , MatriculaPrecisionB(0)                                     // Precision del OCR
+        , MatriculaPrecisionBs("0%")
+    { /** MEMORY LEAK **/
+    }
+
+
+
     } /** end Namespace **/
 } /** end namespace **/
 

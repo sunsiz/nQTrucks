@@ -27,14 +27,14 @@ signals:
     /** DB **/
 private:
     Maestros::Maestros *m_maestros;
-    QVector<SimpleMatriculas> m_RegistroMatriculas;
+    QVector<Registros::RegistroMatriculas> m_RegistroMatriculas;
     ReportManager m_report_manager;
 
 /** Registro Simple **/
 public:
-    void setRegistroMatriculas(const SimpleMatriculas &RegistroMatriculas);
+    void setRegistroMatriculas(const Registros::RegistroMatriculas &RegistroMatriculas);
 public slots:    
-    void guardarRegistroSimpleMatriculas();
+    void guardarRegistroRegistroMatriculas();
 
 /** Busqueda de PAIR **/
 private:

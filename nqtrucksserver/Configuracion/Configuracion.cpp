@@ -52,28 +52,26 @@ Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
 
 
     /** CAMARAS **/
-    connect(engine,SIGNAL(CamaraIP1(Registros::Camara)),this,SLOT(onGetFoto1(Registros::Camara)));
-    connect(engine,SIGNAL(CamaraIP2(Registros::Camara)),this,SLOT(onGetFoto2(Registros::Camara)));
+    connect(engine,&nQTrucksEngine::CamaraIP1,this,&Configuracion::onGetFoto1);
+    connect(engine,&nQTrucksEngine::CamaraIP2,this,&Configuracion::onGetFoto2);
 
 
     /** IO **/
-    connect(engine,SIGNAL(SemaforoConnectChanged(bool)),this,SLOT(on_SemaforoConnect(bool)));
-    connect(engine,SIGNAL(SemaforoEstadoChanged(int)),this,SLOT(on_SemaforoEstadoChanged(int)));
+    connect(engine,&nQTrucksEngine::SemaforoConnectChanged,this,&Configuracion::on_SemaforoConnect);
+    connect(engine,&nQTrucksEngine::SemaforoEstadoChanged, this,&Configuracion::on_SemaforoEstadoChanged);
 
     /** BASCULAS **/
-    connect(engine ,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
-    connect(engine ,SIGNAL(BasculaChanged(Bascula)),this,SLOT(onBascula(Bascula)));
+    connect(engine ,&nQTrucksEngine::BasculaStatus, this,&Configuracion::on_BasculaConectada);
+    connect(engine ,&nQTrucksEngine::BasculaChanged,this,&Configuracion::onBascula);
 
     /** ALPR 1 **/
-    connect(engine ,SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults1(Registros::MatriculaResults)));
-    connect(engine ,SIGNAL(ReplyOriginalFoto1(Registros::Camara)),this,SLOT(onGetOriginalMatricula1(Registros::Camara)));
-    connect(engine ,SIGNAL(ReplyMatriculaCalibrationResults1(Registros::MatriculaResults)),
-                           this,SLOT(onGetCalibrationResult1(Registros::MatriculaResults)));
+    connect(engine ,&nQTrucksEngine::ReplyMatriculaResults1,           this,&Configuracion::onReplyMatriculaResults1);
+    connect(engine ,&nQTrucksEngine::ReplyOriginalFoto1,               this,&Configuracion::onGetOriginalMatricula1);
+    connect(engine ,&nQTrucksEngine::ReplyMatriculaCalibrationResults1,this,&Configuracion::onGetCalibrationResult1);
     /** ALPR 2 **/
-    connect(engine, SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)),this,SLOT(onReplyMatriculaResults2(Registros::MatriculaResults)));
-    connect(engine ,SIGNAL(ReplyOriginalFoto2(Registros::Camara)),this,SLOT(onGetOriginalMatricula2(Registros::Camara)));
-    connect(engine ,SIGNAL(ReplyMatriculaCalibrationResults2(Registros::MatriculaResults)),
-                           this,SLOT(onGetCalibrationResult2(Registros::MatriculaResults)));
+    connect(engine, &nQTrucksEngine::ReplyMatriculaResults2,           this,&Configuracion::onReplyMatriculaResults2);
+    connect(engine ,&nQTrucksEngine::ReplyOriginalFoto2,               this,&Configuracion::onGetOriginalMatricula2);
+    connect(engine ,&nQTrucksEngine::ReplyMatriculaCalibrationResults2,this,&Configuracion::onGetCalibrationResult2);
     loadconfig();
     //setFixedSize(1024,768);
     //this->showFullScreen();
@@ -323,12 +321,12 @@ void Configuracion::on_BasculaConectada(bool conectada)
     }
 }
 
-void Configuracion::onBascula(Bascula _bascula)
+void Configuracion::onBascula(const Registros::Bascula &_bascula)
 {          
-    ui->BasculaLcd->display(_bascula.iBruto);
-    ui->BasculaLcd2->display(_bascula.iTara);
-    ui->BasculaLcd3->display(_bascula.iNeto);
-    ui->BasculaEstable->setChecked(_bascula.bEstado); /** MEMORY LEAK **/
+    ui->BasculaLcd->display(_bascula.getIBruto());
+    ui->BasculaLcd2->display(_bascula.getITara());
+    ui->BasculaLcd3->display(_bascula.getINeto());
+    ui->BasculaEstable->setChecked(_bascula.getBEstado()); /** MEMORY LEAK **/
 }
 
 /** END BASCULAS **/

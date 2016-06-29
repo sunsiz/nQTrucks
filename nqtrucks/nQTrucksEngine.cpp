@@ -46,7 +46,7 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
 
     /** ALPR TYPES **/
     qRegisterMetaType<cv::Mat>("cv::Mat");
-    qRegisterMetaType<Planck>("Planck");
+    qRegisterMetaType<Planck>( "Planck");
     qRegisterMetaType<nQTrucks::t_Prewarp>("nQTrucks::t_Prewarp");
     qRegisterMetaType<Registros::MatriculaResults>("Registros::MatriculaResults");
 
@@ -54,14 +54,14 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
     /** Daemon Types **/
     //qRegisterMetaType<Registros::Simple>            ("Registros::Simple");
    // qRegisterMetaType<Registros::Matriculas>        ("Registros::Matriculas");
-    qRegisterMetaType<SimpleMatriculas>             ("SimpleMatriculas");
+   qRegisterMetaType<Registros::RegistroMatriculas>             ("Registros::RegistroMatriculas");
 
     /** Bascula Types **/
-    qRegisterMetaType<Bascula>("Bascula");
+    //qRegisterMetaType<Registros::Bascula>("Registros::Bascula");
 
     /** Camara Types **/
     QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
-    qRegisterMetaType<Registros::Camara>("Registros::Camara");
+    //qRegisterMetaType<Registros::Camara>("Registros::Camara");
 
     m_camara.resize(2);
     m_camara[0] = new Devices::CamaraIP(0,settings(), this);
@@ -232,32 +232,32 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
     /** CAMARAS IP **/
     /** 1 **/
     connect(d->m_camara[0],SIGNAL(ReplyCamaraIP(Registros::Camara)),this,SIGNAL(CamaraIP1(Registros::Camara)));
-    connect(d->m_camara[0],SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb1(QString)));
+    connect(d->m_camara[0],SIGNAL(CamaraIPWeb(QString)),            this,SIGNAL(CamaraIPWeb1(QString)));
     /** 2 **/
     connect(d->m_camara[1],SIGNAL(ReplyCamaraIP(Registros::Camara)),this,SIGNAL(CamaraIP2(Registros::Camara)));
-    connect(d->m_camara[1],SIGNAL(CamaraIPWeb(QString)),this,SIGNAL(CamaraIPWeb2(QString)));
+    connect(d->m_camara[1],SIGNAL(CamaraIPWeb(QString)),            this,SIGNAL(CamaraIPWeb2(QString)));
     /** END CAMARAS IP **/
 
     /** NEWSAGES IO **/
-    connect(d->m_newsagesIO,SIGNAL(SemaforoConnectChanged(bool)),this,SIGNAL(SemaforoConnectChanged(bool)));
-    connect(d->m_newsagesIO,SIGNAL(SemaforoEstadoChanged(int)),this,SIGNAL(SemaforoEstadoChanged(int)));
+    connect(d->m_newsagesIO,&Devices::NewsagesIO::SemaforoConnectChanged,this,&nQTrucksEngine::SemaforoConnectChanged);
+    connect(d->m_newsagesIO,&Devices::NewsagesIO::SemaforoEstadoChanged, this,&nQTrucksEngine::SemaforoEstadoChanged);
     /** END NEWSAGES IO **/
 
     /** BASCULAS **/
-    connect(d->m_basculaReader1,SIGNAL(BasculaStatus(bool)),this,SIGNAL(BasculaStatus(bool)));
-    connect(d->m_basculaReader1,SIGNAL(BasculaChanged(Bascula)),this,SIGNAL(BasculaChanged(Bascula)));
+    connect(d->m_basculaReader1,&Devices::nQSerialPortReader::BasculaStatus, this,&nQTrucksEngine::BasculaStatus);
+    connect(d->m_basculaReader1,&Devices::nQSerialPortReader::BasculaChanged,this,&nQTrucksEngine::BasculaChanged);
     /** END BASCULAS **/
 
     /** NEWSAGES ALPR **/
     /** 1 **/
-    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFoto(Registros::Camara)),this,SIGNAL(ReplyOriginalFoto1(Registros::Camara)));
+    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFoto(Registros::Camara)),                         this,SIGNAL(ReplyOriginalFoto1(Registros::Camara)));
     connect(d->m_alpr[0],SIGNAL(ReplyMatriculaCalibrationResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaCalibrationResults1(Registros::MatriculaResults)));
-    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)));
+    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),           this,SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)));
 
     /** 2 **/
-    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFoto(Registros::Camara)),this,SIGNAL(ReplyOriginalFoto2(Registros::Camara)));
+    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFoto(Registros::Camara)),                         this,SIGNAL(ReplyOriginalFoto2(Registros::Camara)));
     connect(d->m_alpr[1],SIGNAL(ReplyMatriculaCalibrationResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaCalibrationResults2(Registros::MatriculaResults)));
-    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)));
+    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),           this,SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)));
     /** END NEWSAGES ALPR **/
 
     /** MAESTROS **/
@@ -402,12 +402,9 @@ void nQTrucksEngine::setInitDaemon(const bool &_init){
     Q_D(nQTrucksEngine);
     if (_init){
          d->m_daemon = new Core::Daemon(d->m_basculaReader1,d->m_newsagesIO,d->m_camara,d->m_alpr, d->m_maestros, this);
-        auto daemon_connect = connect(d->m_daemon,SIGNAL(RegistroChanged(      SimpleMatriculas)),
-                                      this       ,SIGNAL(daemonRegistroChanged(SimpleMatriculas)));
-
-        auto daemon_rowchanged = connect(d->m_daemon,SIGNAL(rowsPesoChanged()),
-                                         this       ,SLOT(  sincronizar_maestros()));
-        auto daemon_registrando = connect(d->m_daemon,SIGNAL(registrandoChanged(bool)),this,SIGNAL(registrandoChanged(bool)));
+        auto daemon_connect     = connect(d->m_daemon,&Core::Daemon::RegistroChanged,   this ,&nQTrucksEngine::daemonRegistroChanged);
+        auto daemon_rowchanged  = connect(d->m_daemon,&Core::Daemon::rowsPesoChanged,   this ,&nQTrucksEngine::sincronizar_maestros);
+        auto daemon_registrando = connect(d->m_daemon,&Core::Daemon::registrandoChanged,this ,&nQTrucksEngine::registrandoChanged);
          d->m_daemon->setInit(_init);
     } else{
         d->m_daemon->setInit(_init);

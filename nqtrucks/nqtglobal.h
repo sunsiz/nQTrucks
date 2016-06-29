@@ -51,23 +51,19 @@
 #  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
-
-
-const int matriculaNewWidth = 520;
-const int matriculaNewHeight = 110;
-const cv::Size matriculaSize(matriculaNewWidth,matriculaNewHeight);
-
-const int fotoWidth = 1280;
-const int fotoHeight = 720;
-const cv::Size fotoSize(fotoWidth,fotoHeight);
-
-const QString default_prewarp ="";//  "planar,1280,720,0,0,0,1.0,1.0,0,0";
-
-
-
 /** SETTINGS **/
 namespace nQTrucks
 {
+    static const int matriculaNewWidth = 520;
+    static const int matriculaNewHeight = 110;
+    static const cv::Size matriculaSize(matriculaNewWidth,matriculaNewHeight);
+
+    static const int fotoWidth = 1280;
+    static const int fotoHeight = 720;
+    static const cv::Size fotoSize(fotoWidth,fotoHeight);
+
+    static const QString default_prewarp ="";//  "planar,1280,720,0,0,0,1.0,1.0,0,0";
+
     #define ALPR_PLANCK_BLANCO 0
     #define ALPR_PLANCK_ROJO   1
 
@@ -75,17 +71,28 @@ namespace nQTrucks
     #define SEMAFORO_AMARILLO 1
     #define SEMAFORO_ROJO 2
 
-    #define CAMARA1 "Camara1"
-    #define CAMARA2 "Camara2"
+    #define RELE_ON  false
+    #define RELE_OFF true
+
+    #define CAMARA1     "Camara1"
+    #define CAMARA2     "Camara2"
 
     #define NEWSAGESIO "NEWSAGESIO"
     #define BASCULA    "BASCULA"
 
-    #define ALPR   "Alpr"
-    #define ALPR1  "Alpr1"
-    #define ALPR2  "Alpr2"
+    #define ALPR       "Alpr"
+    #define ALPR1      "Alpr1"
+    #define ALPR2      "Alpr2"
+
+    QString extractClassName(QString className);
+    class nQTrucksError : public std::runtime_error{
+    public:
+        nQTrucksError(const QString& message):std::runtime_error(message.toStdString()){}
+    };
 
     /** CONVERSORES ********************************************************/
+    #ifndef NQTRUCKS_TOOLS_H
+    #define NQTRUCKS_TOOLS_H
     class Tools: public QObject{
         Q_OBJECT
     public:
@@ -139,136 +146,164 @@ namespace nQTrucks
         //static cv::Mat    convertByteArray2Mat(QByteArray _Bytearray);
         //static QByteArray resizeByteArray2ByteArray(QByteArray _ByteArray, const int &_w, const int &_h);
     };
-    /** END CONVERSORES **********************************************************/
+    #endif  //TOOLS
+    /** END CONVERSORES **********************************************************/   
 
+    struct Prewarp{
+        QString type="planar";
+        float w=1280;
+        float h=720;
+        float panX = 0;
+        float panY = 0;
+        float rotationx = 0;
+        float rotationy = 0;
+        float rotationz = 0;
+        float stretchX = 1.0;
+        float dist = 1.0;
+    }; typedef Prewarp t_Prewarp;
 
-
-
-struct Prewarp{
-    QString type="planar";
-    float w=1280;
-    float h=720;
-    float panX = 0;
-    float panY = 0;
-    float rotationx = 0;
-    float rotationy = 0;
-    float rotationz = 0;
-    float stretchX = 1.0;
-    float dist = 1.0;
-
-}; typedef Prewarp t_Prewarp;
-
-
-    QString extractClassName(QString className);
-    class nQTrucksError : public std::runtime_error{
-    public:
-        nQTrucksError(const QString& message):std::runtime_error(message.toStdString()){}
-    };
-
-
-    namespace Const{
-    }
-
-
-
-
-/** BASCULAS **/
-    class Bascula{
-    public:
-        bool bEstado=false;
-        bool bEstadoAnterior=false;
-        float iBruto=0;
-        float iTara=0;
-        float iNeto=0;
-    };
-/** END BASCULAS **/
-
-/** ALPR  **/
+    /** ALPR  **/
     class Planck{
     public:
         int A=0;
         int B=0;
         int C=0;
     };
-/** END ALRP **/
+    /** END ALRP **/
 
 
-namespace Registros{              /** REPORTS **/
-    class Camara{        
-    public:
-        Camara():OrigenFoto(new cv::Mat){}
-        cv::Mat    *OrigenFoto;//              =cv::Mat::zeros(fotoSize, CV_8UC3 );                 //Imagen Original
-        QByteArray OrigenFotoByte;//          =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
-        QImage     OrigenFotoQ;
-        inline void convertirFotos(){
-            Tools *m_tools  = new Tools; /** MEMORY LEAK **/
-            OrigenFotoByte  = m_tools->convertMat2ByteArray(OrigenFoto->clone()); /** MEMORY LEAK **/
-            OrigenFotoQ     = m_tools->convertMat2QImage(OrigenFoto->clone());
-            delete m_tools;
-        }
+    namespace Registros{              /** REPORTS **/
+        /** BASCULAS **************************************************************************************/
+        #ifndef NQTRUCKS_BASCULA_H
+        #define NQTRUCKS_BASCULA_H
+        class Bascula : public QObject {
+            Q_OBJECT
+        public:
+            explicit Bascula(QObject *parent=nullptr);
+        private:
+            bool  m_bEstado;
+            bool  m_bEstadoAnterior;
+            float m_iBruto;
+            float m_iTara;
+            float m_iNeto;
+        public:
+            void setBascula(const Bascula &value);
+            void clearBascula();
 
-    };
+            bool getBEstado() const{ return this->m_bEstado;}
+            void setBEstado(bool value){    this->m_bEstado = value;}
 
-    class MatriculaResults{
-    public:
-        MatriculaResults();
-        int        tipo;//                 =0;                                                     //0 para calibracion, 1 para procesado
-        int        id ;//                  =0;                                                     //id fuente de captura de foto
-        Camara    camara;
+            bool getBEstadoAnterior() const{ return this->m_bEstadoAnterior;}
+            void setBEstadoAnterior(bool value){    this->m_bEstadoAnterior = value;}
+
+            float getIBruto() const{return this->m_iBruto;}
+            void  setIBruto(float value){  this->m_iBruto = value;}
+
+            float getITara() const{return this->m_iTara;}
+            void  setITara(float value){  this->m_iTara = value; }
+
+            float getINeto() const{return this->m_iNeto;}
+            void  setINeto(float value){  this->m_iNeto = value; }
+
+        };
+        #endif
+        /** END BASCULAS *****************************************************************************************************/
+
+        /** CAMARA **/
+        #ifndef NQTRUCKS_CAMARA_H
+        #define NQTRUCKS_CAMARA_H
+        class Camara : public QObject{
+            Q_OBJECT
+        public:
+            explicit Camara(QObject *parent=nullptr);
+            void  setCamara(const Camara &value);
+            cv::Mat *getOrigenFoto() const;
+            void setOrigenFoto(cv::Mat *value);
+
+            QByteArray getOrigenFotoByte() const;
+
+            QImage getOrigenFotoQ() const;
+
+        private:
+            cv::Mat    *m_OrigenFoto;//              =cv::Mat::zeros(fotoSize, CV_8UC3 );                 //Imagen Original
+            QByteArray  m_OrigenFotoByte;//          =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
+            QImage      m_OrigenFotoQ;
+        public:
+            inline void convertirFotos(){
+                Tools *m_tools  = new Tools; /** MEMORY LEAK **/
+                m_OrigenFotoByte.clear();
+                m_OrigenFotoQ.detach();
+                m_OrigenFotoByte  = m_tools->convertMat2ByteArray(m_OrigenFoto->clone()); /** MEMORY LEAK **/
+                m_OrigenFotoQ     = m_tools->convertMat2QImage(   m_OrigenFoto->clone());
+                delete m_tools;
+            }
+        };
+        #endif
+        /** END CAMARA **/
+
+        class MatriculaResults{
+        public:
+            MatriculaResults();
+            int        tipo;//                 =0;                                                     //0 para calibracion, 1 para procesado
+            int        id ;//                  =0;                                                     //id fuente de captura de foto
+            Camara    *camara;
+
+            cv::Mat    OrigenFotoPrewarp;//    =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
+            QImage     OrigenFotoPrewarpQ;
+
+            cv::Mat    OrigenFotoBlanca;//     =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //  Imagen con calibracion de Blancos
+            QImage     OrigenFotoBlancaQ;
+            cv::Mat    OrigenFotoRoja;//       =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion de Rojos
+            QImage     OrigenFotoRojaQ;
+
+            bool       MatriculaDetectedA;//   =false;                                                 // Coincide con un patron de busqueda?
+            QString    MatriculaA;//           ="";                                                    // STring de la matricula
+            cv::Mat    MatriculaFotoA;//       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
+            QByteArray MatriculaFotoAByte;//   =nQTrucks::Tools::convertMat2ByteArray(MatriculaFotoA);
+            QImage     MatriculaFotoAQ;
+            float      MatriculaPrecisionA;//  =0;                                                     // Precision del OCR
+            QString    MatriculaPrecisionAs;// ="0%";
+
+            bool       MatriculaDetectedB;//   =false;                                                 // Coincide con un patron de busqueda?
+            QString    MatriculaB;//           ="";                                                    // STring de la matricula
+            cv::Mat    MatriculaFotoB;//       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
+            QByteArray MatriculaFotoBByte;//   =nQTrucks::Tools::convertMat2ByteArray(MatriculaFotoB);
+            QImage     MatriculaFotoBQ;
+            float      MatriculaPrecisionB;//  =0;                                                     // Precision del OCR
+            QString    MatriculaPrecisionBs;// ="0%";
+
+            inline void convertirFotos(){
+                Tools *m_tools        =  new Tools;
+                OrigenFotoPrewarpQ    =  m_tools->convertMat2QImage(OrigenFotoPrewarp.clone());
+                OrigenFotoBlancaQ     =  m_tools->convertMat2QImage(OrigenFotoBlanca.clone());
+                OrigenFotoRojaQ       =  m_tools->convertMat2QImage(OrigenFotoRoja.clone());
+
+                MatriculaFotoAByte    =  m_tools->convertMat2ByteArray(MatriculaFotoA.clone());
+                MatriculaFotoAQ       =  m_tools->convertMat2QImage(MatriculaFotoA.clone());
+
+                MatriculaFotoBByte    =  m_tools->convertMat2ByteArray(MatriculaFotoB.clone());
+                MatriculaFotoBQ       =  m_tools->convertMat2QImage(MatriculaFotoB.clone());
+                delete m_tools;
+            }
+        };
+
+        #ifndef NQTRUCKS_REGISTROMATRICULAS_H
+        #define NQTRUCKS_REGISTROMATRICULAS_H
+        class RegistroMatriculas{
+        public:
+            //RegistroMatriculas(QObject *parent=nullptr):QObject(parent){}
+            RegistroMatriculas():m_bascula(new Bascula()){;}
+            long long   id=0 ;//                  =0;                                                     //id fuente de captura de foto
+            QDateTime   FechaRegistro;
+            Bascula     *m_bascula;
+            QVector<Registros::MatriculaResults> results = QVector<Registros::MatriculaResults>(2);
+        };
+        #endif
+    } // namespace Registros /** END REPORTS **/
+    /** END SETTINGS **/
 
 
-        cv::Mat    OrigenFotoPrewarp;//    =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
-        QImage     OrigenFotoPrewarpQ;
-
-        cv::Mat    OrigenFotoBlanca;//     =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //  Imagen con calibracion de Blancos
-        QImage     OrigenFotoBlancaQ;
-        cv::Mat    OrigenFotoRoja;//       =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion de Rojos
-        QImage     OrigenFotoRojaQ;
-
-        bool       MatriculaDetectedA;//   =false;                                                 // Coincide con un patron de busqueda?
-        QString    MatriculaA;//           ="";                                                    // STring de la matricula
-        cv::Mat    MatriculaFotoA;//       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
-        QByteArray MatriculaFotoAByte;//   =nQTrucks::Tools::convertMat2ByteArray(MatriculaFotoA);
-        QImage     MatriculaFotoAQ;
-        float      MatriculaPrecisionA;//  =0;                                                     // Precision del OCR
-        QString    MatriculaPrecisionAs;// ="0%";
-
-        bool       MatriculaDetectedB;//   =false;                                                 // Coincide con un patron de busqueda?
-        QString    MatriculaB;//           ="";                                                    // STring de la matricula
-        cv::Mat    MatriculaFotoB;//       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
-        QByteArray MatriculaFotoBByte;//   =nQTrucks::Tools::convertMat2ByteArray(MatriculaFotoB);
-        QImage     MatriculaFotoBQ;
-        float      MatriculaPrecisionB;//  =0;                                                     // Precision del OCR        
-        QString    MatriculaPrecisionBs;// ="0%";
-
-        inline void convertirFotos(){
-            Tools *m_tools        =  new Tools;
-            OrigenFotoPrewarpQ    =  m_tools->convertMat2QImage(OrigenFotoPrewarp.clone());
-            OrigenFotoBlancaQ     =  m_tools->convertMat2QImage(OrigenFotoBlanca.clone());
-            OrigenFotoRojaQ       =  m_tools->convertMat2QImage(OrigenFotoRoja.clone());
-
-            MatriculaFotoAByte    =  m_tools->convertMat2ByteArray(MatriculaFotoA.clone());
-            MatriculaFotoAQ       =  m_tools->convertMat2QImage(MatriculaFotoA.clone());
-
-            MatriculaFotoBByte    =  m_tools->convertMat2ByteArray(MatriculaFotoB.clone());
-            MatriculaFotoBQ       =  m_tools->convertMat2QImage(MatriculaFotoB.clone());
-            delete m_tools;
-        }
-    };
-
-
-} // namespace Registros /** END REPORTS **/
-/** END SETTINGS **/
-
-class SimpleMatriculas{
-public:
-    long long   id=0 ;//                  =0;                                                     //id fuente de captura de foto
-    QDateTime FechaRegistro;
-    Bascula bascula;
-    QVector<Registros::MatriculaResults> results = QVector<Registros::MatriculaResults>(2);
-    };
-
-
+    namespace Const{
+    } //end namespace Const
 } // namespace nQTrucks
-
 #endif // NQTRUCKS_H

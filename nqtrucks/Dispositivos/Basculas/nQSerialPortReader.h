@@ -77,7 +77,7 @@ private:
     QString      m_serialBuffer="";
     int          charInicio=0;
     QByteArray   m_serialData;
-    Bascula      m_bascula;
+    Registros::Bascula      m_bascula;
     QString      m_serialPortName;
 public slots:
     void connectPort(const bool &_value);
@@ -85,7 +85,7 @@ private slots:
     void connectBasculaType(int _type);
     void handleError(QSerialPort::SerialPortError error);  
 signals:
-    void BasculaChanged(const Bascula &bascula);
+    void BasculaChanged(const Registros::Bascula &bascula);
     void BasculaStatus(const bool &status);
     /** END INTERFACE REALTIME**/
 
@@ -100,12 +100,12 @@ private:
     int        m_count_muestras=0;
     int        m_BasculaMuestras=1;
     bool       m_inicio_peso=false;
-    Bascula    m_bascula_estable;
+    Registros::Bascula    m_bascula_estable;
     int        m_tolerancia_minima=10;
 signals:
-    void BasculaPesoNuevo(Bascula _nuevaPesada);
+    void BasculaPesoNuevo(const Registros::Bascula &_nuevaPesada);
 private slots:
-    void MuestrearBascula(const Bascula &_bascula);
+    void MuestrearBascula(const Registros::Bascula &_bascula);
     /** FIN INTERFACE ESTABILIZADA **/
 
 };

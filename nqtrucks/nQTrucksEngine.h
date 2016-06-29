@@ -93,7 +93,7 @@ public slots:
     void setBasculaConnect(bool _value);
 signals:
     void BasculaStatus(const bool &status);
-    void BasculaChanged(const Bascula &bascula);
+    void BasculaChanged(const Registros::Bascula &bascula);
     /** END BASCULAS **/
 
     /** NEWSAGES ALPR **/
@@ -118,7 +118,7 @@ signals:
     /** CORE ***************************************/
     /** DAEMON **/
 signals:
-    void daemonRegistroChanged(const SimpleMatriculas & _results);
+    void daemonRegistroChanged(const Registros::RegistroMatriculas & _results);
 public slots:
     void setInitDaemon(const bool &_init);
 

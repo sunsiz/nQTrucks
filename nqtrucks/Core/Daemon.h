@@ -55,17 +55,17 @@ private:
 
 /** REGRISTRO **/
 private:
-   SimpleMatriculas m_RegistroMatriculas;
+   Registros::RegistroMatriculas m_RegistroMatriculas;
 signals:
-    void RegistroChanged(const SimpleMatriculas &_results);
+    void RegistroChanged(const Registros::RegistroMatriculas &_results);
     void registrandoChanged(const bool &_registrando);
 /** END REGISTRO **/
 
 
     /** PESO ****************************************************************************************************/
 private slots:
-    void onPesoNuevo(const Bascula &_nuevaPesada);
-    void onBasculaChanged(const Bascula &_pesoRT);
+    void onPesoNuevo(const Registros::Bascula &_nuevaPesada);
+    void onBasculaChanged(const Registros::Bascula &_pesoRT);
 private:
     int m_tolerancia_minima;
     /** FIN PESO ***********************************************************************************************/
@@ -97,7 +97,7 @@ private:
 
 private slots:
     void onGuardarRegistroSimple();
-    void onGuardarRegistroSimpleMatriculas();
+    void onGuardarRegistroRegistroMatriculas();
 /** END BD **/
 
 

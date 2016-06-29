@@ -41,18 +41,17 @@ Client::Client(nQTrucksEngine *_engine, QWidget *parent)
     ui->setupUi(this);
 
     /** IO **/
-    connect(engine,SIGNAL(SemaforoEstadoChanged(int)),this,SLOT(on_SemaforoEstadoChanged(int)));
+    connect(engine,&nQTrucksEngine::SemaforoEstadoChanged,this,&Client::on_SemaforoEstadoChanged);
 
     /** BASCULAS **/
-    connect(engine ,SIGNAL(BasculaStatus(bool)),this,SLOT(on_BasculaConectada(bool)));
-    connect(engine ,SIGNAL(BasculaChanged(Bascula)),this,SLOT(onBascula(Bascula)));
+    connect(engine ,&nQTrucksEngine::BasculaStatus, this,&Client::on_BasculaConectada);
+    connect(engine ,&nQTrucksEngine::BasculaChanged,this,&Client::onBascula);
 
     /** DAEMON **/
-    connect(engine,SIGNAL(daemonRegistroChanged(SimpleMatriculas)),this,SLOT(onDaemonRegistroChanged(SimpleMatriculas)));
+    connect(engine,&nQTrucksEngine::daemonRegistroChanged,this,&Client::onDaemonRegistroChanged);
 }
 
-Client::~Client()
-{
+Client::~Client(){
     delete ui;
 }
 
@@ -66,7 +65,7 @@ void Client::on_SemaforoEstadoChanged(int _color){
         ui->semaforoAmarillo->setChecked(true); /** MEMORY LEAK **/
         break;
     case SEMAFORO_ROJO:
-        ui->semaforoRojo->setChecked(true); /** MEMORY LEAK **/
+        ui->semaforoRojo->setChecked(true);     /** MEMORY LEAK **/
         break;
     default:
         ui->semaforoVerde->setChecked(true);
@@ -82,14 +81,13 @@ void Client::on_BasculaConectada(bool conectada){
     }
 }
 
-void Client::onBascula(Bascula _bascula){
-    ui->BasculaLcd->display(_bascula.iBruto);
-    ui->BasculaEstable->setChecked(_bascula.bEstado); /** MEMORY LEAK **/
+void Client::onBascula(const Registros::Bascula &_bascula){
+    ui->BasculaLcd->display(_bascula.getIBruto());
+    ui->BasculaEstable->setChecked(_bascula.getBEstado()); /** MEMORY LEAK **/
 }
 
-void Client::onDaemonRegistroChanged(const SimpleMatriculas &_result)
+void Client::onDaemonRegistroChanged(const Registros::RegistroMatriculas &_result)
 {
-
     ui->camara1->setPixmap(QPixmap::fromImage(_result.results[0].camara.OrigenFotoQ));
     ui->camara2->setPixmap(QPixmap::fromImage(_result.results[1].camara.OrigenFotoQ));
 

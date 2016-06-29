@@ -60,27 +60,27 @@ public:
     };
 
 signals:
-    void ValuePin2Changed(const bool &value);
-    void ValuePin3Changed(const bool &value);
-    void ValuePin4Changed(const bool &value);
+    void ValuePinVerdeChanged(const bool &value);
+    void ValuePinAmarilloChanged(const bool &value);
+    void ValuePinRojoChanged(const bool &value);
 
 
 private slots:
-    void setValuePin2(const bool &value);
-    void setValuePin3(const bool &value);
-    void setValuePin4(const bool &value);
+    void setValuePinVerde(const bool &value);
+    void setValuePinAmarillo(const bool &value);
+    void setValuePinRojo(const bool &value);
 
 private:
     QString m_IODevice;
 
-    bool    m_ValuePin2;
-    DigitalPin *m_OutPin2;
+    bool    m_ValuePinVerde;
+    DigitalPin *m_OutPinVerde;
 
-    bool    m_ValuePin3;
-    DigitalPin *m_OutPin3;
+    bool    m_ValuePinAmarillo;
+    DigitalPin *m_OutPinAmarillo;
 
-    bool    m_ValuePin4;
-    DigitalPin *m_OutPin4;
+    bool    m_ValuePinRojo;
+    DigitalPin *m_OutPinRojo;
 
     bool    m_conectado;
 

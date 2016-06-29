@@ -24,9 +24,9 @@ Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_news
     //, m_tools(new Tools(this))
 
 {
-    QObject::connect(this,SIGNAL(initChanged(bool)),this,SLOT(onStartStop(bool)));
-    QObject::connect(m_bascula,SIGNAL(BasculaPesoNuevo(Bascula)),this,SLOT(onPesoNuevo(Bascula)));
-    QObject::connect(m_bascula,SIGNAL(BasculaChanged(Bascula)),this,SLOT(onBasculaChanged(Bascula)));
+    QObject::connect(this,     &Daemon::initChanged,                          this,&Daemon::onStartStop);
+    QObject::connect(m_bascula,&Devices::nQSerialPortReader::BasculaPesoNuevo,this,&Daemon::onPesoNuevo);
+    QObject::connect(m_bascula,&Devices::nQSerialPortReader::BasculaChanged,  this,&Daemon::onBasculaChanged);
 
 }
 
@@ -68,7 +68,7 @@ void Daemon::setRegistrando(bool registrando)
 }
 
 /** PESO *****************************/
-void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
+void Daemon::onPesoNuevo(const Registros::Bascula &_nuevaPesada)
 {
     if((m_init) && (!m_registrando)){
         // Bloqueo Registro
@@ -77,16 +77,16 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
       //Activo Semaforo rojo
       m_newsagesIO->setSemaforo(SEMAFORO_ROJO);
 
-      //m_RegistroMatriculas = new SimpleMatriculas;
+      //m_RegistroMatriculas = new RegistroMatriculas;
       // Peso:
-      m_RegistroMatriculas.bascula = _nuevaPesada;
+      m_RegistroMatriculas.m_bascula->setBascula(_nuevaPesada);
       //Espero 2 Fotos
       m_bfoto1=false;
       m_bfoto2=false;
 
       camaraconn1=connect(m_camara[0], &Devices::CamaraIP::ReplyCamaraIP, [=](const Registros::Camara  &_Reply){
           QObject::disconnect(camaraconn1);
-          m_RegistroMatriculas.results[0].camara     = _Reply;
+          m_RegistroMatriculas.results[0].camara->setCamara(_Reply);
           //m_RegistroMatriculas.results[0].OrigenFotoByte = _Reply.OrigenFotoByte;
           m_bfoto1=true;
           //Tengo las fotos semaforo GO! y Registro linea
@@ -99,7 +99,7 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
 
       camaraconn2=connect(m_camara[1], &Devices::CamaraIP::ReplyCamaraIP, [=](const Registros::Camara  &_Reply){
           QObject::disconnect(camaraconn2);
-          m_RegistroMatriculas.results[1].camara      = _Reply;
+          m_RegistroMatriculas.results[1].camara->setCamara(_Reply);
           m_bfoto2=true;
           //Tengo las fotos semaforo GO! y Registro linea
           if(m_bfoto1 && m_bfoto2){
@@ -115,9 +115,9 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
 
 }
 
-void Daemon::onBasculaChanged(const Bascula &_pesoRT){
+void Daemon::onBasculaChanged(const Registros::Bascula &_pesoRT){
     //int peso_minimo=m_bascula->reloadTolerancia_minima();
-    if (_pesoRT.iBruto > m_tolerancia_minima){
+    if (_pesoRT.getIBruto() > m_tolerancia_minima){
         if (!m_saliendo && !m_registrando){
             //TODO  no machakar el IO
             m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);
@@ -144,7 +144,7 @@ void Daemon::onGuardarRegistroSimple(){
             m_RegistroMatriculas.results[0]= _registro;
             m_balpr1=true;
             if(m_balpr1 && m_balpr2){
-                onGuardarRegistroSimpleMatriculas();
+                onGuardarRegistroRegistroMatriculas();
             }
         });
 
@@ -153,12 +153,12 @@ void Daemon::onGuardarRegistroSimple(){
             m_RegistroMatriculas.results[1]= _registro;
             m_balpr2=true;
             if(m_balpr1 && m_balpr2){
-                onGuardarRegistroSimpleMatriculas();
+                onGuardarRegistroRegistroMatriculas();
             }
         });
 
-        m_alpr[0]->processFoto(m_RegistroMatriculas.results[0].camara);
-        m_alpr[1]->processFoto(m_RegistroMatriculas.results[1].camara);
+        m_alpr[0]->processFoto(*m_RegistroMatriculas.results[0].camara);
+        m_alpr[1]->processFoto(*m_RegistroMatriculas.results[1].camara);
         //m_registrando=false;
         m_bfoto1=false;
         m_bfoto2=false;
@@ -166,7 +166,7 @@ void Daemon::onGuardarRegistroSimple(){
 }
 
 
-void Daemon::onGuardarRegistroSimpleMatriculas(){
+void Daemon::onGuardarRegistroRegistroMatriculas(){
 
     /* Crea un Hilo para la base de datos */
     /* Ejecuta el registro Simple */
@@ -178,12 +178,12 @@ void Daemon::onGuardarRegistroSimpleMatriculas(){
     tareaDb->moveToThread(hiloDb);    
     tareaDb->setRegistroMatriculas(m_RegistroMatriculas);
 
-    connect( hiloDb,  SIGNAL(started()),      tareaDb, SLOT(guardarRegistroSimpleMatriculas())  );
-    connect( tareaDb, SIGNAL(workFinished()), hiloDb,  SLOT(quit()) );
-    connect( tareaDb, SIGNAL(workFinished()), tareaDb, SLOT(deleteLater()) );
-    connect( hiloDb,  SIGNAL(finished()),     hiloDb,  SLOT(deleteLater()) );
+    connect( hiloDb,  &QThread::started                 , tareaDb, &Db::DatabaseManager::guardarRegistroRegistroMatriculas  );
+    connect( tareaDb, &Db::DatabaseManager::workFinished, hiloDb,  &QThread::quit );
+    connect( tareaDb, &Db::DatabaseManager::workFinished, tareaDb, &QObject::deleteLater );
+    connect( hiloDb,  &QThread::finished                , hiloDb,  &QObject::deleteLater );
     /** INFORMAR DE CAMBIOS EN ROWS **/
-    connect( tareaDb, SIGNAL(rowsPesoChanged()), this,SIGNAL(rowsPesoChanged()));
+    connect( tareaDb, &Db::DatabaseManager::rowsPesoChanged, this, &Daemon::rowsPesoChanged);
 
     hiloDb->start();
 
