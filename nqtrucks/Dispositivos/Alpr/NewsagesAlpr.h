@@ -46,6 +46,7 @@ class NewsagesAlpr : public QObject
 public:
     explicit NewsagesAlpr(int nDevice=0, QSettings *_appsettings=0, QObject *parent = 0);
     //~NewsagesAlpr();
+    ~NewsagesAlpr();
 
     /** SETTINGS **/
 public slots:

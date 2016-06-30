@@ -64,10 +64,16 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
 
 }
 
-//NewsagesAlpr::~NewsagesAlpr()
-//{
-// m_results.detach();
-//}
+NewsagesAlpr::~NewsagesAlpr(){
+    m_results[0]->clear();
+    m_results[1]->clear();
+    m_results[2]->clear();
+    delete m_results[0];
+    delete m_results[1];
+    delete m_results[2];
+    m_results.detach();
+ //m_results.detach();
+}
 
 void NewsagesAlpr::setFotoCamara(const Registros::Camara &_camara) {
     m_results[0]->camara->setCamara(_camara);

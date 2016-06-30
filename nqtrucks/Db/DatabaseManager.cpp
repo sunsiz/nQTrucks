@@ -35,8 +35,8 @@ void DatabaseManager::guardarRegistroRegistroMatriculas(){
         m_maestros->m_RegistroPeso->syncTable();
         m_report_manager.printRegistroMatricula(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[0].getId());
         /** No Guardar Si Cualquiera de las 4 Matriculas es detectada Y BUSCAR SU PAREJA**/
-        if ( m_RegistroMatriculas[0].results0->getMatriculaPrecisionA() >80 || m_RegistroMatriculas[0].results0->getMatriculaPrecisionB() >80 ||
-             m_RegistroMatriculas[0].results1->getMatriculaPrecisionA() >80 || m_RegistroMatriculas[0].results1->getMatriculaPrecisionB() >80  ){
+        if ( m_RegistroMatriculas[0].m_results0->getMatriculaPrecisionA() >80 || m_RegistroMatriculas[0].m_results0->getMatriculaPrecisionB() >80 ||
+             m_RegistroMatriculas[0].m_results1->getMatriculaPrecisionA() >80 || m_RegistroMatriculas[0].m_results1->getMatriculaPrecisionB() >80  ){
             if(m_maestros->m_RegistroPeso->eliminaFotosCamara(m_RegistroMatriculas[0].getId())){
               /** Buscar Pareja **/
                if (encontrarPareja()){
@@ -66,20 +66,20 @@ bool DatabaseManager::encontrarPareja()
 
         /** Cuantas matriculas dispongo para encontrar? **/
         m_MatriculasList.clear();
-        if (m_RegistroMatriculas[0].results0->getMatriculaPrecisionA() >80){
-            m_MatriculasList << m_RegistroMatriculas[0].results0->getMatriculaA();
+        if (m_RegistroMatriculas[0].m_results0->getMatriculaPrecisionA() >80){
+            m_MatriculasList << m_RegistroMatriculas[0].m_results0->getMatriculaA();
         }
 
-        if (m_RegistroMatriculas[0].results0->getMatriculaPrecisionB() >80){
-            m_MatriculasList << m_RegistroMatriculas[0].results0->getMatriculaB();
+        if (m_RegistroMatriculas[0].m_results0->getMatriculaPrecisionB() >80){
+            m_MatriculasList << m_RegistroMatriculas[0].m_results0->getMatriculaB();
         }
 
-        if (m_RegistroMatriculas[0].results1->getMatriculaPrecisionA() >80){
-            m_MatriculasList << m_RegistroMatriculas[0].results1->getMatriculaA();
+        if (m_RegistroMatriculas[0].m_results1->getMatriculaPrecisionA() >80){
+            m_MatriculasList << m_RegistroMatriculas[0].m_results1->getMatriculaA();
         }
 
-        if (m_RegistroMatriculas[0].results1->getMatriculaPrecisionB() >80){
-            m_MatriculasList << m_RegistroMatriculas[0].results1->getMatriculaB();
+        if (m_RegistroMatriculas[0].m_results1->getMatriculaPrecisionB() >80){
+            m_MatriculasList << m_RegistroMatriculas[0].m_results1->getMatriculaB();
         }
 
         /** Tenemos matriculas y fecha,

@@ -36,8 +36,7 @@
 
 //QSettings * nQTrucks::nQTrucksConfig::m_settings = 0;
 
-QString nQTrucks::extractClassName(QString className)
-{
+QString nQTrucks::extractClassName(QString className){
     int startPos=className.lastIndexOf("::");
     if(startPos==-1) startPos=0;
     else startPos+=2;
@@ -72,11 +71,12 @@ namespace nQTrucks {
 
     /** CAMARA **********************************************************************************************/
     Camara::Camara(){
-        clear();
+        m_OrigenFoto = cv::Mat(fotoSize, CV_8UC3 );
     }
 
     Camara::~Camara(){
         clear();
+        //delete m_OrigenFoto;
     }
 
     void Camara::setCamara(const Camara &value){
@@ -86,7 +86,6 @@ namespace nQTrucks {
     }
     void Camara::clear(){
         m_OrigenFoto.release();
-        m_OrigenFoto =cv::Mat::zeros(fotoSize, CV_8UC3 );
         m_OrigenFotoByte.clear();
         m_OrigenFotoQ.detach();
     }
@@ -96,8 +95,10 @@ namespace nQTrucks {
     }
 
     void Camara::setOrigenFoto(const cv::Mat value){
-        m_OrigenFoto.release();
-        m_OrigenFoto = value;
+        clear();
+        //m_OrigenFoto;
+        m_OrigenFoto = cv::Mat(fotoSize, CV_8UC3 );
+        m_OrigenFoto = value.clone();
 
     }
 
@@ -121,65 +122,71 @@ namespace nQTrucks {
 
     /** END CAMARA **********************************************************************************************/
 
-    MatriculaResults::MatriculaResults()
-    { /** MEMORY LEAK **/
+    MatriculaResults::MatriculaResults(){ /** MEMORY LEAK **/
         camara = new Camara;
     }
 
-
-
+    MatriculaResults::~MatriculaResults(){
+        clear();
+    }
 
     void MatriculaResults::setMatriculaResults(const MatriculaResults &value){
         clear();
-        setTipo(value.getTipo());                                                     //0 para calibracion, 1 para procesado
-        setId(value.getId());                                                     //id fuente de captura de foto
+        setTipo(value.getTipo());                                  // 0 para calibracion, 1 para procesado
+        setId(value.getId());                                      // id fuente de captura de foto
         camara = new Camara(value.camara->getCamara());
 
         setOrigenFotoPrewarp(value.getOrigenFotoPrewarp());
 
-        setOrigenFotoBlanca(value.getOrigenFotoBlanca());                    //  Imagen con calibracion de Blancos
-        setOrigenFotoRoja(value.getOrigenFotoRoja());                    // Imagen con calibracion de Rojos
+        setOrigenFotoBlanca(value.getOrigenFotoBlanca());          // Imagen con calibracion de Blancos
+        setOrigenFotoRoja(value.getOrigenFotoRoja());              // Imagen con calibracion de Rojos
 
-        setMatriculaDetectedA(value.getMatriculaDetectedA());                                                 // Coincide con un patron de busqueda?
-        setMatriculaA(value.getMatriculaA());                                                    // STring de la matricula
+        setMatriculaDetectedA(value.getMatriculaDetectedA());      // Coincide con un patron de busqueda?
+        setMatriculaA(value.getMatriculaA());                      // STring de la matricula
         setMatriculaFotoA(value.getMatriculaFotoA());              // Imagen recortada de la Matricula
-        setMatriculaPrecisionA(value.getMatriculaPrecisionA());                                                     // Precision del OCR
+        setMatriculaPrecisionA(value.getMatriculaPrecisionA());    // Precision del OCR
         setMatriculaPrecisionAs(value.getMatriculaPrecisionAs());
 
-        setMatriculaDetectedB(value.getMatriculaDetectedB());                                                 // Coincide con un patron de busqueda?
-        setMatriculaB(value.getMatriculaB());                                                    // STring de la matricula
+        setMatriculaDetectedB(value.getMatriculaDetectedB());      // Coincide con un patron de busqueda?
+        setMatriculaB(value.getMatriculaB());                      // STring de la matricula
         setMatriculaFotoB(value.getMatriculaFotoB());              // Imagen recortada de la Matricula
-        setMatriculaPrecisionB(value.getMatriculaPrecisionB());                                                     // Precision del OCR
+        setMatriculaPrecisionB(value.getMatriculaPrecisionB());    // Precision del OCR
         setMatriculaPrecisionBs(value.getMatriculaPrecisionBs());
-
         convertirFotos();
 
     }
 
     void MatriculaResults::clear()
     {
-        tipo =0;                                                     //0 para calibracion, 1 para procesado
-        id   =0;                                                     //id fuente de captura de foto
-        delete camara;
-        //camara.clear();
+        tipo =0;                        // 0 para calibracion, 1 para procesado
+        id   =0;                        // id fuente de captura de foto
+        //camara->clear();
+        //delete camara;
 
-        OrigenFotoPrewarp=cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
+        OrigenFotoPrewarp.release();    // Imagen con calibracion prewarp
+        OrigenFotoPrewarpQ.detach();
 
-        OrigenFotoBlanca=cv::Mat::zeros(fotoSize, CV_8UC3 );                    //  Imagen con calibracion de Blancos
-        OrigenFotoRoja=cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion de Rojos
+        OrigenFotoBlanca.release();     //  Imagen con calibracion de Blancos
+        OrigenFotoBlancaQ.detach();
+        OrigenFotoRoja.release();       // Imagen con calibracion de Rojos
+        OrigenFotoRojaQ.detach();
 
-        MatriculaDetectedA=false;                                                 // Coincide con un patron de busqueda?
-        MatriculaA="";                                                    // STring de la matricula
-        MatriculaFotoA=cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
-        MatriculaPrecisionA=0;                                                     // Precision del OCR
+        MatriculaDetectedA=NULL;        // Coincide con un patron de busqueda?
+        MatriculaA="";                  // STring de la matricula
+        MatriculaFotoA.release();       // Imagen recortada de la Matricula
+        MatriculaFotoAByte.clear();
+        MatriculaFotoAQ.detach();
+        MatriculaPrecisionA=0;          // Precision del OCR
         MatriculaPrecisionAs="0%";
 
-        MatriculaDetectedB=false;                                                 // Coincide con un patron de busqueda?
-        MatriculaB="";                                                    // STring de la matricula
-        MatriculaFotoB=cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
-        MatriculaPrecisionB=0;                                                     // Precision del OCR
+        MatriculaDetectedB=NULL;        // Coincide con un patron de busqueda?
+        MatriculaB="";                  // STring de la matricula
+        MatriculaFotoB.release();       // Imagen recortada de la Matricula
+        MatriculaFotoBByte.clear();
+        MatriculaFotoBQ.detach();
+        MatriculaPrecisionB=0;          // Precision del OCR
         MatriculaPrecisionBs="0%";
-        convertirFotos();
+        //convertirFotos();
     }
 
     void MatriculaResults::setOrigenFotoPrewarp(const cv::Mat &value){
@@ -204,11 +211,13 @@ namespace nQTrucks {
     }
     void MatriculaResults::setMatriculaFotoA(const cv::Mat &value){
         MatriculaFotoA.release();
+        //MatriculaFotoA=cv::Mat( matriculaSize, CV_8UC3 );
         MatriculaFotoA = value.clone();
     }
 
     void MatriculaResults::setMatriculaFotoB(const cv::Mat &value){
         MatriculaFotoB.release();
+        //MatriculaFotoA=cv::Mat( matriculaSize, CV_8UC3 );
         MatriculaFotoB = value.clone();
     }
 
@@ -238,28 +247,26 @@ namespace nQTrucks {
 
 
     /** REPORTS **/
-
-
     RegistroMatriculas::RegistroMatriculas()
         : m_bascula (new Bascula)
-        , results0  (new MatriculaResults)
-        , results1  (new MatriculaResults)
+        , m_results0  (new MatriculaResults)
+        , m_results1  (new MatriculaResults)
     {
     }
 
     void RegistroMatriculas::setRegistroMatriculas(const RegistroMatriculas &value){
         clear();
-        m_bascula = new Bascula(value.m_bascula->getBascula());
-        results0  = new MatriculaResults(value.results0->getMatriculaResults());
-        results1  = new MatriculaResults(value.results1->getMatriculaResults());
+        m_bascula   = new Bascula(value.m_bascula->getBascula());
+        m_results0  = new MatriculaResults(value.m_results0->getMatriculaResults());
+        m_results1  = new MatriculaResults(value.m_results1->getMatriculaResults());
         setId(value.getId());
         setFechaRegistro(value.getFechaRegistro());
     }
 
-    void RegistroMatriculas::clear()    {
+    void RegistroMatriculas::clear()    {        
         delete m_bascula;
-        delete results0;
-        delete results1;
+        delete m_results0;
+        delete m_results1;
 
     }
 
@@ -282,43 +289,6 @@ namespace nQTrucks {
     {
         FechaRegistro = value;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     } /** end Namespace **/

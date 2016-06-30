@@ -81,7 +81,7 @@ void NewsagesAlprTask::calibrar()
 
 void NewsagesAlprTask::setFotoCalibrada()
 {
-    cv::Mat channel[3];
+   //cv::Mat channel[3];
     switch (getNType()) {
     case ALPR_PLANCK_BLANCO:
         //m_matricularesult->setOrigenFotoBlanca(m_matricularesult->camara->getOrigenFoto().clone());
@@ -102,9 +102,9 @@ void NewsagesAlprTask::setFotoCalibrada()
         break;
     }
         //Limpiar
-    channel[0].release();
-    channel[1].release();
-    channel[2].release();
+//    channel[0].release();
+//    channel[1].release();
+//    channel[2].release();
 }
 
 void NewsagesAlprTask::guardarPlanK()
