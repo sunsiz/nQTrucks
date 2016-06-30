@@ -100,9 +100,10 @@ namespace nQTrucks {
                 qDebug() << "conexion al volver a usar es: " << m_db.connectionName();
             }
             qDebug() << "conexion al verificar es: " << m_db.connectionName();
-            if ( !m_db.isOpen() )
-            {
-                ret = m_db.open();                /** MEMORY LEAK **/
+            if ( !m_db.isOpen() ){                
+                if(!m_db.open()){
+                    ret = false;
+                }else {ret = true;}
             }
             return ret;
         }

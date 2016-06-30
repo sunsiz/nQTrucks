@@ -111,7 +111,7 @@ public:
     void setAlprIndex(int _AlprIndex){ m_AlprIndex = _AlprIndex;}
 private:
     int m_AlprIndex=0;
-    QVector<Registros::MatriculaResults> m_matricularesults={};
+    QVector<Registros::MatriculaResults> m_matricularesults;
     QVector<Registros::MatriculaResults>::iterator m_matricularesults_iterator;
     void updateCalibracionGui();
 

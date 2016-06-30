@@ -1,7 +1,7 @@
 #ifndef DATABASEMANAGER_H
 #define DATABASEMANAGER_H
 
-#include <QObject>
+//#include <QObject>
 #include <nqtglobal.h>
 
 #include <QSqlDatabase>
@@ -19,7 +19,7 @@ class DatabaseManager : public QObject{
 public:
    // DatabaseManager(QObject *parent=nullptr);
     explicit DatabaseManager(Maestros::Maestros *_maestros=nullptr, QObject *parent=nullptr);
-
+    ~DatabaseManager();
 signals:
     void rowsPesoChanged();
     void workFinished();

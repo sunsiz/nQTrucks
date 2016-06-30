@@ -88,27 +88,27 @@ void Client::onBascula(const Registros::Bascula &_bascula){
 
 void Client::onDaemonRegistroChanged(const Registros::RegistroMatriculas &_result)
 {
-    ui->camara1->setPixmap(QPixmap::fromImage(_result.results[0].camara.OrigenFotoQ));
-    ui->camara2->setPixmap(QPixmap::fromImage(_result.results[1].camara.OrigenFotoQ));
+    ui->camara1->setPixmap(QPixmap::fromImage(_result.results0->camara->getOrigenFotoQ()));
+    ui->camara2->setPixmap(QPixmap::fromImage(_result.results1->camara->getOrigenFotoQ()));
 
-    if ( _result.results[0].MatriculaPrecisionA >= _result.results[1].MatriculaPrecisionA){
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.results[0].MatriculaFotoAQ));
-        ui->MatriculaA->setText(_result.results[0].MatriculaA);/** MEMORY LEAK **/
-        ui->MatriculaPrecisionA->setText(_result.results[0].MatriculaPrecisionAs);/** MEMORY LEAK **/
+    if ( _result.results0->getMatriculaPrecisionA() >= _result.results1->getMatriculaPrecisionA()){
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.results0->getMatriculaFotoAQ()));
+        ui->MatriculaA->setText(_result.results0->getMatriculaA());/** MEMORY LEAK **/
+        ui->MatriculaPrecisionA->setText(_result.results0->getMatriculaPrecisionAs());/** MEMORY LEAK **/
     }else{
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.results[1].MatriculaFotoAQ));
-        ui->MatriculaA->setText(_result.results[1].MatriculaA);
-        ui->MatriculaPrecisionA->setText(_result.results[1].MatriculaPrecisionAs);
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.results1->getMatriculaFotoAQ()));
+        ui->MatriculaA->setText(_result.results1->getMatriculaA());
+        ui->MatriculaPrecisionA->setText(_result.results1->getMatriculaPrecisionAs());
     }
 
-    if ( _result.results[0].MatriculaPrecisionB >= _result.results[1].MatriculaPrecisionB){
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(_result.results[0].MatriculaFotoBQ));
-        ui->MatriculaB->setText(_result.results[0].MatriculaB);/** MEMORY LEAK **/
-        ui->MatriculaPrecisionB->setText(_result.results[0].MatriculaPrecisionBs);/** MEMORY LEAK **/
+    if ( _result.results0->getMatriculaPrecisionB() >= _result.results1->getMatriculaPrecisionB()){
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(_result.results0->getMatriculaFotoBQ()));
+        ui->MatriculaB->setText(_result.results0->getMatriculaB());/** MEMORY LEAK **/
+        ui->MatriculaPrecisionB->setText(_result.results0->getMatriculaPrecisionBs());/** MEMORY LEAK **/
     }else{
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(_result.results[1].MatriculaFotoBQ));
-        ui->MatriculaB->setText(_result.results[1].MatriculaB);
-        ui->MatriculaPrecisionB->setText(_result.results[1].MatriculaPrecisionBs);
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(_result.results1->getMatriculaFotoBQ()));
+        ui->MatriculaB->setText(_result.results1->getMatriculaB());
+        ui->MatriculaPrecisionB->setText(_result.results1->getMatriculaPrecisionBs());
     }
 
 }

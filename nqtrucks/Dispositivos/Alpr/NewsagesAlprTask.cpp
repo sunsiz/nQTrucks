@@ -84,19 +84,21 @@ void NewsagesAlprTask::setFotoCalibrada()
     cv::Mat channel[3];
     switch (getNType()) {
     case ALPR_PLANCK_BLANCO:
-        m_matricularesult->camara->getOrigenFoto()->copyTo(m_matricularesult->OrigenFotoBlanca);
-        cv::add(m_matricularesult->OrigenFotoBlanca,cv::Scalar(getPlank().C,getPlank().B,getPlank().A),m_matricularesult->OrigenFotoBlanca);
-        cv::split(m_matricularesult->OrigenFotoBlanca, channel);
-        m_matricularesult->OrigenFotoBlanca = channel[2] - channel[1] -   channel[2] + channel[0];
-        emit ReplyOriginalFotoBlanca(m_matricularesult->OrigenFotoBlanca);
+        //m_matricularesult->setOrigenFotoBlanca(m_matricularesult->camara->getOrigenFoto().clone());
+        //cv::add(m_matricularesult->getOrigenFotoBlanca(),cv::Scalar(getPlank().C,getPlank().B,getPlank().A),m_matricularesult->getOrigenFotoBlanca());
+        //cv::split(m_matricularesult->getOrigenFotoBlanca(), channel);
+        //m_matricularesult->setOrigenFotoBlanca(channel[2] - channel[1] -   channel[2] + channel[0]); /** MEMORY LEAK **/
+        m_matricularesult->setPlanckBlanco(getPlank());
+        emit ReplyOriginalFotoBlanca(m_matricularesult->getOrigenFotoBlanca());
         break;
     case ALPR_PLANCK_ROJO:
-        m_matricularesult->camara->getOrigenFoto()->copyTo(m_matricularesult->OrigenFotoRoja);
-        cv::add(m_matricularesult->OrigenFotoRoja,cv::Scalar(getPlank().A,getPlank().B,getPlank().C),m_matricularesult->OrigenFotoRoja);
-        cv::split(m_matricularesult->OrigenFotoRoja, channel);
-        cv::add(channel[0], channel[1], m_matricularesult->OrigenFotoRoja);
-        cv::subtract(channel[2], channel[1], m_matricularesult->OrigenFotoRoja);
-        emit ReplyOriginalFotoRoja(m_matricularesult->OrigenFotoRoja);
+//        m_matricularesult->setOrigenFotoRoja(m_matricularesult->camara->getOrigenFoto().clone());
+//        cv::add(m_matricularesult->getOrigenFotoRoja(),cv::Scalar(getPlank().A,getPlank().B,getPlank().C),m_matricularesult->getOrigenFotoRoja());
+//        cv::split(m_matricularesult->getOrigenFotoRoja(), channel);
+//        cv::add(channel[0], channel[1], m_matricularesult->getOrigenFotoRoja()); /** MEMORY LEAK **/
+//        cv::subtract(channel[2], channel[1], m_matricularesult->getOrigenFotoRoja());
+        m_matricularesult->setPlanckRojo(getPlank());
+        emit ReplyOriginalFotoRoja(m_matricularesult->getOrigenFotoRoja());
         break;
     }
         //Limpiar
@@ -167,39 +169,42 @@ void NewsagesAlprTask::procesarBlancas()
                 calibrar();
                 // RECONOCER
                 std::vector<AlprRegionOfInterest> regionsOfInterest={};
-                AlprResults results = matricula->recognize(m_matricularesult->OrigenFotoBlanca.data,
-                                                           m_matricularesult->OrigenFotoBlanca.elemSize(),
-                                                           m_matricularesult->OrigenFotoBlanca.cols,
-                                                           m_matricularesult->OrigenFotoBlanca.rows,
+                AlprResults results = matricula->recognize(m_matricularesult->getOrigenFotoBlanca().data,
+                                                           m_matricularesult->getOrigenFotoBlanca().elemSize(),
+                                                           m_matricularesult->getOrigenFotoBlanca().cols,
+                                                           m_matricularesult->getOrigenFotoBlanca().rows,
                                                            regionsOfInterest);
                 for (uint i = 0; i < results.plates.size(); i++){
                     AlprPlateResult plate = results.plates[i];
                     for (uint k = 0; k < plate.topNPlates.size(); k++){
                         AlprPlate candidate = plate.topNPlates[k];
                         //Auto ajuste Plank BLANCAS
-                        if (candidate.matches_template  && m_matricularesult->MatriculaPrecisionA < candidate.overall_confidence){
-                            m_matricularesult->MatriculaDetectedA   = candidate.matches_template;
-                            m_matricularesult->MatriculaPrecisionA  = candidate.overall_confidence;
-                            m_matricularesult->MatriculaPrecisionAs = QString::number(m_matricularesult->MatriculaPrecisionA,'g',6);
-                            m_matricularesult->MatriculaA           = QString::fromStdString(candidate.characters);
+                        if (candidate.matches_template  && m_matricularesult->getMatriculaPrecisionA() < candidate.overall_confidence){
+                            m_matricularesult->setMatriculaDetectedA(  candidate.matches_template);
+                            m_matricularesult->setMatriculaPrecisionA( candidate.overall_confidence);
+                            m_matricularesult->setMatriculaPrecisionAs(QString::number(m_matricularesult->getMatriculaPrecisionA(),'g',6));
+                            m_matricularesult->setMatriculaA(          QString::fromStdString(candidate.characters));
                             cv::Rect rect = cv::Rect(plate.plate_points[0].x , plate.plate_points[0].y,
                                                      plate.plate_points[2].x - plate.plate_points[0].x,
                                                      plate.plate_points[2].y - plate.plate_points[0].y);
-                            cv::resize(cv::Mat(*m_matricularesult->camara->getOrigenFoto(),rect),m_matricularesult->MatriculaFotoA,matriculaSize);
+                            cv::Mat _resize;
+                            cv::resize(cv::Mat(m_matricularesult->camara->getOrigenFoto(),rect),_resize,matriculaSize);
+                            m_matricularesult->setMatriculaFotoA(_resize);
+                            _resize.release();
                         }
                     }
                 }
                regionsOfInterest.clear();
                m_plank.B=b;
                b++;
-           }while( b<=m_retry_panks && m_matricularesult->MatriculaDetectedA!=true);
+           }while( b<=m_retry_panks && m_matricularesult->getMatriculaDetectedA()!=true);
            m_plank.C=c;
            c++;
-       }while( c<=m_retry_panks &&  m_matricularesult->MatriculaDetectedA!=true);
+       }while( c<=m_retry_panks &&  m_matricularesult->getMatriculaDetectedA()!=true);
     }
     delete matricula;
     guardarPlanK();
-    emit ReplyOriginalFotoBlanca(m_matricularesult->OrigenFotoBlanca);
+    emit ReplyOriginalFotoBlanca(m_matricularesult->getOrigenFotoBlanca());
     //m_matricularesult->convertirFotos();
     emit ReplyMatriculaFoto();
 }
@@ -225,10 +230,10 @@ void NewsagesAlprTask::procesarRojas()
                 calibrar();
                 // RECONOCER
                 std::vector<AlprRegionOfInterest> regionsOfInterest={};
-                AlprResults results = remolque->recognize(m_matricularesult->OrigenFotoRoja.data,
-                                                          m_matricularesult->OrigenFotoRoja.elemSize(),
-                                                          m_matricularesult->OrigenFotoRoja.cols,
-                                                          m_matricularesult->OrigenFotoRoja.rows,
+                AlprResults results = remolque->recognize(m_matricularesult->getOrigenFotoRoja().data,
+                                                          m_matricularesult->getOrigenFotoRoja().elemSize(),
+                                                          m_matricularesult->getOrigenFotoRoja().cols,
+                                                          m_matricularesult->getOrigenFotoRoja().rows,
                                                           regionsOfInterest);
                 if(results.plates.size()>0){
                     for (uint i = 0; i < results.plates.size(); i++){
@@ -236,15 +241,17 @@ void NewsagesAlprTask::procesarRojas()
                         for (uint k = 0; k < plate.topNPlates.size(); k++){
                             AlprPlate candidate = plate.topNPlates[k];
 
-                            if (candidate.matches_template  && m_matricularesult->MatriculaPrecisionB < candidate.overall_confidence){
-                                m_matricularesult->MatriculaDetectedB   = candidate.matches_template;
-                                m_matricularesult->MatriculaPrecisionB  = candidate.overall_confidence;
-                                m_matricularesult->MatriculaPrecisionBs = QString::number(m_matricularesult->MatriculaPrecisionB,'g',6);
-                                m_matricularesult->MatriculaB           = QString::fromStdString(candidate.characters);
+                            if (candidate.matches_template  && m_matricularesult->getMatriculaPrecisionB() < candidate.overall_confidence){
+                                m_matricularesult->setMatriculaDetectedB   ( candidate.matches_template);
+                                m_matricularesult->setMatriculaPrecisionB  ( candidate.overall_confidence);
+                                m_matricularesult->setMatriculaPrecisionBs ( QString::number(m_matricularesult->getMatriculaPrecisionB(),'g',6));
+                                m_matricularesult->setMatriculaB           ( QString::fromStdString(candidate.characters));
                                 cv::Rect rect = cv::Rect(plate.plate_points[0].x  ,plate.plate_points[0].y,
                                                          plate.plate_points[2].x - plate.plate_points[0].x,
                                                          plate.plate_points[2].y - plate.plate_points[0].y);
-                                cv::resize(cv::Mat(*m_matricularesult->camara->getOrigenFoto(),rect),m_matricularesult->MatriculaFotoB,matriculaSize);
+                                cv::Mat _resize;
+                                cv::resize(cv::Mat(m_matricularesult->camara->getOrigenFoto(),rect),_resize,matriculaSize);
+                                m_matricularesult->setMatriculaFotoB(_resize);
                             }
                        }
                     }
@@ -252,14 +259,14 @@ void NewsagesAlprTask::procesarRojas()
                 regionsOfInterest.clear();
                 m_plank.B=b;
                 b++;
-            }while( b<=m_retry_panks && m_matricularesult->MatriculaDetectedB!=true);
+            }while( b<=m_retry_panks && m_matricularesult->getMatriculaDetectedB()!=true);
             m_plank.C=c;
             c++;
-        }while( c<=m_retry_panks &&  m_matricularesult->MatriculaDetectedB!=true);
+        }while( c<=m_retry_panks &&  m_matricularesult->getMatriculaDetectedB()!=true);
     }
     delete remolque;
     guardarPlanK();
-    emit ReplyOriginalFotoRoja(m_matricularesult->OrigenFotoRoja);
+    emit ReplyOriginalFotoRoja(m_matricularesult->getOrigenFotoRoja());
     //m_matricularesult->convertirFotos();
     emit ReplyMatriculaFoto();
 

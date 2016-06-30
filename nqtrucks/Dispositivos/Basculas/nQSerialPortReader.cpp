@@ -180,7 +180,7 @@ void nQSerialPortReader::MuestrearBascula(const Registros::Bascula &_bascula){
         if(_bascula.getIBruto()==0){
             m_inicio_peso=true;
             m_count_muestras=0;
-            m_bascula_estable.clearBascula();
+            m_bascula_estable.clear();
         }
     }
 }

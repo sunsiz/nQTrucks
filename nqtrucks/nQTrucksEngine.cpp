@@ -48,20 +48,18 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
     qRegisterMetaType<cv::Mat>("cv::Mat");
     qRegisterMetaType<Planck>( "Planck");
     qRegisterMetaType<nQTrucks::t_Prewarp>("nQTrucks::t_Prewarp");
-    qRegisterMetaType<Registros::MatriculaResults>("Registros::MatriculaResults");
 
 
     /** Daemon Types **/
-    //qRegisterMetaType<Registros::Simple>            ("Registros::Simple");
-   // qRegisterMetaType<Registros::Matriculas>        ("Registros::Matriculas");
-   qRegisterMetaType<Registros::RegistroMatriculas>             ("Registros::RegistroMatriculas");
+    qRegisterMetaType<Registros::MatriculaResults>("Registros::MatriculaResults");
+    qRegisterMetaType<Registros::RegistroMatriculas>             ("Registros::RegistroMatriculas");
 
     /** Bascula Types **/
-    //qRegisterMetaType<Registros::Bascula>("Registros::Bascula");
+    qRegisterMetaType<Registros::Bascula>("Registros::Bascula");
 
     /** Camara Types **/
     QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
-    //qRegisterMetaType<Registros::Camara>("Registros::Camara");
+    qRegisterMetaType<Registros::Camara>("Registros::Camara");
 
     m_camara.resize(2);
     m_camara[0] = new Devices::CamaraIP(0,settings(), this);

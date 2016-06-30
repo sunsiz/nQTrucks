@@ -53,13 +53,13 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
 {
     m_results.resize(3);
     m_results[0] = new Registros::MatriculaResults; //emitir
-    m_results[0]->id=m_nDevice;
+    m_results[0]->setId(m_nDevice);
 
     m_results[1] = new Registros::MatriculaResults; //calibrar
-    m_results[1]->id=m_nDevice;
+    m_results[1]->setId(m_nDevice);
 
     m_results[2] = new Registros::MatriculaResults; //procesar
-    m_results[2]->id=m_nDevice;
+    m_results[2]->setId(m_nDevice);
 
 
 }
@@ -221,11 +221,11 @@ void NewsagesAlpr::processFoto(const Registros::Camara &_camara)
 void NewsagesAlpr::onProcesarFotoFinished(){
     m_results[2]->convertirFotos(); /** MEMORY LEAK **/
     emit ReplyMatriculaResults(*m_results[2]);
-    qDebug() << "Device:"           << m_results[2]->id << endl
-             << "\t Matricula1:"    << m_results[2]->MatriculaA
-             << "precision:"        << m_results[2]->MatriculaPrecisionAs<<"%"<< "patron:"    << m_results[2]->MatriculaDetectedA << endl
-             << "\t Matricula2:"    << m_results[2]->MatriculaB
-             << "precision:"        << m_results[2]->MatriculaPrecisionBs << "%" << "patron:" << m_results[2]->MatriculaDetectedB << endl;
+    qDebug() << "Device:"           << m_results[2]->getId() << endl
+             << "\t Matricula1:"    << m_results[2]->getMatriculaA()
+             << "precision:"        << m_results[2]->getMatriculaPrecisionAs()<<"%"<< "patron:"    << m_results[2]->getMatriculaDetectedA() << endl
+             << "\t Matricula2:"    << m_results[2]->getMatriculaB()
+             << "precision:"        << m_results[2]->getMatriculaPrecisionBs() << "%" << "patron:" << m_results[2]->getMatriculaDetectedB() << endl;
 }
 
 /** END PROCESAR ********************************************************************************************************/

@@ -37,7 +37,7 @@ using namespace nQTrucks;
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv); /** MEMORY LEAK **/
-    QDesktopWidget dw;
+    //QDesktopWidget dw;
     Desktop w;
 
     QFile qss(":qdarkstyle/style.qss");

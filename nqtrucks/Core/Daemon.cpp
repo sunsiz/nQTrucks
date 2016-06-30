@@ -86,7 +86,7 @@ void Daemon::onPesoNuevo(const Registros::Bascula &_nuevaPesada)
 
       camaraconn1=connect(m_camara[0], &Devices::CamaraIP::ReplyCamaraIP, [=](const Registros::Camara  &_Reply){
           QObject::disconnect(camaraconn1);
-          m_RegistroMatriculas.results[0].camara->setCamara(_Reply);
+          m_RegistroMatriculas.results0->camara->setCamara(_Reply);
           //m_RegistroMatriculas.results[0].OrigenFotoByte = _Reply.OrigenFotoByte;
           m_bfoto1=true;
           //Tengo las fotos semaforo GO! y Registro linea
@@ -99,7 +99,7 @@ void Daemon::onPesoNuevo(const Registros::Bascula &_nuevaPesada)
 
       camaraconn2=connect(m_camara[1], &Devices::CamaraIP::ReplyCamaraIP, [=](const Registros::Camara  &_Reply){
           QObject::disconnect(camaraconn2);
-          m_RegistroMatriculas.results[1].camara->setCamara(_Reply);
+          m_RegistroMatriculas.results1->camara->setCamara(_Reply);
           m_bfoto2=true;
           //Tengo las fotos semaforo GO! y Registro linea
           if(m_bfoto1 && m_bfoto2){
@@ -140,8 +140,8 @@ void Daemon::onGuardarRegistroSimple(){
         m_balpr2=false;
 
         alprconn1 = connect(m_alpr[0], &Devices::NewsagesAlpr::ReplyMatriculaResults, [=](const Registros::MatriculaResults &_registro){
-            QObject::disconnect(alprconn1);
-            m_RegistroMatriculas.results[0]= _registro;
+            QObject::disconnect(alprconn1);            
+            m_RegistroMatriculas.results0->setMatriculaResults(_registro);
             m_balpr1=true;
             if(m_balpr1 && m_balpr2){
                 onGuardarRegistroRegistroMatriculas();
@@ -150,15 +150,15 @@ void Daemon::onGuardarRegistroSimple(){
 
         alprconn2 = connect(m_alpr[1],&Devices::NewsagesAlpr::ReplyMatriculaResults, [=](const Registros::MatriculaResults  &_registro){
             QObject::disconnect(alprconn2);
-            m_RegistroMatriculas.results[1]= _registro;
+            m_RegistroMatriculas.results1->setMatriculaResults(_registro);
             m_balpr2=true;
             if(m_balpr1 && m_balpr2){
                 onGuardarRegistroRegistroMatriculas();
             }
         });
 
-        m_alpr[0]->processFoto(*m_RegistroMatriculas.results[0].camara);
-        m_alpr[1]->processFoto(*m_RegistroMatriculas.results[1].camara);
+        m_alpr[0]->processFoto(*m_RegistroMatriculas.results0->camara);
+        m_alpr[1]->processFoto(*m_RegistroMatriculas.results1->camara);
         //m_registrando=false;
         m_bfoto1=false;
         m_bfoto2=false;

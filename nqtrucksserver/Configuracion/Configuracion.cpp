@@ -86,10 +86,10 @@ Configuracion::~Configuracion()
 void Configuracion::updateGui(){
     switch (ui->CamaraSelect->currentIndex()) {
     case 0:        
-        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[0].camara.OrigenFotoQ));
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[0].camara->getOrigenFotoQ()));
         break;
     case 1:
-        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[1].camara.OrigenFotoQ));
+        ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[1].camara->getOrigenFotoQ()));
         break;
     }
 }
@@ -158,13 +158,13 @@ void Configuracion::loadconfig()
 /** CAMARAS *************************************************************************/
     /** CAMARA1 **/
 void Configuracion::onGetFoto1(const Registros::Camara &_camara){
-    m_matricularesults[0].camara = _camara;
+    m_matricularesults[0].camara->setCamara(_camara);
     updateGui();
     updateCalibracionGui();
 }
     /** CAMARA2 **/
 void Configuracion::onGetFoto2(const Registros::Camara &_camara){
-    m_matricularesults[1].camara = _camara;
+    m_matricularesults[1].camara->setCamara(_camara);
     updateGui();
     updateCalibracionGui();
 }
@@ -357,7 +357,7 @@ void Configuracion::loadPlanks(const int &index){
 void Configuracion::on_TestMatricula_clicked(){
     int index = getAlprIndex();
     on_guardarPlanK_clicked();
-    engine->getFotoMatricula(index,m_matricularesults[index].camara);
+    engine->getFotoMatricula(index,*m_matricularesults[index].camara);
 }
 void Configuracion::on_ActualizarCamara_clicked(){
     int index = getAlprIndex();
@@ -367,47 +367,47 @@ void Configuracion::on_ActualizarCamara_clicked(){
     /** ALPR **/
 void Configuracion::updateCalibracionGui(){
     int index = getAlprIndex();
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_matricularesults[index].camara.OrigenFotoQ));
-    ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_matricularesults[index].MatriculaFotoAQ));
-    ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_matricularesults[index].MatriculaFotoBQ));
-    ui->MatriculaA->setText(m_matricularesults[index].MatriculaA);/** MEMORY LEAK **/
-    ui->MatriculaB->setText(m_matricularesults[index].MatriculaB);
-    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(m_matricularesults[index].OrigenFotoBlancaQ));
-    ui->FotoRojosA->setPixmap(QPixmap::fromImage(m_matricularesults[index].OrigenFotoRojaQ));
-    ui->LongMatriculaA->setText(m_matricularesults[index].MatriculaPrecisionAs); /** MEMORY LEAK **/
-    ui->LongMatriculaB->setText(m_matricularesults[index].MatriculaPrecisionBs);
+    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_matricularesults[index].camara->getOrigenFotoQ()));
+    ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_matricularesults[index].getMatriculaFotoAQ()));
+    ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_matricularesults[index].getMatriculaFotoBQ()));
+    ui->MatriculaA->setText(m_matricularesults[index].getMatriculaA());/** MEMORY LEAK **/
+    ui->MatriculaB->setText(m_matricularesults[index].getMatriculaB());
+    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(m_matricularesults[index].getOrigenFotoBlancaQ()));
+    ui->FotoRojosA->setPixmap(QPixmap::fromImage(m_matricularesults[index].getOrigenFotoRojaQ()));
+    ui->LongMatriculaA->setText(m_matricularesults[index].getMatriculaPrecisionAs()); /** MEMORY LEAK **/
+    ui->LongMatriculaB->setText(m_matricularesults[index].getMatriculaPrecisionBs());
 }
     /** ALPR 1 **/
 void Configuracion::onReplyMatriculaResults1(const Registros::MatriculaResults &_result){
-    m_matricularesults[0] = _result;
+    m_matricularesults[0].setMatriculaResults(_result);
     loadPlanks(0);
     updateCalibracionGui();
 }
 
 void Configuracion::onGetOriginalMatricula1(const Registros::Camara &_camara){
-    m_matricularesults[0].camara = _camara;
+    m_matricularesults[0].camara->setCamara(_camara);
     updateCalibracionGui();
 }
 
 void Configuracion::onGetCalibrationResult1(const Registros::MatriculaResults &_calibration_result){
-    m_matricularesults[0] = _calibration_result;
+    m_matricularesults[0].setMatriculaResults(_calibration_result);
     updateCalibracionGui();
 }
     /** END ALPR1 **/
     /** ALPR2 **/
 void Configuracion::onReplyMatriculaResults2(const Registros::MatriculaResults &_result){
-    m_matricularesults[1] = _result;
+    m_matricularesults[1].setMatriculaResults(_result);
     loadPlanks(1);
     updateCalibracionGui();
 }
 
 void Configuracion::onGetOriginalMatricula2(const Registros::Camara &_camara){
-    m_matricularesults[1].camara = _camara;
+    m_matricularesults[1].camara->setCamara(_camara);
     updateCalibracionGui();
 }
 
 void Configuracion::onGetCalibrationResult2(const Registros::MatriculaResults &_calibration_result){
-    m_matricularesults[1] = _calibration_result;
+    m_matricularesults[1].setMatriculaResults(_calibration_result);
     updateCalibracionGui();
 }
 
@@ -438,7 +438,7 @@ void Configuracion::on_guardarPlanK_clicked(){
         engine->appConfig()->setValue(QString(ALPR) + "/plankc2",QString::number(ui->vPlankC->value()));
         break;
     }
-    engine->calibrarFoto(index,m_matricularesults[index].camara);
+    engine->calibrarFoto(index,*m_matricularesults[index].camara);
 }
     /** END PLANKs **/
 /** END CALIBRACION *******************************************************************/

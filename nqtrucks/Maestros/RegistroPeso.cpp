@@ -93,25 +93,25 @@ namespace nQTrucks{
                 qry.bindValue(":pesoneto",          RegistroMatriculas.m_bascula->getINeto());
                 qry.bindValue(":pesotara",          RegistroMatriculas.m_bascula->getITara());
 
-                qry.bindValue(":fotocamara1",       RegistroMatriculas.results[0].camara->getOrigenFotoByte());
-                qry.bindValue(":fotomatriculaA1",   RegistroMatriculas.results[0].MatriculaFotoAByte);
-                qry.bindValue(":fotomatriculaB1",   RegistroMatriculas.results[0].MatriculaFotoBByte);
-                qry.bindValue(":matriculaA1",       RegistroMatriculas.results[0].MatriculaA);
-                qry.bindValue(":matriculaB1",       RegistroMatriculas.results[0].MatriculaB);
-                qry.bindValue(":precisionA1",       QString::number(RegistroMatriculas.results[0].MatriculaPrecisionA,'g',6));
-                qry.bindValue(":precisionB1",       QString::number(RegistroMatriculas.results[0].MatriculaPrecisionB,'g',6));
+                qry.bindValue(":fotocamara1",       RegistroMatriculas.results0->camara->getOrigenFotoByte());
+                qry.bindValue(":fotomatriculaA1",   RegistroMatriculas.results0->getMatriculaFotoAByte());
+                qry.bindValue(":fotomatriculaB1",   RegistroMatriculas.results0->getMatriculaFotoBByte());
+                qry.bindValue(":matriculaA1",       RegistroMatriculas.results0->getMatriculaA());
+                qry.bindValue(":matriculaB1",       RegistroMatriculas.results0->getMatriculaB());
+                qry.bindValue(":precisionA1",       QString::number(RegistroMatriculas.results0->getMatriculaPrecisionA(),'g',6));
+                qry.bindValue(":precisionB1",       QString::number(RegistroMatriculas.results0->getMatriculaPrecisionB(),'g',6));
 
 
-                qry.bindValue(":fotocamara2",       RegistroMatriculas.results[1].camara->getOrigenFotoByte());
-                qry.bindValue(":fotomatriculaA2",   RegistroMatriculas.results[1].MatriculaFotoAByte);
-                qry.bindValue(":fotomatriculaB2",   RegistroMatriculas.results[1].MatriculaFotoBByte);
-                qry.bindValue(":matriculaA2",       RegistroMatriculas.results[1].MatriculaA);
-                qry.bindValue(":matriculaB2",       RegistroMatriculas.results[1].MatriculaB);
-                qry.bindValue(":precisionA2",       QString::number(RegistroMatriculas.results[1].MatriculaPrecisionA,'g',6));
-                qry.bindValue(":precisionB2",       QString::number(RegistroMatriculas.results[1].MatriculaPrecisionB,'g',6));
+                qry.bindValue(":fotocamara2",       RegistroMatriculas.results1->camara->getOrigenFotoByte());
+                qry.bindValue(":fotomatriculaA2",   RegistroMatriculas.results1->getMatriculaFotoAByte());
+                qry.bindValue(":fotomatriculaB2",   RegistroMatriculas.results1->getMatriculaFotoBByte());
+                qry.bindValue(":matriculaA2",       RegistroMatriculas.results1->getMatriculaA());
+                qry.bindValue(":matriculaB2",       RegistroMatriculas.results1->getMatriculaB());
+                qry.bindValue(":precisionA2",       QString::number(RegistroMatriculas.results1->getMatriculaPrecisionA(),'g',6));
+                qry.bindValue(":precisionB2",       QString::number(RegistroMatriculas.results1->getMatriculaPrecisionB(),'g',6));
 
                 if(qry.exec()){ /** MEMORY LEAK **/
-                    RegistroMatriculas.id = qry.lastInsertId().toLongLong();
+                    RegistroMatriculas.setId(qry.lastInsertId().toLongLong());
                     setTable();
                 }else{
                     return false;
@@ -156,14 +156,14 @@ namespace nQTrucks{
              qDebug() << "BUSCANDO:  [[" << _matricula << "]]";
             QSqlQuery qry(m_db);
             qry.prepare(qry_buscarpareja);
-            qry.bindValue(":id0", RegistrosMatriculas[0].id);
-            qry.bindValue(":fechaabuscar", RegistrosMatriculas[0].FechaRegistro.date());
+            qry.bindValue(":id0", RegistrosMatriculas[0].getId());
+            qry.bindValue(":fechaabuscar", RegistrosMatriculas[0].getFechaRegistro().date());
             qry.bindValue(":matriculabuscar", _matricula);
 
             if (qry.exec()) { /** MEMORY LEAK **/ // make sure your query has been executed successfully
                 /** Si existe la pareja, adquiero su id y el peso bruto **/
                 while (qry.next()){
-                    RegistrosMatriculas[1].id = qry.value("id").toLongLong();
+                    RegistrosMatriculas[1].setId(qry.value("id").toLongLong());
                     RegistrosMatriculas[1].m_bascula->setIBruto(qry.value("pesobruto").toFloat()+300); //DEBUG
                     return actualizarPareja(RegistrosMatriculas);
                     /** Actualizo a Procesado y
@@ -187,16 +187,16 @@ namespace nQTrucks{
             qry2.prepare(qry_procesar_pareja);
 
             /** Primera pareja 0 **/
-            qry.bindValue(":idpareja", RegistrosMatriculas[1].id);
+            qry.bindValue(":idpareja", RegistrosMatriculas[1].getId());
             qry.bindValue(":pesoneto", RegistrosMatriculas[0].m_bascula->getINeto());
-            qry.bindValue(":id0",      RegistrosMatriculas[0].id);
+            qry.bindValue(":id0",      RegistrosMatriculas[0].getId());
             qry.bindValue(":entrada",  false);
             if (qry.exec()){
                 qDebug() << "actualizando pareja 1";
                 /** Segunda pareja 1 **/
-                qry2.bindValue(":idpareja", RegistrosMatriculas[0].id);
+                qry2.bindValue(":idpareja", RegistrosMatriculas[0].getId());
                 qry2.bindValue(":pesoneto", RegistrosMatriculas[1].m_bascula->getINeto());
-                qry2.bindValue(":id0",      RegistrosMatriculas[1].id);
+                qry2.bindValue(":id0",      RegistrosMatriculas[1].getId());
                 qry2.bindValue(":entrada",  true);
                 if (qry2.exec()){
                     qDebug() << "actualizando pareja 2";
