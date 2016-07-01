@@ -71,7 +71,7 @@ namespace nQTrucks {
 
     /** CAMARA **********************************************************************************************/
     Camara::Camara(){
-        m_OrigenFoto = cv::Mat(fotoSize, CV_8UC3 );
+        //m_OrigenFoto = cv::Mat(fotoSize, CV_8UC3 );
     }
 
     Camara::~Camara(){
@@ -87,7 +87,7 @@ namespace nQTrucks {
     void Camara::clear(){
         m_OrigenFoto.release();
         m_OrigenFotoByte.clear();
-        m_OrigenFotoQ.detach();
+        if (!m_OrigenFotoQ.isNull()) m_OrigenFotoQ.detach();
     }
 
     cv::Mat Camara::getOrigenFoto() const{
@@ -124,6 +124,18 @@ namespace nQTrucks {
 
     MatriculaResults::MatriculaResults(){ /** MEMORY LEAK **/
         camara = new Camara;
+        tipo =0;                        // 0 para calibracion, 1 para procesado
+        id   =0;                        // id fuente de captura de foto
+
+        MatriculaDetectedA=false;        // Coincide con un patron de busqueda?
+        MatriculaA="";                  // STring de la matricula
+        MatriculaPrecisionA=0;          // Precision del OCR
+        MatriculaPrecisionAs="0%";
+
+        MatriculaDetectedB=false;        // Coincide con un patron de busqueda?
+        MatriculaB="";                  // STring de la matricula
+        MatriculaPrecisionB=0;          // Precision del OCR
+        MatriculaPrecisionBs="0%";
     }
 
     MatriculaResults::~MatriculaResults(){
@@ -152,7 +164,7 @@ namespace nQTrucks {
         setMatriculaFotoB(value.getMatriculaFotoB());              // Imagen recortada de la Matricula
         setMatriculaPrecisionB(value.getMatriculaPrecisionB());    // Precision del OCR
         setMatriculaPrecisionBs(value.getMatriculaPrecisionBs());
-        convertirFotos();
+        //convertirFotos();
 
     }
 
@@ -192,18 +204,22 @@ namespace nQTrucks {
     void MatriculaResults::setOrigenFotoPrewarp(const cv::Mat &value){
         OrigenFotoPrewarp.release();
         OrigenFotoPrewarp = value.clone();
+        convertirFotoPrewarp();
     }
     void MatriculaResults::setOrigenFotoBlanca(const cv::Mat &value){
         OrigenFotoBlanca.release();
         OrigenFotoBlanca = value.clone();
+        convertirFotoBlanca();
     }
     void MatriculaResults::setOrigenFotoBlancaQ(const QImage &value){
         OrigenFotoBlancaQ.detach();
         OrigenFotoBlancaQ = value;
+
     }
     void MatriculaResults::setOrigenFotoRoja(const cv::Mat &value){
         OrigenFotoRoja.release();
         OrigenFotoRoja = value.clone();
+        convertirFotoRoja();
     }
     void MatriculaResults::setOrigenFotoRojaQ(const QImage &value){
         OrigenFotoRojaQ.detach();
@@ -213,12 +229,14 @@ namespace nQTrucks {
         MatriculaFotoA.release();
         //MatriculaFotoA=cv::Mat( matriculaSize, CV_8UC3 );
         MatriculaFotoA = value.clone();
+        convertirMatriculaFotoA();
     }
 
     void MatriculaResults::setMatriculaFotoB(const cv::Mat &value){
         MatriculaFotoB.release();
         //MatriculaFotoA=cv::Mat( matriculaSize, CV_8UC3 );
         MatriculaFotoB = value.clone();
+        convertirMatriculaFotoB();
     }
 
     void MatriculaResults::setOrigenFotoPrewarpQ(const QImage &value){
@@ -243,8 +261,6 @@ namespace nQTrucks {
         MatriculaFotoBQ.detach();
         MatriculaFotoBQ = value;
     }
-
-
 
     /** REPORTS **/
     RegistroMatriculas::RegistroMatriculas()

@@ -99,26 +99,36 @@ namespace nQTrucks
         explicit Tools(QObject *parent=nullptr):QObject(parent){}
 
         inline QImage convertMat2QImage(const cv::Mat &_cvimage){
-            QImage qtImg= QImage();
             if( !_cvimage.empty() && _cvimage.depth() == CV_8U ){
                 if(_cvimage.channels() == 1){
-                    qtImg = QImage( (const unsigned char *)(_cvimage.data),
-                                    _cvimage.cols,
-                                    _cvimage.rows,
-                                    //_cvimage.step,
-                                    QImage::Format_Indexed8 ).copy();
+                    cv::Mat *_temp = new cv::Mat(_cvimage);
+
+                    QImage *qtImg = new QImage((const unsigned char *)(_temp->data),
+                                    _temp->cols,
+                                    _temp->rows,
+                                    //_temp.step,
+                                    QImage::Format_Indexed8 );
+                    _temp->release();
+                    delete _temp;
+                    return *qtImg;
                 }
                 else{
-                    cv::cvtColor( _cvimage, _cvimage, CV_BGR2RGB );
-                    qtImg = QImage( (const unsigned char *)(_cvimage.data),
-                                    _cvimage.cols,
-                                    _cvimage.rows,
-                                    //_cvimage.step,
-                                    QImage::Format_RGB888 ).copy();
+                    cv::Mat *_temp = new cv::Mat(_cvimage);
+                    cv::cvtColor( *_temp, *_temp, CV_BGR2RGB );
+
+                    QImage *qtImg = new QImage((const unsigned char *)(_temp->data),
+                                    _temp->cols,
+                                    _temp->rows,
+                                    //_temp.step,
+                                    QImage::Format_RGB888 );
+                    _temp->release();
+                    delete _temp;
+                    return *qtImg;
                 }
             }
-            return qtImg;
+            return QImage(fotoWidth, fotoHeight,QImage::Format_RGB888);
         }
+
         inline cv::Mat  convertQImage2Mat(   const QImage     &_qimage){
             QByteArray baScene; // byte array with data
             QBuffer buffer(&baScene);
@@ -286,7 +296,7 @@ namespace nQTrucks
                 this->setOrigenFotoRoja(*_dest);
                 channel[0].release();
                 channel[1].release();
-                channel[2].release();
+                channel[2].release();                
                 _dest->release();
                 delete _dest;
                 //emit ReplyOriginalFotoRoja(m_matricularesult->getOrigenFotoRoja());
@@ -401,6 +411,33 @@ namespace nQTrucks
                 setMatriculaFotoAByte(m_tools->convertMat2ByteArray(getMatriculaFotoA().clone()));
                 setMatriculaFotoAQ(   m_tools->convertMat2QImage(getMatriculaFotoA().clone()));
 
+                setMatriculaFotoBByte(m_tools->convertMat2ByteArray(getMatriculaFotoB().clone()));
+                setMatriculaFotoBQ(   m_tools->convertMat2QImage(getMatriculaFotoB().clone()));
+                delete m_tools;
+            }
+            inline void convertirFotoPrewarp(){
+                Tools *m_tools        =  new Tools;
+                setOrigenFotoPrewarpQ(m_tools->convertMat2QImage(getOrigenFotoPrewarp().clone()));
+                delete m_tools;
+            }
+            inline void convertirFotoBlanca(){
+                Tools *m_tools        =  new Tools;
+                setOrigenFotoBlancaQ( m_tools->convertMat2QImage(getOrigenFotoBlanca().clone()));
+                delete m_tools;
+            }
+            inline void convertirFotoRoja(){
+                Tools *m_tools        =  new Tools;
+                setOrigenFotoRojaQ(   m_tools->convertMat2QImage(getOrigenFotoRoja().clone()));
+                delete m_tools;
+            }
+            inline void convertirMatriculaFotoA(){
+                Tools *m_tools        =  new Tools;
+                setMatriculaFotoAByte(m_tools->convertMat2ByteArray(getMatriculaFotoA().clone()));
+                setMatriculaFotoAQ(   m_tools->convertMat2QImage(getMatriculaFotoA().clone()));
+                delete m_tools;
+            }
+            inline void convertirMatriculaFotoB(){
+                Tools *m_tools        =  new Tools;
                 setMatriculaFotoBByte(m_tools->convertMat2ByteArray(getMatriculaFotoB().clone()));
                 setMatriculaFotoBQ(   m_tools->convertMat2QImage(getMatriculaFotoB().clone()));
                 delete m_tools;

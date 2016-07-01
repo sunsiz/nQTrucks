@@ -78,7 +78,7 @@ private:
 private:
     QUrl setCamaraURL();
     QNetworkAccessManager *m_netmanager;
-    Registros::Camara     *m_RegistroCamara;
+    //Registros::Camara     *m_RegistroCamara;
 public slots:
     void sendCamaraIPFotoRequest();
 

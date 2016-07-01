@@ -20,6 +20,7 @@ namespace nQTrucks{
 
     void Maestros::sincronizar(){
         m_RegistroPeso->syncTable();
+        m_Empresa->syncTable();
     }
 
     }

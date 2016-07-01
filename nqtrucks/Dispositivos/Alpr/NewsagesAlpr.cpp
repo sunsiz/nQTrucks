@@ -153,7 +153,7 @@ void NewsagesAlpr::calibrarFoto(const Registros::Camara &_camara){
 }
 
 void NewsagesAlpr::onCalibrarFotoFinished(){
-    m_results[1]->convertirFotos();
+    //m_results[1]->convertirFotos();
     this->ReplyMatriculaCalibrationResults(*m_results[1]);
 }
 /** END SOLO CALIBRACION *************************************************************************************/
@@ -225,7 +225,7 @@ void NewsagesAlpr::processFoto(const Registros::Camara &_camara)
 }
 
 void NewsagesAlpr::onProcesarFotoFinished(){
-    m_results[2]->convertirFotos(); /** MEMORY LEAK **/
+    //m_results[2]->convertirFotos(); /** MEMORY LEAK **/
     emit ReplyMatriculaResults(*m_results[2]);
     qDebug() << "Device:"           << m_results[2]->getId() << endl
              << "\t Matricula1:"    << m_results[2]->getMatriculaA()
