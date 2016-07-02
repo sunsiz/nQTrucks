@@ -157,7 +157,7 @@ void nQSerialPortReader::ReadType0(){
             m_bascula->setITara( m_serialBuffer.mid(14,8).toFloat());
             m_bascula->setINeto( m_serialBuffer.mid(24,8).toFloat());
 
-            if (m_serialBuffer.mid(24,8).contains("-")){m_bascula->setINeto(abs(m_bascula->getINeto()));}
+            //if (m_serialBuffer.mid(24,8).contains("-")){m_bascula->setINeto(fabs(m_bascula->getINeto()));}
             emit BasculaChanged(*m_bascula);
         }
         break;

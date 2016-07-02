@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMetaType>
+#include <math.h>
 
 /** BASCULAS **************************************************************************************/
 
@@ -46,7 +47,7 @@ namespace nQTrucks{
             void  setITara(float value){  this->m_iTara = value; }
 
             float getINeto() const{return this->m_iNeto;}
-            void  setINeto(float value){  this->m_iNeto = value; }
+            void  setINeto(float value){  this->m_iNeto = abs(value); }
 
         };
     } /** END NAMESPACE Regristros **/
