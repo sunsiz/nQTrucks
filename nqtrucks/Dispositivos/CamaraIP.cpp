@@ -133,7 +133,7 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
 
     //QSharedPointer <Registros::Camara> m_RegistroCamara =
     //      QSharedPointer <Registros::Camara> (new Registros::Camara, &QObject::deleteLater);
-    QImage *temp = new QImage(fotoWidth, fotoHeight,QImage::Format_RGB888);
+    QImage *temp = new QImage(Registros::FotoWidth, Registros::FotoHeight,QImage::Format_RGB888);
     if (temp->loadFromData(data)){
         QBuffer buffer(&data);
         buffer.open(QIODevice::ReadOnly);
@@ -144,7 +144,7 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
         cv::Mat _decode;// = new cv::Mat;
         cv::Mat _resize;//   = new cv::Mat;
         cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,&_decode); /** MEMORY LEAK **/
-        cv::resize(_decode,_resize,fotoSize);
+        cv::resize(_decode,_resize,Registros::FotoSize);
 
         m_RegistroCamara.setOrigenFoto(_resize);
         pic.clear();

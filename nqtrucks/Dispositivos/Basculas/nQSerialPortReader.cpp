@@ -38,6 +38,8 @@ nQSerialPortReader::nQSerialPortReader(QSettings *_appsettings, QObject *parent)
     : QObject(parent)
     , m_settings(_appsettings)
 {
+    m_bascula = new Registros::Bascula(this);
+    m_bascula_estable = new Registros::Bascula(this);
     m_serialPort = new QSerialPort(this);
     emit BasculaStatus(false);
     connect(this, &nQSerialPortReader::BasculaChanged,this,&nQSerialPortReader::MuestrearBascula);
@@ -147,16 +149,16 @@ void nQSerialPortReader::ReadType0(){
             m_serialBuffer += QString::fromStdString(m_serialData.toStdString());
         }else{
             charInicio=0;
-            m_bascula.setBEstadoAnterior(m_bascula.getBEstado());
-            if(m_serialBuffer.mid(1,1) != "E"){m_bascula.setBEstado(false);
-            }else m_bascula.setBEstado(true);
+            m_bascula->setBEstadoAnterior(m_bascula->getBEstado());
+            if(m_serialBuffer.mid(1,1) != "E"){m_bascula->setBEstado(false);
+            }else m_bascula->setBEstado(true);
 
-            m_bascula.setIBruto(m_serialBuffer.mid( 4,8).toFloat());
-            m_bascula.setITara( m_serialBuffer.mid(14,8).toFloat());
-            m_bascula.setINeto( m_serialBuffer.mid(24,8).toFloat());
+            m_bascula->setIBruto(m_serialBuffer.mid( 4,8).toFloat());
+            m_bascula->setITara( m_serialBuffer.mid(14,8).toFloat());
+            m_bascula->setINeto( m_serialBuffer.mid(24,8).toFloat());
 
-            if (m_serialBuffer.mid(24,8).contains("-")){m_bascula.setINeto(abs(m_bascula.getINeto()));}
-            emit BasculaChanged(m_bascula);
+            if (m_serialBuffer.mid(24,8).contains("-")){m_bascula->setINeto(abs(m_bascula->getINeto()));}
+            emit BasculaChanged(*m_bascula);
         }
         break;
     default:
@@ -171,8 +173,8 @@ void nQSerialPortReader::MuestrearBascula(const Registros::Bascula &_bascula){
             m_count_muestras++;
             if(m_count_muestras == getBasculaMuestras()*10){
                 m_inicio_peso=false;
-                m_bascula_estable.setBascula(_bascula);
-                emit BasculaPesoNuevo(m_bascula_estable);
+                m_bascula_estable->setBascula(_bascula);
+                emit BasculaPesoNuevo(*m_bascula_estable);
                 setBasculaMuestras(m_settings->value(   QString(BASCULA) + "/factor_estable","1"           ).toInt());
             }
         }
@@ -180,7 +182,7 @@ void nQSerialPortReader::MuestrearBascula(const Registros::Bascula &_bascula){
         if(_bascula.getIBruto()==0){
             m_inicio_peso=true;
             m_count_muestras=0;
-            m_bascula_estable.clear();
+            m_bascula_estable->clear();
         }
     }
 }

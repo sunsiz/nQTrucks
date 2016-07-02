@@ -28,11 +28,23 @@ unix:{
         $$PWD/nqtglobal.cpp \
         $$PWD/nqtglobal.h \
         $$PWD/nQTrucksEngine.h
+
+    EXTRA_FILES2 += \
+        $$PWD/Registros/Tools.h \
+        $$PWD/Registros/Bascula.h \
+        $$PWD/Registros/Camara.h \
+        $$PWD/Registros/MatriculaResults.h \
+        $$PWD/Registros/RegistroMatriculas.h
     linux{
         QMAKE_POST_LINK += mkdir -p $$quote($${DEST_INCLUDE_DIR}) $$escape_expand(\\n\\t) # qmake need make mkdir -p on subdirs more than root
         for(FILE,EXTRA_FILES){
             QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILE) $$quote($${DEST_INCLUDE_DIR}) $$escape_expand(\\n\\t) # copy includes for impl
         }
+        QMAKE_POST_LINK += mkdir -p $$quote($${DEST_INCLUDE_DIR}/Registros) $$escape_expand(\\n\\t) # qmake need make mkdir -p on subdirs more than root
+        for(FILE,EXTRA_FILES2){
+            QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILE) $$quote($${DEST_INCLUDE_DIR}/Registros) $$escape_expand(\\n\\t) # copy includes for impl
+        }
+
     }
 }
 

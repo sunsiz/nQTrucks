@@ -32,12 +32,12 @@
 #define CAMARASIP_H
 
 #include <QObject>
-#include <nqtglobal.h>
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QImage>
 #include <QUrl>
+#include <Registros/Camara.h>
 
 namespace nQTrucks {
 namespace Devices {
@@ -78,7 +78,7 @@ private:
 private:
     QUrl setCamaraURL();
     QNetworkAccessManager *m_netmanager;
-    //Registros::Camara     *m_RegistroCamara;
+    Registros::Camara     *m_RegistroCamara;
 public slots:
     void sendCamaraIPFotoRequest();
 

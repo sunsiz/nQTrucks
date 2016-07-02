@@ -14,7 +14,12 @@ SOURCES += \
     $$PWD/Db/QueryModel.cpp \
     $$PWD/Maestros/RegistroPeso.cpp \
     $$PWD/Maestros/Empresa.cpp \
-    $$PWD/Maestros/Maestros.cpp
+    $$PWD/Maestros/Maestros.cpp \
+    $$PWD/Registros/Bascula.cpp \
+    $$PWD/Registros/Camara.cpp \
+    $$PWD/Registros/Tools.cpp \
+    $$PWD/Registros/MatriculaResults.cpp \
+    $$PWD/Registros/RegistroMatriculas.cpp
 
 
 contains(CONFIG, zint){
@@ -32,7 +37,12 @@ HEADERS += \
     $$PWD/Db/QueryModel.h \
     $$PWD/Maestros/RegistroPeso.h \
     $$PWD/Maestros/Empresa.h \
-    $$PWD/Maestros/Maestros.h
+    $$PWD/Maestros/Maestros.h \
+    $$PWD/Registros/Bascula.h \
+    $$PWD/Registros/Camara.h \
+    $$PWD/Registros/Tools.h \
+    $$PWD/Registros/MatriculaResults.h \
+    $$PWD/Registros/RegistroMatriculas.h
 
 
 contains(CONFIG,zint){

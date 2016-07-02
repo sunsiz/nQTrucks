@@ -34,6 +34,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QByteArray>
 #include <QObject>
+#include <Registros/Bascula.h>
 
 #include <nqtglobal.h>
 
@@ -77,7 +78,7 @@ private:
     QString      m_serialBuffer="";
     int          charInicio=0;
     QByteArray   m_serialData;
-    Registros::Bascula      m_bascula;
+    Registros::Bascula      *m_bascula;
     QString      m_serialPortName;
 public slots:
     void connectPort(const bool &_value);
@@ -100,7 +101,7 @@ private:
     int        m_count_muestras=0;
     int        m_BasculaMuestras=1;
     bool       m_inicio_peso=false;
-    Registros::Bascula    m_bascula_estable;
+    Registros::Bascula    *m_bascula_estable;
     int        m_tolerancia_minima=10;
 signals:
     void BasculaPesoNuevo(const Registros::Bascula &_nuevaPesada);

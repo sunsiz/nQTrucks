@@ -55,11 +55,11 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
     qRegisterMetaType<Registros::RegistroMatriculas>             ("Registros::RegistroMatriculas");
 
     /** Bascula Types **/
-    qRegisterMetaType<Registros::Bascula>("Registros::Bascula");
+    //qRegisterMetaType<Registros::Bascula>("Registros::Bascula");
 
     /** Camara Types **/
     QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
-    qRegisterMetaType<Registros::Camara>("Registros::Camara");
+    //qRegisterMetaType<Registros::Camara>("Registros::Camara");
 
     m_camara.resize(2);
     m_camara[0] = new Devices::CamaraIP(0,settings(), this);

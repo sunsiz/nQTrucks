@@ -33,9 +33,7 @@
 
 #include <QObject>
 
-#include <nqtglobal.h>
-
-#include <QSettings>
+//#include <nqtglobal.h>
 
 /** REPORTS **/
 #include <QApplication>
@@ -44,6 +42,12 @@
 
 /** MAESTROS **/
 #include <QSqlQueryModel>
+
+/** REGISTROS **/
+#include "Registros/Bascula.h"
+#include "Registros/Camara.h"
+#include "Registros/MatriculaResults.h"
+#include "Registros/RegistroMatriculas.h"
 
 
 namespace nQTrucks {

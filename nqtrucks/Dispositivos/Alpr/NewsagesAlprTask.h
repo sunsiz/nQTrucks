@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QImage>
-#include <nqtglobal.h>
 #include <QMutex>
+
+#include <nqtglobal.h>
+#include "Registros/MatriculaResults.h"
 
 namespace nQTrucks {
 namespace Devices {

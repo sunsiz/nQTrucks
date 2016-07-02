@@ -3,6 +3,7 @@
 
 #include <Db/QueryModel.h>
 #include "nqtglobal.h"
+#include "Registros/RegistroMatriculas.h"
 
 namespace nQTrucks{
     namespace Maestros{
