@@ -38,8 +38,8 @@ nQSerialPortReader::nQSerialPortReader(QSettings *_appsettings, QObject *parent)
     : QObject(parent)
     , m_settings(_appsettings)
 {
-    m_bascula = new Bascula(this);
-    m_bascula_estable = new Bascula(this);
+    m_bascula = new Bascula;
+    m_bascula_estable = new Bascula;
     m_serialPort = new QSerialPort(this);
     emit BasculaStatus(false);
     connect(this, &nQSerialPortReader::BasculaChanged,this,&nQSerialPortReader::MuestrearBascula);

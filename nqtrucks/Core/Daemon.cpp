@@ -157,8 +157,8 @@ void Daemon::onGuardarRegistroSimple(){
             }
         });
 
-        m_alpr[0]->processFoto(m_RegistroMatriculas.m_results0->camara->getCamaraPtr());
-        m_alpr[1]->processFoto(m_RegistroMatriculas.m_results1->camara->getCamaraPtr());
+        m_alpr[0]->processFoto(*m_RegistroMatriculas.m_results0->camara->getCamara());
+        m_alpr[1]->processFoto(*m_RegistroMatriculas.m_results1->camara->getCamara());
         //m_registrando=false;
         m_bfoto1=false;
         m_bfoto2=false;
