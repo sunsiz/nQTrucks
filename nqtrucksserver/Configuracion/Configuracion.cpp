@@ -108,8 +108,8 @@ void Configuracion::loadconfig()
 //        m_matricularesults_iterator->convertirFotos(); /** MEMORY LEAK **/
 
 //    }
-    m_matricularesults[0] = new Registros::MatriculaResults;
-    m_matricularesults[1] = new Registros::MatriculaResults;
+    m_matricularesults[0] = new MatriculaResults;
+    m_matricularesults[1] = new MatriculaResults;
 
     /** END DEFAULT UIS **/
 
@@ -162,14 +162,14 @@ void Configuracion::loadconfig()
 
 /** CAMARAS *************************************************************************/
     /** CAMARA1 **/
-void Configuracion::onGetFoto1(const Registros::Camara &_camara){
-    m_matricularesults[0]->camara->setCamara(_camara);
+void Configuracion::onGetFoto1(const Camara &_camara){
+    m_matricularesults[0]->camara->setOrigenFoto(_camara.getOrigenFoto());
     updateGui();
     updateCalibracionGui();
 }
     /** CAMARA2 **/
-void Configuracion::onGetFoto2(const Registros::Camara &_camara){
-    m_matricularesults[1]->camara->setCamara(_camara);
+void Configuracion::onGetFoto2(const Camara &_camara){
+    m_matricularesults[1]->camara->setOrigenFoto(_camara.getOrigenFoto());
     updateGui();
     updateCalibracionGui();
 }
@@ -326,7 +326,7 @@ void Configuracion::on_BasculaConectada(bool conectada)
     }
 }
 
-void Configuracion::onBascula(const Registros::Bascula &_bascula)
+void Configuracion::onBascula(const Bascula &_bascula)
 {          
     ui->BasculaLcd->display(_bascula.getIBruto());
     ui->BasculaLcd2->display(_bascula.getITara());
@@ -383,35 +383,35 @@ void Configuracion::updateCalibracionGui(){
     ui->LongMatriculaB->setText(m_matricularesults[index]->getMatriculaPrecisionBs());
 }
     /** ALPR 1 **/
-void Configuracion::onReplyMatriculaResults1(const Registros::MatriculaResults &_result){
+void Configuracion::onReplyMatriculaResults1(const MatriculaResults &_result){
     m_matricularesults[0]->setMatriculaResults(_result);
     loadPlanks(0);
     updateCalibracionGui();
 }
 
-void Configuracion::onGetOriginalMatricula1(const Registros::Camara &_camara){
-    m_matricularesults[0]->camara->setCamara(_camara);
+void Configuracion::onGetOriginalMatricula1(const Camara &_camara){
+    m_matricularesults[0]->camara->setOrigenFoto(_camara.getOrigenFoto());
     updateCalibracionGui();
 }
 
-void Configuracion::onGetCalibrationResult1(const Registros::MatriculaResults &_calibration_result){
+void Configuracion::onGetCalibrationResult1(const MatriculaResults &_calibration_result){
     m_matricularesults[0]->setMatriculaResults(_calibration_result);
     updateCalibracionGui();
 }
     /** END ALPR1 **/
     /** ALPR2 **/
-void Configuracion::onReplyMatriculaResults2(const Registros::MatriculaResults &_result){
+void Configuracion::onReplyMatriculaResults2(const MatriculaResults &_result){
     m_matricularesults[1]->setMatriculaResults(_result);
     loadPlanks(1);
     updateCalibracionGui();
 }
 
-void Configuracion::onGetOriginalMatricula2(const Registros::Camara &_camara){
-    m_matricularesults[1]->camara->setCamara(_camara);
+void Configuracion::onGetOriginalMatricula2(const Camara &_camara){
+    m_matricularesults[1]->camara->setOrigenFoto(_camara.getOrigenFoto());
     updateCalibracionGui();
 }
 
-void Configuracion::onGetCalibrationResult2(const Registros::MatriculaResults &_calibration_result){
+void Configuracion::onGetCalibrationResult2(const MatriculaResults &_calibration_result){
     m_matricularesults[1]->setMatriculaResults(_calibration_result);
     updateCalibracionGui();
 }

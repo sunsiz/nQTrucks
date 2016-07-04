@@ -39,11 +39,11 @@ namespace nQTrucks{
 namespace Devices {
 
 CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
-    : QObject(parent)
+    : Camara(parent)
     , m_nDevice(nDevice)
     , m_settings(_appsettings)
     , m_netmanager(new QNetworkAccessManager(this))
-    //, m_RegistroCamara (new Registros::Camara)
+    //, m_RegistroCamara (new Camara)
 {
 
     /** CONECTIONS **/
@@ -126,50 +126,88 @@ void CamaraIP::sendCamaraIPFotoRequest()
 }
 
 void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
-    QByteArray data = reply->readAll();    
-
-    Registros::Camara m_RegistroCamara;// =new Registros::Camara;
-    //m_RegistroCamara.setOrigenFoto(cv::Mat::zeros(fotoSize,CV_8UC3));
-
-    //QSharedPointer <Registros::Camara> m_RegistroCamara =
-    //      QSharedPointer <Registros::Camara> (new Registros::Camara, &QObject::deleteLater);
-    QImage *temp = new QImage(Registros::FotoWidth, Registros::FotoHeight,QImage::Format_RGB888);
+    QByteArray data = reply->readAll();
+    QImage *temp = new QImage(FotoWidth, FotoHeight,QImage::Format_RGB888);
     if (temp->loadFromData(data)){
+
         QBuffer buffer(&data);
         buffer.open(QIODevice::ReadOnly);
         const char* begin = reinterpret_cast<char*>(data.data());
         const char* end = begin + data.size();
         std::vector<char> pic(begin, end);
+        buffer.reset();
         buffer.close();
-        cv::Mat _decode;// = new cv::Mat;
-        cv::Mat _resize;//   = new cv::Mat;
-        cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,&_decode); /** MEMORY LEAK **/
-        cv::resize(_decode,_resize,Registros::FotoSize);
 
-        m_RegistroCamara.setOrigenFoto(_resize);
+        cv::Mat *_decode = new cv::Mat;
+        cv::Mat *_resize = new cv::Mat;
+        cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,_decode); /** MEMORY LEAK **/
+        cv::resize(*_decode,*_resize,FotoSize);
+        setOrigenFoto(*_resize);
+        _resize->release();
+        delete _resize;
+        _decode->release();
+        delete _decode;
         pic.clear();
-        _decode.release();
-        _resize.release();
         temp->detach();
-        //delete _resize;
-        //delete _decode;
+        delete temp;
+        data.clear();
 
     }else{
         /** CAMARA ERROR CV::MAT **/
         emit CamaraError(m_errorCamaraIP);
+        data.clear();
+        //emit ReplyCamaraIP(*m_RegistroCamara);
     }
-
-    data.clear();
-    data=NULL;
-    delete temp;
-    m_RegistroCamara.convertirFotos();
-    emit ReplyCamaraIP(m_RegistroCamara);
-
-    //temp.detach();
-    //temp=NULL;
     delete reply;
-    //delete m_RegistroCamara;
 }
+
+
+
+//void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
+//    QByteArray data = reply->readAll();
+
+//    //Camara m_RegistroCamara;// =new Camara;
+//    setOrigenFoto(cv::Mat::zeros(fotoSize,CV_8UC3));
+
+//    //QSharedPointer <Camara> m_RegistroCamara =
+//    //      QSharedPointer <Camara> (new Camara, &QObject::deleteLater);
+//    QImage *temp = new QImage(FotoWidth, FotoHeight,QImage::Format_RGB888);
+//    if (temp->loadFromData(data)){
+//        QBuffer buffer(&data);
+//        buffer.open(QIODevice::ReadOnly);
+//        const char* begin = reinterpret_cast<char*>(data.data());
+//        const char* end = begin + data.size();
+//        std::vector<char> pic(begin, end);
+//        buffer.close();
+//        cv::Mat _decode;// = new cv::Mat;
+//        cv::Mat _resize;//   = new cv::Mat;
+//        cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,&_decode); /** MEMORY LEAK **/
+//        cv::resize(_decode,_resize,FotoSize);
+
+//        setOrigenFoto(_resize);
+//        pic.clear();
+//        _decode.release();
+//        _resize.release();
+//        temp->detach();
+//        //delete _resize;
+//        //delete _decode;
+
+//    }else{
+//        /** CAMARA ERROR CV::MAT **/
+//        emit CamaraError(m_errorCamaraIP);
+//    }
+
+//    data.clear();
+//    data=NULL;
+//    delete temp;
+//    m_RegistroCamara.convertirFotos();
+//    emit ReplyCamaraIP(m_RegistroCamara);
+
+//    //temp.detach();
+//    //temp=NULL;
+//    delete reply;
+//    //delete m_RegistroCamara;
+//}
 
 
 } /** END NAMESPACE Devices  **/

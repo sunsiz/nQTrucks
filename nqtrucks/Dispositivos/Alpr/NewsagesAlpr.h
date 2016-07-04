@@ -50,17 +50,17 @@ public:
 
     /** SETTINGS **/
 public slots:
-    void setFotoCamara(const Registros::Camara &_camara);
+    void setFotoCamara(const Camara &_camara);
 private:
     int         m_nDevice;
     QSettings   *m_settings;
-    QVector<Registros::MatriculaResults*> m_results;
+    QVector<MatriculaResults*> m_results;
     /** END SETTINGS **/
 
 signals:
-    void ReplyOriginalFoto(         const Registros::Camara &_camara);
-    void ReplyMatriculaFoto        (const Registros::MatriculaResults &_tempResults);
-    void ReplyMatriculaFotoRemolque(const Registros::MatriculaResults &_tempResultsRemolque);
+    void ReplyOriginalFoto(         const Camara &_camara);
+    void ReplyMatriculaFoto        (const MatriculaResults &_tempResults);
+    void ReplyMatriculaFotoRemolque(const MatriculaResults &_tempResultsRemolque);
 
     /** CALIBRAR *****************************************************/
 private:
@@ -72,11 +72,11 @@ private:
     NewsagesAlprTask *tareaCalibrar2;
     bool bhiloCalibrar2;
 public slots:
-    void calibrarFoto(const Registros::Camara &_camara);
+    void calibrarFoto(const Camara &_camara);
 signals:
     //void ReplyOriginalFotoRoja(const cv::Mat &Foto);
     //void ReplyOriginalFotoBlanca(const cv::Mat &Foto);
-    void ReplyMatriculaCalibrationResults(const Registros::MatriculaResults  &_calibration_results);
+    void ReplyMatriculaCalibrationResults(const MatriculaResults  &_calibration_results);
 private slots:
     void onCalibrarFotoFinished();
     /** END CALIBRAR *******************************************************/
@@ -84,9 +84,9 @@ private slots:
 
     /** Procesar Matriculas **/
 public slots:
-    void processFoto(const Registros::Camara &_camara);
+    void processFoto(const Camara &_camara);
 signals:
-    void ReplyMatriculaResults(const Registros::MatriculaResults &_MatriculaResults);
+    void ReplyMatriculaResults(const MatriculaResults &_MatriculaResults);
 protected slots:
     void onProcesarFotoFinished();
 private:

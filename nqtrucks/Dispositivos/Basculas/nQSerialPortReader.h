@@ -33,10 +33,7 @@
 
 #include <QtSerialPort/QSerialPort>
 #include <QByteArray>
-#include <QObject>
 #include <Registros/Bascula.h>
-
-#include <nqtglobal.h>
 
 namespace nQTrucks {
 namespace Devices {
@@ -78,7 +75,7 @@ private:
     QString      m_serialBuffer="";
     int          charInicio=0;
     QByteArray   m_serialData;
-    Registros::Bascula      *m_bascula;
+    Bascula      *m_bascula;
     QString      m_serialPortName;
 public slots:
     void connectPort(const bool &_value);
@@ -86,7 +83,7 @@ private slots:
     void connectBasculaType(int _type);
     void handleError(QSerialPort::SerialPortError error);  
 signals:
-    void BasculaChanged(const Registros::Bascula &bascula);
+    void BasculaChanged(const Bascula &bascula);
     void BasculaStatus(const bool &status);
     /** END INTERFACE REALTIME**/
 
@@ -101,12 +98,12 @@ private:
     int        m_count_muestras=0;
     int        m_BasculaMuestras=1;
     bool       m_inicio_peso=false;
-    Registros::Bascula    *m_bascula_estable;
+    Bascula    *m_bascula_estable;
     int        m_tolerancia_minima=10;
 signals:
-    void BasculaPesoNuevo(const Registros::Bascula &_nuevaPesada);
+    void BasculaPesoNuevo(const Bascula &_nuevaPesada);
 private slots:
-    void MuestrearBascula(const Registros::Bascula &_bascula);
+    void MuestrearBascula(const Bascula &_bascula);
     /** FIN INTERFACE ESTABILIZADA **/
 
 };

@@ -81,12 +81,12 @@ void Client::on_BasculaConectada(bool conectada){
     }
 }
 
-void Client::onBascula(const Registros::Bascula &_bascula){
+void Client::onBascula(const Bascula &_bascula){
     ui->BasculaLcd->display(_bascula.getIBruto());
     ui->BasculaEstable->setChecked(_bascula.getBEstado()); /** MEMORY LEAK **/
 }
 
-void Client::onDaemonRegistroChanged(const Registros::RegistroMatriculas &_result)
+void Client::onDaemonRegistroChanged(const RegistroMatriculas &_result)
 {
     ui->camara1->setPixmap(QPixmap::fromImage(_result.m_results0->camara->getOrigenFotoQ()));
     ui->camara2->setPixmap(QPixmap::fromImage(_result.m_results1->camara->getOrigenFotoQ()));

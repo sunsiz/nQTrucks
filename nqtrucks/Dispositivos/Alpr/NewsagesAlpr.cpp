@@ -52,13 +52,13 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
     , bhilo2(false)
 {
     m_results.resize(3);
-    m_results[0] = new Registros::MatriculaResults; //emitir
+    m_results[0] = new MatriculaResults; //emitir
     m_results[0]->setId(m_nDevice);
 
-    m_results[1] = new Registros::MatriculaResults; //calibrar
+    m_results[1] = new MatriculaResults; //calibrar
     m_results[1]->setId(m_nDevice);
 
-    m_results[2] = new Registros::MatriculaResults; //procesar
+    m_results[2] = new MatriculaResults; //procesar
     m_results[2]->setId(m_nDevice);
 
 
@@ -75,15 +75,15 @@ NewsagesAlpr::~NewsagesAlpr(){
  //m_results.detach();
 }
 
-void NewsagesAlpr::setFotoCamara(const Registros::Camara &_camara) {
-    m_results[0]->camara->setCamara(_camara);
-    m_results[1]->camara->setCamara(_camara);
-    m_results[2]->camara->setCamara(_camara);
+void NewsagesAlpr::setFotoCamara(const Camara &_camara) {
+    m_results[0]->camara->setOrigenFoto(_camara.getOrigenFoto());
+    m_results[1]->camara->setOrigenFoto(_camara.getOrigenFoto());
+    m_results[2]->camara->setOrigenFoto(_camara.getOrigenFoto());
     emit ReplyOriginalFoto(*m_results[0]->camara);
 }
 
 /** SOLO CALIBRACION ***************************************************************************************/
-void NewsagesAlpr::calibrarFoto(const Registros::Camara &_camara){
+void NewsagesAlpr::calibrarFoto(const Camara &_camara){
 
     if(!bhiloCalibrar1 && !bhiloCalibrar2){
         bhiloCalibrar1=true;
@@ -96,7 +96,7 @@ void NewsagesAlpr::calibrarFoto(const Registros::Camara &_camara){
         hiloCalibrar2 = new QThread();
 
         /** Crear tareas **/
-        m_results[1]->camara->setCamara(_camara);
+        m_results[1]->camara->setOrigenFoto(_camara.getOrigenFoto());
         tareaCalibrar1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results[1], m_settings);
         tareaCalibrar2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results[1], m_settings);
 
@@ -160,7 +160,7 @@ void NewsagesAlpr::onCalibrarFotoFinished(){
 
 
 /** PROCESAR ************************************************************************************************/
-void NewsagesAlpr::processFoto(const Registros::Camara &_camara)
+void NewsagesAlpr::processFoto(const Camara &_camara)
 {
 
     if(!bhilo1 && !bhilo2){
@@ -174,7 +174,7 @@ void NewsagesAlpr::processFoto(const Registros::Camara &_camara)
         hilo2 = new QThread;
 
         /** Crear tareas **/
-        m_results[2]->camara->setCamara(_camara);
+        m_results[2]->camara->setOrigenFoto(_camara.getOrigenFoto());
         tarea1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results[2], m_settings);
         tarea2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results[2], m_settings);
 

@@ -1,7 +1,6 @@
 #include "RegistroMatriculas.h"
 
 namespace nQTrucks {
-    namespace Registros{
     /** REPORTS **/
         RegistroMatriculas::RegistroMatriculas()
             : m_bascula (new Bascula)
@@ -47,6 +46,5 @@ namespace nQTrucks {
         }
 
 
-    } /** end Namespace **/
 } /** end namespace **/
 

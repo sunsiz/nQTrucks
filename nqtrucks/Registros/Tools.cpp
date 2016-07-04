@@ -1,12 +1,10 @@
 #include "Tools.h"
+#include <QMetaEnum>
 
 namespace nQTrucks{
-    namespace Registros{
         Tools::Tools(QObject *parent)
             :QObject(parent)
         {
-
+            qRegisterMetaType<cv::Mat>("cv::Mat");
         }
-
-}
 }

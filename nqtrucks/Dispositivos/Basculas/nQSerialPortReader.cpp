@@ -38,8 +38,8 @@ nQSerialPortReader::nQSerialPortReader(QSettings *_appsettings, QObject *parent)
     : QObject(parent)
     , m_settings(_appsettings)
 {
-    m_bascula = new Registros::Bascula(this);
-    m_bascula_estable = new Registros::Bascula(this);
+    m_bascula = new Bascula(this);
+    m_bascula_estable = new Bascula(this);
     m_serialPort = new QSerialPort(this);
     emit BasculaStatus(false);
     connect(this, &nQSerialPortReader::BasculaChanged,this,&nQSerialPortReader::MuestrearBascula);
@@ -167,7 +167,7 @@ void nQSerialPortReader::ReadType0(){
 }
 
 
-void nQSerialPortReader::MuestrearBascula(const Registros::Bascula &_bascula){
+void nQSerialPortReader::MuestrearBascula(const Bascula &_bascula){
     if (m_inicio_peso){
         if((_bascula.getBEstado()) & (_bascula.getIBruto() !=0)){
             m_count_muestras++;

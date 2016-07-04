@@ -2,13 +2,14 @@
 #define NQTRUCKS_BASCULA_H
 
 #include <QObject>
+#include <QSettings>
 #include <QMetaType>
 #include <math.h>
 
 /** BASCULAS **************************************************************************************/
 
 namespace nQTrucks{
-    namespace Registros{
+        #define BASCULA    "BASCULA"
         class Bascula : public QObject
         {
             Q_OBJECT
@@ -17,13 +18,6 @@ namespace nQTrucks{
             Bascula* getBascula()       { return this; }
             const Bascula* getBascula() const { return this; }
 
-//            Bascula& getBascula()       { return *this; }
-//            const Basculs& getBasucula() const { return *this; }
-
-//      // Return by value only needs one version.
-//            Bascula getBascula() const { return *this; }
-
-            //Bascula getBascula() const  { return *this; }
         private:
             bool  m_bEstado;
             bool  m_bEstadoAnterior;
@@ -50,7 +44,6 @@ namespace nQTrucks{
             void  setINeto(float value){  this->m_iNeto = abs(value); }
 
         };
-    } /** END NAMESPACE Regristros **/
 } /** END NAMESPACE NQTRUCKS **/
 #endif // BASCULA_H
 

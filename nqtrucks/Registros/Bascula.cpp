@@ -1,8 +1,6 @@
 #include "Bascula.h"
 /** BASCULAS **************************************************************************************/
 namespace nQTrucks{
-    namespace Registros{
-
         Bascula::Bascula(QObject *parent)
             : QObject(parent)
         {
@@ -22,7 +20,6 @@ namespace nQTrucks{
             this->setITara(          0);
             this->setINeto(          0);
         }
-} /** END NAMESPACE Regristros **/
 } /** END NAMESPACE NQTRUCKS **/
 
 /** END BASCULAS *****************************************************************************************************/

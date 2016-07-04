@@ -66,8 +66,8 @@ private:
 private slots:
     void on_CamaraSelect_currentIndexChanged(int index);
     void on_GuardarCamara_clicked();
-    void onGetFoto1(const Registros::Camara &_camara);
-    void onGetFoto2(const Registros::Camara &_camara);
+    void onGetFoto1(const Camara &_camara);
+    void onGetFoto2(const Camara &_camara);
     /** END CAMARAS **/
 
 
@@ -93,7 +93,7 @@ private slots:
     void on_desconectarBascula_clicked();
     void on_guardarBascula_clicked();
     void on_BasculaConectada(bool conectada);
-    void onBascula(const Registros::Bascula &_bascula);
+    void onBascula(const Bascula &_bascula);
     /** END BASCULAS **/
 
 
@@ -111,22 +111,22 @@ public:
     void setAlprIndex(int _AlprIndex){ m_AlprIndex = _AlprIndex;}
 private:
     int m_AlprIndex=0;
-    QVector<Registros::MatriculaResults*> m_matricularesults;
-    //QVector<Registros::MatriculaResults>::iterator m_matricularesults_iterator;
+    QVector<MatriculaResults*> m_matricularesults;
+    //QVector<MatriculaResults>::iterator m_matricularesults_iterator;
     void updateCalibracionGui();
 
     /** ALPR1 **/
 private slots:
-    void onGetCalibrationResult1(const Registros::MatriculaResults &_calibration_result);
-    void onGetOriginalMatricula1(const Registros::Camara &_camara);
-    void onReplyMatriculaResults1(const Registros::MatriculaResults &_result);
+    void onGetCalibrationResult1(const MatriculaResults &_calibration_result);
+    void onGetOriginalMatricula1(const Camara &_camara);
+    void onReplyMatriculaResults1(const MatriculaResults &_result);
     /** END ALPR1 **/
 
     /** ALPR2 **/
 private slots:
-    void onGetCalibrationResult2(const Registros::MatriculaResults &_calibration_result);
-    void onGetOriginalMatricula2(const Registros::Camara &_camara);
-    void onReplyMatriculaResults2(const Registros::MatriculaResults &_result);
+    void onGetCalibrationResult2(const MatriculaResults &_calibration_result);
+    void onGetOriginalMatricula2(const Camara &_camara);
+    void onReplyMatriculaResults2(const MatriculaResults &_result);
     /** END NEWSAGES ALPR 2 **/
     /** PLANKs **/
 private slots:

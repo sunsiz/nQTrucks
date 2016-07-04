@@ -1,7 +1,9 @@
 #include "MatriculaResults.h"
 namespace nQTrucks{
-    namespace Registros{
         MatriculaResults::MatriculaResults(){ /** MEMORY LEAK **/
+            qRegisterMetaType<Planck>("Planck");
+            qRegisterMetaType<t_Prewarp>("t_Prewarp");
+
             camara = new Camara;
             tipo =0;                        // 0 para calibracion, 1 para procesado
             id   =0;                        // id fuente de captura de foto
@@ -140,7 +142,6 @@ namespace nQTrucks{
             MatriculaFotoBQ.detach();
             MatriculaFotoBQ = value;
         }
-    }
 }
 
 

@@ -19,7 +19,7 @@ namespace nQTrucks {
 
 
 /** CONSTRUCTOR TAREAS **/
-NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType,Registros::MatriculaResults *_results, QSettings *_appsettings, QObject *parent)
+NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType,MatriculaResults *_results, QSettings *_appsettings, QObject *parent)
     : QObject(parent)
     , m_settings(_appsettings)
     , m_matricularesult(_results)
@@ -81,30 +81,17 @@ void NewsagesAlprTask::calibrar()
 
 void NewsagesAlprTask::setFotoCalibrada()
 {
-   //cv::Mat channel[3];
+
     switch (getNType()) {
     case ALPR_PLANCK_BLANCO:
-        //m_matricularesult->setOrigenFotoBlanca(m_matricularesult->camara->getOrigenFoto().clone());
-        //cv::add(m_matricularesult->getOrigenFotoBlanca(),cv::Scalar(getPlank().C,getPlank().B,getPlank().A),m_matricularesult->getOrigenFotoBlanca());
-        //cv::split(m_matricularesult->getOrigenFotoBlanca(), channel);
-        //m_matricularesult->setOrigenFotoBlanca(channel[2] - channel[1] -   channel[2] + channel[0]); /** MEMORY LEAK **/
         m_matricularesult->setPlanckBlanco(getPlank());
         emit ReplyOriginalFotoBlanca(m_matricularesult->getOrigenFotoBlanca());
         break;
     case ALPR_PLANCK_ROJO:
-//        m_matricularesult->setOrigenFotoRoja(m_matricularesult->camara->getOrigenFoto().clone());
-//        cv::add(m_matricularesult->getOrigenFotoRoja(),cv::Scalar(getPlank().A,getPlank().B,getPlank().C),m_matricularesult->getOrigenFotoRoja());
-//        cv::split(m_matricularesult->getOrigenFotoRoja(), channel);
-//        cv::add(channel[0], channel[1], m_matricularesult->getOrigenFotoRoja()); /** MEMORY LEAK **/
-//        cv::subtract(channel[2], channel[1], m_matricularesult->getOrigenFotoRoja());
         m_matricularesult->setPlanckRojo(getPlank());
         emit ReplyOriginalFotoRoja(m_matricularesult->getOrigenFotoRoja());
         break;
     }
-        //Limpiar
-//    channel[0].release();
-//    channel[1].release();
-//    channel[2].release();
 }
 
 void NewsagesAlprTask::guardarPlanK()
@@ -188,7 +175,7 @@ void NewsagesAlprTask::procesarBlancas()
                                                      plate.plate_points[2].x - plate.plate_points[0].x,
                                                      plate.plate_points[2].y - plate.plate_points[0].y);
                             cv::Mat _resize;
-                            cv::resize(cv::Mat(m_matricularesult->camara->getOrigenFoto(),rect),_resize,Registros::MatriculaSize);
+                            cv::resize(cv::Mat(m_matricularesult->camara->getOrigenFoto(),rect),_resize,MatriculaSize);
                             m_matricularesult->setMatriculaFotoA(_resize);
                             _resize.release();
                         }
@@ -250,7 +237,7 @@ void NewsagesAlprTask::procesarRojas()
                                                          plate.plate_points[2].x - plate.plate_points[0].x,
                                                          plate.plate_points[2].y - plate.plate_points[0].y);
                                 cv::Mat _resize;
-                                cv::resize(cv::Mat(m_matricularesult->camara->getOrigenFoto(),rect),_resize,Registros::MatriculaSize);
+                                cv::resize(cv::Mat(m_matricularesult->camara->getOrigenFoto(),rect),_resize,MatriculaSize);
                                 m_matricularesult->setMatriculaFotoB(_resize);
                             }
                        }

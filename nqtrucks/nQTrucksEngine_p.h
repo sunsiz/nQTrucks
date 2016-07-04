@@ -32,13 +32,10 @@
 
 #include <QObject>
 #include <QSharedPointer>
-#include <QMetaEnum>
-#include <QLoggingCategory>
-
 
 #include<QVector>
 
-#include "nqtglobal.h"
+//#include "nqtglobal.h"
 #include "nQTrucksEngine.h"
 
 #include "Dispositivos/CamaraIP.h"

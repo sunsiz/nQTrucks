@@ -6,7 +6,6 @@
 #include <QDateTime>
 
 namespace nQTrucks{
-    namespace Registros{
         /** REPORTS **/
         class RegistroMatriculas{
         public:
@@ -16,8 +15,8 @@ namespace nQTrucks{
         void clear();
 
         Bascula          *m_bascula;
-        MatriculaResults *m_results0;// = QVector<Registros::MatriculaResults>(2);
-        MatriculaResults *m_results1;// = QVector<Registros::MatriculaResults>(2);
+        MatriculaResults *m_results0;// = QVector<MatriculaResults>(2);
+        MatriculaResults *m_results1;// = QVector<MatriculaResults>(2);
 
         long long getId() const;
         void setId(long long value);
@@ -30,8 +29,6 @@ namespace nQTrucks{
         QDateTime   FechaRegistro;
 
     };
-
-} // namespace Registros /** END REPORTS **/
 }
 
 #endif

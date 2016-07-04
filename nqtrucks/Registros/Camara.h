@@ -1,17 +1,13 @@
 #ifndef NQTRUCKS_CAMARA_H
 #define NQTRUCKS_CAMARA_H
 
-#include <QObject>
-#include "nqtglobal.h"
 #include "Tools.h"
-#include "opencv2/opencv.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
-
 
 /** CAMARA **/
 namespace nQTrucks{
-    namespace Registros{
 
+    #define CAMARA1     "Camara1"
+    #define CAMARA2     "Camara2"
     static const int MatriculaNewWidth = 520;
     static const int MatriculaNewHeight = 110;
     static const cv::Size MatriculaSize(MatriculaNewWidth,MatriculaNewHeight);
@@ -25,44 +21,26 @@ namespace nQTrucks{
             Q_OBJECT
         public:
             explicit Camara(QObject *parent=nullptr);
-        //            // Return by pointer needs const and non-const versions
-        //                  Camara*  getCamara()       { return this; }
-        //            const Camara*  getCamara() const { return this; }
-
-        //            // Return by reference needs const and non-const versions
-        //                  Camara& getCamara()       { return *this; }
-        //            const Camara& getCamara() const { return *this; }
-
-            // Return by value only needs one version.
-            //Camara getCamara() const { return *this; }
-//            Camara* getBascula()       { return this; }
-//            const Camara* getBascula() const { return this; }
             ~Camara();
         private:
-            cv::Mat           m_OrigenFoto;//              =cv::Mat::zeros(fotoSize, CV_8UC3 );                 //Imagen Original
-            QByteArray        m_OrigenFotoByte;//          =nQTrucks::Tools::convertMat2ByteArray(OrigenFoto);
-            QImage            m_OrigenFotoQ;
+            cv::Mat           m_OrigenFoto        = cv::Mat::zeros(FotoSize, CV_8UC3 );                 //Imagen Original
+            QByteArray        m_OrigenFotoByte;
+            QImage            m_OrigenFotoQ       = QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
         public:
-            void clear();
-            cv::Mat  getOrigenFoto() const;
-            void     setOrigenFoto(const cv::Mat value);
-
-            void       setOrigenFotoByte(  const QByteArray &OrigenFotoByte);
-            QByteArray getOrigenFotoByte() const;
-
-            QImage getOrigenFotoQ() const;
-            void   setOrigenFotoQ(  const QImage &OrigenFotoQ);
-
-            void setCamara(const Camara &value);
+            void       setOrigenFoto(const cv::Mat value);
+            cv::Mat    getOrigenFoto() const{return m_OrigenFoto;}
+            QByteArray getOrigenFotoByte() const{return m_OrigenFotoByte;}
+            QImage     getOrigenFotoQ() const{ return m_OrigenFotoQ; }
 
             inline void convertirFotos(){
                 Tools *m_tools  = new Tools; /** MEMORY LEAK **/
-                setOrigenFotoByte(m_tools->convertMat2ByteArray(getOrigenFoto().clone())); /** MEMORY LEAK **/
-                setOrigenFotoQ(   m_tools->convertMat2QImage(getOrigenFoto().clone()));
+                m_OrigenFotoByte.clear();
+                m_OrigenFotoQ.detach();
+                m_OrigenFotoByte = m_tools->convertMat2ByteArray(m_OrigenFoto.clone()); /** MEMORY LEAK **/
+                m_OrigenFotoQ    = m_tools->convertMat2QImage(   m_OrigenFoto.clone());
                 delete m_tools;
             }
         };
-    }
 }
 #endif
 /** END CAMARA **/

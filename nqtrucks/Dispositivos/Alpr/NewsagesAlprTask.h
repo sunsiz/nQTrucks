@@ -5,7 +5,6 @@
 #include <QImage>
 #include <QMutex>
 
-#include <nqtglobal.h>
 #include "Registros/MatriculaResults.h"
 
 namespace nQTrucks {
@@ -14,7 +13,7 @@ namespace Devices {
 class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
-    explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, Registros::MatriculaResults *_results=0,  QSettings *_appsettings=0, QObject *parent = 0);
+    explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, MatriculaResults *_results=0,  QSettings *_appsettings=0, QObject *parent = 0);
     //~NewsagesAlprTask();
 signals:
     void workFinished();
@@ -66,7 +65,7 @@ signals:
 public slots:
     void procesar();
 private:
-   Registros::MatriculaResults *m_matricularesult;
+   MatriculaResults *m_matricularesult;
    void procesarBlancas();
    void procesarRojas();
 signals:

@@ -30,6 +30,7 @@
 
 #include "nQTrucksEngine_p.h"
 #include "nQTrucksEngine.h"
+#include <QMetaEnum>
 
 namespace nQTrucks{
 QSettings* nQTrucksEngine::m_settings = 0;
@@ -44,22 +45,12 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
 , m_settings(0)
 {
 
-    /** ALPR TYPES **/
-    qRegisterMetaType<cv::Mat>("cv::Mat");
-    qRegisterMetaType<Planck>( "Planck");
-    qRegisterMetaType<nQTrucks::t_Prewarp>("nQTrucks::t_Prewarp");
-
-
     /** Daemon Types **/
-    qRegisterMetaType<Registros::MatriculaResults>("Registros::MatriculaResults");
-    qRegisterMetaType<Registros::RegistroMatriculas>             ("Registros::RegistroMatriculas");
+    qRegisterMetaType<MatriculaResults>("MatriculaResults");
+    qRegisterMetaType<RegistroMatriculas>             ("Registros::RegistroMatriculas");
 
     /** Bascula Types **/
-    //qRegisterMetaType<Registros::Bascula>("Registros::Bascula");
-
-    /** Camara Types **/
-    QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
-    //qRegisterMetaType<Registros::Camara>("Registros::Camara");
+    //qRegisterMetaType<Bascula>("Bascula");
 
     m_camara.resize(2);
     m_camara[0] = new Devices::CamaraIP(0,settings(), this);
@@ -229,10 +220,10 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** CAMARAS IP **/
     /** 1 **/
-    connect(d->m_camara[0],SIGNAL(ReplyCamaraIP(Registros::Camara)),this,SIGNAL(CamaraIP1(Registros::Camara)));
+    connect(d->m_camara[0],SIGNAL(ReplyCamaraIP(Camara)),this,SIGNAL(CamaraIP1(Camara)));
     connect(d->m_camara[0],SIGNAL(CamaraIPWeb(QString)),            this,SIGNAL(CamaraIPWeb1(QString)));
     /** 2 **/
-    connect(d->m_camara[1],SIGNAL(ReplyCamaraIP(Registros::Camara)),this,SIGNAL(CamaraIP2(Registros::Camara)));
+    connect(d->m_camara[1],SIGNAL(ReplyCamaraIP(Camara)),this,SIGNAL(CamaraIP2(Camara)));
     connect(d->m_camara[1],SIGNAL(CamaraIPWeb(QString)),            this,SIGNAL(CamaraIPWeb2(QString)));
     /** END CAMARAS IP **/
 
@@ -248,14 +239,14 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** NEWSAGES ALPR **/
     /** 1 **/
-    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFoto(Registros::Camara)),                         this,SIGNAL(ReplyOriginalFoto1(Registros::Camara)));
-    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaCalibrationResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaCalibrationResults1(Registros::MatriculaResults)));
-    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),           this,SIGNAL(ReplyMatriculaResults1(Registros::MatriculaResults)));
+    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFoto(Camara)),                         this,SIGNAL(ReplyOriginalFoto1(Camara)));
+    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaCalibrationResults(MatriculaResults)),this,SIGNAL(ReplyMatriculaCalibrationResults1(MatriculaResults)));
+    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(MatriculaResults)),           this,SIGNAL(ReplyMatriculaResults1(MatriculaResults)));
 
     /** 2 **/
-    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFoto(Registros::Camara)),                         this,SIGNAL(ReplyOriginalFoto2(Registros::Camara)));
-    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaCalibrationResults(Registros::MatriculaResults)),this,SIGNAL(ReplyMatriculaCalibrationResults2(Registros::MatriculaResults)));
-    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(Registros::MatriculaResults)),           this,SIGNAL(ReplyMatriculaResults2(Registros::MatriculaResults)));
+    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFoto(Camara)),                         this,SIGNAL(ReplyOriginalFoto2(Camara)));
+    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaCalibrationResults(MatriculaResults)),this,SIGNAL(ReplyMatriculaCalibrationResults2(MatriculaResults)));
+    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(MatriculaResults)),           this,SIGNAL(ReplyMatriculaResults2(MatriculaResults)));
     /** END NEWSAGES ALPR **/
 
     /** MAESTROS **/
@@ -363,7 +354,7 @@ QStringList nQTrucksEngine::getSerialDevices()
 
 
 /** ALRP ********************************************************************************************************************/
-void nQTrucksEngine::calibrarFoto(const int &_device, const Registros::Camara &_camara)
+void nQTrucksEngine::calibrarFoto(const int &_device, const Camara &_camara)
 {
     Q_D(nQTrucksEngine);
     switch (_device) {
@@ -378,7 +369,7 @@ void nQTrucksEngine::calibrarFoto(const int &_device, const Registros::Camara &_
     }
 }
 
-void nQTrucksEngine::getFotoMatricula(const int &_device, const Registros::Camara &_camara)
+void nQTrucksEngine::getFotoMatricula(const int &_device, const Camara &_camara)
 {
      Q_D(nQTrucksEngine);
     switch (_device) {

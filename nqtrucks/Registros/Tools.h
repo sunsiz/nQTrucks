@@ -3,16 +3,15 @@
 
 #include <QObject>
 #include <QImage>
+#include <QSettings>
 #include <QByteArray>
 #include <QVariant>
 #include <QBuffer>
-
 #include "opencv2/opencv.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
 
 /** CONVERSORES ********************************************************/
 namespace nQTrucks{
-    namespace Registros {
         class Tools: public QObject{
             Q_OBJECT
         public:
@@ -68,6 +67,5 @@ namespace nQTrucks{
             //static QByteArray resizeByteArray2ByteArray(QByteArray _ByteArray, const int &_w, const int &_h);
         };
 /** END CONVERSORES **********************************************************/
-    }
 }
 #endif  //TOOLS

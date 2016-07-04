@@ -33,7 +33,7 @@
 
 #include <QObject>
 
-//#include <nqtglobal.h>
+#include <nqtglobal.h>
 
 /** REPORTS **/
 #include <QApplication>
@@ -43,11 +43,11 @@
 /** MAESTROS **/
 #include <QSqlQueryModel>
 
-/** REGISTROS **/
-#include "Registros/Bascula.h"
-#include "Registros/Camara.h"
-#include "Registros/MatriculaResults.h"
-#include "Registros/RegistroMatriculas.h"
+///** REGISTROS **/
+//#include "Registros/Bascula.h"
+//#include "Registros/Camara.h"
+//#include "Registros/MatriculaResults.h"
+//#include "Registros/RegistroMatriculas.h"
 
 
 namespace nQTrucks {
@@ -72,9 +72,9 @@ public:
     QStringList getTiposCamaras();
     void getCamaraFoto(int _ncamara);
 signals:
-    void CamaraIP1(const Registros::Camara &_camara);
+    void CamaraIP1(const Camara &_camara);
     void CamaraIPWeb1(const QString &url);
-    void CamaraIP2(const Registros::Camara &_camara);
+    void CamaraIP2(const Camara &_camara);
     void CamaraIPWeb2(const QString &url);
     /** END Camaras **/
 
@@ -97,32 +97,32 @@ public slots:
     void setBasculaConnect(bool _value);
 signals:
     void BasculaStatus(const bool &status);
-    void BasculaChanged(const Registros::Bascula &bascula);
+    void BasculaChanged(const Bascula &bascula);
     /** END BASCULAS **/
 
     /** NEWSAGES ALPR **/
 public:
-    void calibrarFoto(const int &_device, const Registros::Camara &_camara);
-    void getFotoMatricula(const int &_device, const Registros::Camara &_camara);
+    void calibrarFoto(const int &_device, const Camara &_camara);
+    void getFotoMatricula(const int &_device, const Camara &_camara);
 
     /** ALPR 1 **/
 signals:
-    void ReplyOriginalFoto1(const Registros::Camara &_camara);
-    void ReplyMatriculaCalibrationResults1(const Registros::MatriculaResults  &_calibration_results);
-    void ReplyMatriculaResults1(const Registros::MatriculaResults  &_results);
+    void ReplyOriginalFoto1(const Camara &_camara);
+    void ReplyMatriculaCalibrationResults1(const MatriculaResults  &_calibration_results);
+    void ReplyMatriculaResults1(const MatriculaResults  &_results);
 
     /** ALPR 2 **/
 signals:
-    void ReplyOriginalFoto2(const Registros::Camara &_camara);
-    void ReplyMatriculaCalibrationResults2(const Registros::MatriculaResults  &_calibration_results);
-    void ReplyMatriculaResults2(const Registros::MatriculaResults &_results);
+    void ReplyOriginalFoto2(const Camara &_camara);
+    void ReplyMatriculaCalibrationResults2(const MatriculaResults  &_calibration_results);
+    void ReplyMatriculaResults2(const MatriculaResults &_results);
 
     /** END NEWSAGES ALPR **/        
 
     /** CORE ***************************************/
     /** DAEMON **/
 signals:
-    void daemonRegistroChanged(const Registros::RegistroMatriculas & _results);
+    void daemonRegistroChanged(const RegistroMatriculas & _results);
 public slots:
     void setInitDaemon(const bool &_init);
 

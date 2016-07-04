@@ -68,7 +68,7 @@ void Daemon::setRegistrando(bool registrando)
 }
 
 /** PESO *****************************/
-void Daemon::onPesoNuevo(const Registros::Bascula &_nuevaPesada)
+void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
 {
     if((m_init) && (!m_registrando)){
         // Bloqueo Registro
@@ -84,9 +84,9 @@ void Daemon::onPesoNuevo(const Registros::Bascula &_nuevaPesada)
       m_bfoto1=false;
       m_bfoto2=false;
 
-      camaraconn1=connect(m_camara[0], &Devices::CamaraIP::ReplyCamaraIP, [=](const Registros::Camara  &_Reply){
+      camaraconn1=connect(m_camara[0], &Devices::CamaraIP::ReplyCamaraIP, [=](const Camara  &_Reply){
           QObject::disconnect(camaraconn1);
-          m_RegistroMatriculas.m_results0->camara->setCamara(_Reply);
+          m_RegistroMatriculas.m_results0->camara->setOrigenFoto(_Reply.getOrigenFoto());
           //m_RegistroMatriculas.results[0].OrigenFotoByte = _Reply.OrigenFotoByte;
           m_bfoto1=true;
           //Tengo las fotos semaforo GO! y Registro linea
@@ -97,9 +97,9 @@ void Daemon::onPesoNuevo(const Registros::Bascula &_nuevaPesada)
           }
       });
 
-      camaraconn2=connect(m_camara[1], &Devices::CamaraIP::ReplyCamaraIP, [=](const Registros::Camara  &_Reply){
+      camaraconn2=connect(m_camara[1], &Devices::CamaraIP::ReplyCamaraIP, [=](const Camara  &_Reply){
           QObject::disconnect(camaraconn2);
-          m_RegistroMatriculas.m_results1->camara->setCamara(_Reply);
+          m_RegistroMatriculas.m_results1->camara->setOrigenFoto(_Reply.getOrigenFoto());
           m_bfoto2=true;
           //Tengo las fotos semaforo GO! y Registro linea
           if(m_bfoto1 && m_bfoto2){
@@ -115,7 +115,7 @@ void Daemon::onPesoNuevo(const Registros::Bascula &_nuevaPesada)
 
 }
 
-void Daemon::onBasculaChanged(const Registros::Bascula &_pesoRT){
+void Daemon::onBasculaChanged(const Bascula &_pesoRT){
     //int peso_minimo=m_bascula->reloadTolerancia_minima();
     if (_pesoRT.getIBruto() > m_tolerancia_minima){
         if (!m_saliendo && !m_registrando){
@@ -139,7 +139,7 @@ void Daemon::onGuardarRegistroSimple(){
         m_balpr1=false;
         m_balpr2=false;
 
-        alprconn1 = connect(m_alpr[0], &Devices::NewsagesAlpr::ReplyMatriculaResults, [=](const Registros::MatriculaResults &_registro){
+        alprconn1 = connect(m_alpr[0], &Devices::NewsagesAlpr::ReplyMatriculaResults, [=](const MatriculaResults &_registro){
             QObject::disconnect(alprconn1);            
             m_RegistroMatriculas.m_results0->setMatriculaResults(_registro);
             m_balpr1=true;
@@ -148,7 +148,7 @@ void Daemon::onGuardarRegistroSimple(){
             }
         });
 
-        alprconn2 = connect(m_alpr[1],&Devices::NewsagesAlpr::ReplyMatriculaResults, [=](const Registros::MatriculaResults  &_registro){
+        alprconn2 = connect(m_alpr[1],&Devices::NewsagesAlpr::ReplyMatriculaResults, [=](const MatriculaResults  &_registro){
             QObject::disconnect(alprconn2);
             m_RegistroMatriculas.m_results1->setMatriculaResults(_registro);
             m_balpr2=true;

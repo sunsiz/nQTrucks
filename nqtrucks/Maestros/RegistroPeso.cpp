@@ -86,7 +86,7 @@ namespace nQTrucks{
             endResetModel();
         }
 
-        bool RegistroPeso::guardarRegistroRegistroMatriculas(Registros::RegistroMatriculas &RegistroMatriculas){
+        bool RegistroPeso::guardarRegistroRegistroMatriculas(RegistroMatriculas &RegistroMatriculas){
                 QSqlQuery qry(m_db);
                 qry.prepare(qry_insert_simple);
                 qry.bindValue(":pesobruto",         RegistroMatriculas.m_bascula->getIBruto());
@@ -151,7 +151,7 @@ namespace nQTrucks{
             return _fecha;
         }
 
-        bool RegistroPeso::buscarPareja(QVector<Registros::RegistroMatriculas> &RegistrosMatriculas, const QString &_matricula){
+        bool RegistroPeso::buscarPareja(QVector<RegistroMatriculas> &RegistrosMatriculas, const QString &_matricula){
             /** TODO ENTRE FECHAS **/
              qDebug() << "BUSCANDO:  [[" << _matricula << "]]";
             QSqlQuery qry(m_db);
@@ -175,7 +175,7 @@ namespace nQTrucks{
             return false;
         }
 
-        bool RegistroPeso::actualizarPareja(QVector<Registros::RegistroMatriculas> &RegistrosMatriculas)
+        bool RegistroPeso::actualizarPareja(QVector<RegistroMatriculas> &RegistrosMatriculas)
         {
             float neto = abs(RegistrosMatriculas[0].m_bascula->getIBruto() - RegistrosMatriculas[1].m_bascula->getIBruto());
             RegistrosMatriculas[0].m_bascula->setINeto(neto);

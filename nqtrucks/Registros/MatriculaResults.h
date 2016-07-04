@@ -2,10 +2,36 @@
 #define NQTRUCKS_MARICULARESULTS_H
 
 #include "Camara.h"
-#include "nqtglobal.h"
-
 namespace nQTrucks{
-    namespace Registros{
+    static const QString default_prewarp ="";//  "planar,1280,720,0,0,0,1.0,1.0,0,0";
+
+    #define ALPR_PLANCK_BLANCO 0
+    #define ALPR_PLANCK_ROJO   1
+
+    #define ALPR       "Alpr"
+    #define ALPR1      "Alpr1"
+    #define ALPR2      "Alpr2"
+
+    struct Prewarp{
+        QString type="planar";
+        float w=1280;
+        float h=720;
+        float panX = 0;
+        float panY = 0;
+        float rotationx = 0;
+        float rotationy = 0;
+        float rotationz = 0;
+        float stretchX = 1.0;
+        float dist = 1.0;
+    }; typedef Prewarp t_Prewarp;
+
+    class Planck{
+    public:
+        int A=0;
+        int B=0;
+        int C=0;
+    };
+
         class MatriculaResults{
         public:
             explicit MatriculaResults();
@@ -182,6 +208,5 @@ namespace nQTrucks{
                 delete m_tools;
             }
         };
-    }
 }
 #endif // MATRICULARESULTS_H

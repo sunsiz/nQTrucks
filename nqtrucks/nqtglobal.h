@@ -27,6 +27,7 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
+#pragma once
 #ifndef NQTRUCKS_H
 #define NQTRUCKS_H
 #include <QtCore/qglobal.h>
@@ -35,6 +36,8 @@
 
 #include <QSettings>
 
+//#include "Registros/MatriculaResults.h"
+#include "Registros/RegistroMatriculas.h"
 
 #if defined(NQTRUCKS_LIBRARY)
 #  define NQTRUCKSLIBSHARED_EXPORT Q_DECL_EXPORT
@@ -45,18 +48,6 @@
 /** SETTINGS **/
 namespace nQTrucks
 {
-//    static const int matriculaNewWidth = 520;
-//    static const int matriculaNewHeight = 110;
-//    static const cv::Size matriculaSize(matriculaNewWidth,matriculaNewHeight);
-
-//    static const int fotoWidth = 1280;
-//    static const int fotoHeight = 720;
-//    static const cv::Size fotoSize(fotoWidth,fotoHeight);
-
-    static const QString default_prewarp ="";//  "planar,1280,720,0,0,0,1.0,1.0,0,0";
-
-    #define ALPR_PLANCK_BLANCO 0
-    #define ALPR_PLANCK_ROJO   1
 
     #define SEMAFORO_VERDE 0
     #define SEMAFORO_AMARILLO 1
@@ -65,15 +56,7 @@ namespace nQTrucks
     #define RELE_ON  false
     #define RELE_OFF true
 
-    #define CAMARA1     "Camara1"
-    #define CAMARA2     "Camara2"
-
     #define NEWSAGESIO "NEWSAGESIO"
-    #define BASCULA    "BASCULA"
-
-    #define ALPR       "Alpr"
-    #define ALPR1      "Alpr1"
-    #define ALPR2      "Alpr2"
 
     QString extractClassName(QString className);
     class nQTrucksError : public std::runtime_error{
@@ -82,27 +65,7 @@ namespace nQTrucks
     };
 
 
-    struct Prewarp{
-        QString type="planar";
-        float w=1280;
-        float h=720;
-        float panX = 0;
-        float panY = 0;
-        float rotationx = 0;
-        float rotationy = 0;
-        float rotationz = 0;
-        float stretchX = 1.0;
-        float dist = 1.0;
-    }; typedef Prewarp t_Prewarp;
 
-    /** ALPR  **/
-    class Planck{
-    public:
-        int A=0;
-        int B=0;
-        int C=0;
-    };
-    /** END ALRP **/
 
     namespace Const{
     } //end namespace Const
