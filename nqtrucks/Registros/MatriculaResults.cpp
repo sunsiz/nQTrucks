@@ -3,7 +3,7 @@ namespace nQTrucks{
 
 
         MatriculaResults::MatriculaResults()
-            //:Camara(parent)
+            :camara (new Camara)
         { /** MEMORY LEAK **/
             qRegisterMetaType<Planck>          ("Planck");
             qRegisterMetaType<t_Prewarp>       ("t_Prewarp");
