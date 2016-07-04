@@ -32,179 +32,132 @@ namespace nQTrucks{
         int C=0;
     };
 
-        class MatriculaResults{
+        class MatriculaResults {
         public:
-            explicit MatriculaResults();
-            MatriculaResults getMatriculaResults() const { return *this; }
+            MatriculaResults();
+            //MatriculaResults getMatriculaResults() const { return *this; }
             ~MatriculaResults();
+            //Camara     *camara = new Camara;
+            void setPlanckBlanco(const Planck &value);
+            void setPlanckRojo(  const Planck &value);
             Camara     *camara;
-            inline void setPlanckBlanco(const Planck &value){
-                cv::Mat channel[3];
-                cv::Mat *_dest = new cv::Mat(this->camara->getOrigenFoto().clone());
-                cv::add(*_dest,cv::Scalar(value.C,value.B,value.A), *_dest);
-                cv::split(*_dest, channel);
-                this->setOrigenFotoBlanca(channel[2] - channel[1] -   channel[2] + channel[0]); /** MEMORY LEAK **/
-                channel[0].release();
-                channel[1].release();
-                channel[2].release();
-                _dest->release();
-                delete _dest;
-            }
-            inline void setPlanckRojo(const Planck &value){
-                cv::Mat channel[3];
-                cv::Mat *_dest = new cv::Mat(this->camara->getOrigenFoto().clone());
-                //m_matricularesult->setOrigenFotoRoja(m_matricularesult->camara->getOrigenFoto().clone());
-                cv::add(*_dest,cv::Scalar(value.A,value.B,value.C),*_dest);
-                cv::split(*_dest,channel);
-                cv::add(channel[0], channel[1], *_dest); /** MEMORY LEAK **/
-                cv::subtract(channel[2], channel[1], *_dest);
-                this->setOrigenFotoRoja(*_dest);
-                channel[0].release();
-                channel[1].release();
-                channel[2].release();
-                _dest->release();
-                delete _dest;
-                //emit ReplyOriginalFotoRoja(m_matricularesult->getOrigenFotoRoja());
-            }
 
         private:
             int        tipo;//                 =0;                                                     //0 para calibracion, 1 para procesado
             int        id ;//                  =0;                                                     //id fuente de captura de foto
 
-            cv::Mat    OrigenFotoPrewarp;//    =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
-            QImage     OrigenFotoPrewarpQ;
+            cv::Mat    OrigenFotoPrewarp      = cv::Mat::zeros(FotoSize, CV_8UC3 );                    // Imagen con calibracion prewarp
+            cv::Mat    OrigenFotoBlanca       = cv::Mat::zeros(FotoSize, CV_8UC3 );                    //  Imagen con calibracion de Blancos
+            cv::Mat    OrigenFotoRoja         = cv::Mat::zeros(FotoSize, CV_8UC3 );                    // Imagen con calibracion de Rojos
+            QImage     OrigenFotoPrewarpQ     = QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
+            QImage     OrigenFotoBlancaQ      = QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
+            QImage     OrigenFotoRojaQ        = QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
 
-            cv::Mat    OrigenFotoBlanca;//     =cv::Mat::zeros(fotoSize, CV_8UC3 );                    //  Imagen con calibracion de Blancos
-            QImage     OrigenFotoBlancaQ;
-            cv::Mat    OrigenFotoRoja;//       =cv::Mat::zeros(fotoSize, CV_8UC3 );                    // Imagen con calibracion de Rojos
-            QImage     OrigenFotoRojaQ;
 
-            bool       MatriculaDetectedA;//   =false;                                                 // Coincide con un patron de busqueda?
-            QString    MatriculaA;//           ="";                                                    // STring de la matricula
-            cv::Mat    MatriculaFotoA;//       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
-            QByteArray MatriculaFotoAByte;//   =nQTrucks::Tools::convertMat2ByteArray(MatriculaFotoA);
-            QImage     MatriculaFotoAQ;
-            float      MatriculaPrecisionA;//  =0;                                                     // Precision del OCR
-            QString    MatriculaPrecisionAs;// ="0%";
+            bool       MatriculaDetectedA     = false;                                                 // Coincide con un patron de busqueda?
+            bool       MatriculaDetectedB     = false;                                                 // Coincide con un patron de busqueda?
+            QString    MatriculaA             =QString("");                                                    // STring de la matricula
+            QString    MatriculaB             =QString("");                                                    // STring de la matricula
+            cv::Mat    MatriculaFotoA         = cv::Mat::zeros(MatriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
+            cv::Mat    MatriculaFotoB         = cv::Mat::zeros(MatriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
+            QByteArray MatriculaFotoAByte     = {};
+            QByteArray MatriculaFotoBByte     = {};
+            QImage     MatriculaFotoAQ        = QImage(MatriculaNewWidth,MatriculaNewHeight,QImage::Format_RGB888);
+            QImage     MatriculaFotoBQ        = QImage(MatriculaNewWidth,MatriculaNewHeight,QImage::Format_RGB888);
+            float      MatriculaPrecisionA    = 0;                                                     // Precision del OCR
+            float      MatriculaPrecisionB    = 0;                                                     // Precision del OCR
+            QString    MatriculaPrecisionAs   = QString("0%");
+            QString    MatriculaPrecisionBs   = QString("0%");
 
-            bool       MatriculaDetectedB;//   =false;                                                 // Coincide con un patron de busqueda?
-            QString    MatriculaB;//           ="";                                                    // STring de la matricula
-            cv::Mat    MatriculaFotoB;//       =cv::Mat::zeros( matriculaSize, CV_8UC3 );              // Imagen recortada de la Matricula
-            QByteArray MatriculaFotoBByte;//   =nQTrucks::Tools::convertMat2ByteArray(MatriculaFotoB);
-            QImage     MatriculaFotoBQ;
-            float      MatriculaPrecisionB;//  =0;                                                     // Precision del OCR
-            QString    MatriculaPrecisionBs;// ="0%";
         public:
             void     setMatriculaResults(const MatriculaResults &value);
-            void     clear();
-
-
-            int getTipo() const{return tipo; }
+            //void     clear();
+            void setId(  int value){id   = value;}
             void setTipo(int value){tipo = value;}
+            int  getId()   const{return id;}
+            int  getTipo() const{return tipo;}
 
-            int getId() const{return id;}
-            void setId(int value){id = value;}
+
+            void setOrigenFotoPrewarp(const cv::Mat &value);
+            void setOrigenFotoBlanca( const cv::Mat &value);
+            void setOrigenFotoRoja(   const cv::Mat &value);
 
             cv::Mat getOrigenFotoPrewarp() const{return OrigenFotoPrewarp; }
-            void setOrigenFotoPrewarp(const cv::Mat &value);
+            cv::Mat getOrigenFotoBlanca()  const{return OrigenFotoBlanca;}
+            cv::Mat getOrigenFotoRoja()    const{return OrigenFotoRoja;}
 
             QImage getOrigenFotoPrewarpQ() const{return OrigenFotoPrewarpQ;}
-
-            cv::Mat getOrigenFotoBlanca() const{return OrigenFotoBlanca;}
-            void setOrigenFotoBlanca(const cv::Mat &value);
-
-            QImage getOrigenFotoBlancaQ() const{return OrigenFotoBlancaQ;}
-
-            cv::Mat getOrigenFotoRoja() const{return OrigenFotoRoja;}
-            void setOrigenFotoRoja(const cv::Mat &value);
-
-            QImage getOrigenFotoRojaQ() const{ return OrigenFotoRojaQ;}
-
-            bool getMatriculaDetectedA() const{ return MatriculaDetectedA; }
-            void setMatriculaDetectedA(bool value){ MatriculaDetectedA = value; }
-
-            QString getMatriculaA() const{return MatriculaA;}
-            void setMatriculaA(const QString &value){ MatriculaA = value; }
-
-            cv::Mat getMatriculaFotoA() const{return MatriculaFotoA; }
-            void setMatriculaFotoA(const cv::Mat &value);
-
-            QByteArray getMatriculaFotoAByte() const{return MatriculaFotoAByte;}
-
-            QImage getMatriculaFotoAQ() const{return MatriculaFotoAQ;}
-
-            float getMatriculaPrecisionA() const{return MatriculaPrecisionA;}
-            void setMatriculaPrecisionA(float value){ MatriculaPrecisionA = value; }
-
-            QString getMatriculaPrecisionAs() const{ return MatriculaPrecisionAs; }
-            void setMatriculaPrecisionAs(const QString &value){ MatriculaPrecisionAs = value; }
-
-            bool getMatriculaDetectedB() const{ return MatriculaDetectedB;}
-            void setMatriculaDetectedB(bool value){ MatriculaDetectedB = value;}
-
-            QString getMatriculaB() const{return MatriculaB;}
-            void setMatriculaB(const QString &value){MatriculaB = value;}
-
-            cv::Mat getMatriculaFotoB() const{return MatriculaFotoB; }
-            void setMatriculaFotoB(const cv::Mat &value);
-
-            QByteArray getMatriculaFotoBByte() const{ return MatriculaFotoBByte; }
-
-            QImage getMatriculaFotoBQ() const{return MatriculaFotoBQ;}
+            QImage getOrigenFotoBlancaQ()  const{return OrigenFotoBlancaQ;}
+            QImage getOrigenFotoRojaQ()    const{return OrigenFotoRojaQ;}
 
 
-            float getMatriculaPrecisionB() const{ return MatriculaPrecisionB; }
-            void setMatriculaPrecisionB(float value){ MatriculaPrecisionB = value; }
+            void setMatriculaDetectedA( bool           value){ MatriculaDetectedA = value; }
+            void setMatriculaDetectedB( bool           value){ MatriculaDetectedB = value; }
+            void setMatriculaA(         const QString &value){ MatriculaA         = value; }
+            void setMatriculaB(         const QString &value){ MatriculaB         = value; }
+            void setMatriculaFotoA(     const cv::Mat &value);
+            void setMatriculaFotoB(     const cv::Mat &value);
+            void setMatriculaPrecisionA(float          value){ MatriculaPrecisionA = value; MatriculaPrecisionAs = QString::number(value,'g',6);}
+            void setMatriculaPrecisionB(float          value){ MatriculaPrecisionB = value; MatriculaPrecisionBs = QString::number(value,'g',6);}
 
-            QString getMatriculaPrecisionBs() const{ return MatriculaPrecisionBs; }
-            void setMatriculaPrecisionBs(const QString &value){ MatriculaPrecisionBs = value; }
+            bool       getMatriculaDetectedA()   const{return MatriculaDetectedA; }
+            bool       getMatriculaDetectedB()   const{return MatriculaDetectedB; }
+            QString    getMatriculaA()           const{return MatriculaA;}
+            QString    getMatriculaB()           const{return MatriculaB;}
+            cv::Mat    getMatriculaFotoA()       const{return MatriculaFotoA; }
+            cv::Mat    getMatriculaFotoB()       const{return MatriculaFotoB; }
+            QByteArray getMatriculaFotoAByte()   const{return MatriculaFotoAByte;}
+            QByteArray getMatriculaFotoBByte()   const{return MatriculaFotoBByte;}
+            QImage     getMatriculaFotoAQ()      const{return MatriculaFotoAQ;}
+            QImage     getMatriculaFotoBQ()      const{return MatriculaFotoBQ;}
+            float      getMatriculaPrecisionA()  const{return MatriculaPrecisionA;}
+            float      getMatriculaPrecisionB()  const{return MatriculaPrecisionB;}
+            QString    getMatriculaPrecisionAs() const{return MatriculaPrecisionAs; }
+            QString    getMatriculaPrecisionBs() const{return MatriculaPrecisionBs; }
 
-            void setOrigenFotoPrewarpQ(const QImage &value);
-            void setOrigenFotoBlancaQ( const QImage &value);
-            void setOrigenFotoRojaQ(   const QImage &value);
-            void setMatriculaFotoAByte(const QByteArray &value);
-            void setMatriculaFotoAQ(   const QImage &value);
-            void setMatriculaFotoBByte(const QByteArray &value);
-            void setMatriculaFotoBQ(   const QImage &value);
+//            void setOrigenFotoPrewarpQ(const QImage     &value);
+//            void setOrigenFotoBlancaQ( const QImage     &value);
+//            void setOrigenFotoRojaQ(   const QImage     &value);
+//            void setMatriculaFotoAByte(const QByteArray &value);
+//            void setMatriculaFotoAQ(   const QImage     &value);
+//            void setMatriculaFotoBByte(const QByteArray &value);
+//            void setMatriculaFotoBQ(   const QImage     &value);
+
         public:
-            inline void convertirFotos(){
-                Tools *m_tools        =  new Tools;
-                setOrigenFotoPrewarpQ(m_tools->convertMat2QImage(getOrigenFotoPrewarp().clone()));
-                setOrigenFotoBlancaQ( m_tools->convertMat2QImage(getOrigenFotoBlanca().clone()));
-                setOrigenFotoRojaQ(   m_tools->convertMat2QImage(getOrigenFotoRoja().clone()));
-
-                setMatriculaFotoAByte(m_tools->convertMat2ByteArray(getMatriculaFotoA().clone()));
-                setMatriculaFotoAQ(   m_tools->convertMat2QImage(getMatriculaFotoA().clone()));
-
-                setMatriculaFotoBByte(m_tools->convertMat2ByteArray(getMatriculaFotoB().clone()));
-                setMatriculaFotoBQ(   m_tools->convertMat2QImage(getMatriculaFotoB().clone()));
-                delete m_tools;
-            }
+            void convertirFotos();
+        private:
             inline void convertirFotoPrewarp(){
                 Tools *m_tools        =  new Tools;
-                setOrigenFotoPrewarpQ(m_tools->convertMat2QImage(getOrigenFotoPrewarp().clone()));
+                OrigenFotoPrewarpQ.detach();
+                OrigenFotoPrewarpQ = m_tools->convertMat2QImage(OrigenFotoPrewarp.clone());
                 delete m_tools;
             }
             inline void convertirFotoBlanca(){
                 Tools *m_tools        =  new Tools;
-                setOrigenFotoBlancaQ( m_tools->convertMat2QImage(getOrigenFotoBlanca().clone()));
+                OrigenFotoBlancaQ.detach();
+                OrigenFotoBlancaQ = m_tools->convertMat2QImage(OrigenFotoBlanca.clone());
                 delete m_tools;
             }
             inline void convertirFotoRoja(){
                 Tools *m_tools        =  new Tools;
-                setOrigenFotoRojaQ(   m_tools->convertMat2QImage(getOrigenFotoRoja().clone()));
+                OrigenFotoRojaQ.detach();
+                OrigenFotoRojaQ = m_tools->convertMat2QImage(OrigenFotoRoja.clone());
                 delete m_tools;
             }
             inline void convertirMatriculaFotoA(){
                 Tools *m_tools        =  new Tools;
-                setMatriculaFotoAByte(m_tools->convertMat2ByteArray(getMatriculaFotoA().clone()));
-                setMatriculaFotoAQ(   m_tools->convertMat2QImage(getMatriculaFotoA().clone()));
+                MatriculaFotoAByte.clear();
+                MatriculaFotoAQ.detach();
+                MatriculaFotoAByte = m_tools->convertMat2ByteArray(MatriculaFotoA.clone());
+                MatriculaFotoAQ    = m_tools->convertMat2QImage(   MatriculaFotoA.clone());
                 delete m_tools;
             }
             inline void convertirMatriculaFotoB(){
                 Tools *m_tools        =  new Tools;
-                setMatriculaFotoBByte(m_tools->convertMat2ByteArray(getMatriculaFotoB().clone()));
-                setMatriculaFotoBQ(   m_tools->convertMat2QImage(getMatriculaFotoB().clone()));
+                MatriculaFotoBByte.clear();
+                MatriculaFotoBQ.detach();
+                MatriculaFotoBByte = m_tools->convertMat2ByteArray(MatriculaFotoB.clone());
+                MatriculaFotoBQ    = m_tools->convertMat2QImage(   MatriculaFotoB.clone());
                 delete m_tools;
             }
         };

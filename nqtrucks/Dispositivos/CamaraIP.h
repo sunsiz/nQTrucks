@@ -86,7 +86,7 @@ private slots:
     void camaraNetworkReplyFinished(QNetworkReply *reply);
 
 signals:
-    void ReplyCamaraIP(const Camara &_ReplyCamara);
+  //  void ReplyCamaraIP(const Camara &_ReplyCamara);
   //  void ReplyCamaraIPFotoCV(const cv::Mat &_ReplyCV);
   //  void ReplyCamaraIPFoto(const QByteArray &_Reply);
 

@@ -151,12 +151,15 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
         temp->detach();
         delete temp;
         data.clear();
+        data.detach();
 
     }else{
         /** CAMARA ERROR CV::MAT **/
         emit CamaraError(m_errorCamaraIP);
+        temp->detach();
+        delete temp;
         data.clear();
-        //emit ReplyCamaraIP(*m_RegistroCamara);
+        data.detach();
     }
     delete reply;
 }

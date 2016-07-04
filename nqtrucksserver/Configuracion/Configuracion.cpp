@@ -163,13 +163,13 @@ void Configuracion::loadconfig()
 /** CAMARAS *************************************************************************/
     /** CAMARA1 **/
 void Configuracion::onGetFoto1(const Camara &_camara){
-    m_matricularesults[0]->camara->setOrigenFoto(_camara.getOrigenFoto());
+    m_matricularesults[0]->camara->setCamara(_camara);
     updateGui();
     updateCalibracionGui();
 }
     /** CAMARA2 **/
 void Configuracion::onGetFoto2(const Camara &_camara){
-    m_matricularesults[1]->camara->setOrigenFoto(_camara.getOrigenFoto());
+    m_matricularesults[1]->camara->setCamara(_camara);
     updateGui();
     updateCalibracionGui();
 }
@@ -362,7 +362,7 @@ void Configuracion::loadPlanks(const int &index){
 void Configuracion::on_TestMatricula_clicked(){
     int index = getAlprIndex();
     on_guardarPlanK_clicked();
-    engine->getFotoMatricula(index,*m_matricularesults[index]->camara);
+    engine->getFotoMatricula(index,m_matricularesults[index]->camara->getCamaraPtr());
 }
 void Configuracion::on_ActualizarCamara_clicked(){
     int index = getAlprIndex();
@@ -390,7 +390,7 @@ void Configuracion::onReplyMatriculaResults1(const MatriculaResults &_result){
 }
 
 void Configuracion::onGetOriginalMatricula1(const Camara &_camara){
-    m_matricularesults[0]->camara->setOrigenFoto(_camara.getOrigenFoto());
+    m_matricularesults[0]->camara->setCamara(_camara);
     updateCalibracionGui();
 }
 
@@ -407,7 +407,7 @@ void Configuracion::onReplyMatriculaResults2(const MatriculaResults &_result){
 }
 
 void Configuracion::onGetOriginalMatricula2(const Camara &_camara){
-    m_matricularesults[1]->camara->setOrigenFoto(_camara.getOrigenFoto());
+    m_matricularesults[1]->camara->setCamara(_camara);
     updateCalibracionGui();
 }
 
@@ -443,7 +443,7 @@ void Configuracion::on_guardarPlanK_clicked(){
         engine->appConfig()->setValue(QString(ALPR) + "/plankc2",QString::number(ui->vPlankC->value()));
         break;
     }
-    engine->calibrarFoto(index,*m_matricularesults[index]->camara);
+    engine->calibrarFoto(index,m_matricularesults[index]->camara->getCamaraPtr());
 }
     /** END PLANKs **/
 /** END CALIBRACION *******************************************************************/

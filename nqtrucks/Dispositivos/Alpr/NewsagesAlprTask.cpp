@@ -27,7 +27,6 @@ NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType,MatriculaResults *_r
     setlocale(LC_NUMERIC, "C");
     setNDevice(_nDevice);
     setNType(_nType);
-
     //m_matricularesult->convertirFotos();
 
     loadconfig();
@@ -169,7 +168,6 @@ void NewsagesAlprTask::procesarBlancas()
                         if (candidate.matches_template  && m_matricularesult->getMatriculaPrecisionA() < candidate.overall_confidence){
                             m_matricularesult->setMatriculaDetectedA(  candidate.matches_template);
                             m_matricularesult->setMatriculaPrecisionA( candidate.overall_confidence);
-                            m_matricularesult->setMatriculaPrecisionAs(QString::number(m_matricularesult->getMatriculaPrecisionA(),'g',6));
                             m_matricularesult->setMatriculaA(          QString::fromStdString(candidate.characters));
                             cv::Rect rect = cv::Rect(plate.plate_points[0].x , plate.plate_points[0].y,
                                                      plate.plate_points[2].x - plate.plate_points[0].x,
@@ -231,7 +229,7 @@ void NewsagesAlprTask::procesarRojas()
                             if (candidate.matches_template  && m_matricularesult->getMatriculaPrecisionB() < candidate.overall_confidence){
                                 m_matricularesult->setMatriculaDetectedB   ( candidate.matches_template);
                                 m_matricularesult->setMatriculaPrecisionB  ( candidate.overall_confidence);
-                                m_matricularesult->setMatriculaPrecisionBs ( QString::number(m_matricularesult->getMatriculaPrecisionB(),'g',6));
+                                //m_matricularesult->setMatriculaPrecisionBs ( QString::number(m_matricularesult->getMatriculaPrecisionB(),'g',6));
                                 m_matricularesult->setMatriculaB           ( QString::fromStdString(candidate.characters));
                                 cv::Rect rect = cv::Rect(plate.plate_points[0].x  ,plate.plate_points[0].y,
                                                          plate.plate_points[2].x - plate.plate_points[0].x,

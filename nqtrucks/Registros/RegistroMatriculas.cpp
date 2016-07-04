@@ -12,8 +12,8 @@ namespace nQTrucks {
         void RegistroMatriculas::setRegistroMatriculas(const RegistroMatriculas &value){
             clear();
             m_bascula   = new Bascula(value.m_bascula);
-            m_results0  = new MatriculaResults(value.m_results0->getMatriculaResults());
-            m_results1  = new MatriculaResults(value.m_results1->getMatriculaResults());
+            m_results0  = new MatriculaResults;
+            m_results1  = new MatriculaResults;
             setId(value.getId());
             setFechaRegistro(value.getFechaRegistro());
         }

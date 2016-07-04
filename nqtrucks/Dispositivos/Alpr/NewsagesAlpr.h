@@ -50,11 +50,14 @@ public:
 
     /** SETTINGS **/
 public slots:
-    void setFotoCamara(const Camara &_camara);
+   // void setFotoCamara(const Camara &_camara);
 private:
     int         m_nDevice;
     QSettings   *m_settings;
-    QVector<MatriculaResults*> m_results;
+    //QVector<MatriculaResults*> m_results;
+    MatriculaResults  *m_results0;
+    MatriculaResults  *m_results1;
+    MatriculaResults  *m_results2;
     /** END SETTINGS **/
 
 signals:
