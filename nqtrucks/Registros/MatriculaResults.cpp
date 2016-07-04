@@ -2,9 +2,7 @@
 namespace nQTrucks{
 
 
-        MatriculaResults::MatriculaResults()
-            :camara (new Camara)
-        { /** MEMORY LEAK **/
+        MatriculaResults::MatriculaResults(){
             qRegisterMetaType<Planck>          ("Planck");
             qRegisterMetaType<t_Prewarp>       ("t_Prewarp");
             qRegisterMetaType<MatriculaResults>("MatriculaResults");
@@ -14,7 +12,6 @@ namespace nQTrucks{
         MatriculaResults::~MatriculaResults(){
             OrigenFotoPrewarp.release();    // Imagen con calibracion prewarp
             OrigenFotoPrewarpQ.detach();
-
             OrigenFotoBlanca.release();     //  Imagen con calibracion de Blancos
             OrigenFotoBlancaQ.detach();
             OrigenFotoRoja.release();       // Imagen con calibracion de Rojos
@@ -25,91 +22,50 @@ namespace nQTrucks{
             MatriculaFotoB.release();       // Imagen recortada de la Matricula
             MatriculaFotoBByte.clear();
             MatriculaFotoBQ.detach();
-
         }
 
         void MatriculaResults::setMatriculaResults(const MatriculaResults &value){
             setTipo(value.getTipo());                                  // 0 para calibracion, 1 para procesado
             setId(value.getId());                                      // id fuente de captura de foto
 
-            setOrigenFotoPrewarp(  value.getOrigenFotoPrewarp());
-            setOrigenFotoBlanca(   value.getOrigenFotoBlanca());          // Imagen con calibracion de Blancos
-            setOrigenFotoRoja(     value.getOrigenFotoRoja());              // Imagen con calibracion de Rojos
+            value.OrigenFotoPrewarp.copyTo(OrigenFotoPrewarp);
+            value.OrigenFotoBlanca.copyTo( OrigenFotoBlanca);          // Imagen con calibracion de Blancos
+            value.OrigenFotoRoja.copyTo(   OrigenFotoRoja);              // Imagen con calibracion de Rojos
 
-            setMatriculaDetectedA( value.getMatriculaDetectedA());      // Coincide con un patron de busqueda?
-            setMatriculaDetectedB( value.getMatriculaDetectedB());      // Coincide con un patron de busqueda?
-            setMatriculaA(         value.getMatriculaA());                      // STring de la matricula
-            setMatriculaB(         value.getMatriculaB());                      // STring de la matricula
-            setMatriculaFotoA(     value.getMatriculaFotoA());              // Imagen recortada de la Matricula
-            setMatriculaFotoB(     value.getMatriculaFotoB());              // Imagen recortada de la Matricula
-            setMatriculaPrecisionA(value.getMatriculaPrecisionA());    // Precision del OCR
-            setMatriculaPrecisionB(value.getMatriculaPrecisionB());    // Precision del OCR
-
-        }
-
-        void MatriculaResults::setPlanckBlanco(const Planck &value){
-            cv::Mat channel[3];
-            cv::Mat *_dest = new cv::Mat(this->camara->getOrigenFoto().clone());
-            cv::add(*_dest,cv::Scalar(value.C,value.B,value.A), *_dest);
-            cv::split(*_dest, channel);
-            this->setOrigenFotoBlanca(channel[2] - channel[1] -   channel[2] + channel[0]); /** MEMORY LEAK **/
-            channel[0].release();
-            channel[1].release();
-            channel[2].release();
-            _dest->release();
-            delete _dest;
-        }
-
-        void MatriculaResults::setPlanckRojo(const Planck &value){
-            cv::Mat channel[3];
-            cv::Mat *_dest = new cv::Mat(this->camara->getOrigenFoto().clone());
-            cv::add(*_dest,cv::Scalar(value.A,value.B,value.C),*_dest);
-            cv::split(*_dest,channel);
-            cv::add(channel[0], channel[1], *_dest); /** MEMORY LEAK **/
-            cv::subtract(channel[2], channel[1], *_dest);
-            this->setOrigenFotoRoja(*_dest);
-            channel[0].release();
-            channel[1].release();
-            channel[2].release();
-            _dest->release();
-            delete _dest;
+            value.MatriculaFotoA.copyTo(   MatriculaFotoA);              // Imagen recortada de la Matricula
+            value.MatriculaFotoB.copyTo(   MatriculaFotoB);              // Imagen recortada de la Matricula
+            MatriculaDetectedA      = value.MatriculaDetectedA;      // Coincide con un patron de busqueda?
+            MatriculaDetectedB      = value.MatriculaDetectedB;      // Coincide con un patron de busqueda?
+            MatriculaA              = value.MatriculaA;                      // STring de la matricula
+            MatriculaB              = value.MatriculaB;                      // STring de la matricula
+            setMatriculaPrecisionA(value.MatriculaPrecisionA);    // Precision del OCR
+            setMatriculaPrecisionB(value.MatriculaPrecisionB);    // Precision del OCR
+            convertirFotos();
         }
 
 
-        void MatriculaResults::setOrigenFotoPrewarp(const cv::Mat &value){
-            OrigenFotoPrewarp.release();
-            OrigenFotoPrewarp = value.clone();
-            convertirFotoPrewarp();
+
+
+
+
+        void MatriculaResults::setOrigenFotoPrewarp(const cv::Mat &value){            
+            value.copyTo(OrigenFotoPrewarp);
         }
         void MatriculaResults::setOrigenFotoBlanca(const cv::Mat &value){
-            OrigenFotoBlanca.release();
-            OrigenFotoBlanca = value.clone();
-            convertirFotoBlanca();
+            value.copyTo(OrigenFotoBlanca);
         }
         void MatriculaResults::setOrigenFotoRoja(const cv::Mat &value){
-            OrigenFotoRoja.release();
-            OrigenFotoRoja = value.clone();
-            convertirFotoRoja();
+            value.copyTo(OrigenFotoRoja);
         }
         void MatriculaResults::setMatriculaFotoA(const cv::Mat &value){
-            MatriculaFotoA.release();
-            MatriculaFotoA = value.clone();
-            convertirMatriculaFotoA();
+            value.copyTo(MatriculaFotoA);
         }
 
         void MatriculaResults::setMatriculaFotoB(const cv::Mat &value){
-            MatriculaFotoB.release();
-            MatriculaFotoB = value.clone();
-            convertirMatriculaFotoB();
+            value.copyTo(MatriculaFotoB);
         }
 
-        void MatriculaResults::convertirFotos(){
-            convertirFotoPrewarp();
-            convertirFotoBlanca();
-            convertirFotoRoja();
-            convertirMatriculaFotoA();
-            convertirMatriculaFotoB();
-        }
+
 }
 
 

@@ -9,35 +9,73 @@
 #include <QBuffer>
 #include "opencv2/opencv.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
+#include <QVector>
 
 /** CONVERSORES ********************************************************/
 namespace nQTrucks{
-        class Tools: public QObject{
-            Q_OBJECT
+        class Tools{
         public:
-            explicit Tools(QObject *parent=nullptr);
-            QImage     convertMat2QImage(   const cv::Mat &_cvimage);
-            QByteArray convertMat2ByteArray(const cv::Mat &_cvimage);
+            Tools();
 
-//            inline cv::Mat  convertQImage2Mat(   const QImage     &_qimage){
-//                QByteArray baScene; // byte array with data
-//                QBuffer buffer(&baScene);
-//                buffer.open(QIODevice::WriteOnly);
-//                _qimage.save(&buffer,"JPG");
-
-//                const char* begin = reinterpret_cast<char*>(baScene.data());
-//                const char* end = begin + baScene.size();
-//                std::vector<char> pic(begin, end);
-//                buffer.reset();
-//                buffer.close();
-//                baScene.clear();
-//                return cv::Mat(cv::imdecode(pic,CV_LOAD_IMAGE_COLOR)).clone();
-//                //return _cvtemp;
+//            static inline QImage convertMat2QImage(const cv::Mat& _cvimage){
+//                QImage qtImg;
+//                cv::Mat _temp;
+//                if( !_cvimage.empty() && _cvimage.depth() == CV_8U){
+//                    if(_cvimage.channels() == 1){
+//                        cv::cvtColor( _cvimage, _temp, CV_GRAY2RGB );
+//                    }
+//                    else{
+//                        cv::cvtColor( _cvimage, _temp, CV_BGR2RGB );
+//                    }
+//                }
+//                assert(_temp.isContinuous());
+//                qtImg = QImage((const unsigned char *)(_temp.data),
+//                               _temp.cols,
+//                               _temp.rows,
+//                               _temp.cols*3,
+//                               QImage::Format_RGB888);
+//                return qtImg;
 //            }
 
 
-            //static cv::Mat    convertByteArray2Mat(QByteArray _Bytearray);
-            //static QByteArray resizeByteArray2ByteArray(QByteArray _ByteArray, const int &_w, const int &_h);
+            static inline QImage convertMat2QImage(cv::Mat const &_cvimage){
+                QImage qtImg;
+                if( !_cvimage.empty() && _cvimage.depth() == CV_8U){
+                    if(_cvimage.channels() == 1){
+                        qtImg = QImage((const unsigned char *)(_cvimage.data),
+                                       //_cvimage.data,
+                                       _cvimage.cols,
+                                       _cvimage.rows,
+                                       //_cvimage.step,
+                                       QImage::Format_Indexed8).copy();
+                    }
+                    else{
+                        cv::Mat rgb;
+                        cv::cvtColor( _cvimage, rgb, CV_BGR2RGB );
+                        qtImg = QImage((const unsigned char *)(rgb.data),
+                                       //rgb.data,
+                                       rgb.cols,
+                                       rgb.rows,
+                                       //rgb.step,
+                                       QImage::Format_RGB888 ).copy();
+                    }
+                }
+                return qtImg;
+            }
+
+            static inline QByteArray convertMat2ByteArray(const cv::Mat& _cvimage){
+                QImage qtImg;
+                qtImg = convertMat2QImage(_cvimage);
+                QByteArray baScene; // byte array with data
+                QBuffer buffer(&baScene);
+                buffer.open(QIODevice::WriteOnly);
+                qtImg.save(&buffer,"JPG");
+                buffer.reset();
+                buffer.close();
+                qtImg.detach();
+                return baScene;
+            }
         };
 /** END CONVERSORES **********************************************************/
 }

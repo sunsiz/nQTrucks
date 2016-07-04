@@ -42,7 +42,7 @@
 namespace nQTrucks {
 namespace Devices {
 
-class CamaraIP : public Camara
+class CamaraIP : public QObject
 {
     Q_OBJECT
     Q_ENUMS(CameraType)
@@ -78,7 +78,7 @@ private:
 private:
     QUrl setCamaraURL();
     QNetworkAccessManager *m_netmanager;
-    //Camara     *m_RegistroCamara;
+    //Camara              *m_RegistroCamara = new Camara;
 public slots:
     void sendCamaraIPFotoRequest();
 
@@ -86,6 +86,7 @@ private slots:
     void camaraNetworkReplyFinished(QNetworkReply *reply);
 
 signals:
+    void ReplyCamaraIP(const Camara &_ReplyCamara);
   //  void ReplyCamaraIP(const Camara &_ReplyCamara);
   //  void ReplyCamaraIPFotoCV(const cv::Mat &_ReplyCV);
   //  void ReplyCamaraIPFoto(const QByteArray &_Reply);
@@ -93,6 +94,7 @@ signals:
     void CamaraIPWeb(const QString &CamaraWeb);
     void CamaraError(const QString &errorCamaraIP);
 private:
+    bool m_isRunning = false;
     QString m_errorCamaraIP;
     /** END REDES **/
 };

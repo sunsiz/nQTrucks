@@ -4,8 +4,6 @@
 #include "state_detector.h"
 #include "prewarp.h"
 
-#include <QByteArray>
-#include <QBuffer>
 
 #include <QDebug>
 #include <QCoreApplication>
@@ -27,22 +25,14 @@ NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType,MatriculaResults *_r
     setlocale(LC_NUMERIC, "C");
     setNDevice(_nDevice);
     setNType(_nType);
-    //m_matricularesult->convertirFotos();
-
     loadconfig();
 }
-
-
-
-
 /** END CONSTRUCTOR *****************************************************************************/
 
 
-/** SETTINGS **/
-void NewsagesAlprTask::loadconfig()
-{
+/** SETTINGS ************************************************************************************/
+void NewsagesAlprTask::loadconfig(){
     m_config_file = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("config/openalpr.conf");
-
     switch (m_nDevice) {
     case 0:
         setPlank(  m_settings->value(QString(ALPR) + "/planka1","0").toString(),
@@ -60,27 +50,18 @@ void NewsagesAlprTask::loadconfig()
     }
 }
 
-
-
 void NewsagesAlprTask::setPlank(const QString &_plankA, const QString &_plankB, const QString &_plankC){
   m_plank.A=_plankA.toInt();
   m_plank.B=_plankB.toInt();
   m_plank.C=_plankC.toInt();
 }
+/** END SETTINGS **********************************************************************************/
 
-/** END SETTINGS **/
 
+/** CALIBRACION ***********************************************************************************/
+void NewsagesAlprTask::calibrar(){ setFotoCalibrada();}
 
-/** CALIBRACION **********************************************************/
-void NewsagesAlprTask::calibrar()
-{
-    setFotoCalibrada();
-
-}
-
-void NewsagesAlprTask::setFotoCalibrada()
-{
-
+void NewsagesAlprTask::setFotoCalibrada(){
     switch (getNType()) {
     case ALPR_PLANCK_BLANCO:
         m_matricularesult->setPlanckBlanco(getPlank());
@@ -88,14 +69,12 @@ void NewsagesAlprTask::setFotoCalibrada()
         break;
     case ALPR_PLANCK_ROJO:
         m_matricularesult->setPlanckRojo(getPlank());
-        emit ReplyOriginalFotoRoja(m_matricularesult->getOrigenFotoRoja());
+        emit ReplyOriginalFotoRoja(  m_matricularesult->getOrigenFotoRoja());
         break;
     }
 }
 
-void NewsagesAlprTask::guardarPlanK()
-{
-//    m_MutexWrite.lock();
+void NewsagesAlprTask::guardarPlanK(){
     switch (m_nDevice) {
     case 0:
         m_settings->setValue(QString(ALPR) + "/planka1",QString::number(getPlank().A));
@@ -108,9 +87,7 @@ void NewsagesAlprTask::guardarPlanK()
         m_settings->setValue(QString(ALPR) + "/plankc2",QString::number(getPlank().C));
         break;
     }
-//    m_MutexWrite.unlock();
 }
-
 
 cv::Mat NewsagesAlprTask::apply_prewarp(const cv::Mat &img){
     alpr::Config config("truck",m_config_file.toStdString());
@@ -123,7 +100,6 @@ cv::Mat NewsagesAlprTask::apply_prewarp(const cv::Mat &img){
 }
 
 /** PROCESAR *******************************************************************************/
-
 void NewsagesAlprTask::procesar(){
     switch (getNType()) {
     case ALPR_PLANCK_BLANCO:
@@ -136,8 +112,7 @@ void NewsagesAlprTask::procesar(){
 }
 
     /** BLANCAS **/
-void NewsagesAlprTask::procesarBlancas()
-{
+void NewsagesAlprTask::procesarBlancas(){   
     Alpr *matricula;
     matricula = new Alpr("truck", m_config_file.toStdString());
     matricula->setDefaultRegion("truck");
@@ -190,14 +165,11 @@ void NewsagesAlprTask::procesarBlancas()
     delete matricula;
     guardarPlanK();
     emit ReplyOriginalFotoBlanca(m_matricularesult->getOrigenFotoBlanca());
-    //m_matricularesult->convertirFotos();
     emit ReplyMatriculaFoto();
 }
 
-
     /** ROJAS **/
-void NewsagesAlprTask::procesarRojas()
-{
+void NewsagesAlprTask::procesarRojas(){
     Alpr *remolque;
     remolque  = new Alpr("eur", m_config_file.toStdString());
     remolque->setTopN(1);
@@ -229,7 +201,6 @@ void NewsagesAlprTask::procesarRojas()
                             if (candidate.matches_template  && m_matricularesult->getMatriculaPrecisionB() < candidate.overall_confidence){
                                 m_matricularesult->setMatriculaDetectedB   ( candidate.matches_template);
                                 m_matricularesult->setMatriculaPrecisionB  ( candidate.overall_confidence);
-                                //m_matricularesult->setMatriculaPrecisionBs ( QString::number(m_matricularesult->getMatriculaPrecisionB(),'g',6));
                                 m_matricularesult->setMatriculaB           ( QString::fromStdString(candidate.characters));
                                 cv::Rect rect = cv::Rect(plate.plate_points[0].x  ,plate.plate_points[0].y,
                                                          plate.plate_points[2].x - plate.plate_points[0].x,
@@ -251,10 +222,9 @@ void NewsagesAlprTask::procesarRojas()
     }
     delete remolque;
     guardarPlanK();
-    emit ReplyOriginalFotoRoja(m_matricularesult->getOrigenFotoRoja());
     //m_matricularesult->convertirFotos();
+    emit ReplyOriginalFotoRoja(m_matricularesult->getOrigenFotoRoja());
     emit ReplyMatriculaFoto();
-
 }
 /** END PROCESAR ************************************************************************/
 } /** END NAMESPACE Devices  **/

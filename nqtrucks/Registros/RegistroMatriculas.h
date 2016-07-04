@@ -9,25 +9,22 @@ namespace nQTrucks{
         /** REPORTS **/
         class RegistroMatriculas{
         public:
-        //RegistroMatriculas(QObject *parent=nullptr):QObject(parent){}
-        explicit RegistroMatriculas();
-        void setRegistroMatriculas(const RegistroMatriculas &value);
-        void clear();
+            explicit RegistroMatriculas();
+            void setRegistroMatriculas(const RegistroMatriculas &value);
+            void setFechaRegistro(const QDateTime &value){FechaRegistro = value;}
+            void setId(           long long        value){id            = value;}
+            long long getId()            const {return id;  }
+            QDateTime getFechaRegistro() const {return FechaRegistro;}
 
-        Bascula          *m_bascula;
-        MatriculaResults *m_results0;// = QVector<MatriculaResults>(2);
-        MatriculaResults *m_results1;// = QVector<MatriculaResults>(2);
+            Bascula          *m_bascula  = new Bascula;
+            MatriculaResults *m_results0 = new MatriculaResults;
+            MatriculaResults *m_results1 = new MatriculaResults;
 
-        long long getId() const;
-        void setId(long long value);
+            void clear();
 
-        QDateTime getFechaRegistro() const;
-        void setFechaRegistro(const QDateTime &value);
-
-    private:
-        long long   id ;//                  =0;                                                     //id fuente de captura de foto
-        QDateTime   FechaRegistro;
-
+        private:
+            long long   id=0;
+            QDateTime   FechaRegistro;
     };
 }
 

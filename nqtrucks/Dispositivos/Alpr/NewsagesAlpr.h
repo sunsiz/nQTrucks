@@ -34,7 +34,6 @@
 #include <QObject>
 #include <QImage>
 #include <QThread>
-#include <nqtglobal.h>
 #include "NewsagesAlprTask.h"
 
 namespace nQTrucks {
@@ -45,40 +44,32 @@ class NewsagesAlpr : public QObject
     Q_OBJECT
 public:
     explicit NewsagesAlpr(int nDevice=0, QSettings *_appsettings=0, QObject *parent = 0);
-    //~NewsagesAlpr();
     ~NewsagesAlpr();
 
     /** SETTINGS **/
-public slots:
-   // void setFotoCamara(const Camara &_camara);
 private:
-    int         m_nDevice;
-    QSettings   *m_settings;
-    //QVector<MatriculaResults*> m_results;
-    MatriculaResults  *m_results0;
+    int                m_nDevice;
+    QSettings         *m_settings;
+    //MatriculaResults  *m_results0;
     MatriculaResults  *m_results1;
     MatriculaResults  *m_results2;
     /** END SETTINGS **/
 
-signals:
-    void ReplyOriginalFoto(         const Camara &_camara);
-    void ReplyMatriculaFoto        (const MatriculaResults &_tempResults);
-    void ReplyMatriculaFotoRemolque(const MatriculaResults &_tempResultsRemolque);
-
     /** CALIBRAR *****************************************************/
 private:
+    bool bhiloCalibrar1 = false;
+    bool bhiloCalibrar2 = false;
     QThread *hiloCalibrar1;
-    NewsagesAlprTask *tareaCalibrar1;
-    bool bhiloCalibrar1;
-
     QThread *hiloCalibrar2;
+    NewsagesAlprTask *tareaCalibrar1;
     NewsagesAlprTask *tareaCalibrar2;
-    bool bhiloCalibrar2;
+
+signals:
+    void ReplyOriginalFoto(const Camara &_camara);
+
 public slots:
     void calibrarFoto(const Camara &_camara);
 signals:
-    //void ReplyOriginalFotoRoja(const cv::Mat &Foto);
-    //void ReplyOriginalFotoBlanca(const cv::Mat &Foto);
     void ReplyMatriculaCalibrationResults(const MatriculaResults  &_calibration_results);
 private slots:
     void onCalibrarFotoFinished();
@@ -87,19 +78,20 @@ private slots:
 
     /** Procesar Matriculas **/
 public slots:
+    //void setFotoCamara(const Camara &_camara);
     void processFoto(const Camara &_camara);
 signals:
     void ReplyMatriculaResults(const MatriculaResults &_MatriculaResults);
 protected slots:
     void onProcesarFotoFinished();
 private:
+    bool bhilo1 = false;
+    bool bhilo2 = false;
     QThread *hilo1;
-    NewsagesAlprTask *tarea1;
-    bool bhilo1;
-
     QThread *hilo2;
+    NewsagesAlprTask *tarea1;
     NewsagesAlprTask *tarea2;
-    bool bhilo2;
+
 
 };
 

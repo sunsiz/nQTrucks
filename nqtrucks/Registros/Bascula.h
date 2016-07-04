@@ -15,9 +15,10 @@ namespace nQTrucks{
             Q_OBJECT
         public:
             explicit Bascula(QObject *parent=nullptr);
-            Bascula* getBascula()       { return this; }
-            const Bascula* getBascula() const { return this; }
-
+//            Bascula* getBascula()       { return this; }
+//            const Bascula* getBascula() const { return this; }
+            Bascula& getBascula()       { return *this; }
+            const Bascula& getBascula() const { return *this; }
         private:
             bool  m_bEstado;
             bool  m_bEstadoAnterior;

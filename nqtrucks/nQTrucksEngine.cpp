@@ -45,8 +45,6 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
 , m_settings(0)
 {
 
-    /** Daemon Types **/
-    qRegisterMetaType<RegistroMatriculas>             ("Registros::RegistroMatriculas");
 
     /** Bascula Types **/
     //qRegisterMetaType<Bascula>("Bascula");

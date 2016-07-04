@@ -86,8 +86,9 @@ Configuracion::~Configuracion()
 
 
 void Configuracion::updateGui(){
+    ui->camaraLabel->clear();
     switch (ui->CamaraSelect->currentIndex()) {
-    case 0:        
+    case 0:
         ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[0]->camara->getOrigenFotoQ()));
         break;
     case 1:
@@ -362,7 +363,7 @@ void Configuracion::loadPlanks(const int &index){
 void Configuracion::on_TestMatricula_clicked(){
     int index = getAlprIndex();
     on_guardarPlanK_clicked();
-    engine->getFotoMatricula(index,m_matricularesults[index]->camara->getCamaraPtr());
+    engine->getFotoMatricula(index,*m_matricularesults[index]->camara->getCamara());
 }
 void Configuracion::on_ActualizarCamara_clicked(){
     int index = getAlprIndex();
@@ -371,6 +372,17 @@ void Configuracion::on_ActualizarCamara_clicked(){
     /** END GUI **/
     /** ALPR **/
 void Configuracion::updateCalibracionGui(){
+
+    ui->FotoOriginalA->clear();
+    ui->FotoMatriculaA->clear();
+    ui->FotoMatriculaB->clear();
+    ui->MatriculaA->clear();
+    ui->MatriculaB->clear();
+    ui->FotoBlancosA->clear();
+    ui->FotoRojosA->clear();
+    ui->LongMatriculaA->clear();
+    ui->LongMatriculaB->clear();
+
     int index = getAlprIndex();
     ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_matricularesults[index]->camara->getOrigenFotoQ()));
     ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_matricularesults[index]->getMatriculaFotoAQ()));
@@ -443,7 +455,7 @@ void Configuracion::on_guardarPlanK_clicked(){
         engine->appConfig()->setValue(QString(ALPR) + "/plankc2",QString::number(ui->vPlankC->value()));
         break;
     }
-    engine->calibrarFoto(index,m_matricularesults[index]->camara->getCamaraPtr());
+    engine->calibrarFoto(index,*m_matricularesults[index]->camara->getCamara());
 }
     /** END PLANKs **/
 /** END CALIBRACION *******************************************************************/

@@ -2,9 +2,6 @@
 #define NEWSAGESALPRTASK_H
 
 #include <QObject>
-#include <QImage>
-#include <QMutex>
-
 #include "Registros/MatriculaResults.h"
 
 namespace nQTrucks {
@@ -14,33 +11,31 @@ class NewsagesAlprTask : public QObject{
     Q_OBJECT
 public:
     explicit NewsagesAlprTask(int _nDevice=0, int _nType=0, MatriculaResults *_results=0,  QSettings *_appsettings=0, QObject *parent = 0);
-    //~NewsagesAlprTask();
 signals:
     void workFinished();
-private:
-    QMutex m_MutexWrite;
 
     /** SETTINGS *******************************************************/
 private:
     QSettings *m_settings;
     QString    m_config_file;
     void       loadconfig();
+
 private:
     int     m_nDevice;
-    void    setNDevice(int nDevice) {m_nDevice = nDevice;}
+    void    setNDevice(  int nDevice) {m_nDevice = nDevice;}
     int     getNDevice() const {return m_nDevice;}
 
     int     m_nType;
-    void    setNType(int nType) {m_nType = nType;}
+    void    setNType(  int nType)   {m_nType = nType;}
     int     getNType() const {return m_nType;}
 
 private:
-    Planck    m_plank;
-    void setPlank(const QString &_plankA, const QString &_plankB, const QString &_plankC);
-    Planck getPlank() const{return m_plank;}
+    Planck m_plank;
+    void   setPlank(  const QString &_plankA, const QString &_plankB, const QString &_plankC);
+    Planck getPlank() const{return  m_plank;}
 
     QString  m_prewarp;
-    void setPrewarp(const QString &prewarp){m_prewarp=prewarp;}
+    void    setPrewarp(  const QString &prewarp){m_prewarp=prewarp;}
     QString getPrewarp() const{return m_prewarp;}
     /** END SETTINGS ****************************************************/
 
@@ -50,7 +45,7 @@ private:
     void setFotoCalibrada();
     cv::Mat apply_prewarp(const cv::Mat &img);
     /** Algoritmo AUTOCALIBRACION **/
-    int m_retry_panks=5;
+    int  m_retry_panks=5;
     void guardarPlanK();
     /** END ALGORITMO AUTOCALIBRACION**/
 
@@ -58,7 +53,7 @@ public slots:
     void calibrar();
 signals:
     void ReplyOriginalFotoBlanca(const cv::Mat &Foto);
-    void ReplyOriginalFotoRoja(const cv::Mat &Foto);
+    void ReplyOriginalFotoRoja(  const cv::Mat &Foto);
     /** END CALIBRACION ************************************************/
 
     /** PROCESAR **************************************************************/
@@ -71,13 +66,6 @@ private:
 signals:
    void ReplyMatriculaFoto();
     /** END PROCESAR **************************************************************/
-
-    /** TOOLS **/
-private:
-
-    //nQTrucks::Tools *m_tools;
-    /** END TOOLS **/
-
 };
 
 }

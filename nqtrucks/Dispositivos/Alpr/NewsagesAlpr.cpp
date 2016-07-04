@@ -46,35 +46,26 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
     : QObject(parent)
     , m_nDevice(nDevice)
     , m_settings(_appsettings)
-    , bhiloCalibrar1(false)
-    , bhiloCalibrar2(false)
-    , bhilo1(false)
-    , bhilo2(false)
 {
-//    m_results.resize(3);
-//    m_results[0] = new MatriculaResults; //emitir
-//    m_results[0]->setId(m_nDevice);
 
-//    m_results[2] = new MatriculaResults; //procesar
-//    m_results[2]->setId(m_nDevice);
-
+    m_results1 = new MatriculaResults; //calibrar
+    m_results2 = new MatriculaResults; //calibrar
 
 }
 
 NewsagesAlpr::~NewsagesAlpr(){
-    //delete m_results[0];
-    //delete m_results1;
-    //delete m_results[2];
-    //m_results.detach();
- //m_results.detach();
+    delete m_results1;
+    delete m_results2;
 }
 
 //void NewsagesAlpr::setFotoCamara(const Camara &_camara) {
-//    m_results[0]->camara->setOrigenFoto(_camara.getOrigenFoto());
-//    m_results[1]->camara->setOrigenFoto(_camara.getOrigenFoto());
-//    m_results[2]->camara->setOrigenFoto(_camara.getOrigenFoto());
-//    emit ReplyOriginalFoto(*m_results[0]->camara);
-//}
+//    m_results0->camara->setCamara(_camara);
+////    m_results1->camara->setCamara(_camara);
+////    m_results2->camara->setCamara(_camara);
+//    emit ReplyOriginalFoto(*m_results0->camara);
+// }
+
+
 
 /** SOLO CALIBRACION ***************************************************************************************/
 void NewsagesAlpr::calibrarFoto(const Camara &_camara){
@@ -83,17 +74,14 @@ void NewsagesAlpr::calibrarFoto(const Camara &_camara){
         bhiloCalibrar1=true;
         bhiloCalibrar2=true;
 
-        //this->setFotoCamara(Foto);
-
         /** Crear hilos por Tipos de matriculas **/
         hiloCalibrar1 = new QThread();
         hiloCalibrar2 = new QThread();
 
         /** Crear tareas **/
-        m_results1 = new MatriculaResults; //calibrar
+
         m_results1->camara->setCamara(_camara);
         m_results1->setId(m_nDevice);
-        //m_results[1]->Camara(_camara.getCamara());
         tareaCalibrar1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results1, m_settings);
         tareaCalibrar2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results1, m_settings);
 
@@ -149,10 +137,14 @@ void NewsagesAlpr::calibrarFoto(const Camara &_camara){
     }
 }
 
-void NewsagesAlpr::onCalibrarFotoFinished(){
-    //m_results[1]->convertirFotos();
+void NewsagesAlpr::onCalibrarFotoFinished(){    
     this->ReplyMatriculaCalibrationResults(*m_results1);
-    delete m_results1;
+    qDebug() << "Device:"           << m_results1->getId() << endl
+             << "\t Matricula1:"    << m_results1->getMatriculaA()
+             << "precision:"        << m_results1->getMatriculaPrecisionAs()<<"%"<< "patron:"    << m_results1->getMatriculaDetectedA() << endl
+             << "\t Matricula2:"    << m_results1->getMatriculaB()
+             << "precision:"        << m_results1->getMatriculaPrecisionBs() << "%" << "patron:" << m_results1->getMatriculaDetectedB() << endl;
+
 }
 /** END SOLO CALIBRACION *************************************************************************************/
 
@@ -160,19 +152,15 @@ void NewsagesAlpr::onCalibrarFotoFinished(){
 /** PROCESAR ************************************************************************************************/
 void NewsagesAlpr::processFoto(const Camara &_camara)
 {
-
     if(!bhilo1 && !bhilo2){
         bhilo1=true;
         bhilo2=true;
-
-        //this->setFotoCamara(Foto);
 
         /** Crear hilos por Tipos de matriculas **/
         hilo1 = new QThread;
         hilo2 = new QThread;
 
-        /** Crear tareas **/
-        m_results2 = new MatriculaResults;
+        /** Crear tareas **/        
         m_results2->camara->setCamara(_camara);
         m_results2->setId(m_nDevice);
         tarea1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results2, m_settings);
@@ -225,14 +213,13 @@ void NewsagesAlpr::processFoto(const Camara &_camara)
 }
 
 void NewsagesAlpr::onProcesarFotoFinished(){
-    //m_results[2]->convertirFotos(); /** MEMORY LEAK **/
+
     emit ReplyMatriculaResults(*m_results2);
     qDebug() << "Device:"           << m_results2->getId() << endl
              << "\t Matricula1:"    << m_results2->getMatriculaA()
              << "precision:"        << m_results2->getMatriculaPrecisionAs()<<"%"<< "patron:"    << m_results2->getMatriculaDetectedA() << endl
              << "\t Matricula2:"    << m_results2->getMatriculaB()
-             << "precision:"        << m_results2->getMatriculaPrecisionBs() << "%" << "patron:" << m_results2->getMatriculaDetectedB() << endl;
-    delete m_results2;
+             << "precision:"        << m_results2->getMatriculaPrecisionBs() << "%" << "patron:" << m_results2->getMatriculaDetectedB() << endl;    
 }
 
 /** END PROCESAR ********************************************************************************************************/

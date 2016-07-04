@@ -33,17 +33,16 @@
 #include <QBuffer>
 
 #include <QSharedPointer>
-
+#include <memory>
 
 namespace nQTrucks{
 namespace Devices {
 
 CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
-    : Camara(parent)
+    : QObject(parent)
     , m_nDevice(nDevice)
     , m_settings(_appsettings)
     , m_netmanager(new QNetworkAccessManager(this))
-    //, m_RegistroCamara (new Camara)
 {
 
     /** CONECTIONS **/
@@ -110,9 +109,6 @@ QUrl CamaraIP::setCamaraURL(){
 
 void CamaraIP::sendCamaraIPFotoRequest()
 {
-    /**  Peticion ***/
-    QUrl Servidor = setCamaraURL();
-    QNetworkRequest request(Servidor);
 
 
     /** TODO Stuff SSL (por probar) **/
@@ -122,47 +118,57 @@ void CamaraIP::sendCamaraIPFotoRequest()
     //config.setProtocol(QSsl::TlsV1SslV3);
     //request.setSslConfiguration(config);
 
-    m_netmanager->get(request); /** MEMORY LEAK **/
+    if (!m_isRunning){
+        /**  Peticion ***/
+        m_isRunning=true;
+        QUrl Servidor = setCamaraURL();
+        QNetworkRequest request(Servidor);
+        m_netmanager->get(request); /** MEMORY LEAK **/
+    }
 }
 
 void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
     QByteArray data = reply->readAll();
-    QImage *temp = new QImage(FotoWidth, FotoHeight,QImage::Format_RGB888);
-    if (temp->loadFromData(data)){
-
+    QImage temp;
+    if (temp.loadFromData(data)){
         QBuffer buffer(&data);
         buffer.open(QIODevice::ReadOnly);
         const char* begin = reinterpret_cast<char*>(data.data());
         const char* end = begin + data.size();
         std::vector<char> pic(begin, end);
+        cv::Mat _decode;// = new cv::Mat;
+        cv::Mat _resize;// = new cv::Mat;
+        cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,&_decode); /** MEMORY LEAK **/
+        cv::resize(_decode,_resize,FotoSize);
+
+        Camara *m_RegistroCamara = new Camara;
+        m_RegistroCamara->setOrigenFoto(_resize);
+        m_RegistroCamara->convertirFotos();
+        emit ReplyCamaraIP(*m_RegistroCamara->getCamara());
+        delete m_RegistroCamara;
+
         buffer.reset();
         buffer.close();
-
-        cv::Mat *_decode = new cv::Mat;
-        cv::Mat *_resize = new cv::Mat;
-        cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,_decode); /** MEMORY LEAK **/
-        cv::resize(*_decode,*_resize,FotoSize);
-        setOrigenFoto(*_resize);
-        _resize->release();
-        delete _resize;
-        _decode->release();
-        delete _decode;
+        _resize.release();
+        //delete _resize;
+        _decode.release();
+        //delete _decode;
         pic.clear();
-        temp->detach();
-        delete temp;
+        temp.detach();
         data.clear();
         data.detach();
-
     }else{
         /** CAMARA ERROR CV::MAT **/
         emit CamaraError(m_errorCamaraIP);
-        temp->detach();
-        delete temp;
+        temp.detach();
         data.clear();
         data.detach();
     }
+    m_isRunning=false;
     delete reply;
 }
+
+
 
 
 

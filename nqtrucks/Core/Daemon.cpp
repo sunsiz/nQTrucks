@@ -86,7 +86,8 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
 
       camaraconn1=connect(m_camara[0], &Devices::CamaraIP::ReplyCamaraIP, [=](const Camara  &_Reply){
           QObject::disconnect(camaraconn1);
-          m_RegistroMatriculas.m_results0->camara->setOrigenFoto(_Reply.getOrigenFoto());
+          m_RegistroMatriculas.m_results0->camara->setCamara(_Reply);
+          //m_RegistroMatriculas.m_results0->camara->convertirFotos();
           //m_RegistroMatriculas.results[0].OrigenFotoByte = _Reply.OrigenFotoByte;
           m_bfoto1=true;
           //Tengo las fotos semaforo GO! y Registro linea
@@ -99,7 +100,8 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
 
       camaraconn2=connect(m_camara[1], &Devices::CamaraIP::ReplyCamaraIP, [=](const Camara  &_Reply){
           QObject::disconnect(camaraconn2);
-          m_RegistroMatriculas.m_results1->camara->setOrigenFoto(_Reply.getOrigenFoto());
+          m_RegistroMatriculas.m_results1->camara->setCamara(_Reply);
+          //m_RegistroMatriculas.m_results1->camara->convertirFotos();
           m_bfoto2=true;
           //Tengo las fotos semaforo GO! y Registro linea
           if(m_bfoto1 && m_bfoto2){
@@ -159,7 +161,6 @@ void Daemon::onGuardarRegistroSimple(){
 
         m_alpr[0]->processFoto(*m_RegistroMatriculas.m_results0->camara->getCamara());
         m_alpr[1]->processFoto(*m_RegistroMatriculas.m_results1->camara->getCamara());
-        //m_registrando=false;
         m_bfoto1=false;
         m_bfoto2=false;
     }   
@@ -170,7 +171,8 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
 
     /* Crea un Hilo para la base de datos */
     /* Ejecuta el registro Simple */
-
+    //m_RegistroMatriculas.m_results0->convertirFotos();
+    //m_RegistroMatriculas.m_results1->convertirFotos();
     emit RegistroChanged(m_RegistroMatriculas);
 
     hiloDb = new QThread();
