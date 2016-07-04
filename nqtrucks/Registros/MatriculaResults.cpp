@@ -48,20 +48,25 @@ namespace nQTrucks{
 
 
 
-        void MatriculaResults::setOrigenFotoPrewarp(const cv::Mat &value){            
+        void MatriculaResults::setOrigenFotoPrewarp(const cv::Mat &value){
+            OrigenFotoPrewarp.release();
             value.copyTo(OrigenFotoPrewarp);
         }
         void MatriculaResults::setOrigenFotoBlanca(const cv::Mat &value){
+            OrigenFotoBlanca.release();
             value.copyTo(OrigenFotoBlanca);
         }
         void MatriculaResults::setOrigenFotoRoja(const cv::Mat &value){
+            OrigenFotoRoja.release();
             value.copyTo(OrigenFotoRoja);
         }
         void MatriculaResults::setMatriculaFotoA(const cv::Mat &value){
+            MatriculaFotoA.release();
             value.copyTo(MatriculaFotoA);
         }
 
         void MatriculaResults::setMatriculaFotoB(const cv::Mat &value){
+            MatriculaFotoB.release();
             value.copyTo(MatriculaFotoB);
         }
 
