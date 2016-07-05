@@ -87,14 +87,21 @@ Configuracion::~Configuracion()
 
 void Configuracion::updateGui(){
     ui->camaraLabel->clear();
+
+    Tools *m_tools = new Tools;
     switch (ui->CamaraSelect->currentIndex()) {
     case 0:
+        m_matricularesults[0]->camara->setOrigenFotoQ(m_tools->convertMat2QImage(m_matricularesults[0]->camara->getOrigenFoto()));
         ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[0]->camara->getOrigenFotoQ()));
+        m_matricularesults[0]->camara->getOrigenFotoQ().detach();
         break;
     case 1:
+        m_matricularesults[1]->camara->setOrigenFotoQ(m_tools->convertMat2QImage(m_matricularesults[1]->camara->getOrigenFoto()));
         ui->camaraLabel->setPixmap(QPixmap::fromImage(m_matricularesults[1]->camara->getOrigenFotoQ()));
+        m_matricularesults[1]->camara->getOrigenFotoQ().detach();
         break;
     }
+    delete m_tools;
 }
 
 
@@ -384,15 +391,31 @@ void Configuracion::updateCalibracionGui(){
     ui->LongMatriculaB->clear();
 
     int index = getAlprIndex();
-    ui->FotoOriginalA->setPixmap(QPixmap::fromImage(m_matricularesults[index]->camara->getOrigenFotoQ()));
+
+    Tools *m_tools = new Tools;
+    m_matricularesults[index]->camara->setOrigenFotoQ(m_tools->convertMat2QImage(m_matricularesults[index]->camara->getOrigenFoto()));
+    m_matricularesults[index]->setMatriculaFotoAQ(    m_tools->convertMat2QImage(m_matricularesults[index]->getMatriculaFotoA()));
+    m_matricularesults[index]->setMatriculaFotoBQ(    m_tools->convertMat2QImage(m_matricularesults[index]->getMatriculaFotoB()));
+    m_matricularesults[index]->setOrigenFotoBlancaQ(  m_tools->convertMat2QImage(m_matricularesults[index]->getOrigenFotoBlanca()));
+    m_matricularesults[index]->setOrigenFotoRojaQ(    m_tools->convertMat2QImage(m_matricularesults[index]->getOrigenFotoRoja()));
+
+    ui->FotoOriginalA->setPixmap( QPixmap::fromImage(m_matricularesults[index]->camara->getOrigenFotoQ()));
     ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_matricularesults[index]->getMatriculaFotoAQ()));
     ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_matricularesults[index]->getMatriculaFotoBQ()));
-    ui->MatriculaA->setText(m_matricularesults[index]->getMatriculaA());/** MEMORY LEAK **/
+    ui->FotoBlancosA->setPixmap(  QPixmap::fromImage(m_matricularesults[index]->getOrigenFotoBlancaQ()));
+    ui->FotoRojosA->setPixmap(    QPixmap::fromImage(m_matricularesults[index]->getOrigenFotoRojaQ()));
+    ui->MatriculaA->setText(m_matricularesults[index]->getMatriculaA());
     ui->MatriculaB->setText(m_matricularesults[index]->getMatriculaB());
-    ui->FotoBlancosA->setPixmap(QPixmap::fromImage(m_matricularesults[index]->getOrigenFotoBlancaQ()));
-    ui->FotoRojosA->setPixmap(QPixmap::fromImage(m_matricularesults[index]->getOrigenFotoRojaQ()));
-    ui->LongMatriculaA->setText(m_matricularesults[index]->getMatriculaPrecisionAs()); /** MEMORY LEAK **/
+    ui->LongMatriculaA->setText(m_matricularesults[index]->getMatriculaPrecisionAs());
     ui->LongMatriculaB->setText(m_matricularesults[index]->getMatriculaPrecisionBs());
+
+    m_matricularesults[index]->camara->getOrigenFotoQ().detach();
+    m_matricularesults[index]->getMatriculaFotoAQ().detach();
+    m_matricularesults[index]->getMatriculaFotoBQ().detach();
+    m_matricularesults[index]->getOrigenFotoBlancaQ().detach();
+    m_matricularesults[index]->getOrigenFotoRojaQ().detach();
+
+    delete m_tools;
 }
     /** ALPR 1 **/
 void Configuracion::onReplyMatriculaResults1(const MatriculaResults &_result){

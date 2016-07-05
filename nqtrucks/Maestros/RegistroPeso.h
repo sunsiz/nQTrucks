@@ -28,10 +28,10 @@ namespace nQTrucks{
 
         public:
             QDateTime getFechaRegistro(const long long &_id);
-            bool guardarRegistroRegistroMatriculas(RegistroMatriculas &RegistroMatriculas);
+            bool guardarRegistroRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas);
             bool eliminaFotosCamara(const long long &_id);
-            bool buscarPareja(QVector<RegistroMatriculas> &RegistrosMatriculas, const QString &_matricula);
-            bool actualizarPareja(QVector<RegistroMatriculas> &RegistrosMatriculas);
+            bool buscarPareja(QVector<RegistroMatriculas*> _RegistrosMatriculas, const QString &_matricula);
+            bool actualizarPareja(QVector<RegistroMatriculas*> _RegistrosMatriculas);
 
 
         signals:

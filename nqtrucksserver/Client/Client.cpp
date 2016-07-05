@@ -88,28 +88,58 @@ void Client::onBascula(const Bascula &_bascula){
 
 void Client::onDaemonRegistroChanged(const RegistroMatriculas &_result)
 {
-    ui->camara1->setPixmap(QPixmap::fromImage(_result.m_results0->camara->getOrigenFotoQ()));
-    ui->camara2->setPixmap(QPixmap::fromImage(_result.m_results1->camara->getOrigenFotoQ()));
 
-    if ( _result.m_results0->getMatriculaPrecisionA() >= _result.m_results1->getMatriculaPrecisionA()){
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.m_results0->getMatriculaFotoAQ()));
+    RegistroMatriculas *m_regs= new RegistroMatriculas;
+    m_regs->setRegistroMatriculas(_result);
+    Tools *m_tools = new Tools;
+
+    m_regs->m_results0->camara->setOrigenFotoQ(m_tools->convertMat2QImage(_result.m_results0->camara->getOrigenFoto()));
+    m_regs->m_results1->camara->setOrigenFotoQ(m_tools->convertMat2QImage(_result.m_results1->camara->getOrigenFoto()));
+    ui->camara1->setPixmap(QPixmap::fromImage(m_regs->m_results0->camara->getOrigenFotoQ()));
+    ui->camara2->setPixmap(QPixmap::fromImage(m_regs->m_results1->camara->getOrigenFotoQ()));
+    m_regs->m_results0->camara->getOrigenFotoQ().detach();
+    m_regs->m_results1->camara->getOrigenFotoQ().detach();
+
+    if ( m_regs->m_results0->getMatriculaPrecisionA() >= m_regs->m_results1->getMatriculaPrecisionA()){
+
+        m_regs->m_results0->setMatriculaFotoAQ(m_tools->convertMat2QImage(m_regs->m_results0->getMatriculaFotoA()));
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_regs->m_results0->getMatriculaFotoAQ()));
+        m_regs->m_results0->getMatriculaFotoAQ().detach();
+
         ui->MatriculaA->setText(_result.m_results0->getMatriculaA());/** MEMORY LEAK **/
         ui->MatriculaPrecisionA->setText(_result.m_results0->getMatriculaPrecisionAs());/** MEMORY LEAK **/
+
     }else{
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(_result.m_results1->getMatriculaFotoAQ()));
+
+        m_regs->m_results1->setMatriculaFotoAQ(m_tools->convertMat2QImage(m_regs->m_results1->getMatriculaFotoA()));
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage(m_regs->m_results1->getMatriculaFotoAQ()));
+        m_regs->m_results1->getMatriculaFotoAQ().detach();
+
         ui->MatriculaA->setText(_result.m_results1->getMatriculaA());
         ui->MatriculaPrecisionA->setText(_result.m_results1->getMatriculaPrecisionAs());
     }
 
-    if ( _result.m_results0->getMatriculaPrecisionB() >= _result.m_results1->getMatriculaPrecisionB()){
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(_result.m_results0->getMatriculaFotoBQ()));
-        ui->MatriculaB->setText(_result.m_results0->getMatriculaB());/** MEMORY LEAK **/
-        ui->MatriculaPrecisionB->setText(_result.m_results0->getMatriculaPrecisionBs());/** MEMORY LEAK **/
+    if ( m_regs->m_results0->getMatriculaPrecisionB() >= m_regs->m_results1->getMatriculaPrecisionB()){
+
+        m_regs->m_results0->setMatriculaFotoBQ(m_tools->convertMat2QImage(m_regs->m_results0->getMatriculaFotoB()));
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_regs->m_results0->getMatriculaFotoBQ()));
+        m_regs->m_results0->getMatriculaFotoBQ().detach();
+
+        ui->MatriculaB->setText(m_regs->m_results0->getMatriculaB());/** MEMORY LEAK **/
+        ui->MatriculaPrecisionB->setText(m_regs->m_results0->getMatriculaPrecisionBs());/** MEMORY LEAK **/
+
     }else{
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(_result.m_results1->getMatriculaFotoBQ()));
-        ui->MatriculaB->setText(_result.m_results1->getMatriculaB());
-        ui->MatriculaPrecisionB->setText(_result.m_results1->getMatriculaPrecisionBs());
+
+        m_regs->m_results1->setMatriculaFotoBQ(m_tools->convertMat2QImage(m_regs->m_results1->getMatriculaFotoB()));
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage(m_regs->m_results1->getMatriculaFotoBQ()));
+        m_regs->m_results1->getMatriculaFotoBQ().detach();
+
+        ui->MatriculaB->setText(m_regs->m_results1->getMatriculaB());
+        ui->MatriculaPrecisionB->setText(m_regs->m_results1->getMatriculaPrecisionBs());
     }
+
+    delete m_tools;
+    delete m_regs;
 
 }
 

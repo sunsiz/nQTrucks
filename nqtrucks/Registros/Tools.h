@@ -39,6 +39,33 @@ namespace nQTrucks{
 //            }
 
 
+            static inline void convertMat2QImage( cv::Mat &_cvimage, QImage &_qtImg ){
+                if( !_cvimage.empty() && _cvimage.depth() == CV_8U){
+                    if(_cvimage.channels() == 1){
+                        _qtImg.fromData((const uchar *)(_cvimage.data),
+                                       QSize(_cvimage.cols,_cvimage.row));
+                    }
+                    else{
+                        cv::cvtColor( _cvimage, _cvimage, CV_BGR2RGB );
+                        _qtImg.fromData((const unsigned char *)(_cvimage.data),
+                                       QSize(_cvimage.cols,_cvimage.rows),
+                                       "JPG" );
+                    }
+                }
+            }
+            static inline void convertMat2ByteArray(cv::Mat _cvimage,QByteArray &_baScene){
+                QImage qtImg;
+                convertMat2QImage(_cvimage,qtImg);
+                //QByteArray baScene; // byte array with data
+                QBuffer buffer(&_baScene);
+                buffer.open(QIODevice::WriteOnly);
+                qtImg.save(&buffer,"JPG");
+                buffer.reset();
+                buffer.close();
+                qtImg.detach();
+            }
+
+
             static inline QImage convertMat2QImage(cv::Mat const &_cvimage){
                 QImage qtImg;
                 if( !_cvimage.empty() && _cvimage.depth() == CV_8U){

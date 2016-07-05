@@ -77,16 +77,16 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
       //Activo Semaforo rojo
       m_newsagesIO->setSemaforo(SEMAFORO_ROJO);
 
-      //m_RegistroMatriculas = new RegistroMatriculas;
+      m_RegistroMatriculas = new RegistroMatriculas;
       // Peso:
-      m_RegistroMatriculas.m_bascula->setBascula(_nuevaPesada);
+      m_RegistroMatriculas->m_bascula->setBascula(_nuevaPesada);
       //Espero 2 Fotos
       m_bfoto1=false;
       m_bfoto2=false;
 
       camaraconn1=connect(m_camara[0], &Devices::CamaraIP::ReplyCamaraIP, [=](const Camara  &_Reply){
           QObject::disconnect(camaraconn1);
-          m_RegistroMatriculas.m_results0->camara->setCamara(_Reply);
+          m_RegistroMatriculas->m_results0->camara->setCamara(_Reply);
           //m_RegistroMatriculas.m_results0->camara->convertirFotos();
           //m_RegistroMatriculas.results[0].OrigenFotoByte = _Reply.OrigenFotoByte;
           m_bfoto1=true;
@@ -100,7 +100,7 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
 
       camaraconn2=connect(m_camara[1], &Devices::CamaraIP::ReplyCamaraIP, [=](const Camara  &_Reply){
           QObject::disconnect(camaraconn2);
-          m_RegistroMatriculas.m_results1->camara->setCamara(_Reply);
+          m_RegistroMatriculas->m_results1->camara->setCamara(_Reply);
           //m_RegistroMatriculas.m_results1->camara->convertirFotos();
           m_bfoto2=true;
           //Tengo las fotos semaforo GO! y Registro linea
@@ -143,7 +143,7 @@ void Daemon::onGuardarRegistroSimple(){
 
         alprconn1 = connect(m_alpr[0], &Devices::NewsagesAlpr::ReplyMatriculaResults, [=](const MatriculaResults &_registro){
             QObject::disconnect(alprconn1);            
-            m_RegistroMatriculas.m_results0->setMatriculaResults(_registro);
+            m_RegistroMatriculas->m_results0->setMatriculaResults(_registro);
             m_balpr1=true;
             if(m_balpr1 && m_balpr2){
                 onGuardarRegistroRegistroMatriculas();
@@ -152,15 +152,15 @@ void Daemon::onGuardarRegistroSimple(){
 
         alprconn2 = connect(m_alpr[1],&Devices::NewsagesAlpr::ReplyMatriculaResults, [=](const MatriculaResults  &_registro){
             QObject::disconnect(alprconn2);
-            m_RegistroMatriculas.m_results1->setMatriculaResults(_registro);
+            m_RegistroMatriculas->m_results1->setMatriculaResults(_registro);
             m_balpr2=true;
             if(m_balpr1 && m_balpr2){
                 onGuardarRegistroRegistroMatriculas();
             }
         });
 
-        m_alpr[0]->processFoto(*m_RegistroMatriculas.m_results0->camara->getCamara());
-        m_alpr[1]->processFoto(*m_RegistroMatriculas.m_results1->camara->getCamara());
+        m_alpr[0]->processFoto(*m_RegistroMatriculas->m_results0->camara);
+        m_alpr[1]->processFoto(*m_RegistroMatriculas->m_results1->camara);
         m_bfoto1=false;
         m_bfoto2=false;
     }   
@@ -173,7 +173,7 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
     /* Ejecuta el registro Simple */
     //m_RegistroMatriculas.m_results0->convertirFotos();
     //m_RegistroMatriculas.m_results1->convertirFotos();
-    emit RegistroChanged(m_RegistroMatriculas);
+    emit RegistroChanged(*m_RegistroMatriculas);
 
     hiloDb = new QThread();
     tareaDb = new Db::DatabaseManager(m_maestros);

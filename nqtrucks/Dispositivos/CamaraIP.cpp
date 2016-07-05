@@ -143,7 +143,7 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
 
         Camara *m_RegistroCamara = new Camara;
         m_RegistroCamara->setOrigenFoto(_resize);
-        m_RegistroCamara->convertirFotos();
+        //m_RegistroCamara->convertirFotos();
         emit ReplyCamaraIP(*m_RegistroCamara->getCamara());
         delete m_RegistroCamara;
 

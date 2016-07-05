@@ -55,7 +55,7 @@ private:
 
 /** REGRISTRO **/
 private:
-   RegistroMatriculas m_RegistroMatriculas;
+   RegistroMatriculas *m_RegistroMatriculas;
 signals:
     void RegistroChanged(const RegistroMatriculas &_results);
     void registrandoChanged(const bool &_registrando);

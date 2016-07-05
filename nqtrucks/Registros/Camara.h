@@ -30,7 +30,7 @@ namespace nQTrucks{
             void setCamara(      Camara *value);
 
         private:
-            cv::Mat           m_OrigenFoto        = cv::Mat::zeros(FotoSize, CV_8U );                 //Imagen Original
+            cv::Mat           m_OrigenFoto   ;//     = cv::Mat::zeros(FotoSize, CV_8U );                 //Imagen Original
             QByteArray        m_OrigenFotoByte;
             QImage            m_OrigenFotoQ; //= QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
         public:
@@ -38,16 +38,19 @@ namespace nQTrucks{
             cv::Mat    getOrigenFoto() const{    return m_OrigenFoto;}
             QByteArray getOrigenFotoByte() const{return m_OrigenFotoByte;}
             QImage     getOrigenFotoQ() const{   return m_OrigenFotoQ;}
+            QImage&     getOrigenFotoQ() {   return m_OrigenFotoQ;}
+            void setOrigenFotoByte(const QByteArray &OrigenFotoByte);
+            void setOrigenFotoQ(const QImage &OrigenFotoQ);
 
-            inline void convertirFotos(){
-                Tools *m_tools  = new Tools; /** MEMORY LEAK **/
-                m_OrigenFotoByte.clear();
-                m_OrigenFotoQ.detach();
-                m_OrigenFotoByte = m_tools->convertMat2ByteArray(m_OrigenFoto); /** MEMORY LEAK **/
-                m_OrigenFotoQ    = m_tools->convertMat2QImage(   m_OrigenFoto);
-                delete m_tools;
-                //emit ReplyCamaraIP(*this);
-            }
+//            inline void convertirFotos(){
+//                Tools *m_tools  = new Tools; /** MEMORY LEAK **/
+//                m_OrigenFotoByte.clear();
+//                m_OrigenFotoQ.detach();
+//                m_OrigenFotoByte = m_tools->convertMat2ByteArray(m_OrigenFoto); /** MEMORY LEAK **/
+//                m_OrigenFotoQ    = m_tools->convertMat2QImage(   m_OrigenFoto);
+//                delete m_tools;
+//                //emit ReplyCamaraIP(*this);
+//            }
         };
 }
 #endif
