@@ -31,16 +31,16 @@ namespace nQTrucks{
 
         private:
             cv::Mat           m_OrigenFoto   ;//     = cv::Mat::zeros(FotoSize, CV_8U );                 //Imagen Original
-            QByteArray        m_OrigenFotoByte;
-            QImage            m_OrigenFotoQ; //= QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
+//            QByteArray        m_OrigenFotoByte;
+//            QImage            m_OrigenFotoQ; //= QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
         public:
             void       setOrigenFoto(const cv::Mat &value);
             cv::Mat    getOrigenFoto() const{    return m_OrigenFoto;}
-            QByteArray getOrigenFotoByte() const{return m_OrigenFotoByte;}
-            QImage     getOrigenFotoQ() const{   return m_OrigenFotoQ;}
-            QImage&     getOrigenFotoQ() {   return m_OrigenFotoQ;}
-            void setOrigenFotoByte(const QByteArray &OrigenFotoByte);
-            void setOrigenFotoQ(const QImage &OrigenFotoQ);
+//            QByteArray getOrigenFotoByte() const{return m_OrigenFotoByte;}
+//            QImage     getOrigenFotoQ() const{   return m_OrigenFotoQ;}
+//            QImage&     getOrigenFotoQ() {   return m_OrigenFotoQ;}
+//            void setOrigenFotoByte(const QByteArray &OrigenFotoByte);
+//            void setOrigenFotoQ(const QImage &OrigenFotoQ);
 
 //            inline void convertirFotos(){
 //                Tools *m_tools  = new Tools; /** MEMORY LEAK **/

@@ -35,24 +35,25 @@ namespace nQTrucks{
         class MatriculaResults {
         public:
             MatriculaResults();
-            //MatriculaResults getMatriculaResults() const { return *this; }
             ~MatriculaResults();
             Camara     *camara = new Camara;
             MatriculaResults&       getMatriculaResults()       { return *this; }
             const MatriculaResults& getMatriculaResults() const { return *this; }
-            //Camara     *camara = new Camara;
+
             inline void setPlanckBlanco(const Planck &value){
                 cv::Mat channel[3];
-                cv::Mat *_dest = new cv::Mat(this->camara->getOrigenFoto().clone());
-                cv::add(*_dest,cv::Scalar(value.C,value.B,value.A), *_dest);
-                cv::split(*_dest, channel);
+                cv::Mat _dest;
+                _dest = this->camara->getOrigenFoto().clone();
+                cv::add(_dest,cv::Scalar(value.C,value.B,value.A), _dest);
+                cv::split(_dest, channel);
                 this->setOrigenFotoBlanca(channel[2] - channel[1] -   channel[2] + channel[0]); /** MEMORY LEAK **/
                 channel[0].release();
                 channel[1].release();
                 channel[2].release();
-                _dest->release();
-                delete _dest;
+                _dest.release();
+                //delete _dest;
             }
+
             inline void setPlanckRojo(  const Planck &value){
                 cv::Mat channel[3];
                 cv::Mat *_dest = new cv::Mat(this->camara->getOrigenFoto().clone());
@@ -72,24 +73,16 @@ namespace nQTrucks{
             int        tipo;//                 =0;                                                     //0 para calibracion, 1 para procesado
             int        id ;//                  =0;                                                     //id fuente de captura de foto
 
-            cv::Mat    OrigenFotoPrewarp      = cv::Mat::zeros(FotoSize, CV_8U );                    // Imagen con calibracion prewarp
-            cv::Mat    OrigenFotoBlanca       = cv::Mat::zeros(FotoSize, CV_8U );                    //  Imagen con calibracion de Blancos
-            cv::Mat    OrigenFotoRoja         = cv::Mat::zeros(FotoSize, CV_8U );                    // Imagen con calibracion de Rojos
-            QImage     OrigenFotoPrewarpQ     ;//= QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
-            QImage     OrigenFotoBlancaQ      ;//= QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
-            QImage     OrigenFotoRojaQ        ;//= QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
-
+            cv::Mat    OrigenFotoPrewarp      ;//= cv::Mat::zeros(FotoSize, CV_8U );                    // Imagen con calibracion prewarp
+            cv::Mat    OrigenFotoBlanca       ;//= cv::Mat::zeros(FotoSize, CV_8U );                    //  Imagen con calibracion de Blancos
+            cv::Mat    OrigenFotoRoja         ;//= cv::Mat::zeros(FotoSize, CV_8U );                    // Imagen con calibracion de Rojos
 
             bool       MatriculaDetectedA     = false;                                                 // Coincide con un patron de busqueda?
             bool       MatriculaDetectedB     = false;                                                 // Coincide con un patron de busqueda?
-            QString    MatriculaA             =QString("");                                                    // STring de la matricula
-            QString    MatriculaB             =QString("");                                                    // STring de la matricula
-            cv::Mat    MatriculaFotoA         = cv::Mat::zeros(MatriculaSize, CV_8U );              // Imagen recortada de la Matricula
-            cv::Mat    MatriculaFotoB         = cv::Mat::zeros(MatriculaSize, CV_8U );              // Imagen recortada de la Matricula
-            QByteArray MatriculaFotoAByte     ;//= {};
-            QByteArray MatriculaFotoBByte     ;//= {};
-            QImage     MatriculaFotoAQ        ;//= QImage(MatriculaNewWidth,MatriculaNewHeight,QImage::Format_RGB888);
-            QImage     MatriculaFotoBQ        ;//= QImage(MatriculaNewWidth,MatriculaNewHeight,QImage::Format_RGB888);
+            QString    MatriculaA             = QString("");                                                    // STring de la matricula
+            QString    MatriculaB             = QString("");                                                    // STring de la matricula
+            cv::Mat    MatriculaFotoA         ;//= cv::Mat::zeros(MatriculaSize, CV_8U );              // Imagen recortada de la Matricula
+            cv::Mat    MatriculaFotoB         ;//= cv::Mat::zeros(MatriculaSize, CV_8U );              // Imagen recortada de la Matricula
             float      MatriculaPrecisionA    = 0;                                                     // Precision del OCR
             float      MatriculaPrecisionB    = 0;                                                     // Precision del OCR
             QString    MatriculaPrecisionAs   = QString("0%");
@@ -112,11 +105,6 @@ namespace nQTrucks{
             cv::Mat getOrigenFotoBlanca()  const{return OrigenFotoBlanca;}
             cv::Mat getOrigenFotoRoja()    const{return OrigenFotoRoja;}
 
-            QImage getOrigenFotoPrewarpQ() const{return OrigenFotoPrewarpQ;}
-            QImage getOrigenFotoBlancaQ()  const{return OrigenFotoBlancaQ;}
-            QImage getOrigenFotoRojaQ()    const{return OrigenFotoRojaQ;}
-
-
             void setMatriculaDetectedA( bool           value){ MatriculaDetectedA = value; }
             void setMatriculaDetectedB( bool           value){ MatriculaDetectedB = value; }
             void setMatriculaA(         const QString &value){ MatriculaA         = value; }
@@ -132,66 +120,10 @@ namespace nQTrucks{
             QString    getMatriculaB()           const{return MatriculaB;}
             cv::Mat    getMatriculaFotoA()       const{return MatriculaFotoA; }
             cv::Mat    getMatriculaFotoB()       const{return MatriculaFotoB; }
-            QByteArray getMatriculaFotoAByte()   const{return MatriculaFotoAByte;}
-            QByteArray getMatriculaFotoBByte()   const{return MatriculaFotoBByte;}
-            QImage     getMatriculaFotoAQ()      const{return MatriculaFotoAQ;}
-            QImage     getMatriculaFotoBQ()      const{return MatriculaFotoBQ;}
             float      getMatriculaPrecisionA()  const{return MatriculaPrecisionA;}
             float      getMatriculaPrecisionB()  const{return MatriculaPrecisionB;}
             QString    getMatriculaPrecisionAs() const{return MatriculaPrecisionAs; }
             QString    getMatriculaPrecisionBs() const{return MatriculaPrecisionBs; }
-
-
-//        public:
-//           inline void convertirFotos(){
-//                this->convertirFotoPrewarp();
-//                this->convertirFotoBlanca();
-//                this->convertirFotoRoja();
-//                this->convertirMatriculaFotoA();
-//                this->convertirMatriculaFotoB();
-//            }
-//        private:
-//            inline void convertirFotoPrewarp(){
-//                Tools *m_tools        =  new Tools;
-//                OrigenFotoPrewarpQ.detach();
-//                OrigenFotoPrewarpQ = m_tools->convertMat2QImage(OrigenFotoPrewarp);
-//                delete m_tools;
-//            }
-//            inline void convertirFotoBlanca(){
-//                Tools *m_tools        =  new Tools;
-//                OrigenFotoBlancaQ.detach();
-//                OrigenFotoBlancaQ = m_tools->convertMat2QImage(OrigenFotoBlanca);
-//                delete m_tools;
-//            }
-//            inline void convertirFotoRoja(){
-//                Tools *m_tools        =  new Tools;
-//                OrigenFotoRojaQ.detach();
-//                OrigenFotoRojaQ = m_tools->convertMat2QImage(OrigenFotoRoja);
-//                delete m_tools;
-//            }
-//            inline void convertirMatriculaFotoA(){
-//                Tools *m_tools        =  new Tools;
-//                MatriculaFotoAByte.clear();
-//                MatriculaFotoAQ.detach();
-//                MatriculaFotoAByte = m_tools->convertMat2ByteArray(MatriculaFotoA);
-//                MatriculaFotoAQ    = m_tools->convertMat2QImage(   MatriculaFotoA);
-//                delete m_tools;
-//            }
-//            inline void convertirMatriculaFotoB(){
-//                Tools *m_tools        =  new Tools;
-//                MatriculaFotoBByte.clear();
-//                MatriculaFotoBQ.detach();
-//                MatriculaFotoBByte = m_tools->convertMat2ByteArray(MatriculaFotoB);
-//                MatriculaFotoBQ    = m_tools->convertMat2QImage(   MatriculaFotoB);
-//                delete m_tools;
-//            }
-            void setOrigenFotoPrewarpQ(const QImage &value);
-            void setOrigenFotoBlancaQ(const QImage &value);
-            void setOrigenFotoRojaQ(const QImage &value);
-            void setMatriculaFotoAByte(const QByteArray &value);
-            void setMatriculaFotoBByte(const QByteArray &value);
-            void setMatriculaFotoAQ(const QImage &value);
-            void setMatriculaFotoBQ(const QImage &value);
         };
 }
 #endif // MATRICULARESULTS_H

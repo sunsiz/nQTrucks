@@ -9,31 +9,14 @@ namespace nQTrucks {
         }
         void Camara::setCamara(const Camara &value){
             m_OrigenFoto.release();
-            value.m_OrigenFoto.copyTo(m_OrigenFoto);
-        }
-
-        void Camara::setCamara(Camara *value){
-            m_OrigenFoto.release();
-            value->m_OrigenFoto.copyTo(m_OrigenFoto);
-
-        }
-
-        void Camara::setOrigenFotoQ(const QImage &OrigenFotoQ)
-        {
-            m_OrigenFotoQ = OrigenFotoQ;
-        }
-
-        void Camara::setOrigenFotoByte(const QByteArray &OrigenFotoByte)
-        {
-            m_OrigenFotoByte = OrigenFotoByte;
+            m_OrigenFoto=value.m_OrigenFoto.clone();
         }
         Camara::~Camara(){
             m_OrigenFoto.release();
-            m_OrigenFotoByte.clear();
-            m_OrigenFotoQ.detach();
         }
         void Camara::setOrigenFoto(const cv::Mat &value){
-            value.copyTo(m_OrigenFoto);
+            m_OrigenFoto.release();
+            m_OrigenFoto = value.clone();
         }
     /** END CAMARA **********************************************************************************************/
 }

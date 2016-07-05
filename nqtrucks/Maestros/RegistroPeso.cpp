@@ -87,49 +87,39 @@ namespace nQTrucks{
         }
 
         bool RegistroPeso::guardarRegistroRegistroMatriculas(nQTrucks::RegistroMatriculas *_RegistroMatriculas){
-                Tools *m_tools = new Tools;
 
-                _RegistroMatriculas->m_results0->camara->setOrigenFotoByte(m_tools->convertMat2ByteArray(_RegistroMatriculas->m_results0->camara->getOrigenFoto()));
-                _RegistroMatriculas->m_results0->setMatriculaFotoAByte(    m_tools->convertMat2ByteArray(_RegistroMatriculas->m_results0->getMatriculaFotoA()));
-                _RegistroMatriculas->m_results0->setMatriculaFotoBByte(    m_tools->convertMat2ByteArray(_RegistroMatriculas->m_results0->getMatriculaFotoB()));
+            QSqlQuery qry(m_db);
+            Tools *m_tools = new Tools;
+            qry.prepare(qry_insert_simple);
+            qry.bindValue(":pesobruto",                                         _RegistroMatriculas->m_bascula->getIBruto()                        );
+            qry.bindValue(":pesoneto",                                          _RegistroMatriculas->m_bascula->getINeto()                         );
+            qry.bindValue(":pesotara",                                          _RegistroMatriculas->m_bascula->getITara()                         );
 
-                _RegistroMatriculas->m_results1->camara->setOrigenFotoByte(m_tools->convertMat2ByteArray(_RegistroMatriculas->m_results1->camara->getOrigenFoto()));
-                _RegistroMatriculas->m_results1->setMatriculaFotoAByte(    m_tools->convertMat2ByteArray(_RegistroMatriculas->m_results1->getMatriculaFotoA()));
-                _RegistroMatriculas->m_results1->setMatriculaFotoBByte(    m_tools->convertMat2ByteArray(_RegistroMatriculas->m_results1->getMatriculaFotoB()));
-
-
-                QSqlQuery qry(m_db);
-                qry.prepare(qry_insert_simple);
-                qry.bindValue(":pesobruto",         _RegistroMatriculas->m_bascula->getIBruto());
-                qry.bindValue(":pesoneto",          _RegistroMatriculas->m_bascula->getINeto());
-                qry.bindValue(":pesotara",          _RegistroMatriculas->m_bascula->getITara());
-
-                qry.bindValue(":fotocamara1",       _RegistroMatriculas->m_results0->camara->getOrigenFotoByte());
-                qry.bindValue(":fotomatriculaA1",   _RegistroMatriculas->m_results0->getMatriculaFotoAByte());
-                qry.bindValue(":fotomatriculaB1",   _RegistroMatriculas->m_results0->getMatriculaFotoBByte());
-                qry.bindValue(":matriculaA1",       _RegistroMatriculas->m_results0->getMatriculaA());
-                qry.bindValue(":matriculaB1",       _RegistroMatriculas->m_results0->getMatriculaB());
-                qry.bindValue(":precisionA1",       QString::number(_RegistroMatriculas->m_results0->getMatriculaPrecisionA(),'g',6));
-                qry.bindValue(":precisionB1",       QString::number(_RegistroMatriculas->m_results0->getMatriculaPrecisionB(),'g',6));
+            qry.bindValue(":fotocamara1",       m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results0->camara->getOrigenFoto())          );
+            qry.bindValue(":fotomatriculaA1",   m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results0->getMatriculaFotoA())              );
+            qry.bindValue(":fotomatriculaB1",   m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results0->getMatriculaFotoB())              );
+            qry.bindValue(":matriculaA1",                                       _RegistroMatriculas->m_results0->getMatriculaA()                   );
+            qry.bindValue(":matriculaB1",                                       _RegistroMatriculas->m_results0->getMatriculaB()                   );
+            qry.bindValue(":precisionA1",       QString::number(                _RegistroMatriculas->m_results0->getMatriculaPrecisionA(),'g',6)   );
+            qry.bindValue(":precisionB1",       QString::number(                _RegistroMatriculas->m_results0->getMatriculaPrecisionB(),'g',6)   );
 
 
-                qry.bindValue(":fotocamara2",       _RegistroMatriculas->m_results1->camara->getOrigenFotoByte());
-                qry.bindValue(":fotomatriculaA2",   _RegistroMatriculas->m_results1->getMatriculaFotoAByte());
-                qry.bindValue(":fotomatriculaB2",   _RegistroMatriculas->m_results1->getMatriculaFotoBByte());
-                qry.bindValue(":matriculaA2",       _RegistroMatriculas->m_results1->getMatriculaA());
-                qry.bindValue(":matriculaB2",       _RegistroMatriculas->m_results1->getMatriculaB());
-                qry.bindValue(":precisionA2",       QString::number(_RegistroMatriculas->m_results1->getMatriculaPrecisionA(),'g',6));
-                qry.bindValue(":precisionB2",       QString::number(_RegistroMatriculas->m_results1->getMatriculaPrecisionB(),'g',6));
+            qry.bindValue(":fotocamara2",       m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results1->camara->getOrigenFoto())          );
+            qry.bindValue(":fotomatriculaA2",   m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results1->getMatriculaFotoA())              );
+            qry.bindValue(":fotomatriculaB2",   m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results1->getMatriculaFotoB())              );
+            qry.bindValue(":matriculaA2",                                       _RegistroMatriculas->m_results1->getMatriculaA()                   );
+            qry.bindValue(":matriculaB2",                                       _RegistroMatriculas->m_results1->getMatriculaB()                   );
+            qry.bindValue(":precisionA2",       QString::number(                _RegistroMatriculas->m_results1->getMatriculaPrecisionA(),'g',6)   );
+            qry.bindValue(":precisionB2",       QString::number(                _RegistroMatriculas->m_results1->getMatriculaPrecisionB(),'g',6)   );
+            delete m_tools;
 
-                delete m_tools;
-
-                if(qry.exec()){ /** MEMORY LEAK **/
-                    _RegistroMatriculas->setId(qry.lastInsertId().toLongLong());
-                    setTable();
-                }else{
-                    return false;
-                }
-                return true;
+            if(qry.exec()){ /** MEMORY LEAK **/
+                _RegistroMatriculas->setId(qry.lastInsertId().toLongLong());
+                setTable();
+            }else{
+                return false;
+            }
+            return true;
 
         }
         bool RegistroPeso::eliminaFotosCamara(const long long &_id){
