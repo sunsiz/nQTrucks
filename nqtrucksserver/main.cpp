@@ -31,13 +31,17 @@
 #include "Desktop/Desktop.h"
 #include <QApplication>
 #include <QFile>
-
+#include <QMetaType>
 using namespace nQTrucks;
 
 int main(int argc, char *argv[])
 {
+    qRegisterMetaType<MatriculaResults>("MatriculaResults");
+    qRegisterMetaType<RegistroMatriculas>("RegistroMatriculas");
     QApplication app(argc, argv); /** MEMORY LEAK **/
+
     //QDesktopWidget dw;
+
     Desktop w;
 
     QFile qss(":qdarkstyle/style.qss");

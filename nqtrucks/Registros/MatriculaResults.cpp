@@ -1,9 +1,12 @@
 #include "MatriculaResults.h"
 namespace nQTrucks{
-        MatriculaResults::MatriculaResults(){
+        MatriculaResults::MatriculaResults(QObject *parent)
+            : QObject(parent)
+        {
             qRegisterMetaType<Planck>          ("Planck");
             qRegisterMetaType<t_Prewarp>       ("t_Prewarp");
             qRegisterMetaType<MatriculaResults>("MatriculaResults");
+            qRegisterMetaType<cv::Mat>("cv::Mat");
         }
 
         MatriculaResults::~MatriculaResults(){
@@ -12,22 +15,29 @@ namespace nQTrucks{
             OrigenFotoRoja.release();       // Imagen con calibracion de Rojos
             MatriculaFotoA.release();       // Imagen recortada de la Matricula
             MatriculaFotoB.release();       // Imagen recortada de la Matricula
+            camara->deleteLater();
         }
 
-        void MatriculaResults::setMatriculaResults(const MatriculaResults &value){
-            setTipo(                  value.getTipo()            );    // 0 para calibracion, 1 para procesado
-            setId(                    value.getId()              );    // id fuente de captura de foto
-            setOrigenFotoPrewarp(     value.OrigenFotoPrewarp    );
-            setOrigenFotoBlanca(      value.OrigenFotoBlanca     );
-            setOrigenFotoRoja(        value.OrigenFotoRoja       );
-            setMatriculaFotoA(        value.MatriculaFotoA       );    // Imagen recortada de la Matricula
-            setMatriculaFotoB(        value.MatriculaFotoB       );    // Imagen recortada de la Matricula
-            setMatriculaPrecisionA(   value.MatriculaPrecisionA  );    // Precision del OCR
-            setMatriculaPrecisionB(   value.MatriculaPrecisionB  );    // Precision del OCR
-            MatriculaDetectedA      = value.MatriculaDetectedA    ;    // Coincide con un patron de busqueda?
-            MatriculaDetectedB      = value.MatriculaDetectedB    ;    // Coincide con un patron de busqueda?
-            MatriculaA              = value.MatriculaA            ;    // STring de la matricula
-            MatriculaB              = value.MatriculaB            ;    // STring de la matricula
+        MatriculaResults::MatriculaResults(const MatriculaResults &other)
+        {
+           this->setMatriculaResults(other);
+        }
+
+        void MatriculaResults::setMatriculaResults(const MatriculaResults &other){
+            setTipo(                  other.getTipo()            );    // 0 para calibracion, 1 para procesado
+            setId(                    other.getId()              );    // id fuente de captura de foto
+            setOrigenFotoPrewarp(     other.OrigenFotoPrewarp    );
+            setOrigenFotoBlanca(      other.OrigenFotoBlanca     );
+            setOrigenFotoRoja(        other.OrigenFotoRoja       );
+            setMatriculaFotoA(        other.MatriculaFotoA       );    // Imagen recortada de la Matricula
+            setMatriculaFotoB(        other.MatriculaFotoB       );    // Imagen recortada de la Matricula
+            setMatriculaPrecisionA(   other.MatriculaPrecisionA  );    // Precision del OCR
+            setMatriculaPrecisionB(   other.MatriculaPrecisionB  );    // Precision del OCR
+            MatriculaDetectedA      = other.MatriculaDetectedA    ;    // Coincide con un patron de busqueda?
+            MatriculaDetectedB      = other.MatriculaDetectedB    ;    // Coincide con un patron de busqueda?
+            MatriculaA              = other.MatriculaA            ;    // STring de la matricula
+            MatriculaB              = other.MatriculaB            ;    // STring de la matricula
+
         }
 
         void MatriculaResults::setOrigenFotoPrewarp(const cv::Mat &value){

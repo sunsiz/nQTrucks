@@ -109,7 +109,7 @@ void RegistrosUi::rangoFechasChanged(const QVector<QDate> &_fechaMinMax){
 }
 
 
-void nQTrucks::RegistrosUi::on_calendarioWidget_clicked(const QDate &date){
+void RegistrosUi::on_calendarioWidget_clicked(const QDate &date){
     flt_fecha->setFilterRegExp(QRegExp(date.toString("yyyy-MM-dd").prepend("^").append("(.*)"),
                                     Qt::CaseSensitive,
                                     QRegExp::RegExp));
@@ -117,9 +117,8 @@ void nQTrucks::RegistrosUi::on_calendarioWidget_clicked(const QDate &date){
 
 }
 
-}
 
-void nQTrucks::RegistrosUi::on_selectProcesados_clicked(bool checked){
+void RegistrosUi::on_selectProcesados_clicked(bool checked){
    // procesados 19
    // emparejado 20
    // entrada 21
@@ -134,7 +133,7 @@ void nQTrucks::RegistrosUi::on_selectProcesados_clicked(bool checked){
     }
 }
 
-void nQTrucks::RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &index){
+void RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &index){
     int  row        = index.row();
     long long id    = index.sibling(row, 0).data().toLongLong();
     QTime hora      = index.sibling(row, 1).data().toTime();
@@ -152,7 +151,7 @@ void nQTrucks::RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &ind
 
 }
 
-void nQTrucks::RegistrosUi::on_imprimirInforme_clicked(){
+void RegistrosUi::on_imprimirInforme_clicked(){
 //id ,fecha, pesobruto, pesoneto , matriculaA1, matriculaB1, matriculaA2, matriculaB2, procesado, emparejado, entrada
     if( ui->tableRegistrosView->currentIndex().isValid()){
         int  row       = ui->tableRegistrosView->currentIndex().row();
@@ -169,4 +168,5 @@ void nQTrucks::RegistrosUi::on_imprimirInforme_clicked(){
     }
 
 
+}
 }

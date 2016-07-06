@@ -17,40 +17,25 @@ namespace nQTrucks{
     static const int FotoHeight = 720;
     static const cv::Size FotoSize(FotoWidth,FotoHeight);
 
-        class Camara
+        class Camara : public QObject
         {
+            Q_OBJECT
         public:
-            Camara();
+            explicit Camara(QObject *parent=nullptr);
             ~Camara();
+            Camara(const Camara &other){this->setCamara(other);}
+            Camara& operator=( const Camara& ) { return *this;  }
             Camara*         getCamara()          { return  this; }
             const   Camara *getCamara()    const { return  this; }
-            Camara&         getCamaraPtr()       { return *this; }
-            const   Camara &getCamaraPtr() const { return *this; }
             void setCamara(const Camara &value);
             void setCamara(      Camara *value);
 
         private:
             cv::Mat           m_OrigenFoto   ;//     = cv::Mat::zeros(FotoSize, CV_8U );                 //Imagen Original
-//            QByteArray        m_OrigenFotoByte;
-//            QImage            m_OrigenFotoQ; //= QImage(FotoWidth,FotoHeight,QImage::Format_RGB888);
         public:
             void       setOrigenFoto(const cv::Mat &value);
             cv::Mat    getOrigenFoto() const{    return m_OrigenFoto;}
-//            QByteArray getOrigenFotoByte() const{return m_OrigenFotoByte;}
-//            QImage     getOrigenFotoQ() const{   return m_OrigenFotoQ;}
-//            QImage&     getOrigenFotoQ() {   return m_OrigenFotoQ;}
-//            void setOrigenFotoByte(const QByteArray &OrigenFotoByte);
-//            void setOrigenFotoQ(const QImage &OrigenFotoQ);
 
-//            inline void convertirFotos(){
-//                Tools *m_tools  = new Tools; /** MEMORY LEAK **/
-//                m_OrigenFotoByte.clear();
-//                m_OrigenFotoQ.detach();
-//                m_OrigenFotoByte = m_tools->convertMat2ByteArray(m_OrigenFoto); /** MEMORY LEAK **/
-//                m_OrigenFotoQ    = m_tools->convertMat2QImage(   m_OrigenFoto);
-//                delete m_tools;
-//                //emit ReplyCamaraIP(*this);
-//            }
         };
 }
 #endif

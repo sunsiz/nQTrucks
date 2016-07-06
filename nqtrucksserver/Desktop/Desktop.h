@@ -50,7 +50,7 @@ private slots:
 
     /** APLICACION **/
 private:
-    nQTrucks::nQTrucksEngine *m_app_engine;
+    nQTrucksEngine *m_app_engine;
     Configuracion *m_app_config;
     Client  *m_app_client;
     RegistrosUi *m_app_registros;

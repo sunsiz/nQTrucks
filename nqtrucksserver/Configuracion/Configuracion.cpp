@@ -79,8 +79,8 @@ Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
 Configuracion::~Configuracion()
 {
     delete ui;
-    delete m_matricularesults[0];
-    delete m_matricularesults[1];
+    m_matricularesults[0]->deleteLater();
+    m_matricularesults[1]->deleteLater();
     m_matricularesults.detach();
 }
 
@@ -88,7 +88,7 @@ Configuracion::~Configuracion()
 void Configuracion::updateGui(){
     ui->camaraLabel->clear();
 
-    Tools *m_tools = new Tools;
+    Tools *m_tools = new Tools(this);
     switch (ui->CamaraSelect->currentIndex()) {
     case 0:
         ui->camaraLabel->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(m_matricularesults[0]->camara->getOrigenFoto()) ));
@@ -97,7 +97,7 @@ void Configuracion::updateGui(){
         ui->camaraLabel->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(m_matricularesults[1]->camara->getOrigenFoto()) ));
         break;
     }
-    delete m_tools;
+    m_tools->deleteLater();
 }
 
 
@@ -112,8 +112,8 @@ void Configuracion::loadconfig()
 //        m_matricularesults_iterator->convertirFotos(); /** MEMORY LEAK **/
 
 //    }
-    m_matricularesults[0] = new MatriculaResults;
-    m_matricularesults[1] = new MatriculaResults;
+    m_matricularesults[0] = new MatriculaResults(this);
+    m_matricularesults[1] = new MatriculaResults(this);
 
     /** END DEFAULT UIS **/
 
@@ -386,7 +386,7 @@ void Configuracion::updateCalibracionGui(){
 
     int index = getAlprIndex();
 
-    Tools *m_tools = new Tools;
+    Tools *m_tools = new Tools(this);
     ui->FotoOriginalA->setPixmap( QPixmap::fromImage( m_tools->convertMat2QImage(m_matricularesults[index]->camara->getOrigenFoto())  ));
     ui->FotoMatriculaA->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(m_matricularesults[index]->getMatriculaFotoA())      ));
     ui->FotoMatriculaB->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(m_matricularesults[index]->getMatriculaFotoB())      ));
@@ -396,7 +396,7 @@ void Configuracion::updateCalibracionGui(){
     ui->MatriculaB->setText(m_matricularesults[index]->getMatriculaB());
     ui->LongMatriculaA->setText(m_matricularesults[index]->getMatriculaPrecisionAs());
     ui->LongMatriculaB->setText(m_matricularesults[index]->getMatriculaPrecisionBs());
-    delete m_tools;
+    m_tools->deleteLater();
 }
     /** END GUI **/
 

@@ -36,7 +36,7 @@
 
 #include <QSettings>
 
-//#include "Registros/MatriculaResults.h"
+#include "Registros/MatriculaResults.h"
 #include "Registros/RegistroMatriculas.h"
 
 #if defined(NQTRUCKS_LIBRARY)

@@ -25,9 +25,10 @@ DatabaseManager::~DatabaseManager()
 }
 
 /** REGISTRO SIMPLE **/
-void DatabaseManager::setRegistroMatriculas(nQTrucks::RegistroMatriculas *_RegistroMatriculas){
-    m_RegistroMatriculas[0] = _RegistroMatriculas; //[0] es el ultimo registro registrado = salida si pareja
-    m_RegistroMatriculas[1] = new nQTrucks::RegistroMatriculas;
+void DatabaseManager::setRegistroMatriculas(const RegistroMatriculas &_RegistroMatriculas){
+    m_RegistroMatriculas[0] = new RegistroMatriculas(this);
+    m_RegistroMatriculas[0]->setRegistroMatriculas(_RegistroMatriculas); //[0] es el ultimo registro registrado = salida si pareja
+    m_RegistroMatriculas[1] = new RegistroMatriculas(this);
 }
 
 void DatabaseManager::guardarRegistroRegistroMatriculas(){
@@ -47,8 +48,8 @@ void DatabaseManager::guardarRegistroRegistroMatriculas(){
             }
         }
     }
-    delete m_RegistroMatriculas[0];
-    delete m_RegistroMatriculas[1];
+    m_RegistroMatriculas[0]->deleteLater();
+    m_RegistroMatriculas[1]->deleteLater();
     emit workFinished();
 }
 /** END REGISTRO SIMPLE **/

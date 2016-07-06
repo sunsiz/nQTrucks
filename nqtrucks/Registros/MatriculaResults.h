@@ -1,7 +1,8 @@
-#ifndef NQTRUCKS_MARICULARESULTS_H
-#define NQTRUCKS_MARICULARESULTS_H
+#ifndef NQTRUCKS_MATRICULARESULTS_H
+#define NQTRUCKS_MATRICULARESULTS_H
 
 #include "Camara.h"
+#include <QMetaType>
 namespace nQTrucks{
     static const QString default_prewarp ="";//  "planar,1280,720,0,0,0,1.0,1.0,0,0";
 
@@ -25,18 +26,23 @@ namespace nQTrucks{
         float dist = 1.0;
     }; typedef Prewarp t_Prewarp;
 
-    class Planck{
+    struct Planck{
     public:
         int A=0;
         int B=0;
         int C=0;
     };
 
-        class MatriculaResults {
+        class MatriculaResults : public QObject
+        {
+            Q_OBJECT
         public:
-            MatriculaResults();
+            explicit MatriculaResults(QObject *parent=nullptr);
             ~MatriculaResults();
-            Camara     *camara = new Camara;
+            MatriculaResults(const MatriculaResults &other);
+            MatriculaResults& operator=( const MatriculaResults& ) { return *this;  }
+
+            Camara     *camara = new Camara(this);
             MatriculaResults&       getMatriculaResults()       { return *this; }
             const MatriculaResults& getMatriculaResults() const { return *this; }
 
@@ -89,7 +95,7 @@ namespace nQTrucks{
             QString    MatriculaPrecisionBs   = QString("0%");
 
         public:
-            void     setMatriculaResults(const MatriculaResults &value);
+            void     setMatriculaResults(const MatriculaResults &other);
             //void     clear();
             void setId(  int value){id   = value;}
             void setTipo(int value){tipo = value;}
@@ -127,3 +133,4 @@ namespace nQTrucks{
         };
 }
 #endif // MATRICULARESULTS_H
+//Q_DECLARE_METATYPE(nQTrucks::MatriculaResults)

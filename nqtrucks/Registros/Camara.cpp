@@ -2,7 +2,9 @@
 #include "Camara.h"
     /** CAMARA **********************************************************************************************/
 namespace nQTrucks {
-        Camara::Camara(){
+        Camara::Camara(QObject *parent)
+            :QObject(parent)
+        {
             /** Camara Types **/
             QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
             qRegisterMetaType<Camara>("Camara");

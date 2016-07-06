@@ -7,18 +7,22 @@
 
 namespace nQTrucks{
         /** REPORTS **/
-        class RegistroMatriculas{
+        class RegistroMatriculas : public QObject
+        {
+            Q_OBJECT
         public:
-            explicit RegistroMatriculas();
+            explicit RegistroMatriculas(QObject *parent = nullptr);
+            RegistroMatriculas(const RegistroMatriculas &other){this->setRegistroMatriculas(other);}
+            RegistroMatriculas& operator=( const RegistroMatriculas& ) { return *this;  }
             void setRegistroMatriculas(const RegistroMatriculas &value);
             void setFechaRegistro(const QDateTime &value){FechaRegistro = value;}
             void setId(           long long        value){id            = value;}
             long long getId()            const {return id;  }
             QDateTime getFechaRegistro() const {return FechaRegistro;}
 
-            Bascula          *m_bascula  = new Bascula;
-            MatriculaResults *m_results0 = new MatriculaResults;
-            MatriculaResults *m_results1 = new MatriculaResults;
+            Bascula          *m_bascula  = new Bascula(this);
+            MatriculaResults *m_results0 = new MatriculaResults(this);
+            MatriculaResults *m_results1 = new MatriculaResults(this);
 
             void clear();
 

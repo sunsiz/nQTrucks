@@ -14,9 +14,11 @@
 
 /** CONVERSORES ********************************************************/
 namespace nQTrucks{
-        class Tools{
+        class Tools : public QObject
+        {
+            Q_OBJECT
         public:
-            Tools();
+            Tools(QObject *parent=nullptr);
 
 //            static inline QImage convertMat2QImage(const cv::Mat& _cvimage){
 //                QImage qtImg;

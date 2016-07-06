@@ -97,7 +97,7 @@ void Client::onDaemonRegistroChanged(const RegistroMatriculas &_result)
     ui->MatriculaPrecisionB->clear();
 
 
-    Tools *m_tools = new Tools;
+    Tools *m_tools = new Tools(this);
     ui->camara1->setPixmap(QPixmap::fromImage(           m_tools->convertMat2QImage( _result.m_results0->camara->getOrigenFoto())   ));
     ui->camara2->setPixmap(QPixmap::fromImage(           m_tools->convertMat2QImage( _result.m_results1->camara->getOrigenFoto())   ));
 
@@ -126,7 +126,7 @@ void Client::onDaemonRegistroChanged(const RegistroMatriculas &_result)
         ui->MatriculaB->setText(                                                     _result.m_results1->getMatriculaB()            );
         ui->MatriculaPrecisionB->setText(                                            _result.m_results1->getMatriculaPrecisionBs()  );
     }
-    delete m_tools;
+    m_tools->deleteLater();
 
 }
 

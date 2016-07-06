@@ -141,11 +141,11 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
         cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,&_decode); /** MEMORY LEAK **/
         cv::resize(_decode,_resize,FotoSize);
 
-        Camara *m_RegistroCamara = new Camara;
+        Camara *m_RegistroCamara = new Camara(this);
         m_RegistroCamara->setOrigenFoto(_resize);
         //m_RegistroCamara->convertirFotos();
         emit ReplyCamaraIP(*m_RegistroCamara->getCamara());
-        delete m_RegistroCamara;
+        m_RegistroCamara->deleteLater();
 
         buffer.reset();
         buffer.close();
@@ -165,7 +165,7 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
         data.detach();
     }
     m_isRunning=false;
-    delete reply;
+    reply->deleteLater();
 }
 
 

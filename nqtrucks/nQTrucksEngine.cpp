@@ -236,14 +236,15 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** NEWSAGES ALPR **/
     /** 1 **/
-    connect(d->m_alpr[0],SIGNAL(ReplyOriginalFoto(Camara)),                         this,SIGNAL(ReplyOriginalFoto1(Camara)));
-    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaCalibrationResults(MatriculaResults)),this,SIGNAL(ReplyMatriculaCalibrationResults1(MatriculaResults)));
-    connect(d->m_alpr[0],SIGNAL(ReplyMatriculaResults(MatriculaResults)),           this,SIGNAL(ReplyMatriculaResults1(MatriculaResults)));
+    //connect(d->m_alpr[0],&Camara::ReplyOriginalFoto, this,&Camara::ReplyOriginalFoto1);
+    connect(d->m_alpr[0],&Devices::NewsagesAlpr::ReplyOriginalFoto,                this,&nQTrucksEngine::ReplyOriginalFoto1);
+    connect(d->m_alpr[0],&Devices::NewsagesAlpr::ReplyMatriculaCalibrationResults, this,&nQTrucksEngine::ReplyMatriculaCalibrationResults1);
+    connect(d->m_alpr[0],&Devices::NewsagesAlpr::ReplyMatriculaResults,            this,&nQTrucksEngine::ReplyMatriculaResults1);
 
     /** 2 **/
-    connect(d->m_alpr[1],SIGNAL(ReplyOriginalFoto(Camara)),                         this,SIGNAL(ReplyOriginalFoto2(Camara)));
-    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaCalibrationResults(MatriculaResults)),this,SIGNAL(ReplyMatriculaCalibrationResults2(MatriculaResults)));
-    connect(d->m_alpr[1],SIGNAL(ReplyMatriculaResults(MatriculaResults)),           this,SIGNAL(ReplyMatriculaResults2(MatriculaResults)));
+    connect(d->m_alpr[1],&Devices::NewsagesAlpr::ReplyOriginalFoto,                this,&nQTrucksEngine::ReplyOriginalFoto2);
+    connect(d->m_alpr[1],&Devices::NewsagesAlpr::ReplyMatriculaCalibrationResults, this,&nQTrucksEngine::ReplyMatriculaCalibrationResults2);
+    connect(d->m_alpr[1],&Devices::NewsagesAlpr::ReplyMatriculaResults,            this,&nQTrucksEngine::ReplyMatriculaResults2);
     /** END NEWSAGES ALPR **/
 
     /** MAESTROS **/

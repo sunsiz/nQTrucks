@@ -86,10 +86,10 @@ namespace nQTrucks{
             endResetModel();
         }
 
-        bool RegistroPeso::guardarRegistroRegistroMatriculas(nQTrucks::RegistroMatriculas *_RegistroMatriculas){
+        bool RegistroPeso::guardarRegistroRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas){
 
             QSqlQuery qry(m_db);
-            Tools *m_tools = new Tools;
+            Tools *m_tools = new Tools(this);
             qry.prepare(qry_insert_simple);
             qry.bindValue(":pesobruto",                                         _RegistroMatriculas->m_bascula->getIBruto()                        );
             qry.bindValue(":pesoneto",                                          _RegistroMatriculas->m_bascula->getINeto()                         );
@@ -111,7 +111,7 @@ namespace nQTrucks{
             qry.bindValue(":matriculaB2",                                       _RegistroMatriculas->m_results1->getMatriculaB()                   );
             qry.bindValue(":precisionA2",       QString::number(                _RegistroMatriculas->m_results1->getMatriculaPrecisionA(),'g',6)   );
             qry.bindValue(":precisionB2",       QString::number(                _RegistroMatriculas->m_results1->getMatriculaPrecisionB(),'g',6)   );
-            delete m_tools;
+            m_tools->deleteLater();
 
             if(qry.exec()){ /** MEMORY LEAK **/
                 _RegistroMatriculas->setId(qry.lastInsertId().toLongLong());
@@ -167,7 +167,8 @@ namespace nQTrucks{
                 /** Si existe la pareja, adquiero su id y el peso bruto **/
                 while (qry.next()){
                     _RegistrosMatriculas[1]->setId(qry.value("id").toLongLong());
-                    _RegistrosMatriculas[1]->m_bascula->setIBruto(qry.value("pesobruto").toFloat()+300); //DEBUG
+                    _RegistrosMatriculas[1]->m_bascula->setIBruto(qry.value("pesobruto").toFloat()); //DEBUG
+                    //_RegistrosMatriculas[1]->m_bascula->setIBruto(qry.value("pesobruto").toFloat()+300); //DEBUG
                     return actualizarPareja(_RegistrosMatriculas);
                     /** Actualizo a Procesado y
                     * consigo el Peso Verificado

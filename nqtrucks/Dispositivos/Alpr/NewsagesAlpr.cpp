@@ -48,14 +48,14 @@ NewsagesAlpr::NewsagesAlpr(int nDevice, QSettings *_appsettings, QObject *parent
     , m_settings(_appsettings)
 {
 
-    m_results1 = new MatriculaResults; //calibrar
-    m_results2 = new MatriculaResults; //calibrar
+    m_results1 = new MatriculaResults(this); //calibrar
+    m_results2 = new MatriculaResults(this); //calibrar
 
 }
 
 NewsagesAlpr::~NewsagesAlpr(){
-    delete m_results1;
-    delete m_results2;
+    m_results1->deleteLater();
+    m_results2->deleteLater();
 }
 
 //void NewsagesAlpr::setFotoCamara(const Camara &_camara) {
