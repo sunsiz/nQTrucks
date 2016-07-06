@@ -25,8 +25,10 @@ ReportManager::~ReportManager(){
     QSqlDatabase::removeDatabase("reports2");
 }
 
-void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, long long _row1)
+void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, const long long &_row1)
 {
+    QMutex _cluje;
+    _cluje.lock();
     if (!QPrinterInfo::defaultPrinter().isNull()){
         QPrinter _default_printer;
         _default_printer.setPrinterName(QPrinterInfo::defaultPrinter().printerName());
@@ -51,20 +53,20 @@ void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, long long _r
             /** Report **/
             LimeReport::ReportEngine *m_report = new LimeReport::ReportEngine;
             m_report->loadFromFile(informe_Peso);
-            m_report->dataManager()->addModel("registro1", registroModel1,false);
-            m_report->dataManager()->addModel("empresa",   empresaModel,  false);
+            m_report->dataManager()->addModel("registro1", registroModel1,true);
+            m_report->dataManager()->addModel("empresa",   empresaModel,  true);
             m_report->printReport(&_default_printer);
 
             delete m_report;
-            registroModel1->clear();
-            delete registroModel1;
+//            registroModel1->clear();
+//            delete registroModel1;
 
             m_registro1->finish();
             m_registro1->clear();
             delete m_registro1;
 
-            empresaModel->clear();
-            delete empresaModel;
+//            empresaModel->clear();
+//            delete empresaModel;
 
             m_empresa->finish();
             m_empresa->clear();
@@ -74,11 +76,14 @@ void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, long long _r
 
         }
     }
+    _cluje.unlock();
 }
 
 
-void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, long long _row1, long long _row2)
+void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, const long long &_row1, const long long &_row2)
 {
+    QMutex _cluje;
+    _cluje.lock();
     if (!QPrinterInfo::defaultPrinter().isNull()){
         QPrinter _default_printer;
         _default_printer.setPrinterName(QPrinterInfo::defaultPrinter().printerName());
@@ -111,31 +116,31 @@ void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, lon
             /** Report **/
             LimeReport::ReportEngine *m_report = new LimeReport::ReportEngine;
             m_report->loadFromFile(informe_PesoProcesado);
-            m_report->dataManager()->addModel("registro2", registroModel2,false);
-            m_report->dataManager()->addModel("registro1", registroModel1,false);
-            m_report->dataManager()->addModel("empresa",   empresaModel,  false);
+            m_report->dataManager()->addModel("registro2", registroModel2,true);
+            m_report->dataManager()->addModel("registro1", registroModel1,true);
+            m_report->dataManager()->addModel("empresa",   empresaModel,  true);
             m_report->printReport(&_default_printer);
 
             delete m_report;
             /** END REPORT **/
 
-            registroModel2->clear();
-            delete registroModel2;
+//            registroModel2->clear();
+//            delete registroModel2;
             m_registro2->finish();
             m_registro2->clear();
             delete m_registro2;
             /** END Registro 2 **/
 
 
-            registroModel1->clear();
-            delete registroModel1;
+//            registroModel1->clear();
+//            delete registroModel1;
             m_registro1->finish();
             m_registro1->clear();
             delete m_registro1;
             /** END Registro 1 **/
 
-            empresaModel->clear();
-            delete empresaModel;
+//            empresaModel->clear();
+//            delete empresaModel;
             m_empresa->finish();
             m_empresa->clear();
             delete m_empresa;
@@ -145,6 +150,7 @@ void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, lon
             //QSqlDatabase::removeDatabase(_dbtemp.connectionName());
         }
     }
+    _cluje.unlock();
 }
 
 

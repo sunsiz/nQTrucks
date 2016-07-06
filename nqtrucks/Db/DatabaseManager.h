@@ -18,26 +18,32 @@ class DatabaseManager : public QObject{
     Q_OBJECT
 public:
    // DatabaseManager(QObject *parent=nullptr);
-    explicit DatabaseManager(Maestros::Maestros *_maestros=nullptr, QObject *parent=nullptr);
+    explicit DatabaseManager(QObject *parent=nullptr);
     ~DatabaseManager();
 signals:
     void rowsPesoChanged();
     void workFinished();
+    void printFinished();
 
     /** DB **/
 private:
     Maestros::Maestros *m_maestros;
     QVector<RegistroMatriculas*> m_RegistroMatriculas;
-    ReportManager m_report_manager;
+    //ReportManager m_report_manager;
 
 /** Registro Simple **/
 public:
     void setRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas);
+    void setMaestros(Maestros::Maestros *_Maestros);
 public slots:    
     void guardarRegistroRegistroMatriculas();
 
+signals:
+    void printRegistroMatricula(const QSqlDatabase &_db,const long long &_row1);
+    void printRegistroMatriculaProcesada(const QSqlDatabase &_db,const long long &_row1,const long long &_row2);
 /** Busqueda de PAIR **/
 private:
+    float PrecisionA1,PrecisionA2,PrecisionB1,PrecisionB2;
     QStringList m_MatriculasList;
     bool encontrarPareja();
     bool buscarPareja(const long long &_id, const QString &_matricula);

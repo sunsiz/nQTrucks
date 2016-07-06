@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
 {
     qRegisterMetaType<MatriculaResults>("MatriculaResults");
     qRegisterMetaType<RegistroMatriculas>("RegistroMatriculas");
+    qRegisterMetaType<QSqlDatabase>("QSqlDatabase");
     QApplication app(argc, argv); /** MEMORY LEAK **/
 
     //QDesktopWidget dw;

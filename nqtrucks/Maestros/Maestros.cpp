@@ -9,8 +9,8 @@ namespace nQTrucks{
     }
 
     void Maestros::crearMaestros(){
-        m_RegistroPeso  = new RegistroPeso(this);
-        m_Empresa       = new Empresa(this);
+        m_RegistroPeso  = new RegistroPeso;
+        m_Empresa       = new Empresa;
     }
 
     void Maestros::eliminarMaestros(){

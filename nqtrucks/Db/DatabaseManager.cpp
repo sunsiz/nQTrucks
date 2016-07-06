@@ -12,9 +12,8 @@
 namespace nQTrucks{
 namespace Db{
 
-DatabaseManager::DatabaseManager(Maestros::Maestros *_maestros, QObject *parent)
+DatabaseManager::DatabaseManager(QObject *parent)
    : QObject(parent)
-   , m_maestros(_maestros)
 {
     m_RegistroMatriculas.resize(2);
 }
@@ -26,32 +25,44 @@ DatabaseManager::~DatabaseManager()
 
 /** REGISTRO SIMPLE **/
 void DatabaseManager::setRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas){
-    m_RegistroMatriculas[0] = new RegistroMatriculas(this);
-    m_RegistroMatriculas[0]->setRegistroMatriculas(*_RegistroMatriculas); //[0] es el ultimo registro registrado = salida si pareja
-    m_RegistroMatriculas[0]->m_results0->setMatriculaResults(*_RegistroMatriculas->m_results0);
-    m_RegistroMatriculas[0]->m_results1->setMatriculaResults(*_RegistroMatriculas->m_results1);
+    //m_RegistroMatriculas[0] = new RegistroMatriculas(this);
+    PrecisionA1=_RegistroMatriculas->m_results0->getMatriculaPrecisionA();
+    PrecisionA2=_RegistroMatriculas->m_results0->getMatriculaPrecisionB();
+    PrecisionB1=_RegistroMatriculas->m_results1->getMatriculaPrecisionA();
+    PrecisionB2=_RegistroMatriculas->m_results1->getMatriculaPrecisionB();
+
+    m_RegistroMatriculas[0] = _RegistroMatriculas; //[0] es el ultimo registro registrado = salida si pareja
+    //m_RegistroMatriculas[0]->m_results0->setMatriculaResults(*_RegistroMatriculas->m_results0);
+    //m_RegistroMatriculas[0]->m_results1->setMatriculaResults(*_RegistroMatriculas->m_results1);
     m_RegistroMatriculas[1] = new RegistroMatriculas(this);
+}
+
+void DatabaseManager::setMaestros(Maestros::Maestros *_Maestros)
+{
+    m_maestros = _Maestros;
 }
 
 void DatabaseManager::guardarRegistroRegistroMatriculas(){
     if (m_maestros->m_RegistroPeso->guardarRegistroRegistroMatriculas(m_RegistroMatriculas[0])){
-        m_report_manager.printRegistroMatricula(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[0]->getId());
+        m_maestros->m_RegistroPeso->syncTable();
+         emit printRegistroMatricula(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[0]->getId());
         /** No Guardar Si Cualquiera de las 4 Matriculas es detectada Y BUSCAR SU PAREJA**/
-        if ( m_RegistroMatriculas[0]->m_results0->getMatriculaPrecisionA() >80 || m_RegistroMatriculas[0]->m_results0->getMatriculaPrecisionB() >80 ||
-             m_RegistroMatriculas[0]->m_results1->getMatriculaPrecisionA() >80 || m_RegistroMatriculas[0]->m_results1->getMatriculaPrecisionB() >80  ){
+        if ( PrecisionA1 >=80 || PrecisionA1 >=80 || PrecisionA1 >=80 || PrecisionA1 >=80  ){
             if(m_maestros->m_RegistroPeso->eliminaFotosCamara(m_RegistroMatriculas[0]->getId())){
+                m_maestros->m_RegistroPeso->syncTable();
               /** Buscar Pareja **/
                if (encontrarPareja()){
                 /** Si pareja **/
-                   m_report_manager.printRegistroMatriculaProcesada(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[1]->getId(),m_RegistroMatriculas[0]->getId());
+                   m_maestros->m_RegistroPeso->syncTable();
+                   emit printRegistroMatriculaProcesada(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[1]->getId(),m_RegistroMatriculas[0]->getId());
                }
             }
-        }
-        m_maestros->m_RegistroPeso->syncTable();
+        }        
     }
-    //m_RegistroMatriculas[0]->deleteLater();
-    //m_RegistroMatriculas[1]->deleteLater();
-    emit workFinished();
+    emit printFinished();
+//    m_RegistroMatriculas[0]->deleteLater();
+//    m_RegistroMatriculas[1]->deleteLater();
+    //emit workFinished();
 }
 /** END REGISTRO SIMPLE **/
 
@@ -70,19 +81,19 @@ bool DatabaseManager::encontrarPareja()
 
         /** Cuantas matriculas dispongo para encontrar? **/
         m_MatriculasList.clear();
-        if (m_RegistroMatriculas[0]->m_results0->getMatriculaPrecisionA() >80){
+        if (PrecisionA1 >=80){
             m_MatriculasList << m_RegistroMatriculas[0]->m_results0->getMatriculaA();
         }
 
-        if (m_RegistroMatriculas[0]->m_results0->getMatriculaPrecisionB() >80){
+        if (PrecisionB1 >=80){
             m_MatriculasList << m_RegistroMatriculas[0]->m_results0->getMatriculaB();
         }
 
-        if (m_RegistroMatriculas[0]->m_results1->getMatriculaPrecisionA() >80){
+        if (PrecisionA2 >=80){
             m_MatriculasList << m_RegistroMatriculas[0]->m_results1->getMatriculaA();
         }
 
-        if (m_RegistroMatriculas[0]->m_results1->getMatriculaPrecisionB() >80){
+        if ( PrecisionB1 >=80){
             m_MatriculasList << m_RegistroMatriculas[0]->m_results1->getMatriculaB();
         }
 
