@@ -28,6 +28,8 @@ DatabaseManager::~DatabaseManager()
 void DatabaseManager::setRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas){
     m_RegistroMatriculas[0] = new RegistroMatriculas(this);
     m_RegistroMatriculas[0]->setRegistroMatriculas(*_RegistroMatriculas); //[0] es el ultimo registro registrado = salida si pareja
+    m_RegistroMatriculas[0]->m_results0->setMatriculaResults(*_RegistroMatriculas->m_results0);
+    m_RegistroMatriculas[0]->m_results1->setMatriculaResults(*_RegistroMatriculas->m_results1);
     m_RegistroMatriculas[1] = new RegistroMatriculas(this);
 }
 
