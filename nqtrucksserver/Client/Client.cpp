@@ -86,7 +86,7 @@ void Client::onBascula(const Bascula &_bascula){
     ui->BasculaEstable->setChecked(_bascula.getBEstado()); /** MEMORY LEAK **/
 }
 
-void Client::onDaemonRegistroChanged(const RegistroMatriculas &_result)
+void Client::onDaemonRegistroChanged(RegistroMatriculas *_result)
 {
 
     ui->FotoMatriculaA->clear();
@@ -98,33 +98,33 @@ void Client::onDaemonRegistroChanged(const RegistroMatriculas &_result)
 
 
     Tools *m_tools = new Tools(this);
-    ui->camara1->setPixmap(QPixmap::fromImage(           m_tools->convertMat2QImage( _result.m_results0->camara->getOrigenFoto())   ));
-    ui->camara2->setPixmap(QPixmap::fromImage(           m_tools->convertMat2QImage( _result.m_results1->camara->getOrigenFoto())   ));
+    ui->camara1->setPixmap(QPixmap::fromImage(           m_tools->convertMat2QImage( _result->m_results0->camara->getOrigenFoto())   ));
+    ui->camara2->setPixmap(QPixmap::fromImage(           m_tools->convertMat2QImage( _result->m_results1->camara->getOrigenFoto())   ));
 
-    if (  _result.m_results0->getMatriculaPrecisionA()      >=                       _result.m_results1->getMatriculaPrecisionA()   ){
+    if (  _result->m_results0->getMatriculaPrecisionA()      >=                       _result->m_results1->getMatriculaPrecisionA()   ){
 
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(_result.m_results0->getMatriculaFotoA())       ));
-        ui->MatriculaA->setText(                                                     _result.m_results0->getMatriculaA()            );
-        ui->MatriculaPrecisionA->setText(                                            _result.m_results0->getMatriculaPrecisionAs()  );
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(_result->m_results0->getMatriculaFotoA())       ));
+        ui->MatriculaA->setText(                                                     _result->m_results0->getMatriculaA()            );
+        ui->MatriculaPrecisionA->setText(                                            _result->m_results0->getMatriculaPrecisionAs()  );
 
     }else{
 
-        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(_result.m_results1->getMatriculaFotoA())       ));
-        ui->MatriculaA->setText(                                                     _result.m_results1->getMatriculaA());
-        ui->MatriculaPrecisionA->setText(                                            _result.m_results1->getMatriculaPrecisionAs()  );
+        ui->FotoMatriculaA->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(_result->m_results1->getMatriculaFotoA())       ));
+        ui->MatriculaA->setText(                                                     _result->m_results1->getMatriculaA());
+        ui->MatriculaPrecisionA->setText(                                            _result->m_results1->getMatriculaPrecisionAs()  );
     }
 
-    if ( _result.m_results0->getMatriculaPrecisionB()       >=                       _result.m_results1->getMatriculaPrecisionB()   ){
+    if ( _result->m_results0->getMatriculaPrecisionB()       >=                       _result->m_results1->getMatriculaPrecisionB()   ){
 
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(_result.m_results0->getMatriculaFotoB())       ));
-        ui->MatriculaB->setText(                                                     _result.m_results0->getMatriculaB()            );
-        ui->MatriculaPrecisionB->setText(                                            _result.m_results0->getMatriculaPrecisionBs()  );
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(_result->m_results0->getMatriculaFotoB())       ));
+        ui->MatriculaB->setText(                                                     _result->m_results0->getMatriculaB()            );
+        ui->MatriculaPrecisionB->setText(                                            _result->m_results0->getMatriculaPrecisionBs()  );
 
     }else{
 
-        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(_result.m_results1->getMatriculaFotoB())       ));
-        ui->MatriculaB->setText(                                                     _result.m_results1->getMatriculaB()            );
-        ui->MatriculaPrecisionB->setText(                                            _result.m_results1->getMatriculaPrecisionBs()  );
+        ui->FotoMatriculaB->setPixmap(QPixmap::fromImage( m_tools->convertMat2QImage(_result->m_results1->getMatriculaFotoB())       ));
+        ui->MatriculaB->setText(                                                     _result->m_results1->getMatriculaB()            );
+        ui->MatriculaPrecisionB->setText(                                            _result->m_results1->getMatriculaPrecisionBs()  );
     }
     m_tools->deleteLater();
 

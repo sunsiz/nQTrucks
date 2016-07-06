@@ -122,7 +122,7 @@ signals:
     /** CORE ***************************************/
     /** DAEMON **/
 signals:
-    void daemonRegistroChanged(const nQTrucks::RegistroMatriculas & _results);
+    void daemonRegistroChanged(nQTrucks::RegistroMatriculas *_results);
 public slots:
     void setInitDaemon(const bool &_init);
 

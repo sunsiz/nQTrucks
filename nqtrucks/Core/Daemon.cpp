@@ -168,13 +168,13 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
 
     /* Crea un Hilo para la base de datos */
     /* Ejecuta el registro Simple */
-    emit RegistroChanged(*m_RegistroMatriculas);
+    emit RegistroChanged(m_RegistroMatriculas);
 
     hiloDb = new QThread();
     tareaDb = new Db::DatabaseManager(m_maestros);
     tareaDb->moveToThread(hiloDb);
     //m_RegistroMatriculas->moveToThread(hiloDb);
-    tareaDb->setRegistroMatriculas(*m_RegistroMatriculas);
+    tareaDb->setRegistroMatriculas(m_RegistroMatriculas);
 
     connect( hiloDb,  &QThread::started                 , tareaDb, &Db::DatabaseManager::guardarRegistroRegistroMatriculas  );
     connect( tareaDb, &Db::DatabaseManager::workFinished, hiloDb,  &QThread::quit );

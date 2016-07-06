@@ -32,7 +32,7 @@ private:
 
 /** Registro Simple **/
 public:
-    void setRegistroMatriculas(const RegistroMatriculas &_RegistroMatriculas);
+    void setRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas);
 public slots:    
     void guardarRegistroRegistroMatriculas();
 

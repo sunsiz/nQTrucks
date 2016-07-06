@@ -72,7 +72,7 @@ private slots:
     /** END BASCULAS **/
 
 private slots:
-    void onDaemonRegistroChanged(const RegistroMatriculas &_result);
+    void onDaemonRegistroChanged(RegistroMatriculas *_result);
     /** END ALPR **/
 
     /** CONFIG **/

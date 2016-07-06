@@ -25,9 +25,9 @@ DatabaseManager::~DatabaseManager()
 }
 
 /** REGISTRO SIMPLE **/
-void DatabaseManager::setRegistroMatriculas(const RegistroMatriculas &_RegistroMatriculas){
-    m_RegistroMatriculas[0] = new RegistroMatriculas(this);
-    m_RegistroMatriculas[0]->setRegistroMatriculas(_RegistroMatriculas); //[0] es el ultimo registro registrado = salida si pareja
+void DatabaseManager::setRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas){
+    //m_RegistroMatriculas[0] = new RegistroMatriculas(this);
+    m_RegistroMatriculas[0] = _RegistroMatriculas; //[0] es el ultimo registro registrado = salida si pareja
     m_RegistroMatriculas[1] = new RegistroMatriculas(this);
 }
 
