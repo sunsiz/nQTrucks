@@ -26,15 +26,14 @@ DatabaseManager::~DatabaseManager()
 
 /** REGISTRO SIMPLE **/
 void DatabaseManager::setRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas){
-    //m_RegistroMatriculas[0] = new RegistroMatriculas(this);
-    m_RegistroMatriculas[0] = _RegistroMatriculas; //[0] es el ultimo registro registrado = salida si pareja
+    m_RegistroMatriculas[0] = new RegistroMatriculas(this);
+    m_RegistroMatriculas[0]->setRegistroMatriculas(*_RegistroMatriculas); //[0] es el ultimo registro registrado = salida si pareja
     m_RegistroMatriculas[1] = new RegistroMatriculas(this);
 }
 
 void DatabaseManager::guardarRegistroRegistroMatriculas(){
     if (m_maestros->m_RegistroPeso->guardarRegistroRegistroMatriculas(m_RegistroMatriculas[0])){
-        m_maestros->m_RegistroPeso->syncTable();
-        //m_report_manager.printRegistroMatricula(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[0]->getId());
+        m_report_manager.printRegistroMatricula(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[0]->getId());
         /** No Guardar Si Cualquiera de las 4 Matriculas es detectada Y BUSCAR SU PAREJA**/
         if ( m_RegistroMatriculas[0]->m_results0->getMatriculaPrecisionA() >80 || m_RegistroMatriculas[0]->m_results0->getMatriculaPrecisionB() >80 ||
              m_RegistroMatriculas[0]->m_results1->getMatriculaPrecisionA() >80 || m_RegistroMatriculas[0]->m_results1->getMatriculaPrecisionB() >80  ){
@@ -42,14 +41,14 @@ void DatabaseManager::guardarRegistroRegistroMatriculas(){
               /** Buscar Pareja **/
                if (encontrarPareja()){
                 /** Si pareja **/
-                   m_maestros->m_RegistroPeso->syncTable();
-                   //m_report_manager.printRegistroMatriculaProcesada(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[1]->getId(),m_RegistroMatriculas[0]->getId());
+                   m_report_manager.printRegistroMatriculaProcesada(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[1]->getId(),m_RegistroMatriculas[0]->getId());
                }
             }
         }
+        m_maestros->m_RegistroPeso->syncTable();
     }
-    m_RegistroMatriculas[0]->deleteLater();
-    m_RegistroMatriculas[1]->deleteLater();
+    //m_RegistroMatriculas[0]->deleteLater();
+    //m_RegistroMatriculas[1]->deleteLater();
     emit workFinished();
 }
 /** END REGISTRO SIMPLE **/
