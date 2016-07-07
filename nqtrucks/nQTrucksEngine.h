@@ -72,9 +72,9 @@ public:
     QStringList getTiposCamaras();
     void getCamaraFoto(int _ncamara);
 signals:
-    void CamaraIP1(const Camara &_camara);
+    void CamaraIP1(const MatriculaResults &_camara);
     void CamaraIPWeb1(const QString &url);
-    void CamaraIP2(const Camara &_camara);
+    void CamaraIP2(const MatriculaResults &_camara);
     void CamaraIPWeb2(const QString &url);
     /** END Camaras **/
 
@@ -102,18 +102,18 @@ signals:
 
     /** NEWSAGES ALPR **/
 public:
-    void calibrarFoto(const int &_device, const Camara &_camara);
-    void getFotoMatricula(const int &_device, const Camara &_camara);
+    void calibrarFoto(const int &_device, const MatriculaResults &_camara);
+    void getFotoMatricula(const int &_device, const MatriculaResults &_camara);
 
     /** ALPR 1 **/
 signals:
-    void ReplyOriginalFoto1(const Camara &_camara);
+    void ReplyOriginalFoto1(const MatriculaResults &_camara);
     void ReplyMatriculaCalibrationResults1(const MatriculaResults  &_calibration_results);
     void ReplyMatriculaResults1(const MatriculaResults  &_results);
 
     /** ALPR 2 **/
 signals:
-    void ReplyOriginalFoto2(const Camara &_camara);
+    void ReplyOriginalFoto2(const MatriculaResults &_camara);
     void ReplyMatriculaCalibrationResults2(const MatriculaResults  &_calibration_results);
     void ReplyMatriculaResults2(const MatriculaResults &_results);
 

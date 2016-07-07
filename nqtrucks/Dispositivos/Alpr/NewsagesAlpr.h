@@ -65,10 +65,10 @@ private:
     NewsagesAlprTask *tareaCalibrar2;
 
 signals:
-    void ReplyOriginalFoto(const Camara &_camara);
+    void ReplyOriginalFoto(const MatriculaResults &_camara);
 
 public slots:
-    void calibrarFoto(const Camara &_camara);
+    void calibrarFoto(const MatriculaResults &_camara);
 signals:
     void ReplyMatriculaCalibrationResults(const MatriculaResults  &_calibration_results);
 private slots:
@@ -79,7 +79,7 @@ private slots:
     /** Procesar Matriculas **/
 public slots:
     //void setFotoCamara(const Camara &_camara);
-    void processFoto(const Camara &_camara);
+    void processFoto(const MatriculaResults &_camara);
 signals:
     void ReplyMatriculaResults(const MatriculaResults &_MatriculaResults);
 protected slots:

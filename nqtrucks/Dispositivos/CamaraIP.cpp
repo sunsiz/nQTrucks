@@ -27,7 +27,7 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  ****************************************************************************/
-
+#include <QLoggingCategory>
 #include "CamaraIP.h"
 #include <QNetworkRequest>
 #include <QBuffer>
@@ -45,6 +45,7 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
     , m_netmanager(new QNetworkAccessManager(this))
 {
 
+    QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
     /** CONECTIONS **/
     connect(m_netmanager, &QNetworkAccessManager::finished, this , &CamaraIP::camaraNetworkReplyFinished);
 
@@ -141,11 +142,11 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
         cv::imdecode(pic,CV_LOAD_IMAGE_COLOR,&_decode); /** MEMORY LEAK **/
         cv::resize(_decode,_resize,FotoSize);
 
-        Camara *m_RegistroCamara = new Camara(this);
-        m_RegistroCamara->setOrigenFoto(_resize);
+        MatriculaResults *m_MatriculaResults = new MatriculaResults(this);
+        m_MatriculaResults->setOrigenFoto(_resize);
         //m_RegistroCamara->convertirFotos();
-        emit ReplyCamaraIP(*m_RegistroCamara->getCamara());
-        m_RegistroCamara->deleteLater();
+        emit ReplyCamaraIP(*m_MatriculaResults);
+        m_MatriculaResults->deleteLater();
 
         buffer.reset();
         buffer.close();

@@ -352,7 +352,7 @@ QStringList nQTrucksEngine::getSerialDevices()
 
 
 /** ALRP ********************************************************************************************************************/
-void nQTrucksEngine::calibrarFoto(const int &_device, const Camara &_camara)
+void nQTrucksEngine::calibrarFoto(const int &_device, const MatriculaResults &_camara)
 {
     Q_D(nQTrucksEngine);
     switch (_device) {
@@ -367,7 +367,7 @@ void nQTrucksEngine::calibrarFoto(const int &_device, const Camara &_camara)
     }
 }
 
-void nQTrucksEngine::getFotoMatricula(const int &_device, const Camara &_camara)
+void nQTrucksEngine::getFotoMatricula(const int &_device, const MatriculaResults &_camara)
 {
      Q_D(nQTrucksEngine);
     switch (_device) {

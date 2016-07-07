@@ -1,7 +1,9 @@
 #ifndef NQTRUCKS_MATRICULARESULTS_H
 #define NQTRUCKS_MATRICULARESULTS_H
 
-#include "Camara.h"
+//#include "Camara.h"
+#include "Tools.h"
+#include <memory>
 #include <QMetaType>
 namespace nQTrucks{
     static const QString default_prewarp ="";//  "planar,1280,720,0,0,0,1.0,1.0,0,0";
@@ -12,6 +14,16 @@ namespace nQTrucks{
     #define ALPR       "Alpr"
     #define ALPR1      "Alpr1"
     #define ALPR2      "Alpr2"
+
+    #define CAMARA1     "Camara1"
+    #define CAMARA2     "Camara2"
+    static const int MatriculaNewWidth = 520;
+    static const int MatriculaNewHeight = 110;
+    static const cv::Size MatriculaSize(MatriculaNewWidth,MatriculaNewHeight);
+
+    static const int FotoWidth = 1280;
+    static const int FotoHeight = 720;
+    static const cv::Size FotoSize(FotoWidth,FotoHeight);
 
     struct Prewarp{
         QString type="planar";
@@ -42,14 +54,14 @@ namespace nQTrucks{
             MatriculaResults(const MatriculaResults &other);
             MatriculaResults& operator=( const MatriculaResults& ) { return *this;  }
 
-            Camara     *camara = new Camara(this);
+            //Camara     *camara = new Camara(this);
             MatriculaResults&       getMatriculaResults()       { return *this; }
             const MatriculaResults& getMatriculaResults() const { return *this; }
 
             inline void setPlanckBlanco(const Planck &value){
                 cv::Mat channel[3];
                 cv::Mat _dest;
-                _dest = this->camara->getOrigenFoto().clone();
+                _dest = OrigenFoto.clone();
                 cv::add(_dest,cv::Scalar(value.C,value.B,value.A), _dest);
                 cv::split(_dest, channel);
                 this->setOrigenFotoBlanca(channel[2] - channel[1] -   channel[2] + channel[0]); /** MEMORY LEAK **/
@@ -62,7 +74,7 @@ namespace nQTrucks{
 
             inline void setPlanckRojo(  const Planck &value){
                 cv::Mat channel[3];
-                cv::Mat *_dest = new cv::Mat(this->camara->getOrigenFoto().clone());
+                cv::Mat *_dest = new cv::Mat(OrigenFoto.clone());
                 cv::add(*_dest,cv::Scalar(value.A,value.B,value.C),*_dest);
                 cv::split(*_dest,channel);
                 cv::add(channel[0], channel[1], *_dest); /** MEMORY LEAK **/
@@ -76,9 +88,10 @@ namespace nQTrucks{
             }
 
         private:
-            int        tipo;//                 =0;                                                     //0 para calibracion, 1 para procesado
-            int        id ;//                  =0;                                                     //id fuente de captura de foto
+            int        tipo                    =0;                                                     //0 para calibracion, 1 para procesado
+            int        id                      =0;                                                     //id fuente de captura de foto
 
+            cv::Mat    OrigenFoto;
             cv::Mat    OrigenFotoPrewarp      ;//= cv::Mat::zeros(FotoSize, CV_8U );                    // Imagen con calibracion prewarp
             cv::Mat    OrigenFotoBlanca       ;//= cv::Mat::zeros(FotoSize, CV_8U );                    //  Imagen con calibracion de Blancos
             cv::Mat    OrigenFotoRoja         ;//= cv::Mat::zeros(FotoSize, CV_8U );                    // Imagen con calibracion de Rojos
@@ -102,11 +115,12 @@ namespace nQTrucks{
             int  getId()   const{return id;}
             int  getTipo() const{return tipo;}
 
-
+            void setOrigenFoto(const cv::Mat &value);
             void setOrigenFotoPrewarp(const cv::Mat &value);
             void setOrigenFotoBlanca( const cv::Mat &value);
             void setOrigenFotoRoja(   const cv::Mat &value);
 
+            cv::Mat getOrigenFoto() const{return OrigenFoto; }
             cv::Mat getOrigenFotoPrewarp() const{return OrigenFotoPrewarp; }
             cv::Mat getOrigenFotoBlanca()  const{return OrigenFotoBlanca;}
             cv::Mat getOrigenFotoRoja()    const{return OrigenFotoRoja;}

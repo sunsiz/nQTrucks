@@ -1,4 +1,5 @@
 #include "RegistroPeso.h"
+#include <QMutex>
 #include <QDebug>
 
 namespace nQTrucks{
@@ -87,15 +88,16 @@ namespace nQTrucks{
         }
 
         bool RegistroPeso::guardarRegistroRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas){
-
+            QMutex _mutexreport;
+            _mutexreport.lock();
             QSqlQuery qry(m_db);
-            Tools *m_tools = new Tools;
+            Tools *m_tools = new Tools(this);
             qry.prepare(qry_insert_simple);
             qry.bindValue(":pesobruto",                                         _RegistroMatriculas->m_bascula->getIBruto()                        );
             qry.bindValue(":pesoneto",                                          _RegistroMatriculas->m_bascula->getINeto()                         );
             qry.bindValue(":pesotara",                                          _RegistroMatriculas->m_bascula->getITara()                         );
 
-            qry.bindValue(":fotocamara1",       m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results0->camara->getOrigenFoto())          );
+            qry.bindValue(":fotocamara1",       m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results0->getOrigenFoto())          );
             qry.bindValue(":fotomatriculaA1",   m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results0->getMatriculaFotoA())              );
             qry.bindValue(":fotomatriculaB1",   m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results0->getMatriculaFotoB())              );
             qry.bindValue(":matriculaA1",                                       _RegistroMatriculas->m_results0->getMatriculaA()                   );
@@ -104,7 +106,7 @@ namespace nQTrucks{
             qry.bindValue(":precisionB1",       QString::number(                _RegistroMatriculas->m_results0->getMatriculaPrecisionB(),'f',2)   );
 
 
-            qry.bindValue(":fotocamara2",       m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results1->camara->getOrigenFoto())          );
+            qry.bindValue(":fotocamara2",       m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results1->getOrigenFoto())          );
             qry.bindValue(":fotomatriculaA2",   m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results1->getMatriculaFotoA())              );
             qry.bindValue(":fotomatriculaB2",   m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results1->getMatriculaFotoB())              );
             qry.bindValue(":matriculaA2",                                       _RegistroMatriculas->m_results1->getMatriculaA()                   );
@@ -113,48 +115,59 @@ namespace nQTrucks{
             qry.bindValue(":precisionB2",       QString::number(                _RegistroMatriculas->m_results1->getMatriculaPrecisionB(),'f',2)   );
             m_tools->deleteLater();
 
-            if(qry.exec()){ /** MEMORY LEAK **/
-                _RegistroMatriculas->setId(qry.lastInsertId().toLongLong());
-                setTable();
-            }else{
+            if(!qry.exec()){ /** MEMORY LEAK **/
+                _mutexreport.unlock();
                 return false;
             }
+            _RegistroMatriculas->setId(qry.lastInsertId().toLongLong());
+            setTable();
+            _mutexreport.unlock();
             return true;
-
         }
-        bool RegistroPeso::eliminaFotosCamara(const long long &_id){
+
+        bool RegistroPeso::eliminaFotosCamara(const long long &_id){            
+            QMutex _mutexreport;
+            _mutexreport.lock();
             QSqlQuery qry2(m_db);
             qry2.prepare(  qry_delete_fotos);
             qry2.bindValue(":id0",                _id);
             qry2.bindValue(":fotocamara1",       QVariant());
             qry2.bindValue(":fotocamara2",       QVariant());
 
-            if(qry2.exec()){
-                setTable();
-                return true;
+            if(!qry2.exec()){
+                _mutexreport.unlock();
+                return false;
             }
-            return false;
+            setTable();
+            _mutexreport.unlock();
+            return true;
         }
 
 
         QDateTime RegistroPeso::getFechaRegistro(const long long &_id)
-        {
+        {            
+            QMutex _mutexreport;
+            _mutexreport.lock();
             QSqlQuery qry(m_db);
             QDateTime _fecha;
             qry.prepare(  qry_fecharegistro);
             qry.bindValue(":id", _id);
             if (!qry.exec()) { // make sure your query has been executed successfully
                 qDebug() << qry.lastError(); // show the error
-            } else {
-                while (qry.next()) {
-                    _fecha =  qry.value("fecha").toDateTime();
-                    return _fecha;
-                }
+                _mutexreport.unlock();
+                return _fecha;
             }
+            while (qry.next()) {
+                _fecha =  qry.value("fecha").toDateTime();
+            }
+            _mutexreport.unlock();
             return _fecha;
         }
 
         bool RegistroPeso::buscarPareja(QVector<RegistroMatriculas*> _RegistrosMatriculas, const QString &_matricula){
+
+            QMutex _mutexreport;
+            _mutexreport.lock();
             /** TODO ENTRE FECHAS **/
              qDebug() << "BUSCANDO:  [[" << _matricula << "]]";
             QSqlQuery qry(m_db);
@@ -163,24 +176,30 @@ namespace nQTrucks{
             qry.bindValue(":fechaabuscar", _RegistrosMatriculas[0]->getFechaRegistro().date());
             qry.bindValue(":matriculabuscar", _matricula);
 
-            if (qry.exec()) { /** MEMORY LEAK **/ // make sure your query has been executed successfully
+            if (!qry.exec()) {
+                _mutexreport.unlock();
+                return false;
+            }
+            /** MEMORY LEAK **/ // make sure your query has been executed successfully
                 /** Si existe la pareja, adquiero su id y el peso bruto **/
-                while (qry.next()){
-                    _RegistrosMatriculas[1]->setId(qry.value("id").toLongLong());
-                    _RegistrosMatriculas[1]->m_bascula->setIBruto(qry.value("pesobruto").toFloat()); //DEBUG
+            while (qry.next()){
+                _RegistrosMatriculas[1]->setId(qry.value("id").toLongLong());
+                _RegistrosMatriculas[1]->m_bascula->setIBruto(qry.value("pesobruto").toFloat()); //DEBUG
+                _mutexreport.unlock();
+                return actualizarPareja(_RegistrosMatriculas);
                     //_RegistrosMatriculas[1]->m_bascula->setIBruto(qry.value("pesobruto").toFloat()+300); //DEBUG
-                    return actualizarPareja(_RegistrosMatriculas);
                     /** Actualizo a Procesado y
                     * consigo el Peso Verificado
                     * http://www.worldshipping.org/industry-issues/safety/WSC_Summarizes_the_Basic_Elements_of_the_SOLAS_Container_Weight_Verification_Requirement___February_2015.pdf
                     **/
                 }
-            }
-            return false;
         }
 
         bool RegistroPeso::actualizarPareja(QVector<RegistroMatriculas *> _RegistrosMatriculas)
         {
+
+            QMutex _mutexreport;
+            _mutexreport.lock();
             float neto = fabs(_RegistrosMatriculas[0]->m_bascula->getIBruto() - _RegistrosMatriculas[1]->m_bascula->getIBruto());
             _RegistrosMatriculas[0]->m_bascula->setINeto(neto);
             _RegistrosMatriculas[1]->m_bascula->setINeto(neto);
@@ -195,20 +214,26 @@ namespace nQTrucks{
             qry.bindValue(":pesoneto", _RegistrosMatriculas[0]->m_bascula->getINeto());
             qry.bindValue(":id0",      _RegistrosMatriculas[0]->getId());
             qry.bindValue(":entrada",  false);
-            if (qry.exec()){
-                qDebug() << "actualizando pareja 1";
+            if (!qry.exec()){
+                _mutexreport.unlock();
+                return false;
+            }
+            qDebug() << "actualizando pareja 1";
                 /** Segunda pareja 1 **/
                 qry2.bindValue(":idpareja", _RegistrosMatriculas[0]->getId());
                 qry2.bindValue(":pesoneto", _RegistrosMatriculas[1]->m_bascula->getINeto());
                 qry2.bindValue(":id0",      _RegistrosMatriculas[1]->getId());
                 qry2.bindValue(":entrada",  true);
-                if (qry2.exec()){
-                    qDebug() << "actualizando pareja 2";
-                    return true;
+                if (!qry2.exec()){
+                    _mutexreport.unlock();
+                    return false;
                 }
-            }
-            return false;
+                qDebug() << "actualizando pareja 2";
+                _mutexreport.unlock();
+                return true;
         }
+
+
 
 
 

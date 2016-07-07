@@ -10,12 +10,13 @@ namespace nQTrucks{
         }
 
         MatriculaResults::~MatriculaResults(){
+            OrigenFoto.release();
             OrigenFotoPrewarp.release();    // Imagen con calibracion prewarp
             OrigenFotoBlanca.release();     //  Imagen con calibracion de Blancos
             OrigenFotoRoja.release();       // Imagen con calibracion de Rojos
             MatriculaFotoA.release();       // Imagen recortada de la Matricula
             MatriculaFotoB.release();       // Imagen recortada de la Matricula
-            camara->deleteLater();
+            //camara->deleteLater();
         }
 
         MatriculaResults::MatriculaResults(const MatriculaResults &other)
@@ -26,6 +27,7 @@ namespace nQTrucks{
         void MatriculaResults::setMatriculaResults(const MatriculaResults &other){
             setTipo(                  other.getTipo()            );    // 0 para calibracion, 1 para procesado
             setId(                    other.getId()              );    // id fuente de captura de foto
+            setOrigenFoto(            other.OrigenFoto           );
             setOrigenFotoPrewarp(     other.OrigenFotoPrewarp    );
             setOrigenFotoBlanca(      other.OrigenFotoBlanca     );
             setOrigenFotoRoja(        other.OrigenFotoRoja       );
@@ -40,6 +42,10 @@ namespace nQTrucks{
 
         }
 
+        void MatriculaResults::setOrigenFoto(const cv::Mat &value){
+            OrigenFoto.release();
+            value.copyTo(OrigenFoto);
+        }
         void MatriculaResults::setOrigenFotoPrewarp(const cv::Mat &value){
             OrigenFotoPrewarp.release();
             value.copyTo(OrigenFotoPrewarp);

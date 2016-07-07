@@ -68,7 +68,7 @@ NewsagesAlpr::~NewsagesAlpr(){
 
 
 /** SOLO CALIBRACION ***************************************************************************************/
-void NewsagesAlpr::calibrarFoto(const Camara &_camara){
+void NewsagesAlpr::calibrarFoto(const MatriculaResults &_camara){
 
     if(!bhiloCalibrar1 && !bhiloCalibrar2){
         bhiloCalibrar1=true;
@@ -80,7 +80,7 @@ void NewsagesAlpr::calibrarFoto(const Camara &_camara){
 
         /** Crear tareas **/
 
-        m_results1->camara->setCamara(_camara);
+        m_results1->setMatriculaResults(_camara);
         m_results1->setId(m_nDevice);
         tareaCalibrar1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results1, m_settings);
         tareaCalibrar2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results1, m_settings);
@@ -150,7 +150,7 @@ void NewsagesAlpr::onCalibrarFotoFinished(){
 
 
 /** PROCESAR ************************************************************************************************/
-void NewsagesAlpr::processFoto(const Camara &_camara)
+void NewsagesAlpr::processFoto(const MatriculaResults &_camara)
 {
     if(!bhilo1 && !bhilo2){
         bhilo1=true;
@@ -161,7 +161,7 @@ void NewsagesAlpr::processFoto(const Camara &_camara)
         hilo2 = new QThread;
 
         /** Crear tareas **/        
-        m_results2->camara->setCamara(_camara);
+        m_results2->setMatriculaResults(_camara);
         m_results2->setId(m_nDevice);
         tarea1 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_BLANCO, m_results2, m_settings);
         tarea2 = new NewsagesAlprTask(m_nDevice, ALPR_PLANCK_ROJO,   m_results2, m_settings);

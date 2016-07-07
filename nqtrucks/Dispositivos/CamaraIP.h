@@ -37,7 +37,7 @@
 #include <QNetworkReply>
 #include <QImage>
 #include <QUrl>
-#include <Registros/Camara.h>
+#include <Registros/MatriculaResults.h>
 
 namespace nQTrucks {
 namespace Devices {
@@ -86,7 +86,8 @@ private slots:
     void camaraNetworkReplyFinished(QNetworkReply *reply);
 
 signals:
-    void ReplyCamaraIP(const Camara &_ReplyCamara);
+    //void ReplyCamaraIP(const Camara &_ReplyCamara);
+    void ReplyCamaraIP(const MatriculaResults &_ReplyMatriculaResults);
   //  void ReplyCamaraIP(const Camara &_ReplyCamara);
   //  void ReplyCamaraIPFotoCV(const cv::Mat &_ReplyCV);
   //  void ReplyCamaraIPFoto(const QByteArray &_Reply);

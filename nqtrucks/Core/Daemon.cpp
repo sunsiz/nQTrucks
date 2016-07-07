@@ -88,9 +88,9 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
       m_bfoto1=false;
       m_bfoto2=false;
 
-      camaraconn1=connect(m_camara[0], &Devices::CamaraIP::ReplyCamaraIP, [=](const Camara  &_Reply){
+      camaraconn1=connect(m_camara[0], &Devices::CamaraIP::ReplyCamaraIP, [=](const MatriculaResults  &_Reply){
           QObject::disconnect(camaraconn1);
-          m_RegistroMatriculas->m_results0->camara->setCamara(_Reply);
+          m_RegistroMatriculas->m_results0->setMatriculaResults(_Reply);
           m_bfoto1=true;
           //Tengo las fotos semaforo GO! y Registro linea
           if(m_bfoto1 && m_bfoto2){
@@ -100,9 +100,9 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
           }
       });
 
-      camaraconn2=connect(m_camara[1], &Devices::CamaraIP::ReplyCamaraIP, [=](const Camara  &_Reply){
+      camaraconn2=connect(m_camara[1], &Devices::CamaraIP::ReplyCamaraIP, [=](const MatriculaResults  &_Reply){
           QObject::disconnect(camaraconn2);
-          m_RegistroMatriculas->m_results1->camara->setCamara(_Reply);
+          m_RegistroMatriculas->m_results1->setMatriculaResults(_Reply);
           m_bfoto2=true;
           //Tengo las fotos semaforo GO! y Registro linea
           if(m_bfoto1 && m_bfoto2){
@@ -160,8 +160,8 @@ void Daemon::onGuardarRegistroSimple(){
             }
         });
 
-        m_alpr[0]->processFoto(*m_RegistroMatriculas->m_results0->camara);
-        m_alpr[1]->processFoto(*m_RegistroMatriculas->m_results1->camara);
+        m_alpr[0]->processFoto(*m_RegistroMatriculas->m_results0);
+        m_alpr[1]->processFoto(*m_RegistroMatriculas->m_results1);
         m_bfoto1=false;
         m_bfoto2=false;
     }   

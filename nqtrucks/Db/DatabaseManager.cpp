@@ -41,13 +41,16 @@ void DatabaseManager::setRegistroMatriculas(RegistroMatriculas *_RegistroMatricu
 
 void DatabaseManager::guardarRegistroRegistroMatriculas(){
     if (m_maestros->m_RegistroPeso->guardarRegistroRegistroMatriculas(m_RegistroMatriculas[0])){
+        m_maestros->m_RegistroPeso->syncTable();
          emit printRegistroMatricula(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[0]->getId());
         /** No Guardar Si Cualquiera de las 4 Matriculas es detectada Y BUSCAR SU PAREJA**/
         if ( PrecisionA1 >80 || PrecisionB1 >80 || PrecisionA2 >80 || PrecisionB2 >80  ){
             if(m_maestros->m_RegistroPeso->eliminaFotosCamara(m_RegistroMatriculas[0]->getId())){
+                m_maestros->m_RegistroPeso->syncTable();
               /** Buscar Pareja **/
                if (encontrarPareja()){
                 /** Si pareja **/
+                   m_maestros->m_RegistroPeso->syncTable();
                    emit printRegistroMatriculaProcesada(m_maestros->m_RegistroPeso->getCurrentDb(),m_RegistroMatriculas[1]->getId(),m_RegistroMatriculas[0]->getId());
                }
             }

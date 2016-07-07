@@ -66,8 +66,8 @@ private:
 private slots:
     void on_CamaraSelect_currentIndexChanged(int index);
     void on_GuardarCamara_clicked();
-    void onGetFoto1(const Camara &_camara);
-    void onGetFoto2(const Camara &_camara);
+    void onGetFoto1(const MatriculaResults &_camara);
+    void onGetFoto2(const MatriculaResults &_camara);
     /** END CAMARAS **/
 
 
@@ -118,14 +118,14 @@ private:
     /** ALPR1 **/
 private slots:
     void onGetCalibrationResult1(const MatriculaResults &_calibration_result);
-    void onGetOriginalMatricula1(const Camara &_camara);
+    void onGetOriginalMatricula1(const MatriculaResults &_camara);
     void onReplyMatriculaResults1(const MatriculaResults &_result);
     /** END ALPR1 **/
 
     /** ALPR2 **/
 private slots:
     void onGetCalibrationResult2(const MatriculaResults &_calibration_result);
-    void onGetOriginalMatricula2(const Camara &_camara);
+    void onGetOriginalMatricula2(const MatriculaResults &_camara);
     void onReplyMatriculaResults2(const MatriculaResults &_result);
     /** END NEWSAGES ALPR 2 **/
     /** PLANKs **/

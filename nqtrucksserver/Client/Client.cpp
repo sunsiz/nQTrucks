@@ -98,8 +98,8 @@ void Client::onDaemonRegistroChanged(RegistroMatriculas *_result)
 
 
     Tools *m_tools = new Tools(this);
-    ui->camara1->setPixmap(QPixmap::fromImage(           m_tools->convertMat2QImage( _result->m_results0->camara->getOrigenFoto())   ));
-    ui->camara2->setPixmap(QPixmap::fromImage(           m_tools->convertMat2QImage( _result->m_results1->camara->getOrigenFoto())   ));
+    ui->camara1->setPixmap(QPixmap::fromImage(           m_tools->convertMat2QImage( _result->m_results0->getOrigenFoto())   ));
+    ui->camara2->setPixmap(QPixmap::fromImage(           m_tools->convertMat2QImage( _result->m_results1->getOrigenFoto())   ));
 
     if (  _result->m_results0->getMatriculaPrecisionA()      >=                       _result->m_results1->getMatriculaPrecisionA()   ){
 

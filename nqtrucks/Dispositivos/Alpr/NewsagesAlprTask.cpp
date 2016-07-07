@@ -148,7 +148,7 @@ void NewsagesAlprTask::procesarBlancas(){
                                                      plate.plate_points[2].x - plate.plate_points[0].x,
                                                      plate.plate_points[2].y - plate.plate_points[0].y);
                             cv::Mat _resize;
-                            cv::resize(cv::Mat(m_matricularesult->camara->getOrigenFoto(),rect),_resize,MatriculaSize);
+                            cv::resize(cv::Mat(m_matricularesult->getOrigenFoto(),rect),_resize,MatriculaSize);
                             m_matricularesult->setMatriculaFotoA(_resize);
                             _resize.release();
                         }
@@ -206,7 +206,7 @@ void NewsagesAlprTask::procesarRojas(){
                                                          plate.plate_points[2].x - plate.plate_points[0].x,
                                                          plate.plate_points[2].y - plate.plate_points[0].y);
                                 cv::Mat _resize;
-                                cv::resize(cv::Mat(m_matricularesult->camara->getOrigenFoto(),rect),_resize,MatriculaSize);
+                                cv::resize(cv::Mat(m_matricularesult->getOrigenFoto(),rect),_resize,MatriculaSize);
                                 m_matricularesult->setMatriculaFotoB(_resize);
                             }
                        }
