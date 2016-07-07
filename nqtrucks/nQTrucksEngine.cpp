@@ -432,7 +432,7 @@ void nQTrucksEngine::printReport(const int &_ReportId, const QVector<long long> 
 void nQTrucksEngine::sincronizar_maestros(){
     Q_D(nQTrucksEngine);
     d->m_maestros->sincronizar();
-//    reloadMaestros();
+    reloadMaestros();
 
 }
 

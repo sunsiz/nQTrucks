@@ -27,8 +27,8 @@ ReportManager::~ReportManager(){
 
 void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, const long long &_row1)
 {
-    QMutex _cluje;
-    _cluje.lock();
+//    QMutex _cluje;
+//    _cluje.lock();
     if (!QPrinterInfo::defaultPrinter().isNull()){
         QPrinter _default_printer;
         _default_printer.setPrinterName(QPrinterInfo::defaultPrinter().printerName());
@@ -76,14 +76,14 @@ void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, const long l
 
         }
     }
-    _cluje.unlock();
+    //_cluje.unlock();
 }
 
 
 void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, const long long &_row1, const long long &_row2)
 {
-    QMutex _cluje;
-    _cluje.lock();
+//    QMutex _cluje;
+//    _cluje.lock();
     if (!QPrinterInfo::defaultPrinter().isNull()){
         QPrinter _default_printer;
         _default_printer.setPrinterName(QPrinterInfo::defaultPrinter().printerName());
@@ -150,7 +150,7 @@ void ReportManager::printRegistroMatriculaProcesada(const QSqlDatabase &_db, con
             //QSqlDatabase::removeDatabase(_dbtemp.connectionName());
         }
     }
-    _cluje.unlock();
+//    _cluje.unlock();
 }
 
 

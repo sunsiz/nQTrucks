@@ -37,7 +37,7 @@ private:
     QVector<Devices::CamaraIP*> m_camara;
     QVector<Devices::NewsagesAlpr*> m_alpr;
     Maestros::Maestros             *m_maestros;
-    Db::ReportManager              *m_report_manager;
+    //Db::ReportManager              *m_report_manager;
 
 public:
     void setInit(bool init);

@@ -18,7 +18,7 @@ class DatabaseManager : public QObject{
     Q_OBJECT
 public:
    // DatabaseManager(QObject *parent=nullptr);
-    explicit DatabaseManager(QObject *parent=nullptr);
+    explicit DatabaseManager(Maestros::Maestros *_maestros, QObject *parent=nullptr);
     ~DatabaseManager();
 signals:
     void rowsPesoChanged();
@@ -29,12 +29,11 @@ signals:
 private:
     Maestros::Maestros *m_maestros;
     QVector<RegistroMatriculas*> m_RegistroMatriculas;
-    //ReportManager m_report_manager;
+    ReportManager *m_report_manager;
 
 /** Registro Simple **/
 public:
     void setRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas);
-    void setMaestros(Maestros::Maestros *_Maestros);
 public slots:    
     void guardarRegistroRegistroMatriculas();
 

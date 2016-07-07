@@ -53,8 +53,8 @@ namespace nQTrucks{
 
 
         void RegistroPeso::configQueries(){
-            //m_DefaultQuery = "select * from registros_matriculas ;" ;//+ QString(appServer_tablename);
-            m_DefaultQuery = "SELECT id ,fecha, pesobruto, pesoneto , matriculaA1, matriculaB1, matriculaA2, matriculaB2, procesado, emparejado, entrada from registros_matriculas;";
+            m_DefaultQuery = "select * from registros_matriculas ;" ;//+ QString(appServer_tablename);
+            //m_DefaultQuery = "SELECT id ,fecha, pesobruto, pesoneto , matriculaA1, matriculaB1, matriculaA2, matriculaB2, procesado, emparejado, entrada from registros_matriculas;";
         }
 
         void RegistroPeso::setFecha_min_max()
@@ -100,8 +100,8 @@ namespace nQTrucks{
             qry.bindValue(":fotomatriculaB1",   m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results0->getMatriculaFotoB())              );
             qry.bindValue(":matriculaA1",                                       _RegistroMatriculas->m_results0->getMatriculaA()                   );
             qry.bindValue(":matriculaB1",                                       _RegistroMatriculas->m_results0->getMatriculaB()                   );
-            //qry.bindValue(":precisionA1",       QString::number(                _RegistroMatriculas->m_results0->getMatriculaPrecisionA(),'g',6)   );
-            //qry.bindValue(":precisionB1",       QString::number(                _RegistroMatriculas->m_results0->getMatriculaPrecisionB(),'g',6)   );
+            qry.bindValue(":precisionA1",       QString::number(                _RegistroMatriculas->m_results0->getMatriculaPrecisionA(),'f',2)   );
+            qry.bindValue(":precisionB1",       QString::number(                _RegistroMatriculas->m_results0->getMatriculaPrecisionB(),'f',2)   );
 
 
             qry.bindValue(":fotocamara2",       m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results1->camara->getOrigenFoto())          );
@@ -109,8 +109,8 @@ namespace nQTrucks{
             qry.bindValue(":fotomatriculaB2",   m_tools->convertMat2ByteArray(  _RegistroMatriculas->m_results1->getMatriculaFotoB())              );
             qry.bindValue(":matriculaA2",                                       _RegistroMatriculas->m_results1->getMatriculaA()                   );
             qry.bindValue(":matriculaB2",                                       _RegistroMatriculas->m_results1->getMatriculaB()                   );
-            //qry.bindValue(":precisionA2",       QString::number(                _RegistroMatriculas->m_results1->getMatriculaPrecisionA(),'g',6)   );
-            //qry.bindValue(":precisionB2",       QString::number(                _RegistroMatriculas->m_results1->getMatriculaPrecisionB(),'g',6)   );
+            qry.bindValue(":precisionA2",       QString::number(                _RegistroMatriculas->m_results1->getMatriculaPrecisionA(),'f',2)   );
+            qry.bindValue(":precisionB2",       QString::number(                _RegistroMatriculas->m_results1->getMatriculaPrecisionB(),'f',2)   );
             m_tools->deleteLater();
 
             if(qry.exec()){ /** MEMORY LEAK **/
@@ -181,7 +181,7 @@ namespace nQTrucks{
 
         bool RegistroPeso::actualizarPareja(QVector<RegistroMatriculas *> _RegistrosMatriculas)
         {
-            float neto = abs(_RegistrosMatriculas[0]->m_bascula->getIBruto() - _RegistrosMatriculas[1]->m_bascula->getIBruto());
+            float neto = fabs(_RegistrosMatriculas[0]->m_bascula->getIBruto() - _RegistrosMatriculas[1]->m_bascula->getIBruto());
             _RegistrosMatriculas[0]->m_bascula->setINeto(neto);
             _RegistrosMatriculas[1]->m_bascula->setINeto(neto);
             qDebug() << "Actualizando Parejas";

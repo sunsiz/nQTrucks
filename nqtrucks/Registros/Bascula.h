@@ -40,7 +40,7 @@ namespace nQTrucks{
             void  setITara(float value){  this->m_iTara = value; }
 
             float getINeto() const{return this->m_iNeto;}
-            void  setINeto(float value){  this->m_iNeto = abs(value); }
+            void  setINeto(float value){  this->m_iNeto = fabs(value); }
 
         };
 } /** END NAMESPACE NQTRUCKS **/

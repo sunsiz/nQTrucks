@@ -174,22 +174,21 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
     /* Ejecuta el registro Simple */
     emit RegistroChanged(m_RegistroMatriculas);
 
-    hiloDb = new QThread();
-    tareaDb = new Db::DatabaseManager;//(m_maestros);
-    m_report_manager = new Db::ReportManager;
+    hiloDb = new QThread;
+    tareaDb = new Db::DatabaseManager(m_maestros);
+    //m_report_manager = new Db::ReportManager;
 
     tareaDb->moveToThread(hiloDb);
     //m_maestros->moveToThread(hiloDb);
-    m_report_manager->moveToThread(hiloDb);
+    //m_report_manager->moveToThread(hiloDb);
 
 
-    tareaDb->setMaestros(m_maestros);
+    //tareaDb->setMaestros(m_maestros);
     tareaDb->setRegistroMatriculas(m_RegistroMatriculas);
 
-    connect(tareaDb,&Db::DatabaseManager::printRegistroMatricula,m_report_manager,&Db::ReportManager::printRegistroMatricula);
-    connect(tareaDb,&Db::DatabaseManager::printRegistroMatriculaProcesada,m_report_manager,&Db::ReportManager::printRegistroMatriculaProcesada);
+    //connect(tareaDb,&Db::DatabaseManager::printRegistroMatricula,m_report_manager,&Db::ReportManager::printRegistroMatricula);
+    //connect(tareaDb,&Db::DatabaseManager::printRegistroMatriculaProcesada,m_report_manager,&Db::ReportManager::printRegistroMatriculaProcesada);
 
-    /** INFORMAR DE CAMBIOS EN ROWS **/
     connect( tareaDb, &Db::DatabaseManager::rowsPesoChanged, this, &Daemon::rowsPesoChanged);
 
     connect( hiloDb,  &QThread::started                 , tareaDb, &Db::DatabaseManager::guardarRegistroRegistroMatriculas  );
@@ -202,15 +201,14 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
     QMetaObject::Connection &conn1 = *pconn1;
     conn1 = connect(tareaDb,  &Db::DatabaseManager::printFinished, [=](){
         QObject::disconnect(conn1);
-
-        //tareaDb->m_RegistroMatriculas[0]->deleteLater();
-        //tareaDb->m_RegistroMatriculas[1]->deleteLater();
+        /** INFORMAR DE CAMBIOS EN ROWS **/
+        rowsPesoChanged();        
         tareaDb->workFinished();
     });
 
     hiloDb->start();
 
-    m_report_manager->deleteLater();
+    //m_report_manager->deleteLater();
     m_RegistroMatriculas->deleteLater();
     setRegistrando(false);
     m_saliendo=true;

@@ -117,8 +117,8 @@ namespace nQTrucks{
             void setMatriculaB(         const QString &value){ MatriculaB         = value; }
             void setMatriculaFotoA(     const cv::Mat &value);
             void setMatriculaFotoB(     const cv::Mat &value);
-            void setMatriculaPrecisionA(float          value){ MatriculaPrecisionA = value; MatriculaPrecisionAs = QString::number(value,'g',6);}
-            void setMatriculaPrecisionB(float          value){ MatriculaPrecisionB = value; MatriculaPrecisionBs = QString::number(value,'g',6);}
+            void setMatriculaPrecisionA(float          value){ MatriculaPrecisionA = value; MatriculaPrecisionAs = QString::number(value,'f',2);}
+            void setMatriculaPrecisionB(float          value){ MatriculaPrecisionB = value; MatriculaPrecisionBs = QString::number(value,'f',2);}
 
             bool       getMatriculaDetectedA()   const{return MatriculaDetectedA; }
             bool       getMatriculaDetectedB()   const{return MatriculaDetectedB; }

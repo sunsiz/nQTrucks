@@ -33,6 +33,7 @@
 #include <QStandardItemModel>
 #include <QModelIndex>
 #include <QDebug>
+#include <QSqlQuery>
 namespace nQTrucks {
 
 
@@ -82,6 +83,8 @@ RegistrosUi::RegistrosUi(nQTrucksEngine *_engine, QWidget *parent)
         ui->tableRegistrosView->hideColumn(i);
     }
 
+    ui->tableRegistrosView->showColumn(0);
+    ui->tableRegistrosView->model()->setHeaderData(0,Qt::Horizontal,"Registro");
     ui->tableRegistrosView->showColumn(4);
     ui->tableRegistrosView->model()->setHeaderData(4, Qt::Horizontal,"Matrícula1");
     ui->tableRegistrosView->showColumn(5);
@@ -122,6 +125,7 @@ void RegistrosUi::on_selectProcesados_clicked(bool checked){
    // procesados 19
    // emparejado 20
    // entrada 21
+    engine->RegistrosPesos->query();
     flt_procesado->setFilterRegExp(QRegExp(QString::number(checked),Qt::CaseSensitive, QRegExp::RegExp));
     flt_entrada->setFilterRegExp(QRegExp(QString::number(checked),Qt::CaseSensitive, QRegExp::RegExp));
     if (checked){
