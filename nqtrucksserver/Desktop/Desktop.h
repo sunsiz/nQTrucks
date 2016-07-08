@@ -41,6 +41,9 @@ private:
     QProcess *m_control_center;
     bool      m_running=false;
 
+    QProcess *m_reboot;
+    QProcess *m_halt;
+
 private slots:
     void on_exit_Keyboard(const int &arg1);
     void on_actionKeyboard_toggled(bool arg1);
@@ -70,6 +73,8 @@ private slots:
     //void on_actionClient_triggered();
     void on_actionClient_toggled(bool arg1);
     void on_actionRegistros_toggled(bool arg1);
+    void on_actionReiniciar_triggered();
+    void on_actionApagar_triggered();
 };
 
 }

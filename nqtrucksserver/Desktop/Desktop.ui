@@ -114,6 +114,8 @@
    <addaction name="actionClient"/>
    <addaction name="actionRegistros"/>
    <addaction name="separator"/>
+   <addaction name="actionReiniciar"/>
+   <addaction name="actionApagar"/>
   </widget>
   <action name="actionSystemSettings">
    <property name="icon">
@@ -213,6 +215,24 @@
    </property>
    <property name="text">
     <string>Registros</string>
+   </property>
+  </action>
+  <action name="actionReiniciar">
+   <property name="icon">
+    <iconset resource="../../resources/system.qrc">
+     <normaloff>:/temp/icons/system/devices/gnome-session-reboot2.png</normaloff>:/temp/icons/system/devices/gnome-session-reboot2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reiniciar</string>
+   </property>
+  </action>
+  <action name="actionApagar">
+   <property name="icon">
+    <iconset resource="../../resources/system.qrc">
+     <normaloff>:/temp/icons/system/devices/system-shutdown-panel.png</normaloff>:/temp/icons/system/devices/system-shutdown-panel.png</iconset>
+   </property>
+   <property name="text">
+    <string>Apagar</string>
    </property>
   </action>
  </widget>

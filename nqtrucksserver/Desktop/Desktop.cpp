@@ -30,29 +30,39 @@ Desktop::Desktop(QWidget *parent) :
     m_app_registros = new RegistrosUi(m_app_engine);
 
     /** KEYBOARD SIEMPRE VIVO **/
-    connect(m_keyboard,SIGNAL(finished(int)),this,SLOT(on_exit_Keyboard(int)));
+    //connect(m_keyboard,SIGNAL(finished(int)),this,SLOT(on_exit_Keyboard(int)));
     //QDBusConnection::sessionBus().connect("org.onboard.Onboard","/org/onboard/Onboard/Keyboard","org.onboard.Onboard.Keyboard","PropertiesChanged",this,SLOT())
 
     /** Listado de StackWidgets **/
     //ui->appWidget->addWidget(m_app_config);
     //ui->appWidget->setVisible(false);
 
+    /** SYSTEM CONTROL **/
+    m_reboot = new QProcess(this);
+    //m_reboot->setProgram("/usr/bin/sudo" , /sbin/reboot");
+
+    m_halt = new QProcess(this);
+    //m_halt->setProgram("/usr/bin/sudo /sbin/halt");
+
+
+
     /** DAEMON **/
-    loadconfig();
     connect(ui->runningCheckBox,SIGNAL(toggled(bool)),this,SLOT(isRunning(bool)));
     connect(m_app_engine,SIGNAL(registrandoChanged(bool)),ui->runningCheckBox,SLOT(setDisabled(bool)));
+    loadconfig();
+    isRunning(m_running);
 
 
 }
 
 Desktop::~Desktop(){
-    delete ui;
     m_keyboard->deleteLater();
     m_control_center->deleteLater();
     m_app_config->deleteLater();
     m_app_client->deleteLater();
     m_app_registros->deleteLater();
     m_app_engine->deleteLater();
+    delete ui;
 
 }
 
@@ -70,15 +80,17 @@ void Desktop::changeEvent(QEvent *e){
 void Desktop::loadconfig(){
 
    /** INTERFACE **/
+   ui->actionRegistros->setVisible(false);
+   ui->actionReiniciar->setVisible(false);
    ui->actionConexiones->setVisible(false);
    ui->actionConfiguracion->setVisible(false);
    ui->actionKeyboard->setVisible(false);
    ui->actionSystemSettings->setVisible(false);
-   ui->actionRegistros->setVisible(true);
-   ui->actionClient->setVisible(false);
+   ui->actionClient->setVisible(true);
 
    m_running = m_app_engine->appConfig()->value(QString("Daemon") + "/running","0").toBool();
    ui->runningCheckBox->setChecked(m_running);
+
 }
 
 /** HARDWARE **************************************************************/
@@ -224,9 +236,10 @@ void Desktop::isRunning(bool clicked)
     m_running=clicked;
     ui->actionConfiguracion->setVisible(!m_running);
     ui->actionSystemSettings->setVisible(!m_running);
+    ui->actionReiniciar->setVisible(!m_running);
 
     ui->actionClient->setVisible(m_running);
-    ui->actionRegistros->setVisible(m_running);
+//    ui->actionRegistros->setVisible(m_running);
 
 
     m_app_engine->appConfig()->setValue(QString("Daemon") + "/running",m_running);
@@ -246,8 +259,19 @@ void Desktop::isRunning(bool clicked)
     }
 }
 
-void Desktop::registrandoChanged(const bool &_registrando){
+void Desktop::registrandoChanged(const bool &_registrando){}
 
+
+
+void Desktop::on_actionReiniciar_triggered(){
+    m_reboot->startDetached("/usr/bin/sudo",QStringList() << "reboot" );
+
+}
+
+
+
+void Desktop::on_actionApagar_triggered(){
+    m_halt->startDetached("/usr/bin/sudo",QStringList() << "halt" );
 }
 
 
