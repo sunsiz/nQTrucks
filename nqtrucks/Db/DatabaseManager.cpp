@@ -12,9 +12,8 @@
 namespace nQTrucks{
 namespace Db{
 
-DatabaseManager::DatabaseManager(Maestros::Maestros *_maestros, QObject *parent)
+DatabaseManager::DatabaseManager(QObject *parent)
    : QObject(parent)
-   , m_maestros(_maestros)
 {
     m_RegistroMatriculas.resize(2);
     m_report_manager = new Db::ReportManager;
@@ -36,7 +35,7 @@ void DatabaseManager::setRegistroMatriculas(RegistroMatriculas *_RegistroMatricu
     PrecisionB2=_RegistroMatriculas->m_results1->getMatriculaPrecisionB();
 
     m_RegistroMatriculas[0] = _RegistroMatriculas; //[0] es el ultimo registro registrado = salida si pareja
-    m_RegistroMatriculas[1] = new RegistroMatriculas(this);
+    m_RegistroMatriculas[1] = new RegistroMatriculas;
 }
 
 void DatabaseManager::guardarRegistroRegistroMatriculas(){

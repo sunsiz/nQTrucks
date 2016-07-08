@@ -28,10 +28,6 @@ Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_news
     QObject::connect(m_bascula,&Devices::nQSerialPortReader::BasculaPesoNuevo,this,&Daemon::onPesoNuevo);
     QObject::connect(m_bascula,&Devices::nQSerialPortReader::BasculaChanged,  this,&Daemon::onBasculaChanged);
 
-
-
-
-
 }
 
 void Daemon::setInit(bool init)
@@ -174,17 +170,20 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
     /* Ejecuta el registro Simple */
     emit RegistroChanged(m_RegistroMatriculas);
 
+    /** MULTI HILO TODO: **/
+
+    /*
     hiloDb = new QThread;
-    tareaDb = new Db::DatabaseManager(m_maestros);
+    tareaDb = new Db::DatabaseManager(this->m_maestros);
     //m_report_manager = new Db::ReportManager;
 
+    tareaDb->setRegistroMatriculas(this->m_RegistroMatriculas);
     tareaDb->moveToThread(hiloDb);
     //m_maestros->moveToThread(hiloDb);
     //m_report_manager->moveToThread(hiloDb);
 
 
     //tareaDb->setMaestros(m_maestros);
-    tareaDb->setRegistroMatriculas(m_RegistroMatriculas);
 
     //connect(tareaDb,&Db::DatabaseManager::printRegistroMatricula,m_report_manager,&Db::ReportManager::printRegistroMatricula);
     //connect(tareaDb,&Db::DatabaseManager::printRegistroMatriculaProcesada,m_report_manager,&Db::ReportManager::printRegistroMatriculaProcesada);
@@ -195,23 +194,40 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
     connect( tareaDb, &Db::DatabaseManager::workFinished, hiloDb,  &QThread::quit );
     connect( tareaDb, &Db::DatabaseManager::workFinished, tareaDb, &QObject::deleteLater );
     connect( hiloDb,  &QThread::finished                , hiloDb,  &QObject::deleteLater );
+    */
 
     /** CONTROL DELETE **/
+    /*
     std::unique_ptr<QMetaObject::Connection> pconn1{new QMetaObject::Connection};
     QMetaObject::Connection &conn1 = *pconn1;
     conn1 = connect(tareaDb,  &Db::DatabaseManager::printFinished, [=](){
         QObject::disconnect(conn1);
-        /** INFORMAR DE CAMBIOS EN ROWS **/
+        // INFORMAR DE CAMBIOS EN ROWS //
         rowsPesoChanged();        
         tareaDb->workFinished();
+        m_RegistroMatriculas->deleteLater();
+        setRegistrando(false);
+        m_saliendo=true;
     });
 
     hiloDb->start();
+    */
 
-    //m_report_manager->deleteLater();
+    /** MODO HILO PRINCIPAL: **/
+
+    tareaDb = new Db::DatabaseManager;
+    connect( tareaDb, &Db::DatabaseManager::rowsPesoChanged, this, &Daemon::rowsPesoChanged);
+    tareaDb->setMaestros(this->m_maestros);
+    tareaDb->setRegistroMatriculas(this->m_RegistroMatriculas);
+    tareaDb->guardarRegistroRegistroMatriculas();
+    tareaDb->deleteLater();
+
+    /** CONTROL DELETE **/
+    //rowsPesoChanged();
     m_RegistroMatriculas->deleteLater();
     setRegistrando(false);
     m_saliendo=true;
+
 }
 
 /** END DB **/

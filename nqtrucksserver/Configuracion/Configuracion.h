@@ -73,10 +73,10 @@ private slots:
 
     /** NEWSAGES I/O  **/
 private slots:
-    void on_actualizarSemaforos_clicked();
+//    void on_actualizarSemaforos_clicked();
     void on_conectarSemaforo_clicked();
     void on_desconectarSemaforo_clicked();
-    void on_guardarSemaforo_clicked();
+//    void on_guardarSemaforo_clicked();
 
     void on_semaforoVerde_clicked();
     void on_semaforoAmarillo_clicked();

@@ -124,8 +124,8 @@ void Configuracion::loadconfig()
     /** END CAMARAS **/
 
     /** IO DEVICES **/
-    QStringList l_IODevices = engine->getIODevices();
-    ui->ioDevicesComboBox1->addItems(l_IODevices);
+    //QStringList l_IODevices = engine->getIODevices();
+    //ui->ioDevicesComboBox1->addItems(l_IODevices);
     /** IO DEVICES **/
 
     /** BASCULAS **/
@@ -232,14 +232,14 @@ void Configuracion::on_GuardarCamara_clicked()
 
 
 /** NEWSAGES I/O  **/
-void Configuracion::on_actualizarSemaforos_clicked(){
-    ui->ioDevicesComboBox1->clear();
-    QStringList l_IODevices = engine->getIODevices();
-    ui->ioDevicesComboBox1->addItems(l_IODevices);
-}
+//void Configuracion::on_actualizarSemaforos_clicked(){
+//    ui->ioDevicesComboBox1->clear();
+//    QStringList l_IODevices = engine->getIODevices();
+//    ui->ioDevicesComboBox1->addItems(l_IODevices);
+//}
 
 void Configuracion::on_conectarSemaforo_clicked(){
-    on_guardarSemaforo_clicked();
+    //on_guardarSemaforo_clicked();
     engine->setSemaforoDevicesConnect(true);
 }
 
@@ -247,9 +247,9 @@ void Configuracion::on_desconectarSemaforo_clicked(){
     engine->setSemaforoDevicesConnect(false);
 }
 
-void Configuracion::on_guardarSemaforo_clicked(){
-    engine->appConfig()->setValue(QString(NEWSAGESIO) + "/device",ui->ioDevicesComboBox1->currentText());
-}
+//void Configuracion::on_guardarSemaforo_clicked(){
+//    engine->appConfig()->setValue(QString(NEWSAGESIO) + "/device",ui->ioDevicesComboBox1->currentText());
+//}
 
 void Configuracion::on_semaforoVerde_clicked(){
     engine->setSemaforoStatus(SEMAFORO_VERDE);

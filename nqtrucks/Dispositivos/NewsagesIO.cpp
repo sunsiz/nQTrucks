@@ -37,6 +37,8 @@ namespace Devices {
 
 //bool NewsagesIO::m_ioPin10Value=true;
 
+static const QString m_IODevice = "/dev/NewsagesIO";
+
 NewsagesIO::NewsagesIO(QSettings *_appsettings, QObject *parent)
     : Firmata(parent)
     , m_settings(_appsettings)
@@ -128,7 +130,7 @@ void NewsagesIO::onIOConectado(){
     m_OutPinAmarillo->setValue(m_ValuePinAmarillo);
     m_OutPinRojo->initialize();
     m_OutPinRojo->setValue(m_ValuePinAmarillo);
-    setSemaforo(m_semaforo);
+    //setSemaforo(m_semaforo);
 }
 
 void NewsagesIO::setSemaforo(const int &_color){
@@ -138,12 +140,12 @@ void NewsagesIO::setSemaforo(const int &_color){
 /** END FTDI *********************************************************************************/
 
 /** SEMAFORO *********************************************************/
-void NewsagesIO::setSemaforoDevice(const QString &_IODevice){
-    if (m_IODevice != _IODevice) {
-        m_IODevice = _IODevice;
-        m_settings->setValue(QString(NEWSAGESIO) + "/device",m_IODevice);
-    }
-}
+//void NewsagesIO::setSemaforoDevice(const QString &_IODevice){
+//    if (m_IODevice != _IODevice) {
+//        m_IODevice = _IODevice;
+//        m_settings->setValue(QString(NEWSAGESIO) + "/device",m_IODevice);
+//    }
+//}
 
 void NewsagesIO::setSemaforoDeviceConnect(const bool &value){
     setConectado(value);

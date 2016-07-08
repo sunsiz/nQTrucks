@@ -110,42 +110,42 @@ QStringList nQTrucksEnginePrivate::getCameraTypes()
 /** END CAMARAS **************************************************************************************************/
 
 /** NEWSAGES I/O *************************************************************************************************/
-QStringList nQTrucksEnginePrivate::getIODevices()
-{
-    QStringList listIODevices;
-    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
-        /* qDebug() << QObject::tr("Port: ") + info.portName() + "\n"
-                    + QObject::tr("Location: ") + info.systemLocation() + "\n"
-                    + QObject::tr("Description: ") + info.description() + "\n"
-                    + QObject::tr("Manufacturer: ") + info.manufacturer() + "\n"
-                    + QObject::tr("Serial number: ") + info.serialNumber() + "\n"
-                    + QObject::tr("Vendor Identifier: ") + (info.hasVendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString()) + "\n"
-                    + QObject::tr("Product Identifier: ") + (info.hasProductIdentifier() ? QString::number(info.productIdentifier(), 16) : QString()) + "\n"
-                    + QObject::tr("Busy: ") + (info.isBusy() ? QObject::tr("Yes") : QObject::tr("No")) + "\n";
-       */
+//QStringList nQTrucksEnginePrivate::getIODevices()
+//{
+//    QStringList listIODevices;
+//    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+//        /* qDebug() << QObject::tr("Port: ") + info.portName() + "\n"
+//                    + QObject::tr("Location: ") + info.systemLocation() + "\n"
+//                    + QObject::tr("Description: ") + info.description() + "\n"
+//                    + QObject::tr("Manufacturer: ") + info.manufacturer() + "\n"
+//                    + QObject::tr("Serial number: ") + info.serialNumber() + "\n"
+//                    + QObject::tr("Vendor Identifier: ") + (info.hasVendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString()) + "\n"
+//                    + QObject::tr("Product Identifier: ") + (info.hasProductIdentifier() ? QString::number(info.productIdentifier(), 16) : QString()) + "\n"
+//                    + QObject::tr("Busy: ") + (info.isBusy() ? QObject::tr("Yes") : QObject::tr("No")) + "\n";
+//       */
 
-//        if (info.manufacturer()=="Newsages NewsTechs")
+////        if (info.manufacturer()=="Newsages NewsTechs")
+////        {
+////            if(info.description()=="NewsagesIO")
+////            {
+
+//        if (info.vendorIdentifier()==0x1a86)
 //        {
-//            if(info.description()=="NewsagesIO")
+//            if(info.productIdentifier()==0x7523)
 //            {
+//                if (!info.isBusy())
+//                {
+////                    if(info.serialNumber()=="")
+////                    {
+//                        listIODevices.append(info.systemLocation());
+////                    }
+//                }
+//            }
+//        }
+//    }
 
-        if (info.vendorIdentifier()==0x1a86)
-        {
-            if(info.productIdentifier()==0x7523)
-            {
-                if (!info.isBusy())
-                {
-//                    if(info.serialNumber()=="")
-//                    {
-                        listIODevices.append(info.systemLocation());
-//                    }
-                }
-            }
-        }
-    }
-
-    return listIODevices;
-}
+//    return listIODevices;
+//}
 /** FIN NEWSAGES I/O ************************************************************************************************************/
 
 /** BASCULAS ********************************************************************************************************************/
@@ -236,7 +236,6 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** NEWSAGES ALPR **/
     /** 1 **/
-    //connect(d->m_alpr[0],&Camara::ReplyOriginalFoto, this,&Camara::ReplyOriginalFoto1);
     connect(d->m_alpr[0],&Devices::NewsagesAlpr::ReplyOriginalFoto,                this,&nQTrucksEngine::ReplyOriginalFoto1);
     connect(d->m_alpr[0],&Devices::NewsagesAlpr::ReplyMatriculaCalibrationResults, this,&nQTrucksEngine::ReplyMatriculaCalibrationResults1);
     connect(d->m_alpr[0],&Devices::NewsagesAlpr::ReplyMatriculaResults,            this,&nQTrucksEngine::ReplyMatriculaResults1);
@@ -311,11 +310,11 @@ void nQTrucksEngine::getCamaraFoto(int _ncamara)
 /** END CAMARAS ***********************************************************************************************************/
 
 /** NEWSAGES I/O **********************************************************************************************************/
-QStringList nQTrucksEngine::getIODevices()
-{
-    Q_D(nQTrucksEngine);
-    return d->getIODevices();
-}
+//QStringList nQTrucksEngine::getIODevices()
+//{
+//    Q_D(nQTrucksEngine);
+//    return d->getIODevices();
+//}
 
 void nQTrucksEngine::setSemaforoDevicesConnect(const bool &_value)
 {

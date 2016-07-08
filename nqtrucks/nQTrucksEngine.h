@@ -80,7 +80,7 @@ signals:
 
     /** NEWSAGES I/O **/
 public:
-    QStringList getIODevices();
+    //QStringList getIODevices();
 public slots:
     void setSemaforoDevicesConnect(const bool &_value);
     void setSemaforoStatus(const int &_color);

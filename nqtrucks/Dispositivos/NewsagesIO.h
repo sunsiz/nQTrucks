@@ -71,7 +71,7 @@ private slots:
     void setValuePinRojo(const bool &value);
 
 private:
-    QString m_IODevice;
+    //QString m_IODevice;
 
     bool    m_ValuePinVerde;
     DigitalPin *m_OutPinVerde;
@@ -103,7 +103,7 @@ private slots:
 
     /** SETTINGS ********************************************************************/
 private:
-    void      loadconfig() {setSemaforoDevice(m_settings->value(QString(NEWSAGESIO) + "/device").toString());}
+    void      loadconfig() {/*setSemaforoDevice(m_settings->value(QString(NEWSAGESIO) + "/device").toString());*/}
     QSettings *m_settings;
     /** END SETTINGS ****************************************************************/
 
@@ -115,7 +115,7 @@ public:
 private:
     int     m_semaforo;
 private slots:
-    void setSemaforoDevice  (const QString &_IODevice);
+    //void setSemaforoDevice  (const QString &_IODevice);
 public slots:
     void setSemaforoDeviceConnect(const bool &value);
     void setSemaforoEstado(const int &_color);
