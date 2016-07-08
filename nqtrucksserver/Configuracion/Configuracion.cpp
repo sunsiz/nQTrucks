@@ -487,21 +487,21 @@ void Configuracion::on_guardarEmpresa_clicked(){
 }
 
 void Configuracion::reloadEmpresa(){
-    QTableView *flt_empresa = new QTableView();
-    flt_empresa->setModel(engine->Empresa);
-    if (flt_empresa->model()->rowCount()){
-        flt_empresa->selectRow(0);
-        if(flt_empresa->currentIndex().isValid()){
-            int  row       = flt_empresa->currentIndex().row();
-            ui->empresa_razon->setText(      flt_empresa->currentIndex().sibling(row,1).data().toString());
-            ui->empresa_nif->setText(        flt_empresa->currentIndex().sibling(row,2).data().toString());
-            ui->empresa_direccion1->setText( flt_empresa->currentIndex().sibling(row,3).data().toString());
-            ui->empresa_direccion2->setText( flt_empresa->currentIndex().sibling(row,4).data().toString());
-            ui->empresa_direccion3->setText( flt_empresa->currentIndex().sibling(row,5).data().toString());
-            ui->empresa_certificado->setText(flt_empresa->currentIndex().sibling(row,6).data().toString());
-            ui->empresa_enac->setText(       flt_empresa->currentIndex().sibling(row,7).data().toString());
-        }
-    }
+//    QTableView *flt_empresa = new QTableView();
+//    flt_empresa->setModel(engine->Empresa);
+//    if (flt_empresa->model()->rowCount()){
+//        flt_empresa->selectRow(0);
+//        if(flt_empresa->currentIndex().isValid()){
+//            int  row       = flt_empresa->currentIndex().row();
+//            ui->empresa_razon->setText(      flt_empresa->currentIndex().sibling(row,1).data().toString());
+//            ui->empresa_nif->setText(        flt_empresa->currentIndex().sibling(row,2).data().toString());
+//            ui->empresa_direccion1->setText( flt_empresa->currentIndex().sibling(row,3).data().toString());
+//            ui->empresa_direccion2->setText( flt_empresa->currentIndex().sibling(row,4).data().toString());
+//            ui->empresa_direccion3->setText( flt_empresa->currentIndex().sibling(row,5).data().toString());
+//            ui->empresa_certificado->setText(flt_empresa->currentIndex().sibling(row,6).data().toString());
+//            ui->empresa_enac->setText(       flt_empresa->currentIndex().sibling(row,7).data().toString());
+//        }
+//    }
 }
 
 

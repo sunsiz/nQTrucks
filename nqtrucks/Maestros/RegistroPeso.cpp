@@ -88,8 +88,8 @@ namespace nQTrucks{
         }
 
         bool RegistroPeso::guardarRegistroRegistroMatriculas(RegistroMatriculas *_RegistroMatriculas){
-            QMutex _mutexreport;
-            _mutexreport.lock();
+//            QMutex _mutexreport;
+//            _mutexreport.lock();
             QSqlQuery qry(m_db);
             Tools *m_tools = new Tools(this);
             qry.prepare(qry_insert_simple);
@@ -116,18 +116,18 @@ namespace nQTrucks{
             m_tools->deleteLater();
 
             if(!qry.exec()){ /** MEMORY LEAK **/
-                _mutexreport.unlock();
+                //_mutexreport.unlock();
                 return false;
             }
             _RegistroMatriculas->setId(qry.lastInsertId().toLongLong());
             setTable();
-            _mutexreport.unlock();
+            //_mutexreport.unlock();
             return true;
         }
 
         bool RegistroPeso::eliminaFotosCamara(const long long &_id){            
-            QMutex _mutexreport;
-            _mutexreport.lock();
+            //QMutex _mutexreport;
+            //_mutexreport.lock();
             QSqlQuery qry2(m_db);
             qry2.prepare(  qry_delete_fotos);
             qry2.bindValue(":id0",                _id);
@@ -135,39 +135,39 @@ namespace nQTrucks{
             qry2.bindValue(":fotocamara2",       QVariant());
 
             if(!qry2.exec()){
-                _mutexreport.unlock();
+              //  _mutexreport.unlock();
                 return false;
             }
             setTable();
-            _mutexreport.unlock();
+            //_mutexreport.unlock();
             return true;
         }
 
 
         QDateTime RegistroPeso::getFechaRegistro(const long long &_id)
         {            
-            QMutex _mutexreport;
-            _mutexreport.lock();
+            //QMutex _mutexreport;
+            //_mutexreport.lock();
             QSqlQuery qry(m_db);
             QDateTime _fecha;
             qry.prepare(  qry_fecharegistro);
             qry.bindValue(":id", _id);
             if (!qry.exec()) { // make sure your query has been executed successfully
                 qDebug() << qry.lastError(); // show the error
-                _mutexreport.unlock();
+              //  _mutexreport.unlock();
                 return _fecha;
             }
             while (qry.next()) {
                 _fecha =  qry.value("fecha").toDateTime();
             }
-            _mutexreport.unlock();
+            //_mutexreport.unlock();
             return _fecha;
         }
 
         bool RegistroPeso::buscarPareja(QVector<RegistroMatriculas*> _RegistrosMatriculas, const QString &_matricula){
 
-            QMutex _mutexreport;
-            _mutexreport.lock();
+            //QMutex _mutexreport;
+            //_mutexreport.lock();
             /** TODO ENTRE FECHAS **/
              qDebug() << "BUSCANDO:  [[" << _matricula << "]]";
             QSqlQuery qry(m_db);
@@ -177,7 +177,7 @@ namespace nQTrucks{
             qry.bindValue(":matriculabuscar", _matricula);
 
             if (!qry.exec()) {
-                _mutexreport.unlock();
+              //  _mutexreport.unlock();
                 return false;
             }
             /** MEMORY LEAK **/ // make sure your query has been executed successfully
@@ -185,7 +185,7 @@ namespace nQTrucks{
             while (qry.next()){
                 _RegistrosMatriculas[1]->setId(qry.value("id").toLongLong());
                 _RegistrosMatriculas[1]->m_bascula->setIBruto(qry.value("pesobruto").toFloat()); //DEBUG
-                _mutexreport.unlock();
+                //_mutexreport.unlock();
                 return actualizarPareja(_RegistrosMatriculas);
                     //_RegistrosMatriculas[1]->m_bascula->setIBruto(qry.value("pesobruto").toFloat()+300); //DEBUG
                     /** Actualizo a Procesado y
@@ -197,9 +197,8 @@ namespace nQTrucks{
 
         bool RegistroPeso::actualizarPareja(QVector<RegistroMatriculas *> _RegistrosMatriculas)
         {
-
-            QMutex _mutexreport;
-            _mutexreport.lock();
+            //QMutex _mutexreport;
+            //_mutexreport.lock();
             float neto = fabs(_RegistrosMatriculas[0]->m_bascula->getIBruto() - _RegistrosMatriculas[1]->m_bascula->getIBruto());
             _RegistrosMatriculas[0]->m_bascula->setINeto(neto);
             _RegistrosMatriculas[1]->m_bascula->setINeto(neto);
@@ -215,7 +214,7 @@ namespace nQTrucks{
             qry.bindValue(":id0",      _RegistrosMatriculas[0]->getId());
             qry.bindValue(":entrada",  false);
             if (!qry.exec()){
-                _mutexreport.unlock();
+              //  _mutexreport.unlock();
                 return false;
             }
             qDebug() << "actualizando pareja 1";
@@ -225,19 +224,13 @@ namespace nQTrucks{
                 qry2.bindValue(":id0",      _RegistrosMatriculas[1]->getId());
                 qry2.bindValue(":entrada",  true);
                 if (!qry2.exec()){
-                    _mutexreport.unlock();
+            //        _mutexreport.unlock();
                     return false;
                 }
                 qDebug() << "actualizando pareja 2";
-                _mutexreport.unlock();
+              //  _mutexreport.unlock();
                 return true;
         }
-
-
-
-
-
-
 
     } /** End namespace Maestros **/
 } /** End namespace nQTrucks **/

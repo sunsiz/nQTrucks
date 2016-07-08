@@ -38,9 +38,8 @@ Desktop::Desktop(QWidget *parent) :
     //ui->appWidget->setVisible(false);
 
     /** DAEMON **/
-    connect(ui->runningCheckBox,SIGNAL(toggled(bool)),this,SLOT(isRunning(bool)));
     loadconfig();
-
+    connect(ui->runningCheckBox,SIGNAL(toggled(bool)),this,SLOT(isRunning(bool)));
     connect(m_app_engine,SIGNAL(registrandoChanged(bool)),ui->runningCheckBox,SLOT(setDisabled(bool)));
 
 
@@ -75,7 +74,7 @@ void Desktop::loadconfig(){
    ui->actionConfiguracion->setVisible(false);
    ui->actionKeyboard->setVisible(false);
    ui->actionSystemSettings->setVisible(false);
-   ui->actionRegistros->setVisible(false);
+   ui->actionRegistros->setVisible(true);
    ui->actionClient->setVisible(false);
 
    m_running = m_app_engine->appConfig()->value(QString("Daemon") + "/running","0").toBool();
