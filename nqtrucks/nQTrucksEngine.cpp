@@ -217,11 +217,11 @@ nQTrucksEngine::nQTrucksEngine(QObject *parent)
 
     /** CAMARAS IP **/
     /** 1 **/
-    connect(d->m_camara[0],SIGNAL(ReplyCamaraIP(Camara)),this,SIGNAL(CamaraIP1(Camara)));
-    connect(d->m_camara[0],SIGNAL(CamaraIPWeb(QString)),            this,SIGNAL(CamaraIPWeb1(QString)));
+    connect(d->m_camara[0],&Devices::CamaraIP::ReplyCamaraIP,       this,&nQTrucksEngine::CamaraIP1);
+    connect(d->m_camara[0],&Devices::CamaraIP::CamaraIPWeb,         this,&nQTrucksEngine::CamaraIPWeb1);
     /** 2 **/
-    connect(d->m_camara[1],SIGNAL(ReplyCamaraIP(Camara)),this,SIGNAL(CamaraIP2(Camara)));
-    connect(d->m_camara[1],SIGNAL(CamaraIPWeb(QString)),            this,SIGNAL(CamaraIPWeb2(QString)));
+    connect(d->m_camara[1],&Devices::CamaraIP::ReplyCamaraIP,       this,&nQTrucksEngine::CamaraIP2);
+    connect(d->m_camara[1],&Devices::CamaraIP::CamaraIPWeb,         this,&nQTrucksEngine::CamaraIPWeb2);
     /** END CAMARAS IP **/
 
     /** NEWSAGES IO **/
