@@ -50,7 +50,7 @@ Desktop::Desktop(QWidget *parent) :
     connect(ui->runningCheckBox,SIGNAL(toggled(bool)),this,SLOT(isRunning(bool)));
     connect(m_app_engine,SIGNAL(registrandoChanged(bool)),ui->runningCheckBox,SLOT(setDisabled(bool)));
     loadconfig();
-    isRunning(m_running);
+    //isRunning(m_running);
 
 
 }
@@ -80,13 +80,13 @@ void Desktop::changeEvent(QEvent *e){
 void Desktop::loadconfig(){
 
    /** INTERFACE **/
-   ui->actionRegistros->setVisible(false);
-   ui->actionReiniciar->setVisible(false);
+   ui->actionRegistros->setVisible(true);
+   //ui->actionReiniciar->setVisible(false);
+   ui->actionClient->setVisible(false);
    ui->actionConexiones->setVisible(false);
    ui->actionConfiguracion->setVisible(false);
    ui->actionKeyboard->setVisible(false);
    ui->actionSystemSettings->setVisible(false);
-   ui->actionClient->setVisible(true);
 
    m_running = m_app_engine->appConfig()->value(QString("Daemon") + "/running","0").toBool();
    ui->runningCheckBox->setChecked(m_running);
@@ -264,7 +264,7 @@ void Desktop::registrandoChanged(const bool &_registrando){}
 
 
 void Desktop::on_actionReiniciar_triggered(){
-    m_reboot->startDetached("/usr/bin/sudo",QStringList() << "reboot" );
+    m_reboot->startDetached("/usr/bin/sudo",QStringList() << "-S shutdown -r now" );
 
 }
 

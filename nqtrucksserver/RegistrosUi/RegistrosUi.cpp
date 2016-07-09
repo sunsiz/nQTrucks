@@ -49,7 +49,7 @@ RegistrosUi::RegistrosUi(nQTrucksEngine *_engine, QWidget *parent)
     /** FILTRO CALENDARIO **/
     flt_fecha = new QSortFilterProxyModel(this);
     flt_fecha->setSourceModel(engine->RegistrosPesos);
-    flt_fecha->setFilterKeyColumn(REGISTROS_MATRICULAS_ID);
+    flt_fecha->setFilterKeyColumn(REGISTROS_MATRICULAS_FECHA);
     flt_fecha->setDynamicSortFilter(false);
 
     /** Filtro Procesado **/
@@ -84,15 +84,15 @@ RegistrosUi::RegistrosUi(nQTrucksEngine *_engine, QWidget *parent)
     }
 
     ui->tableRegistrosView->showColumn(REGISTROS_MATRICULAS_ID);
-    ui->tableRegistrosView->model()->setHeaderData(0,Qt::Horizontal,"Registro");
+    ui->tableRegistrosView->model()->setHeaderData(REGISTROS_MATRICULAS_ID,Qt::Horizontal,"Registro");
     ui->tableRegistrosView->showColumn(REGISTROS_MATRICULAS_MATRICULAA1);
-    ui->tableRegistrosView->model()->setHeaderData(4, Qt::Horizontal,"Matrícula1");
+    ui->tableRegistrosView->model()->setHeaderData(REGISTROS_MATRICULAS_MATRICULAA1, Qt::Horizontal,"Matrícula1");
     ui->tableRegistrosView->showColumn(REGISTROS_MATRICULAS_MATRICULAB1);
-    ui->tableRegistrosView->model()->setHeaderData(5, Qt::Horizontal,"Matrícula2");
+    ui->tableRegistrosView->model()->setHeaderData(REGISTROS_MATRICULAS_MATRICULAB1, Qt::Horizontal,"Matrícula2");
     ui->tableRegistrosView->showColumn(REGISTROS_MATRICULAS_MATRICULAA2);
-    ui->tableRegistrosView->model()->setHeaderData(6,Qt::Horizontal,"Matrícula3");
+    ui->tableRegistrosView->model()->setHeaderData(REGISTROS_MATRICULAS_MATRICULAA2,Qt::Horizontal,"Matrícula3");
     ui->tableRegistrosView->showColumn(REGISTROS_MATRICULAS_MATRICULAB2);
-    ui->tableRegistrosView->model()->setHeaderData(7,Qt::Horizontal,"Matrícula4");
+    ui->tableRegistrosView->model()->setHeaderData(REGISTROS_MATRICULAS_MATRICULAB2,Qt::Horizontal,"Matrícula4");
 
 
     on_calendarioWidget_clicked(QDate::currentDate());    
@@ -133,16 +133,16 @@ void RegistrosUi::on_selectProcesados_clicked(bool checked){
 
     }else{
         ui->tableRegistrosView->showColumn(REGISTROS_MATRICULAS_ID);
-        ui->tableRegistrosView->model()->setHeaderData(0,Qt::Horizontal,"Registro");
+        ui->tableRegistrosView->model()->setHeaderData(REGISTROS_MATRICULAS_ID,Qt::Horizontal,"Registro");
     }
 }
 
 void RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &index){
     int  row        = index.row();
-    long long id    = index.sibling(row, 0).data().toLongLong();
-    QTime hora      = index.sibling(row, 1).data().toTime();
-    float pesobruto = index.sibling(row, 2).data().toFloat();
-    bool procesado  = index.sibling(row, 8).data().toBool();
+    long long id    = index.sibling(row, REGISTROS_MATRICULAS_ID).data().toLongLong();
+    QTime hora      = index.sibling(row, REGISTROS_MATRICULAS_FECHA).data().toTime();
+    float pesobruto = index.sibling(row, REGISTROS_MATRICULAS_PESOBRUTO).data().toFloat();
+    bool procesado  = index.sibling(row, REGISTROS_MATRICULAS_PROCESADO).data().toBool();
 //    long long id2   = index.sibling(row, 20).data().toLongLong();
 
 
