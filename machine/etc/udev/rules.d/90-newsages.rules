@@ -1,0 +1,2 @@
+SUBSYSTEM=="input", KERNEL=="event[0-9]*", ATTRS{name}=="Newsages_TOUCH*", SYMLINK+="input/touchscreen"
+SUBSYSTEM=="tty" ,  ATTRS{idVendor}=="1a86" , ATTRS{idProduct}=="7523" , SYMLINK+="NewsagesIO" 

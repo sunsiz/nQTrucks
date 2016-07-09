@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Newsages Shell
+TryExec=/opt/newsages/nQTrucks/nqtrucksserver
+Exec=/opt/newsages/nQTrucks/nqtrucksserver
+OnlyShowIn=LXQt;
+X-LXQt-Module=true
+X-LXQt-AutoRestart=true
+X-GNOME-AutoRestart=true
+Name[es]=Newsages SHELL

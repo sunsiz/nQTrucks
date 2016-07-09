@@ -1,0 +1,13 @@
+[Original]
+log = Original configuration
+fstab = # /etc/fstab: static file system information.
+	#
+	# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+	
+	proc	/proc	proc	defaults	0	0
+	# /dev/sda1
+	UUID=3268d061-2905-420f-a4f3-8bacfa9dd65c	swap	swap	sw	0	0
+	# /dev/sda2
+	UUID=a296921f-844e-4d2e-8b69-953df2562dbd	/	ext4	rw,errors=remount-ro	0	1
+	
+

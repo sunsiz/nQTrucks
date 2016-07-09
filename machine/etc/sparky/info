@@ -1,0 +1,12 @@
+RELEASE=4
+CODENAME=Tyche
+EDITION=sparky
+DESCRIPTION="SparkyLinux"
+#DESKTOP=
+DISTRIB_ID=SparkyLinux
+TOOLKIT=GTK
+NEW_FEATURES_URL=http://sparkylinux.org
+RELEASE_NOTES_URL=http://sparkylinux.org
+USER_GUIDE_URL=http://sparkylinux.org
+GRUB_TITLE="Sparky"
+

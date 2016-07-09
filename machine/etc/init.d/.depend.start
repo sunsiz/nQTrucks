@@ -1,0 +1,27 @@
+TARGETS = motd killprocs bootlogs single nfs-common console-setup.sh rsyslog uuidd libcec-daemon sudo acpi-fakekey apache2 mysql dbus memcached atd acpid irqbalance acpi-support anacron ssh rsync cron ntp exim4 bluetooth network-manager lightdm avahi-daemon cups-browsed saned cups plymouth rmnologin rc.local
+INTERACTIVE = console-setup.sh apache2
+single: killprocs motd bootlogs
+apache2: rsyslog
+mysql: rsyslog
+dbus: rsyslog
+memcached: rsyslog
+atd: rsyslog
+acpid: rsyslog
+irqbalance: rsyslog
+acpi-support: rsyslog
+anacron: rsyslog
+ssh: rsyslog
+rsync: rsyslog
+cron: rsyslog
+ntp: rsyslog
+exim4: rsyslog mysql
+bluetooth: rsyslog dbus
+network-manager: dbus rsyslog
+lightdm: acpid dbus
+avahi-daemon: dbus rsyslog
+cups-browsed: rsyslog
+saned: rsyslog dbus
+cups: rsyslog
+plymouth: mysql rsyslog nfs-common exim4 bluetooth dbus uuidd memcached atd network-manager lightdm acpid libcec-daemon cups-browsed avahi-daemon saned apache2 irqbalance motd bootlogs acpi-support cups console-setup.sh sudo anacron ssh rsync cron ntp acpi-fakekey
+rmnologin: sudo mysql rsyslog nfs-common exim4 bluetooth dbus uuidd memcached atd network-manager lightdm acpid libcec-daemon cups-browsed avahi-daemon saned apache2 irqbalance motd bootlogs acpi-support cups console-setup.sh anacron ssh rsync cron ntp acpi-fakekey
+rc.local: mysql rsyslog nfs-common exim4 bluetooth dbus uuidd memcached atd network-manager lightdm acpid libcec-daemon cups-browsed avahi-daemon saned apache2 irqbalance motd bootlogs acpi-support cups console-setup.sh sudo anacron ssh rsync cron ntp acpi-fakekey

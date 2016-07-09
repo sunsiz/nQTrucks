@@ -1,0 +1,21 @@
+[Desktop Entry]
+Type=Application
+Name=Compton (X Compositor)
+GenericName=X compositor
+Comment=A X compositor
+TryExec=compton
+Exec=compton --dbus
+
+# turned off by default
+Hidden=true
+OnlyShowIn=LXQt;
+X-LXQt-Module=true
+Name[de]=Compton (X11 Kompositionsmanager)
+GenericName[de]=X11 Kompositionsmanager
+Comment[de]=Kompositionsmanager für X11
+Name[el]=Compton (Συνθέτης X)
+GenericName[el]=Συνθέτης X
+Comment[el]=Ένας συνθέτης X
+Name[pt]=Compton (Compositor X)
+GenericName[pt]=Compositor X
+Comment[pt]=Compositor para o servidor X

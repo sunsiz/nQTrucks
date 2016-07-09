@@ -1,0 +1,9 @@
+[Plymouth Theme]
+Name=SparkyBlue
+Description=Script example plugin
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/sparky-blue
+ScriptFile=/usr/share/plymouth/themes/sparky-blue/sparky-blue.script
+

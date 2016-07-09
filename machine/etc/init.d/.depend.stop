@@ -1,0 +1,14 @@
+TARGETS = apache-htcacheclean urandom ufw alsa-utils uuidd libcec-daemon apache2 memcached atd irqbalance acpi-support exim4 bluetooth network-manager lightdm cups-browsed saned cups plymouth mysql avahi-daemon sendsigs rsyslog umountnfs.sh rpcbind nfs-common hwclock.sh networking umountfs umountroot halt reboot
+mysql: exim4
+avahi-daemon: cups-browsed saned
+sendsigs: plymouth alsa-utils mysql exim4 bluetooth uuidd memcached atd network-manager lightdm apache-htcacheclean libcec-daemon cups-browsed avahi-daemon saned apache2 irqbalance
+rsyslog: mysql exim4 bluetooth memcached atd network-manager apache-htcacheclean sendsigs cups-browsed avahi-daemon saned apache2 irqbalance acpi-support cups
+umountnfs.sh: plymouth alsa-utils sendsigs mysql exim4 bluetooth uuidd memcached atd network-manager lightdm apache-htcacheclean rsyslog libcec-daemon cups-browsed avahi-daemon saned apache2 irqbalance
+rpcbind: umountnfs.sh
+nfs-common: umountnfs.sh
+hwclock.sh: mysql uuidd atd rsyslog cups-browsed nfs-common
+networking: rpcbind mysql umountnfs.sh exim4 cups-browsed apache2
+umountfs: plymouth rpcbind alsa-utils mysql umountnfs.sh exim4 bluetooth uuidd memcached networking atd network-manager urandom lightdm apache-htcacheclean hwclock.sh libcec-daemon cups-browsed avahi-daemon saned apache2 irqbalance
+umountroot: umountfs
+halt: umountroot
+reboot: umountroot

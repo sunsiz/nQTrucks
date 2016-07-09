@@ -1,0 +1,31 @@
+# Sparky XTerm is a configuration script which chooses
+# right x-terminal-emulator for Sparky applications
+# Created by Paweł "pavroo" Pijanowski 2015/02/26
+# Copyright 2014, 2015 under the GNU GPL2 License
+# Last updated 2016/03/17
+
+if [ $(pidof enlightenment) ] && [ -f /usr/bin/terminology ]; then
+	SPARKYXTERM="/usr/bin/terminology"
+elif [ $(pidof marco) ] && [ -f /usr/bin/mate-terminal ]; then
+	SPARKYXTERM="/usr/bin/mate-terminal"
+elif [ $(pidof openbox) ] && [ -f /usr/bin/qterminal ]; then
+	SPARKYXTERM="/usr/bin/qterminal"
+elif [ $(pidof openbox) ] && [ -f /usr/bin/lxterminal ]; then
+	SPARKYXTERM="/usr/bin/lxterminal"
+elif [ $(pidof kwin_x11) ] && [ -f /usr/bin/xterm ]; then
+	SPARKYXTERM="/usr/bin/xterm"
+elif [ $(pidof cinnamon) ] && [ -f /usr/bin/xterm ]; then
+	SPARKYXTERM="/usr/bin/xterm"
+elif [ $(pidof metacity) ] && [ -f /usr/bin/xterm ]; then
+	SPARKYXTERM="/usr/bin/xterm"
+elif [ $(pidof gnome-shell) ] && [ -f /usr/bin/xterm ]; then
+	SPARKYXTERM="/usr/bin/xterm"
+elif [ $(pidof gala) ] && [ -f /usr/bin/xterm ]; then
+	SPARKYXTERM="/usr/bin/xterm"
+else
+	if [ -f /usr/bin/xterm ]; then
+		SPARKYXTERM="/usr/bin/xterm"
+	else
+		SPARKYXTERM="x-terminal-emulator"
+	fi
+fi

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=vnc
+Exec=/usr/lib/vino/vino-server
+NoDisplay=true
+X-GNOME-AutoRestart=true
+X-GNOME-Autostart-Phase=Initialization

@@ -1,0 +1,94 @@
+
+menu "Applications" folder {
+menu "Editors" folder {
+  prog    "Nano" "/usr/share/nano/nano-menu.xpm" /bin/sh -c "x-terminal-emulator  -T \"Nano\" -e sh -c \"/bin/nano\""
+}
+menu "File Management" folder {
+  prog    "mc" "/usr/share/pixmaps/mc.xpm" /bin/sh -c "x-terminal-emulator  -T \"mc\" -e sh -c \"/usr/bin/mc\""
+  prog    "PCManFM" - /bin/sh -c "/usr/bin/pcmanfm"
+}
+menu "Network" folder {
+menu "Communication" folder {
+  prog    "Mutt" "/usr/share/pixmaps/mutt.xpm" /bin/sh -c "x-terminal-emulator  -T \"Mutt\" -e sh -c \"/usr/bin/mutt\""
+  prog    "Telnet" - /bin/sh -c "x-terminal-emulator  -T \"Telnet\" -e sh -c \"/usr/bin/telnet\""
+}
+menu "Web Browsing" folder {
+  prog    "ELinks WWW browser" - /bin/sh -c "x-terminal-emulator  -T \"ELinks WWW browser\" -e sh -c \"/usr/bin/elinks\""
+  prog    "w3m" - /bin/sh -c "x-terminal-emulator  -T \"w3m\" -e sh -c \"/usr/bin/w3m /usr/share/doc/w3m/MANUAL.html\""
+}
+}
+menu "Programming" folder {
+  prog    "Python (v2.6)" "/usr/share/pixmaps/python2.6.xpm" /bin/sh -c "x-terminal-emulator  -T \"Python (v2.6)\" -e sh -c \"/usr/bin/python2.6\""
+  prog    "Python (v2.7)" "/usr/share/pixmaps/python2.7.xpm" /bin/sh -c "x-terminal-emulator  -T \"Python (v2.7)\" -e sh -c \"/usr/bin/python2.7\""
+  prog    "Python (v3.3)" "/usr/share/pixmaps/python3.3.xpm" /bin/sh -c "x-terminal-emulator  -T \"Python (v3.3)\" -e sh -c \"/usr/bin/python3.3\""
+  prog    "Tclsh8.5" - /bin/sh -c "x-terminal-emulator  -T \"Tclsh8.5\" -e sh -c \"/usr/bin/tclsh8.5\""
+  prog    "TkWish8.5" - /bin/sh -c "x-terminal-emulator -e /usr/bin/wish8.5"
+}
+menu "Science" folder {
+menu "Mathematics" folder {
+  prog    "Bc" - /bin/sh -c "x-terminal-emulator  -T \"Bc\" -e sh -c \"/usr/bin/bc\""
+  prog    "Dc" - /bin/sh -c "x-terminal-emulator  -T \"Dc\" -e sh -c \"/usr/bin/dc\""
+}
+}
+menu "Shells" folder {
+  prog    "Bash" - /bin/sh -c "x-terminal-emulator  -T \"Bash\" -e sh -c \"/bin/bash --login\""
+  prog    "Dash" - /bin/sh -c "x-terminal-emulator  -T \"Dash\" -e sh -c \"/bin/dash -i\""
+  prog    "Sh" - /bin/sh -c "x-terminal-emulator  -T \"Sh\" -e sh -c \"/bin/sh --login\""
+}
+menu "Sound" folder {
+  prog    "moc" - /bin/sh -c "x-terminal-emulator  -T \"moc\" -e sh -c \"/usr/bin/mocp\""
+  prog    "volumeicon" - /bin/sh -c "/usr/bin/volumeicon"
+}
+menu "System" folder {
+menu "Administration" folder {
+  prog    "Ceni" "/usr/share/pixmaps/ceni.xpm" /bin/sh -c "x-terminal-emulator  -T \"Ceni\" -e sh -c \"su-to-root -c /usr/bin/Ceni\""
+  prog    "Debian Task selector" - /bin/sh -c "x-terminal-emulator  -T \"Debian Task selector\" -e sh -c \"su-to-root -c tasksel\""
+  prog    "Editres" - /bin/sh -c "editres"
+  prog    "nitrogen" - /bin/sh -c "/usr/bin/nitrogen"
+  prog    "Openbox Configuration Manager" "/usr/share/pixmaps/obconf.xpm" /bin/sh -c "/usr/bin/obconf"
+  prog    "Reportbug" - /bin/sh -c "x-terminal-emulator  -T \"Reportbug\" -e sh -c \"/usr/bin/reportbug --exit-prompt\""
+  prog    "Reportbug (GTK+)" - /bin/sh -c "/usr/bin/reportbug --exit-prompt --ui gtk2"
+  prog    "Xfontsel" - /bin/sh -c "xfontsel"
+  prog    "Xkill" - /bin/sh -c "xkill"
+  prog    "Xrefresh" - /bin/sh -c "xrefresh"
+}
+menu "Hardware" folder {
+  prog    "Xvidtune" - /bin/sh -c "xvidtune"
+}
+menu "Monitoring" folder {
+  prog    "htop" - /bin/sh -c "x-terminal-emulator  -T \"htop\" -e sh -c \"/usr/bin/htop\""
+  prog    "Pstree" "/usr/share/pixmaps/pstree16.xpm" /bin/sh -c "x-terminal-emulator  -T \"Pstree\" -e sh -c \"/usr/bin/pstree.x11\""
+  prog    "Top" - /bin/sh -c "x-terminal-emulator  -T \"Top\" -e sh -c \"/usr/bin/top\""
+  prog    "Xev" - /bin/sh -c "x-terminal-emulator -e xev"
+}
+menu "Package Management" folder {
+  prog    "Aptitude Package Manager (text)" - /bin/sh -c "x-terminal-emulator  -T \"Aptitude Package Manager (text)\" -e sh -c \"/usr/bin/aptitude-curses\""
+}
+}
+menu "Terminal Emulators" folder {
+  prog    "XTerm" "/usr/share/pixmaps/xterm-color_32x32.xpm" /bin/sh -c "xterm"
+  prog    "X-Terminal as root (GKsu)" "/usr/share/pixmaps/gksu-debian.xpm" /bin/sh -c "/usr/bin/gksu -u root /usr/bin/x-terminal-emulator"
+  prog    "XTerm (Unicode)" "/usr/share/pixmaps/xterm-color_32x32.xpm" /bin/sh -c "uxterm"
+}
+}
+menu "Help" folder {
+  prog    "Info" - /bin/sh -c "x-terminal-emulator  -T \"Info\" -e sh -c \"info\""
+}
+menu "Screen" folder {
+menu "Locking" folder {
+  prog    "Lock Screen (XScreenSaver)" - /bin/sh -c "/usr/bin/xscreensaver-command -lock"
+}
+menu "Saving" folder {
+  prog    "Activate ScreenSaver (Next)" - /bin/sh -c "/usr/bin/xscreensaver-command -next"
+  prog    "Activate ScreenSaver (Previous)" - /bin/sh -c "/usr/bin/xscreensaver-command -prev"
+  prog    "Activate ScreenSaver (Random)" - /bin/sh -c "/usr/bin/xscreensaver-command -activate"
+  prog    "Demo Screen Hacks" - /bin/sh -c "/usr/bin/xscreensaver-command -demo"
+  prog    "Disable XScreenSaver" - /bin/sh -c "/usr/bin/xscreensaver-command -exit"
+  prog    "Enable XScreenSaver" - /bin/sh -c "/usr/bin/xscreensaver"
+  prog    "Reinitialize XScreenSaver" - /bin/sh -c "/usr/bin/xscreensaver-command -restart"
+  prog    "ScreenSaver Preferences" - /bin/sh -c "/usr/bin/xscreensaver-command -prefs"
+}
+}
+menu "Window Managers" folder {
+  restart "Openbox" "/usr/share/pixmaps/openbox.xpm" /bin/sh -c "/usr/bin/openbox"
+}

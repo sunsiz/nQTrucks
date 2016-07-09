@@ -1,0 +1,33 @@
+# Sparky Editor is a configuration script which chooses
+# the right text editor ffor Sparky applications
+# Created by Paweł "pavroo" Pijanowski 2015/02/27
+# Copyright 2014, 2015 under the GNU GPL2 License
+# Last updated 2016/03/13
+
+if [ $(pidof xfwm4) ] && [ -f /usr/bin/mousepad ]; then
+	SPARKYEDITOR="/usr/bin/mousepad"
+
+elif [ $(pidof marco) ] && [ -f /usr/bin/pluma ]; then
+	SPARKYEDITOR="/usr/bin/pluma"
+
+elif [ $(pidof kwin) ] && [ -f /usr/bin/kwrite ]; then
+	SPARKYEDITOR="/usr/bin/kwrite"
+
+elif [ $(pidof kwin_x11) ] && [ -f /usr/bin/kwrite ]; then
+	SPARKYEDITOR="/usr/bin/kwrite"
+
+elif [ $(pidof enlightenment) ] && [ -f /usr/bin/ecrire ]; then
+	SPARKYEDITOR="/usr/bin/ecrire"
+
+elif [ $(pidof gala) ] && [ -f /usr/bin/leafpad ]; then
+	SPARKYEDITOR="/usr/bin/leafpad"
+
+else
+	if [ -f /usr/bin/gnome-text-editor ]; then
+		SPARKYEDITOR="gnome-text-editor"
+
+	elif [ -f /bin/nano ]; then
+		SPARKYEDITOR="`/usr/bin/sparky-terminal -e /bin/nano`"
+
+	fi
+fi

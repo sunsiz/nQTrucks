@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libsuinput
+Description: Thin userspace library on top of Linux uinput kernel module
+Version: 0.6.1
+URL: http://tjjr.fi/sw/libsuinput/
+Libs: -L${libdir} -lsuinput
+Cflags: -I${includedir}

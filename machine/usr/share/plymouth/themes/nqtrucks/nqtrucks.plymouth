@@ -1,0 +1,9 @@
+[Plymouth Theme]
+Name=nqtrucks
+Description=Script example plugin
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/nqtrucks
+ScriptFile=/usr/share/plymouth/themes/nqtrucks/nqtrucks.script
+
