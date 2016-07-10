@@ -12,7 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4){
 
 # *** LIBS ***#
 # ** nQTrucks ** #
-unix:{
+unix{
     DESTDIR = $$DEST_BINS
     LIBS += -L$${DEST_LIBS}
     INCLUDEPATH += $${GLOBAL_INCLUDE}

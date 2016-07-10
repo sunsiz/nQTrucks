@@ -140,18 +140,25 @@ void RegistrosUi::on_selectProcesados_clicked(bool checked){
 void RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &index){
     int  row        = index.row();
     long long id    = index.sibling(row, REGISTROS_MATRICULAS_ID).data().toLongLong();
+    long long id2   = index.sibling(row, REGISTROS_MATRICULAS_EMPAREJADO).data().toLongLong();
+    bool  procesado  = index.sibling(row, REGISTROS_MATRICULAS_PROCESADO).data().toBool();
+
     QTime hora      = index.sibling(row, REGISTROS_MATRICULAS_FECHA).data().toTime();
     float pesobruto = index.sibling(row, REGISTROS_MATRICULAS_PESOBRUTO).data().toFloat();
-    bool procesado  = index.sibling(row, REGISTROS_MATRICULAS_PROCESADO).data().toBool();
-//    long long id2   = index.sibling(row, 20).data().toLongLong();
+    float pesoneto = index.sibling(row, REGISTROS_MATRICULAS_PESONETO).data().toFloat();
+
+
+    qDebug() << "row:       "        << row;
+    qDebug() << "hora:       "       << hora;
+    qDebug() << "id:        "        << id;
+    qDebug() << "id2:       "        << id2;
+    qDebug() << "procesado: "        << procesado;
+    qDebug() << "peso bruto:       " << pesobruto;
+    qDebug() << "peso neto:       "  << pesoneto;
 
 
 
 
-//    qDebug() << "row:       " << row;
-//    qDebug() << "id:        " << id;
-//    qDebug() << "procesado: " << procesado;
-//    qDebug() << "id2:       " << id2;
 
 }
 

@@ -26,7 +26,7 @@ namespace nQTrucks {
         {
             if (m_db.isOpen()){
                 m_db.close();
-                QSqlDatabase::removeDatabase(m_db.connectionName());
+                //QSqlDatabase::removeDatabase(m_db.connectionName());
             }
         }
 

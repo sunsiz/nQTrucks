@@ -33,10 +33,12 @@
 #include <QDebug>
 #include <QDesktopWidget>
 
-#include <QTableView>
+#include <QDataWidgetMapper>
+#include <QByteArray>
+#include  <QVariant>
 
-#include "alpr.h"
-#include "prewarp.h"
+//#include "alpr.h"
+//#include "prewarp.h"
 
 namespace nQTrucks{
 
@@ -45,9 +47,6 @@ Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
     , ui(new Ui::Configuracion)
     , engine(_engine)
 {
-    ui->setupUi(this);
-
-    //engine  = new nQTrucks::nQTrucksEngine(this);
     m_matricularesults.resize(2);
 
     /** CAMARAS **/
@@ -71,17 +70,19 @@ Configuracion::Configuracion(nQTrucksEngine *_engine, QWidget *parent)
     connect(engine, &nQTrucksEngine::ReplyMatriculaResults2,           this,&Configuracion::onReplyMatriculaResults2);
     connect(engine ,&nQTrucksEngine::ReplyOriginalFoto2,               this,&Configuracion::onGetOriginalMatricula2);
     connect(engine ,&nQTrucksEngine::ReplyMatriculaCalibrationResults2,this,&Configuracion::onGetCalibrationResult2);
+
+    ui->setupUi(this);
     loadconfig();
     //setFixedSize(1024,768);
     //this->showFullScreen();
 }
 
-Configuracion::~Configuracion()
-{
-    delete ui;
+Configuracion::~Configuracion(){
     m_matricularesults[0]->deleteLater();
     m_matricularesults[1]->deleteLater();
     m_matricularesults.detach();
+    m_mapper->deleteLater();
+    delete ui;
 }
 
 
@@ -107,26 +108,14 @@ void Configuracion::loadconfig()
 {
 
     /** DEFAULTS UI **/
-//    for(m_matricularesults_iterator = m_matricularesults.begin(); m_matricularesults_iterator != m_matricularesults.end(); m_matricularesults_iterator++)
-//    {
-//        m_matricularesults_iterator->convertirFotos(); /** MEMORY LEAK **/
-
-//    }
     m_matricularesults[0] = new MatriculaResults(this);
     m_matricularesults[1] = new MatriculaResults(this);
-
     /** END DEFAULT UIS **/
-
 
     /** CAMARAS **/
     ui->CamaraSelect->addItem(CAMARA1);
     ui->CamaraSelect->addItem(CAMARA2);
     /** END CAMARAS **/
-
-    /** IO DEVICES **/
-    //QStringList l_IODevices = engine->getIODevices();
-    //ui->ioDevicesComboBox1->addItems(l_IODevices);
-    /** IO DEVICES **/
 
     /** BASCULAS **/
     ui->BasculaLcd->display("-------");
@@ -154,12 +143,14 @@ void Configuracion::loadconfig()
     engine->report_buildReportsTree(ui->reportsTreeWidget);
     /** END REPORTS **/
 
-
     updateGui();
     updateCalibracionGui();
+
+
+    /** EMPRESAS **/
+    m_mapper->setOrientation(Qt::Horizontal);
+    m_mapper->setModel(engine->Empresa);
     reloadEmpresa();
-
-
 }
 /** END SETTINGS **/
 
@@ -232,12 +223,6 @@ void Configuracion::on_GuardarCamara_clicked()
 
 
 /** NEWSAGES I/O  **/
-//void Configuracion::on_actualizarSemaforos_clicked(){
-//    ui->ioDevicesComboBox1->clear();
-//    QStringList l_IODevices = engine->getIODevices();
-//    ui->ioDevicesComboBox1->addItems(l_IODevices);
-//}
-
 void Configuracion::on_conectarSemaforo_clicked(){
     //on_guardarSemaforo_clicked();
     engine->setSemaforoDevicesConnect(true);
@@ -246,10 +231,6 @@ void Configuracion::on_conectarSemaforo_clicked(){
 void Configuracion::on_desconectarSemaforo_clicked(){
     engine->setSemaforoDevicesConnect(false);
 }
-
-//void Configuracion::on_guardarSemaforo_clicked(){
-//    engine->appConfig()->setValue(QString(NEWSAGESIO) + "/device",ui->ioDevicesComboBox1->currentText());
-//}
 
 void Configuracion::on_semaforoVerde_clicked(){
     engine->setSemaforoStatus(SEMAFORO_VERDE);
@@ -289,38 +270,30 @@ void Configuracion::on_SemaforoEstadoChanged(int _color){
 }
 /** END NEWSAGES I/O **/
 
-
-
-
 /** BASCULAS **/
-void Configuracion::on_actualizarBasculas_clicked()
-{
+void Configuracion::on_actualizarBasculas_clicked(){
     ui->BasculaDevicesComboBox->clear();
     QStringList l_Devices = engine->getSerialDevices();
     ui->BasculaDevicesComboBox->addItems(l_Devices);
 }
 
-void Configuracion::on_conectarBascula_clicked()
-{
+void Configuracion::on_conectarBascula_clicked(){
     on_guardarBascula_clicked();
     engine->setBasculaConnect(true);
 }
 
-void Configuracion::on_desconectarBascula_clicked()
-{
+void Configuracion::on_desconectarBascula_clicked(){
     engine->setBasculaConnect(false);
 }
 
-void Configuracion::on_guardarBascula_clicked()
-{
+void Configuracion::on_guardarBascula_clicked(){
     engine->appConfig()->setValue(QString(BASCULA) + "/device",            ui->BasculaDevicesComboBox->currentText());
     engine->appConfig()->setValue(QString(BASCULA) + "/tipo",              QString::number(ui->BasculaTipoComboBox->currentIndex()));
     engine->appConfig()->setValue(QString(BASCULA) + "/tolerancia_minima", QString::number(ui->BasculaErrorMinimo->value()));
     engine->appConfig()->setValue(QString(BASCULA) + "/factor_estable",    QString::number(ui->BasculaFactorEstable->value()));
 }
 
-void Configuracion::on_BasculaConectada(bool conectada)
-{
+void Configuracion::on_BasculaConectada(bool conectada){
     ui->BasculaStatus->setChecked(conectada);/** MEMORY LEAK **/
     if (!conectada){
         ui->BasculaLcd->display("-------");
@@ -330,14 +303,12 @@ void Configuracion::on_BasculaConectada(bool conectada)
     }
 }
 
-void Configuracion::onBascula(const Bascula &_bascula)
-{          
+void Configuracion::onBascula(const Bascula &_bascula){          
     ui->BasculaLcd->display(_bascula.getIBruto());
     ui->BasculaLcd2->display(_bascula.getITara());
     ui->BasculaLcd3->display(_bascula.getINeto());
     ui->BasculaEstable->setChecked(_bascula.getBEstado()); /** MEMORY LEAK **/
 }
-
 /** END BASCULAS **/
 
 
@@ -373,7 +344,6 @@ void Configuracion::on_ActualizarCamara_clicked(){
     engine->getCamaraFoto(index);
 }
 void Configuracion::updateCalibracionGui(){
-
     ui->FotoOriginalA->clear();
     ui->FotoMatriculaA->clear();
     ui->FotoMatriculaB->clear();
@@ -447,7 +417,6 @@ void Configuracion::on_vPlankC_valueChanged(int value){
     ui->lvPlankC->setText(QString::number( value));
 }
 
-
 void Configuracion::on_guardarPlanK_clicked(){
     int index = getAlprIndex();
     switch (index) {
@@ -487,23 +456,24 @@ void Configuracion::on_guardarEmpresa_clicked(){
 }
 
 void Configuracion::reloadEmpresa(){
-//    QTableView *flt_empresa = new QTableView();
-//    flt_empresa->setModel(engine->Empresa);
-//    if (flt_empresa->model()->rowCount()){
-//        flt_empresa->selectRow(0);
-//        if(flt_empresa->currentIndex().isValid()){
-//            int  row       = flt_empresa->currentIndex().row();
-//            ui->empresa_razon->setText(      flt_empresa->currentIndex().sibling(row,1).data().toString());
-//            ui->empresa_nif->setText(        flt_empresa->currentIndex().sibling(row,2).data().toString());
-//            ui->empresa_direccion1->setText( flt_empresa->currentIndex().sibling(row,3).data().toString());
-//            ui->empresa_direccion2->setText( flt_empresa->currentIndex().sibling(row,4).data().toString());
-//            ui->empresa_direccion3->setText( flt_empresa->currentIndex().sibling(row,5).data().toString());
-//            ui->empresa_certificado->setText(flt_empresa->currentIndex().sibling(row,6).data().toString());
-//            ui->empresa_enac->setText(       flt_empresa->currentIndex().sibling(row,7).data().toString());
-//        }
-//    }
-}
 
+
+    m_mapper->addMapping(ui->empresa_razon,         1);
+    m_mapper->addMapping(ui->empresa_nif,           2);
+    m_mapper->addMapping(ui->empresa_direccion1,    3);
+    m_mapper->addMapping(ui->empresa_direccion2,    4);
+    m_mapper->addMapping(ui->empresa_direccion3,    5);
+    m_mapper->addMapping(ui->empresa_certificado,   6);
+    m_mapper->addMapping(ui->empresa_enac,          7);
+    m_mapper->toFirst();
+
+    QPixmap pixmap;
+    if (pixmap.loadFromData(engine->Empresa->index(m_mapper->currentIndex(),8).data().toByteArray()) )
+    {
+        ui->empresa_logo->setPixmap(pixmap);
+    }
+
+}
 
 
 } //end Namespace

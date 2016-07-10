@@ -49,7 +49,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>4</number>
        </property>
        <property name="iconSize">
         <size>
@@ -82,7 +82,7 @@
          </iconset>
         </attribute>
         <attribute name="title">
-         <string>Bascula</string>
+         <string>Báscula</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="0" column="0">
@@ -342,8 +342,14 @@
             <layout class="QHBoxLayout" name="horizontalLayout_9">
              <item>
               <widget class="QSpinBox" name="BasculaErrorMinimo">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="prefix">
-                <string>Tolerancia minima </string>
+                <string>Tolerancia mínima </string>
                </property>
                <property name="minimum">
                 <number>10</number>
@@ -371,6 +377,12 @@
              </item>
              <item>
               <widget class="QSpinBox" name="BasculaFactorEstable">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="prefix">
                 <string>Factor Estable </string>
                </property>
@@ -386,6 +398,12 @@
               <widget class="QToolButton" name="BasculaEstable">
                <property name="enabled">
                 <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
                <property name="minimumSize">
                 <size>
@@ -775,7 +793,7 @@
          </iconset>
         </attribute>
         <attribute name="title">
-         <string>Camaras</string>
+         <string>Cámaras</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="1">
@@ -950,7 +968,7 @@
          </iconset>
         </attribute>
         <attribute name="title">
-         <string>Calibracion</string>
+         <string>Calibración</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_6">
          <item row="0" column="0">
@@ -1575,8 +1593,8 @@
          <string>Empresa</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_8">
-         <item row="0" column="0" colspan="2">
-          <layout class="QFormLayout" name="formLayout_2">
+         <item row="0" column="0">
+          <layout class="QFormLayout" name="formLayout_3">
            <item row="0" column="0">
             <widget class="QLabel" name="label_10">
              <property name="text">
@@ -1616,7 +1634,7 @@
            <item row="5" column="0">
             <widget class="QLabel" name="label_13">
              <property name="text">
-              <string>Certificado Bascula</string>
+              <string>Certificado</string>
              </property>
             </widget>
            </item>
@@ -1635,7 +1653,49 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
+         <item row="0" column="1" colspan="2">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QLabel" name="empresa_logo">
+             <property name="minimumSize">
+              <size>
+               <width>200</width>
+               <height>200</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>200</width>
+               <height>200</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0" colspan="2">
           <spacer name="horizontalSpacer_7">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -1648,7 +1708,7 @@
            </property>
           </spacer>
          </item>
-         <item row="1" column="1">
+         <item row="1" column="2">
           <widget class="QToolButton" name="guardarEmpresa">
            <property name="text">
             <string>Guardar</string>

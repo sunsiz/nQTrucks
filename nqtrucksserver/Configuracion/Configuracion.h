@@ -34,6 +34,7 @@
 
 #include "nQTrucksEngine.h"
 #include "nqtglobal.h"
+#include <QDataWidgetMapper>
 
 
 namespace Ui {
@@ -51,6 +52,7 @@ public:
 
 private:
     Ui::Configuracion *ui;
+    QDataWidgetMapper *m_mapper = new QDataWidgetMapper(this);
 //    bool m_running=false;
     void updateGui();
 

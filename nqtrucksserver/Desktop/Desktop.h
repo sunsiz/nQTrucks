@@ -45,7 +45,7 @@ private:
     QProcess *m_halt;
 
 private slots:
-    void on_exit_Keyboard(const int &arg1);
+    //void on_exit_Keyboard(const int &arg1);
     void on_actionKeyboard_toggled(bool arg1);
     void on_actionSystemSettings_triggered();
     void isRunning(bool clicked);

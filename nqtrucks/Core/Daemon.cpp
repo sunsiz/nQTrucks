@@ -30,8 +30,7 @@ Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_news
 
 }
 
-void Daemon::setInit(bool init)
-{    
+void Daemon::setInit(bool init){    
     if(m_init != init){
         m_init = init;        
         emit initChanged(m_init);
@@ -55,23 +54,19 @@ void Daemon::onStartStop(const bool &_init){
 
 }
 
-bool Daemon::registrando() const
-{
-    //emit registrandoChanged(m_registrando);
+bool Daemon::registrando() const {
     return m_registrando;
 }
 
-void Daemon::setRegistrando(bool registrando)
-{
+void Daemon::setRegistrando(bool registrando){
     m_registrando = registrando;
     emit registrandoChanged(m_registrando);
 }
 
 /** PESO *****************************/
-void Daemon::onPesoNuevo(const Bascula &_nuevaPesada)
-{
+void Daemon::onPesoNuevo(const Bascula &_nuevaPesada){
     if((m_init) && (!m_registrando)){
-        // Bloqueo Registro
+      // Bloqueo Registro
       setRegistrando(true);
       m_saliendo=false;
       //Activo Semaforo rojo
@@ -214,7 +209,6 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
     */
 
     /** MODO HILO PRINCIPAL: **/
-
     tareaDb = new Db::DatabaseManager;
     connect( tareaDb, &Db::DatabaseManager::rowsPesoChanged, this, &Daemon::rowsPesoChanged);
     tareaDb->setMaestros(this->m_maestros);

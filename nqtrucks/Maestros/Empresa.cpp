@@ -25,7 +25,7 @@ namespace nQTrucks{
 
 
         void Empresa::configQueries(){
-            m_DefaultQuery = "select * from empresa where idempresa=1 ;" ;//+ QString(appServer_tablename);
+            m_DefaultQuery = "select * from empresa ;" ;//+ QString(appServer_tablename);
         }
 
 
@@ -33,7 +33,6 @@ namespace nQTrucks{
         void Empresa::setTable(){
             beginResetModel();
             if(initDB()){
-
                 if (setQuery(m_DefaultQuery)){
                     while(canFetchMore() ) {
                         fetchMore();

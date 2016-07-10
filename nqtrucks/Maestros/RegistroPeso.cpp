@@ -75,9 +75,8 @@ namespace nQTrucks{
 
         void RegistroPeso::setTable(){
             beginResetModel();
-            setFecha_min_max();
             if(initDB()){
-
+                setFecha_min_max();
                 if (setQuery(m_DefaultQuery)){
                     while(canFetchMore() ) {
                         fetchMore();

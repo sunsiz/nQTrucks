@@ -22,7 +22,7 @@ RC_FILE = nQTrucks.rc
 #** LIBS  **#
 LIBS += -L$${DEST_LIBS}
 
-unix:{
+unix{
     DESTDIR  = $${DEST_LIBS}
     EXTRA_FILES += \
         $$PWD/nqtglobal.cpp \
@@ -56,7 +56,7 @@ unix:linux{
 }
 
 #*** nQAlpr ***#
-unix:{
+unix{
     DEPENDPATH  += $${GLOBAL_INCLUDE}/nQAlpr/include
     INCLUDEPATH += $${GLOBAL_INCLUDE}/nQAlpr/include
     INCLUDEPATH += $${SOURCE_GITS}/openalpr/src/openalpr
@@ -90,7 +90,7 @@ unix:{
 }
 
 #** LimeReport **#
-unix:{
+unix{
     DEPENDPATH  += $${GLOBAL_INCLUDE}/nQLReport/include
     INCLUDEPATH += $${GLOBAL_INCLUDE}/nQLReport/include
 
@@ -113,7 +113,7 @@ unix:{
 
 
 # ***nQLReport ***#
-unix:{
+unix{
     INCLUDEPATH     += $${DEST_INCLUDE_DIR}
     DEPENDPATH      += $${DEST_INCLUDE_DIR}
     #PRE_TARGETDEPS  += $${DEST_INCLUDE_DIR}
@@ -130,7 +130,7 @@ unix:{
 
 
 #INSTALLS
-linux:{
+linux{
    QMAKE_LFLAGS += -Wl,--rpath=/opt/newsages/lib
     target.path == $${NEWSAGES_LIBS}
 

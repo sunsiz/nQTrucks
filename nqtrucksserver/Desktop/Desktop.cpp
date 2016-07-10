@@ -16,18 +16,19 @@ Desktop::Desktop(QWidget *parent) :
     /** KEYBOARD **/
     m_keyboard = new QProcess(this);
     m_keyboard->setProgram("/usr/bin/onboard");
-//    m_keyboard->start();
     /** END KEYBOARD **/
 
+    /** SYSTEM CONTROL **/
+    m_reboot         = new QProcess(this);
+    m_halt           = new QProcess(this);
     m_control_center = new QProcess(this);
     m_control_center->setProgram("/usr/bin/gnome-control-center");
 
     /** APLICACION **/
-    m_app_engine = new nQTrucksEngine();
-
-    m_app_config    = new Configuracion(m_app_engine);
+    m_app_engine    = new nQTrucksEngine(this);
     m_app_client    = new Client(m_app_engine);
     m_app_registros = new RegistrosUi(m_app_engine);
+    m_app_config    = new Configuracion(m_app_engine);
 
     /** KEYBOARD SIEMPRE VIVO **/
     //connect(m_keyboard,SIGNAL(finished(int)),this,SLOT(on_exit_Keyboard(int)));
@@ -37,22 +38,12 @@ Desktop::Desktop(QWidget *parent) :
     //ui->appWidget->addWidget(m_app_config);
     //ui->appWidget->setVisible(false);
 
-    /** SYSTEM CONTROL **/
-    m_reboot = new QProcess(this);
-    //m_reboot->setProgram("/usr/bin/sudo" , /sbin/reboot");
-
-    m_halt = new QProcess(this);
-    //m_halt->setProgram("/usr/bin/sudo /sbin/halt");
-
-
 
     /** DAEMON **/
     connect(ui->runningCheckBox,SIGNAL(toggled(bool)),this,SLOT(isRunning(bool)));
     connect(m_app_engine,SIGNAL(registrandoChanged(bool)),ui->runningCheckBox,SLOT(setDisabled(bool)));
+
     loadconfig();
-    //isRunning(m_running);
-
-
 }
 
 Desktop::~Desktop(){
@@ -63,7 +54,6 @@ Desktop::~Desktop(){
     m_app_registros->deleteLater();
     m_app_engine->deleteLater();
     delete ui;
-
 }
 
 void Desktop::changeEvent(QEvent *e){
@@ -79,26 +69,37 @@ void Desktop::changeEvent(QEvent *e){
 
 void Desktop::loadconfig(){
 
-   /** INTERFACE **/
-   ui->actionRegistros->setVisible(true);
-   //ui->actionReiniciar->setVisible(false);
-   ui->actionClient->setVisible(false);
-   ui->actionConexiones->setVisible(false);
-   ui->actionConfiguracion->setVisible(false);
-   ui->actionKeyboard->setVisible(false);
-   ui->actionSystemSettings->setVisible(false);
+    /** INTERFACE **/
+    m_running = m_app_engine->appConfig()->value(QString("Daemon") + "/running","0").toBool();
 
-   m_running = m_app_engine->appConfig()->value(QString("Daemon") + "/running","0").toBool();
+    ui->actionRegistros->setVisible(true);
+    ui->actionConexiones->setVisible(false);
+    ui->actionKeyboard->setVisible(false);
+
+    ui->actionConfiguracion->setVisible(!m_running);
+    ui->actionSystemSettings->setVisible(!m_running);
+    ui->actionReiniciar->setVisible(!m_running);
+    ui->actionClient->setVisible(m_running);
+
+    //DEBUG NO BLOQUEAR ui->configTabWidget->setEnabled(!m_running);
+    if (m_running){
+        ui->runningCheckBox->setText("Running...");
+    }else{
+        ui->runningCheckBox->setText("Stoped...");
+    }
+
+
+
+
    ui->runningCheckBox->setChecked(m_running);
-
 }
 
 /** HARDWARE **************************************************************/
 /** KEYBOARD ***/
-void Desktop::on_exit_Keyboard(const int &arg1){
-    Q_UNUSED(arg1);
-    m_keyboard->start();
-}
+//void Desktop::on_exit_Keyboard(const int &arg1){
+//    Q_UNUSED(arg1);
+//    m_keyboard->start();
+//}
 
 void Desktop::on_actionKeyboard_toggled(bool arg1){
     if (arg1){
@@ -125,78 +126,47 @@ void Desktop::on_actionSystemSettings_triggered(){
 
 /** END SYSTEM SETTINGS **/
 /** END HARDWARE **********************************************************************************/
+
 /** APPLICACION ***************************************************************/
 void Desktop::on_selectedAppChanged(){
 
     ui->appWidget->removeWidget(ui->appWidget->currentWidget());
     switch (m_app) {
     case appConfig:
-
-            //m_app_client=nullptr;
-            ui->actionClient->setChecked(false);
-
-            //m_app_registros=nullptr;
-            ui->actionRegistros->setChecked(false);
-
-            //m_app_config    = new Configuracion(m_app_engine);
-
+        ui->actionClient->setChecked(false);
+        ui->actionRegistros->setChecked(false);
         m_app_config->setMaximumSize(ui->appWidget->size());
         m_app_config->setSizePolicy(ui->appWidget->sizePolicy());
-
         ui->appWidget->addWidget(m_app_config);
         ui->appWidget->setCurrentWidget(m_app_config);
         break;
-
     case appClient:
-            //m_app_registros=nullptr;
-            ui->actionRegistros->setChecked(false);
-
-            //m_app_config=nullptr;
-            ui->actionConfiguracion->setChecked(false);
-
-            //m_app_client = new Client(m_app_engine);
-
+        ui->actionRegistros->setChecked(false);
+        ui->actionConfiguracion->setChecked(false);
         m_app_client->setMaximumSize(ui->appWidget->size());
         m_app_client->setSizePolicy(ui->appWidget->sizePolicy());
-
         ui->appWidget->addWidget(m_app_client);
         ui->appWidget->setCurrentWidget(m_app_client);
         break;
-
     case appRegistros:
-            //m_app_config=nullptr;
-            ui->actionConfiguracion->setChecked(false);
-
-            //m_app_client=nullptr;
-            ui->actionClient->setChecked(false);
-
-            //m_app_registros  = new RegistrosUi(m_app_engine);
-
+        ui->actionConfiguracion->setChecked(false);
+        ui->actionClient->setChecked(false);
         m_app_registros->setMaximumSize(ui->appWidget->size());
         m_app_registros->setSizePolicy(ui->appWidget->sizePolicy());
-
         ui->appWidget->addWidget(m_app_registros);
         ui->appWidget->setCurrentWidget(m_app_registros);
         break;
 
     case appNone:
-            //m_app_client=nullptr;
-            ui->actionClient->setChecked(false);
-
-            //m_app_registros=nullptr;
-            ui->actionRegistros->setChecked(false);
-
-            //m_app_config=nullptr;
-            ui->actionConfiguracion->setChecked(false);
-
+        ui->actionClient->setChecked(false);
+        ui->actionRegistros->setChecked(false);
+        ui->actionConfiguracion->setChecked(false);
         break;
     }
 }
 
-
 /** CONFIGURACION APP **/
 void Desktop::on_actionConfiguracion_toggled(bool arg1){
-
     if (arg1){
         m_app=appConfig;
     }else{
@@ -230,49 +200,39 @@ void Desktop::on_actionRegistros_toggled(bool arg1){
 
 
 /** DAEMON **/
-void Desktop::isRunning(bool clicked)
-{
+void Desktop::isRunning(bool clicked){
     ui->appWidget->removeWidget(ui->appWidget->currentWidget());
     m_running=clicked;
-    ui->actionConfiguracion->setVisible(!m_running);
+
+    ui->actionConfiguracion->setVisible( !m_running);
     ui->actionSystemSettings->setVisible(!m_running);
-    ui->actionReiniciar->setVisible(!m_running);
-
-    ui->actionClient->setVisible(m_running);
-//    ui->actionRegistros->setVisible(m_running);
-
+    ui->actionApagar->setVisible(        !m_running);
+    ui->actionReiniciar->setVisible(     !m_running);
+    ui->actionClient->setVisible(         m_running);
 
     m_app_engine->appConfig()->setValue(QString("Daemon") + "/running",m_running);
     m_app_engine->setInitDaemon(m_running);
+
     //DEBUG NO BLOQUEAR ui->configTabWidget->setEnabled(!m_running);
     if (m_running){
-//        m_app_config    = new Configuracion(m_app_engine,this);
-//        m_app_client    = new Client(m_app_engine,this);
-//        m_app_registros = new RegistrosUi(m_app_engine,this);
-
         ui->runningCheckBox->setText("Running...");
     }else{
-
-
-
         ui->runningCheckBox->setText("Stoped...");
     }
 }
 
-void Desktop::registrandoChanged(const bool &_registrando){}
+void Desktop::registrandoChanged(const bool &_registrando){
 
+}
 
 
 void Desktop::on_actionReiniciar_triggered(){
-    m_reboot->startDetached("/usr/bin/sudo",QStringList() << "-S shutdown -r now" );
-
+    m_reboot->startDetached("/usr/bin/sudo",QStringList() << "reboot" );
 }
-
-
 
 void Desktop::on_actionApagar_triggered(){
-    m_halt->startDetached("/usr/bin/sudo",QStringList() << "halt" );
+    m_halt->startDetached("/usr/bin/sudo",QStringList() << "poweroff" );
 }
 
 
-}
+} /** END NAMESPACE **/
