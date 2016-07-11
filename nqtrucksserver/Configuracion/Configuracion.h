@@ -52,7 +52,7 @@ public:
 
 private:
     Ui::Configuracion *ui;
-    QDataWidgetMapper *m_mapper = new QDataWidgetMapper(this);
+    QDataWidgetMapper *m_mapper;
 //    bool m_running=false;
     void updateGui();
 
@@ -145,6 +145,8 @@ private slots:
     void on_reportsTreeWidget_doubleClicked(const QModelIndex &index);
     void on_guardarEmpresa_clicked();
     void reloadEmpresa();
+
+    void on_actualizarEmpresa_clicked();
 
 private:
     void loadconfig();

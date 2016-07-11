@@ -5,7 +5,7 @@ namespace nQTrucks{
     namespace Maestros{
 
     static const QString qry_empresa_insert_or_update =    " INSERT INTO empresa"
-                                                "         ( idempresa,  razon,  nif,  direccion1,  direccion2,  direccion3,  certificado,  enac ) "
+                                                "         ( id,   razon,  nif,  direccion1,  direccion2,  direccion3,  certificado,  enac ) "
                                                 " VALUES  ( 1,         :razon, :nif, :direccion1, :direccion2, :direccion3, :certificado, :enac ) "
                                                 " ON DUPLICATE KEY UPDATE "
                                                 " razon       = :razon, "

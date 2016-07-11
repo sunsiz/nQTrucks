@@ -36,6 +36,8 @@
 #include <QDataWidgetMapper>
 #include <QByteArray>
 #include  <QVariant>
+#include <QSql>
+#include <QSqlRelationalDelegate>
 
 //#include "alpr.h"
 //#include "prewarp.h"
@@ -110,6 +112,8 @@ void Configuracion::loadconfig()
     /** DEFAULTS UI **/
     m_matricularesults[0] = new MatriculaResults(this);
     m_matricularesults[1] = new MatriculaResults(this);
+    ui->Informes->setDisabled(true); //DEBUG
+    ui->Informes->setHidden(true); //DEBUG
     /** END DEFAULT UIS **/
 
     /** CAMARAS **/
@@ -148,8 +152,11 @@ void Configuracion::loadconfig()
 
 
     /** EMPRESAS **/
+    m_mapper = new QDataWidgetMapper(this);
     m_mapper->setOrientation(Qt::Horizontal);
+    m_mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
     m_mapper->setModel(engine->Empresa);
+    m_mapper->setItemDelegate(new QSqlRelationalDelegate(this));
     reloadEmpresa();
 }
 /** END SETTINGS **/
@@ -456,16 +463,17 @@ void Configuracion::on_guardarEmpresa_clicked(){
 }
 
 void Configuracion::reloadEmpresa(){
-
-
+    //
     m_mapper->addMapping(ui->empresa_razon,         1);
     m_mapper->addMapping(ui->empresa_nif,           2);
     m_mapper->addMapping(ui->empresa_direccion1,    3);
     m_mapper->addMapping(ui->empresa_direccion2,    4);
     m_mapper->addMapping(ui->empresa_direccion3,    5);
     m_mapper->addMapping(ui->empresa_certificado,   6);
-    m_mapper->addMapping(ui->empresa_enac,          7);
+    m_mapper->addMapping(ui->empresa_enac,          7);    
     m_mapper->toFirst();
+
+    qDebug() << "Mapper "  << m_mapper->currentIndex();
 
     QPixmap pixmap;
     if (pixmap.loadFromData(engine->Empresa->index(m_mapper->currentIndex(),8).data().toByteArray()) )
@@ -479,3 +487,8 @@ void Configuracion::reloadEmpresa(){
 } //end Namespace
 
 
+
+void nQTrucks::Configuracion::on_actualizarEmpresa_clicked(){
+    reloadEmpresa();
+
+}
