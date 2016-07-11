@@ -89,6 +89,17 @@ namespace nQTrucks
     #define REGISTROS_MATRICULAS_ENTRADA            21
 
 
+    #define EMPRESA_ID            0
+    #define EMPRESA_RAZON         1
+    #define EMPRESA_NIF           2
+    #define EMPRESA_DIRECCION1    3
+    #define EMPRESA_DIRECCION2    4
+    #define EMPRESA_DIRECCION3    5
+    #define EMPRESA_CERTIFICADO   6
+    #define EMPRESA_ENAC          7
+    #define EMPRESA_LOGO          8
+
+
     namespace Const{
     } //end namespace Const
 } // namespace nQTrucks

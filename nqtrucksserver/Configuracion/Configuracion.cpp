@@ -35,9 +35,6 @@
 
 #include <QDataWidgetMapper>
 #include <QByteArray>
-#include  <QVariant>
-#include <QSql>
-#include <QSqlRelationalDelegate>
 
 //#include "alpr.h"
 //#include "prewarp.h"
@@ -83,7 +80,6 @@ Configuracion::~Configuracion(){
     m_matricularesults[0]->deleteLater();
     m_matricularesults[1]->deleteLater();
     m_matricularesults.detach();
-    m_mapper->deleteLater();
     delete ui;
 }
 
@@ -152,12 +148,8 @@ void Configuracion::loadconfig()
 
 
     /** EMPRESAS **/
-    m_mapper = new QDataWidgetMapper(this);
-    m_mapper->setOrientation(Qt::Horizontal);
-    m_mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-    m_mapper->setModel(engine->Empresa);
-    m_mapper->setItemDelegate(new QSqlRelationalDelegate(this));
     reloadEmpresa();
+
 }
 /** END SETTINGS **/
 
@@ -450,33 +442,32 @@ void Configuracion::on_reportsTreeWidget_doubleClicked(const QModelIndex &index)
 }
 
 void Configuracion::on_guardarEmpresa_clicked(){
-    QVector<QString> empresa_info = QVector<QString>(7);
-    empresa_info[0] = ui->empresa_razon->text();
-    empresa_info[1] = ui->empresa_nif->text();
-    empresa_info[2] = ui->empresa_direccion1->text();
-    empresa_info[3] = ui->empresa_direccion2->text();
-    empresa_info[4] = ui->empresa_direccion3->text();
-    empresa_info[5] = ui->empresa_certificado->text();
-    empresa_info[6] = ui->empresa_enac->text();
-    engine->updateEmpresa(empresa_info);
+//    QVector<QString> empresa_info = QVector<QString>(7);
+//    empresa_info[0] = ui->empresa_razon->text();
+//    empresa_info[1] = ui->empresa_nif->text();
+//    empresa_info[2] = ui->empresa_direccion1->text();
+//    empresa_info[3] = ui->empresa_direccion2->text();
+//    empresa_info[4] = ui->empresa_direccion3->text();
+//    empresa_info[5] = ui->empresa_certificado->text();
+//    empresa_info[6] = ui->empresa_enac->text();
+//    engine->updateEmpresa(empresa_info);
+    engine->Empresa_Mapper->submit();
     reloadEmpresa();
 }
 
 void Configuracion::reloadEmpresa(){
     //
-    m_mapper->addMapping(ui->empresa_razon,         1);
-    m_mapper->addMapping(ui->empresa_nif,           2);
-    m_mapper->addMapping(ui->empresa_direccion1,    3);
-    m_mapper->addMapping(ui->empresa_direccion2,    4);
-    m_mapper->addMapping(ui->empresa_direccion3,    5);
-    m_mapper->addMapping(ui->empresa_certificado,   6);
-    m_mapper->addMapping(ui->empresa_enac,          7);    
-    m_mapper->toFirst();
-
-    qDebug() << "Mapper "  << m_mapper->currentIndex();
+    engine->Empresa_Mapper->addMapping(ui->empresa_razon,         EMPRESA_RAZON);
+    engine->Empresa_Mapper->addMapping(ui->empresa_nif,           EMPRESA_NIF);
+    engine->Empresa_Mapper->addMapping(ui->empresa_direccion1,    EMPRESA_DIRECCION1);
+    engine->Empresa_Mapper->addMapping(ui->empresa_direccion2,    EMPRESA_DIRECCION2);
+    engine->Empresa_Mapper->addMapping(ui->empresa_direccion3,    EMPRESA_DIRECCION3);
+    engine->Empresa_Mapper->addMapping(ui->empresa_certificado,   EMPRESA_CERTIFICADO);
+    engine->Empresa_Mapper->addMapping(ui->empresa_enac,          EMPRESA_ENAC);
+    engine->Empresa_Mapper->toFirst();
 
     QPixmap pixmap;
-    if (pixmap.loadFromData(engine->Empresa->index(m_mapper->currentIndex(),8).data().toByteArray()) )
+    if (pixmap.loadFromData(engine->Empresa->index(engine->Empresa_Mapper->currentIndex(),EMPRESA_LOGO).data().toByteArray()) )
     {
         ui->empresa_logo->setPixmap(pixmap);
     }

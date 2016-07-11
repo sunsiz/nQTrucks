@@ -42,6 +42,8 @@
 
 /** MAESTROS **/
 #include <QSqlQueryModel>
+#include <QSqlTableModel>
+#include <QDataWidgetMapper>
 
 ///** REGISTROS **/
 //#include "Registros/Bascula.h"
@@ -162,11 +164,13 @@ public slots:
 
     /** MAESTROS **/
 public:
-    QSqlQueryModel *RegistrosPesos;
-    QSqlQueryModel *Empresa;
+    QSqlQueryModel    *RegistrosPesos;
+    QSqlTableModel    *Empresa;
+    QDataWidgetMapper *Empresa_Mapper;
 public slots:
     void sincronizar_maestros();
-    void updateEmpresa(const QVector<QString> _empresaVector);
+    //void updateEmpresa(const QVector<QString> _empresaVector);
+    QSqlDatabase getCurrentDatabase();
 private slots:
     void reloadMaestros();
 signals:

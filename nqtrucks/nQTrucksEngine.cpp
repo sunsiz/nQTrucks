@@ -378,15 +378,22 @@ void nQTrucksEngine::sincronizar_maestros(){
     reloadMaestros();
 }
 
-void nQTrucksEngine::updateEmpresa(const QVector<QString> _empresaVector){
+//void nQTrucksEngine::updateEmpresa(const QVector<QString> _empresaVector){
+//    Q_D(nQTrucksEngine);
+//    d->m_maestros->m_Empresa->actualizarEmpresa(_empresaVector);
+//}
+
+QSqlDatabase nQTrucksEngine::getCurrentDatabase()
+{
     Q_D(nQTrucksEngine);
-    d->m_maestros->m_Empresa->actualizarEmpresa(_empresaVector);
+    return d->m_maestros->m_RegistroPeso->getCurrentDb();
 }
 
 void nQTrucksEngine::reloadMaestros(){
     Q_D(nQTrucksEngine);
     RegistrosPesos  = d->m_maestros->m_RegistroPeso;
     Empresa         = d->m_maestros->m_Empresa;
+    Empresa_Mapper  = d->m_maestros->m_Empresa_Mapper;
     //RegistrosPesos->query();
 }
 /** END MAESTROS ************************************************************/

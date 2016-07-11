@@ -2,9 +2,12 @@
 #define MAESTROS_H
 
 #include <QObject>
+#include <QSqlTableModel>
+#include <QDataWidgetMapper>
+#include <QSqlRelationalDelegate>
 
 #include "Maestros/RegistroPeso.h"
-#include "Maestros/Empresa.h"
+//#include "Maestros/Empresa.h"
 
 namespace nQTrucks{
     namespace Maestros{
@@ -18,7 +21,8 @@ namespace nQTrucks{
         void eliminarMaestros();
     public:
         RegistroPeso *m_RegistroPeso;
-        Empresa      *m_Empresa;
+        QSqlTableModel      *m_Empresa;
+        QDataWidgetMapper   *m_Empresa_Mapper;
     signals:
 
     public slots:
