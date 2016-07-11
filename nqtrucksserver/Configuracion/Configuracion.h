@@ -50,7 +50,6 @@ public:
 
 private:
     Ui::Configuracion *ui;
-//    bool m_running=false;
     void updateGui();
 
 private slots:
@@ -72,10 +71,8 @@ private slots:
 
     /** NEWSAGES I/O  **/
 private slots:
-//    void on_actualizarSemaforos_clicked();
     void on_conectarSemaforo_clicked();
     void on_desconectarSemaforo_clicked();
-//    void on_guardarSemaforo_clicked();
 
     void on_semaforoVerde_clicked();
     void on_semaforoAmarillo_clicked();
@@ -111,7 +108,6 @@ public:
 private:
     int m_AlprIndex=0;
     QVector<MatriculaResults*> m_matricularesults;
-    //QVector<MatriculaResults>::iterator m_matricularesults_iterator;
     void updateCalibracionGui();
 
     /** ALPR1 **/

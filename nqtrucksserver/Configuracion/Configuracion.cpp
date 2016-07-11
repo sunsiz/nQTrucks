@@ -110,6 +110,7 @@ void Configuracion::loadconfig()
     m_matricularesults[1] = new MatriculaResults(this);
     ui->Informes->setDisabled(true); //DEBUG
     ui->Informes->setHidden(true); //DEBUG
+    ui->configTabWidget->removeTab(5);
     /** END DEFAULT UIS **/
 
     /** CAMARAS **/
@@ -442,21 +443,11 @@ void Configuracion::on_reportsTreeWidget_doubleClicked(const QModelIndex &index)
 }
 
 void Configuracion::on_guardarEmpresa_clicked(){
-//    QVector<QString> empresa_info = QVector<QString>(7);
-//    empresa_info[0] = ui->empresa_razon->text();
-//    empresa_info[1] = ui->empresa_nif->text();
-//    empresa_info[2] = ui->empresa_direccion1->text();
-//    empresa_info[3] = ui->empresa_direccion2->text();
-//    empresa_info[4] = ui->empresa_direccion3->text();
-//    empresa_info[5] = ui->empresa_certificado->text();
-//    empresa_info[6] = ui->empresa_enac->text();
-//    engine->updateEmpresa(empresa_info);
     engine->Empresa_Mapper->submit();
     reloadEmpresa();
 }
 
 void Configuracion::reloadEmpresa(){
-    //
     engine->Empresa_Mapper->addMapping(ui->empresa_razon,         EMPRESA_RAZON);
     engine->Empresa_Mapper->addMapping(ui->empresa_nif,           EMPRESA_NIF);
     engine->Empresa_Mapper->addMapping(ui->empresa_direccion1,    EMPRESA_DIRECCION1);
@@ -474,12 +465,11 @@ void Configuracion::reloadEmpresa(){
 
 }
 
+void Configuracion::on_actualizarEmpresa_clicked(){
+    reloadEmpresa();
+}
 
 } //end Namespace
 
 
 
-void nQTrucks::Configuracion::on_actualizarEmpresa_clicked(){
-    reloadEmpresa();
-
-}
