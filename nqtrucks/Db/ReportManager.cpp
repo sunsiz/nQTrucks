@@ -12,7 +12,7 @@
 namespace nQTrucks {
 namespace Db {
 
-static const QString qry_empresa_id   = " Select * from empresa where idempresa = 1 ;";
+static const QString qry_empresa_id   = " Select * from empresa where id = 1 ;";
 static const QString qry_matricula_id = " Select * from registros_matriculas where id = :id;";
 
 ReportManager::ReportManager(QObject *parent)

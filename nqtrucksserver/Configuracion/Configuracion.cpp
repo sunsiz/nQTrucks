@@ -108,8 +108,8 @@ void Configuracion::loadconfig()
     /** DEFAULTS UI **/
     m_matricularesults[0] = new MatriculaResults(this);
     m_matricularesults[1] = new MatriculaResults(this);
-    ui->Informes->setDisabled(true); //DEBUG
-    ui->Informes->setHidden(true); //DEBUG
+    //ui->Informes->setDisabled(true); //DEBUG
+    //ui->Informes->setHidden(true); //DEBUG
     ui->configTabWidget->removeTab(5);
     /** END DEFAULT UIS **/
 
