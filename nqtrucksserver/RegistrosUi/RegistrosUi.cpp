@@ -138,6 +138,8 @@ void RegistrosUi::on_selectProcesados_clicked(bool checked){
 }
 
 void RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &index){
+    ui->labelDetalleHora->clear();
+    ui->labelDetallePeso->clear();
     int  row        = index.row();
     long long id    = index.sibling(row, REGISTROS_MATRICULAS_ID).data().toLongLong();
     long long id2   = index.sibling(row, REGISTROS_MATRICULAS_EMPAREJADO).data().toLongLong();
@@ -146,6 +148,11 @@ void RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &index){
     QTime hora      = index.sibling(row, REGISTROS_MATRICULAS_FECHA).data().toTime();
     float pesobruto = index.sibling(row, REGISTROS_MATRICULAS_PESOBRUTO).data().toFloat();
     float pesoneto = index.sibling(row, REGISTROS_MATRICULAS_PESONETO).data().toFloat();
+
+
+    ui->labelDetalleHora->setText(hora);
+    ui->labelDetallePeso->setText(pesoneto);
+
 
 
     qDebug() << "row:       "        << row;
