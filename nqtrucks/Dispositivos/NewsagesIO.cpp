@@ -129,7 +129,7 @@ void NewsagesIO::onIOConectado(){
     m_OutPinAmarillo->initialize();
     m_OutPinAmarillo->setValue(m_ValuePinAmarillo);
     m_OutPinRojo->initialize();
-    m_OutPinRojo->setValue(m_ValuePinAmarillo);
+    m_OutPinRojo->setValue(m_ValuePinRojo);
     //setSemaforo(m_semaforo);
 }
 
