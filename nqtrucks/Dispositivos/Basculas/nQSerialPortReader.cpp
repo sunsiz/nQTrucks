@@ -150,7 +150,7 @@ void nQSerialPortReader::ReadType0(){
         }else{
             charInicio=0;
             m_bascula->setBEstadoAnterior(m_bascula->getBEstado());
-            if(m_serialBuffer.mid(1,1) != "E"){m_bascula->setBEstado(false);
+            if(m_serialBuffer.mid(0,1) != "E"){m_bascula->setBEstado(false);
             }else m_bascula->setBEstado(true);
 
             m_bascula->setIBruto(m_serialBuffer.mid( 4,8).toFloat());
