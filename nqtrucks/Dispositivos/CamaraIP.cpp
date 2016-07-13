@@ -161,6 +161,11 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
     }else{
         /** CAMARA ERROR CV::MAT **/
         emit CamaraError(m_errorCamaraIP);
+        MatriculaResults *m_MatriculaResults = new MatriculaResults(this);
+        //m_MatriculaResults->setOrigenFoto(_resize);
+        emit ReplyCamaraIP(*m_MatriculaResults);
+        m_MatriculaResults->deleteLater();
+
         temp.detach();
         data.clear();
         data.detach();
