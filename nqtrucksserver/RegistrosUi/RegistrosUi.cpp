@@ -117,6 +117,8 @@ void RegistrosUi::on_calendarioWidget_clicked(const QDate &date){
                                     Qt::CaseSensitive,
                                     QRegExp::RegExp));
     qDebug() << "Calendario fecha:"  <<  date.toString("yyyy-MM-dd");//Qt::SystemLocaleShortDate);
+    ui->labelDetalleHora->clear();
+    ui->labelDetallePeso->clear();
 
 }
 
@@ -150,8 +152,8 @@ void RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &index){
     float pesoneto = index.sibling(row, REGISTROS_MATRICULAS_PESONETO).data().toFloat();
 
 
-    ui->labelDetalleHora->setText(hora);
-    ui->labelDetallePeso->setText(pesoneto);
+    ui->labelDetalleHora->setText(hora.toString());
+    ui->labelDetallePeso->setText(QString(QString::number(pesoneto) + QString(" Kg.")));
 
 
 
