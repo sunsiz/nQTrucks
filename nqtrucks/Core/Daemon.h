@@ -44,6 +44,9 @@ public:
     bool registrando() const;
     void setRegistrando(bool registrando);
 
+    bool saliendo() const;
+    void setSaliendo(bool saliendo);
+
 signals:
     void initChanged(const bool &_init);
     void rowsPesoChanged();

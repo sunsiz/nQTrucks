@@ -127,6 +127,7 @@ void Client::onDaemonRegistroChanged(RegistroMatriculas *_result)
         ui->MatriculaPrecisionB->setText(                                            _result->m_results1->getMatriculaPrecisionBs()  );
     }
     m_tools->deleteLater();
+    engine->setSemaforoStatus(SEMAFORO_VERDE);
 
 }
 

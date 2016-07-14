@@ -85,7 +85,7 @@ public:
 
     /** NEWSAGES I/O **/
 public:
-    Devices::NewsagesIO *m_newsagesIO= new Devices::NewsagesIO(settings(),this);
+    Devices::NewsagesIO *m_newsagesIO;//= new Devices::NewsagesIO(settings(),this);
     QStringList getIODevices();
 signals:
     /** END NEWSAGES I/O **/

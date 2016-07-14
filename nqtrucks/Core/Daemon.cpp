@@ -54,6 +54,19 @@ void Daemon::onStartStop(const bool &_init){
 
 }
 
+bool Daemon::saliendo() const
+{
+    return m_saliendo;
+}
+
+void Daemon::setSaliendo(bool saliendo)
+{
+    m_saliendo = saliendo;
+    if (saliendo){
+        m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+    }
+}
+
 bool Daemon::registrando() const {
     return m_registrando;
 }
@@ -68,7 +81,7 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada){
     if((m_init) && (!m_registrando)){
       // Bloqueo Registro
       setRegistrando(true);
-      m_saliendo=false;
+      setSaliendo(false);
       //Activo Semaforo rojo
       m_newsagesIO->setSemaforo(SEMAFORO_ROJO);
 
@@ -220,7 +233,8 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
     //rowsPesoChanged();
     m_RegistroMatriculas->deleteLater();
     setRegistrando(false);
-    m_saliendo=true;
+    setSaliendo(true);
+    //m_saliendo=true;
 
 }
 

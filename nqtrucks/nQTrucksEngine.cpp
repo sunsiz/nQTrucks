@@ -48,7 +48,7 @@ nQTrucksEnginePrivate::nQTrucksEnginePrivate(QObject *parent)
 
     /** Bascula Types **/
     //qRegisterMetaType<Bascula>("Bascula");
-
+    m_newsagesIO= new Devices::NewsagesIO(settings());
     m_camara.resize(2);
     m_camara[0] = new Devices::CamaraIP(0,settings(), this);
     m_camara[1] = new Devices::CamaraIP(1,settings(), this);

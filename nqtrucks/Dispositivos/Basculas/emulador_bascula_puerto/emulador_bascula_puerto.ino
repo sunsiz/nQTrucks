@@ -70,7 +70,7 @@ void loop()
  }
  subiendo();
 
- for(int i=0;i<=10; i++){
+ for(int i=0;i<=40; i++){
   estable();
  }
 
@@ -84,7 +84,7 @@ void azero(){
   for(int i=0; i <=20; i++)
   {
    Serial.write(2);
-   Serial.print(" E");
+   Serial.print("E");
    Serial.print(" B");
    Serial.print("       0");
    Serial.print(" T");
@@ -101,7 +101,7 @@ void estable(){
   for(int i=0; i <=20; i++)
   {
    Serial.write(2);
-   Serial.print(" E");
+   Serial.print("E");
    Serial.print(" B");
    Serial.print("    1897");
    Serial.print(" T");
@@ -121,7 +121,7 @@ void subiendo(){
   for(int i=0; i <=6; i++)
   {
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("       0");
    Serial.print(" T");
@@ -136,7 +136,7 @@ void subiendo(){
   for(int i=0; i <=6; i++)
   {  
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("     300");
    Serial.print(" T");
@@ -151,7 +151,7 @@ void subiendo(){
   for(int i=0; i <=9; i++)
   {
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("     600");
    Serial.print(" T");
@@ -166,7 +166,7 @@ void subiendo(){
   for(int i=0; i <=4; i++)
   {
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("     800");
    Serial.print(" T");
@@ -181,7 +181,7 @@ void subiendo(){
   for(int i=0; i <=3; i++)
   {  
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("     900");
    Serial.print(" T");
@@ -196,7 +196,7 @@ void subiendo(){
   for(int i=0; i <=6; i++)
   {
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("    1200");
    Serial.print(" T");
@@ -211,7 +211,7 @@ void subiendo(){
   for(int i=0; i <=4; i++)
   {
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("    1890");
    Serial.print(" T");
@@ -230,7 +230,7 @@ void bajando(){
   for(int i=0; i <=4; i++)
   {
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("    1890");
    Serial.print(" T");
@@ -245,7 +245,7 @@ void bajando(){
   for(int i=0; i <=6; i++)
   {
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("    1200");
    Serial.print(" T");
@@ -260,7 +260,7 @@ void bajando(){
   for(int i=0; i <=3; i++)
   {  
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("     900");
    Serial.print(" T");
@@ -275,7 +275,7 @@ void bajando(){
   for(int i=0; i <=4; i++)
   {
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("     800");
    Serial.print(" T");
@@ -290,7 +290,7 @@ void bajando(){
   for(int i=0; i <=9; i++)
   {
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("     600");
    Serial.print(" T");
@@ -305,7 +305,7 @@ void bajando(){
   for(int i=0; i <=6; i++)
   {  
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("     300");
    Serial.print(" T");
@@ -320,7 +320,7 @@ void bajando(){
   for(int i=0; i <=6; i++)
   {
    Serial.write(2);
-   Serial.print(" D");
+   Serial.print("D");
    Serial.print(" B");
    Serial.print("       0");
    Serial.print(" T");

@@ -45,7 +45,7 @@ private:
     void setFotoCalibrada();
     cv::Mat apply_prewarp(const cv::Mat &img);
     /** Algoritmo AUTOCALIBRACION **/
-    int  m_retry_panks=5;
+    int  m_retry_panks=1;
     void guardarPlanK();
     /** END ALGORITMO AUTOCALIBRACION**/
 
