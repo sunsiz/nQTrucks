@@ -163,7 +163,7 @@ void NewsagesAlprTask::procesarBlancas(){
        }while( c<=m_retry_panks &&  m_matricularesult->getMatriculaDetectedA()!=true);
     }
     delete matricula;
-    guardarPlanK();
+    //guardarPlanK();
     emit ReplyOriginalFotoBlanca(m_matricularesult->getOrigenFotoBlanca());
     emit ReplyMatriculaFoto();
 }
@@ -221,7 +221,7 @@ void NewsagesAlprTask::procesarRojas(){
         }while( c<=m_retry_panks &&  m_matricularesult->getMatriculaDetectedB()!=true);
     }
     delete remolque;
-    guardarPlanK();
+    //guardarPlanK();
     //m_matricularesult->convertirFotos();
     emit ReplyOriginalFotoRoja(m_matricularesult->getOrigenFotoRoja());
     emit ReplyMatriculaFoto();
