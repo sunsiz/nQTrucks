@@ -70,8 +70,8 @@ unix{
 
     EXTRA_DIRS += \
         $${GLOBAL_LIBS}/nQAlpr/config \
-        $${GLOBAL_LIBS}/nQAlpr/runtime_data \
-        $${GLOBAL_LIBS}/nQAlpr/matriculas
+        $${GLOBAL_LIBS}/nQAlpr/runtime_data
+#        $${GLOBAL_LIBS}/nQAlpr/matriculas
     QMAKE_POST_LINK += $(COPY_DIR) $$quote($${EXTRA_DIRS}) $$quote($${DEST_BINS}) $$escape_expand(\\n\\t) #inside of libs make /include/files
 
     EXTRA_LIBS += \
