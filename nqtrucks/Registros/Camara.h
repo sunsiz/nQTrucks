@@ -13,8 +13,8 @@ namespace nQTrucks{
     static const int MatriculaNewHeight = 110;
     static const cv::Size MatriculaSize(MatriculaNewWidth,MatriculaNewHeight);
 
-    static const int FotoWidth = 1280;
-    static const int FotoHeight = 720;
+    static const int FotoWidth  = 1920;
+    static const int FotoHeight = 1080;
     static const cv::Size FotoSize(FotoWidth,FotoHeight);
 
         class Camara : public QObject

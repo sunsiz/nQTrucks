@@ -1,7 +1,7 @@
 #include "NewsagesAlprTask.h"
 
 #include "alpr.h"
-#include "state_detector.h"
+//#include "state_detector.h"
 #include "prewarp.h"
 
 
@@ -38,14 +38,14 @@ void NewsagesAlprTask::loadconfig(){
         setPlank(  m_settings->value(QString(ALPR) + "/planka1","0").toString(),
                    m_settings->value(QString(ALPR) + "/plankb1","0").toString(),
                    m_settings->value(QString(ALPR) + "/plankc1","0").toString());
-        setPrewarp(m_settings->value(QString(ALPR) + "/prewarp1",default_prewarp).toString());
+        //setPrewarp(m_settings->value(QString(ALPR) + "/prewarp1","").toString());//default_prewarp).toString());
 
         break;
     case 1:
         setPlank(  m_settings->value(QString(ALPR) + "/planka2","0").toString(),
                    m_settings->value(QString(ALPR) + "/plankb2","0").toString(),
                    m_settings->value(QString(ALPR) + "/plankc2","0").toString());
-        setPrewarp(m_settings->value(QString(ALPR) + "/prewarp2",default_prewarp).toString());
+        //setPrewarp(m_settings->value(QString(ALPR) + "/prewarp2","").toString());//default_prewarp).toString());
         break;
     }
 }
@@ -62,6 +62,16 @@ void NewsagesAlprTask::setPlank(const QString &_plankA, const QString &_plankB, 
 void NewsagesAlprTask::calibrar(){ setFotoCalibrada();}
 
 void NewsagesAlprTask::setFotoCalibrada(){
+    switch (m_nDevice) {
+    case 0:
+        m_prewarp = m_settings->value(QString(ALPR) + "/prewarp1","").toString();//default_prewarp).toString());
+        break;
+    case 1:
+        m_prewarp = m_settings->value(QString(ALPR) + "/prewarp2","").toString();//default_prewarp).toString());
+        break;
+    }
+    qDebug() << "Prewarp/Device: " << m_prewarp  << "    /    "  << m_nDevice;
+    m_matricularesult->apply_prewarp(m_config_file,m_prewarp);
     switch (getNType()) {
     case ALPR_PLANCK_BLANCO:
         m_matricularesult->setPlanckBlanco(getPlank());
@@ -89,15 +99,17 @@ void NewsagesAlprTask::guardarPlanK(){
     }
 }
 
-cv::Mat NewsagesAlprTask::apply_prewarp(const cv::Mat &img){
-    alpr::Config config("truck",m_config_file.toStdString());
-    config.prewarp = getPrewarp().toStdString();
-    config.setDebug(false);
-    alpr::PreWarp prewarp(&config);
-    cv::Mat imgprewarp=prewarp.warpImage(img.clone());
-    prewarp.clear();
-    return  imgprewarp;
-}
+//cv::Mat NewsagesAlprTask::apply_prewarp(const cv::Mat &img){
+//    alpr::Config config("truck",m_config_file.toStdString());
+//    config.prewarp = m_prewarp.toStdString();
+//    config.setDebug(false);
+//    alpr::PreWarp prewarp(&config);
+//    cv::Mat imgprewarp=prewarp.warpImage(img.clone());
+//    prewarp.clear();
+//    return  imgprewarp;
+//}
+
+
 
 /** PROCESAR *******************************************************************************/
 void NewsagesAlprTask::procesar(){
@@ -117,7 +129,8 @@ void NewsagesAlprTask::procesarBlancas(){
     matricula = new Alpr("truck", m_config_file.toStdString());
     matricula->setDefaultRegion("truck");
     matricula->setTopN(1);
-    //matricula->setPrewarp(getPrewarp().toStdString());
+    //matricula->setPrewarp(m_prewarp.toStdString());
+    //qDebug() << "Prewarp cargado blancas: " << m_prewarp  << "  Device: "  << m_nDevice;
     if (matricula->isLoaded() == false){
         qDebug() << "Error loading OpenALPR" << endl;
     }else{
@@ -148,7 +161,7 @@ void NewsagesAlprTask::procesarBlancas(){
                                                      plate.plate_points[2].x - plate.plate_points[0].x,
                                                      plate.plate_points[2].y - plate.plate_points[0].y);
                             cv::Mat _resize;
-                            cv::resize(cv::Mat(m_matricularesult->getOrigenFoto(),rect),_resize,MatriculaSize);
+                            cv::resize(cv::Mat(m_matricularesult->getOrigenFotoPrewarp(),rect),_resize,MatriculaSize);
                             m_matricularesult->setMatriculaFotoA(_resize);
                             _resize.release();
                         }
@@ -174,7 +187,8 @@ void NewsagesAlprTask::procesarRojas(){
     remolque  = new Alpr("eur", m_config_file.toStdString());
     remolque->setTopN(1);
     remolque->setDefaultRegion("eur");
-    //remolque->setPrewarp(getPrewarp().toStdString());
+    //remolque->setPrewarp(m_prewarp.toStdString());
+    //qDebug() << "Prewarp cargado rojas: " << m_prewarp  << "  Device: "  << m_nDevice;
     if (remolque->isLoaded() == false){
         qDebug() << "Error loading OpenALPR" << endl;
     }else{
@@ -206,7 +220,7 @@ void NewsagesAlprTask::procesarRojas(){
                                                          plate.plate_points[2].x - plate.plate_points[0].x,
                                                          plate.plate_points[2].y - plate.plate_points[0].y);
                                 cv::Mat _resize;
-                                cv::resize(cv::Mat(m_matricularesult->getOrigenFoto(),rect),_resize,MatriculaSize);
+                                cv::resize(cv::Mat(m_matricularesult->getOrigenFotoPrewarp(),rect),_resize,MatriculaSize);
                                 m_matricularesult->setMatriculaFotoB(_resize);
                             }
                        }

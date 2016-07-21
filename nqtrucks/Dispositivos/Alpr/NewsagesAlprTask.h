@@ -35,17 +35,17 @@ private:
     Planck getPlank() const{return  m_plank;}
 
     QString  m_prewarp;
-    void    setPrewarp(  const QString &prewarp){m_prewarp=prewarp;}
-    QString getPrewarp() const{return m_prewarp;}
+//    void    setPrewarp(  const QString &prewarp){m_prewarp=prewarp;}
+//    QString getPrewarp() const{return m_prewarp;}
     /** END SETTINGS ****************************************************/
 
 
     /** CALIBRACION **************************************************/
 private:
     void setFotoCalibrada();
-    cv::Mat apply_prewarp(const cv::Mat &img);
+    //cv::Mat apply_prewarp(const cv::Mat &img);
     /** Algoritmo AUTOCALIBRACION **/
-    int  m_retry_panks=1;
+    int  m_retry_panks=0;
     void guardarPlanK();
     /** END ALGORITMO AUTOCALIBRACION**/
 

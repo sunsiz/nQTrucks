@@ -5,8 +5,11 @@
 #include "Tools.h"
 #include <memory>
 #include <QMetaType>
+
+#include "prewarp.h"
+
 namespace nQTrucks{
-    static const QString default_prewarp ="";//  "planar,1280,720,0,0,0,1.0,1.0,0,0";
+    static const QString default_prewarp = "planar,1920,1080,0,0,0,1.0,1.0,0,0";
 
     #define ALPR_PLANCK_BLANCO 0
     #define ALPR_PLANCK_ROJO   1
@@ -21,14 +24,14 @@ namespace nQTrucks{
     static const int MatriculaNewHeight = 110;
     static const cv::Size MatriculaSize(MatriculaNewWidth,MatriculaNewHeight);
 
-    static const int FotoWidth = 1280;
-    static const int FotoHeight = 720;
+    static const int FotoWidth = 1920;
+    static const int FotoHeight = 1080;
     static const cv::Size FotoSize(FotoWidth,FotoHeight);
 
     struct Prewarp{
         QString type="planar";
-        float w=1280;
-        float h=720;
+        float w=FotoWidth;
+        float h=FotoHeight;
         float panX = 0;
         float panY = 0;
         float rotationx = 0;
@@ -61,7 +64,7 @@ namespace nQTrucks{
             inline void setPlanckBlanco(const Planck &value){
                 cv::Mat channel[3];
                 cv::Mat _dest;
-                _dest = OrigenFoto.clone();
+                _dest = OrigenFotoPrewarp.clone();
                 cv::add(_dest,cv::Scalar(value.C,value.B,value.A), _dest);
                 cv::split(_dest, channel);
                 this->setOrigenFotoBlanca(channel[2] - channel[1] -   channel[2] + channel[0]); /** MEMORY LEAK **/
@@ -74,7 +77,7 @@ namespace nQTrucks{
 
             inline void setPlanckRojo(  const Planck &value){
                 cv::Mat channel[3];
-                cv::Mat *_dest = new cv::Mat(OrigenFoto.clone());
+                cv::Mat *_dest = new cv::Mat(OrigenFotoPrewarp.clone());
                 cv::add(*_dest,cv::Scalar(value.A,value.B,value.C),*_dest);
                 cv::split(*_dest,channel);
                 cv::add(channel[0], channel[1], *_dest); /** MEMORY LEAK **/
@@ -86,6 +89,19 @@ namespace nQTrucks{
                 _dest->release();
                 delete _dest;
             }
+
+
+            inline void apply_prewarp(const QString &config_file,const QString &config_prewarp){
+                alpr::Config config("truck",config_file.toStdString());
+                config.prewarp = config_prewarp.toStdString();
+                config.setDebug(false);
+                alpr::PreWarp prewarp(&config);
+                //cv::Mat imgprewarp;
+                this->setOrigenFotoPrewarp(prewarp.warpImage(OrigenFoto.clone()));
+                prewarp.clear();
+                //return  imgprewarp;
+            }
+
 
         private:
             int        tipo                    =0;                                                     //0 para calibracion, 1 para procesado
