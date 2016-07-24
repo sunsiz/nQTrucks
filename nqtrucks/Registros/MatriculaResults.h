@@ -96,8 +96,22 @@ namespace nQTrucks{
             }
 
 
-            inline void apply_prewarp(const QString &config_file,const QString &config_prewarp){
-                alpr::Config config("truck",config_file.toStdString());
+            inline void apply_prewarp(const QString &config_file,const QString &config_prewarp , int &m_nDevice){
+                QString fileBR;
+                switch (m_nDevice) {
+                case 0:
+
+                    fileBR="truckB";
+                    break;
+                case 1:
+                    fileBR="truckR";
+                    break;
+                default:
+                    fileBR="truckB";
+                    break;
+                }
+
+                alpr::Config config(fileBR.toStdString(),config_file.toStdString());
                 config.prewarp = config_prewarp.toStdString();
                 config.setDebug(false);
                 alpr::PreWarp prewarp(&config);

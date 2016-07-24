@@ -99,6 +99,7 @@ namespace nQTrucks{
                 QByteArray baScene; // byte array with data
                 QBuffer buffer(&baScene);
                 buffer.open(QIODevice::WriteOnly);
+                //qtImg.save(&buffer,"PNG");
                 qtImg.save(&buffer,"JPG");
                 buffer.reset();
                 buffer.close();

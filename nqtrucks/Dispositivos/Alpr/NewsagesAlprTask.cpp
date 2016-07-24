@@ -72,7 +72,7 @@ void NewsagesAlprTask::setFotoCalibrada(){
         break;
     }
     qDebug() << "Prewarp/Device: " << m_prewarp  << "    /    "  << m_nDevice;
-    m_matricularesult->apply_prewarp(m_config_file,m_prewarp);
+    m_matricularesult->apply_prewarp(m_config_file,m_prewarp,m_nDevice);
     switch (getNType()) {
     case ALPR_PLANCK_BLANCO:
         m_matricularesult->setPlanckBlanco(getPlank());

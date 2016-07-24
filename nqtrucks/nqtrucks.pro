@@ -150,7 +150,10 @@ linux{
     reports.path = $${NEWSAGES_DIR}/nQTrucks
     reports.files = $${EXTRA_DIR_REPORTS}
 
-    INSTALLS += target extradirs extralibs reports
+    mascaras.path = $${NEWSAGES_DIR}/nQTrucks
+    mascaras.files = $${EXTRA_MASCARAS}
+
+    INSTALLS += target extradirs extralibs reports mascaras
 }
 
 
