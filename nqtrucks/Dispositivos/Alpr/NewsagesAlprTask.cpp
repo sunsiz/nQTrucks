@@ -32,9 +32,9 @@ NewsagesAlprTask::NewsagesAlprTask(int _nDevice, int _nType,MatriculaResults *_r
 
 /** SETTINGS ************************************************************************************/
 void NewsagesAlprTask::loadconfig(){
-    m_config_file = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("config/openalpr.conf");
     switch (m_nDevice) {
     case 0:
+        m_config_file = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("config/trucks" + QString::number(m_nDevice+1) +  ".conf");
         setPlank(  m_settings->value(QString(ALPR) + "/planka1","0").toString(),
                    m_settings->value(QString(ALPR) + "/plankb1","0").toString(),
                    m_settings->value(QString(ALPR) + "/plankc1","0").toString());
@@ -42,6 +42,7 @@ void NewsagesAlprTask::loadconfig(){
 
         break;
     case 1:
+        m_config_file = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("config/trucks" + QString::number(m_nDevice+1) +  ".conf");
         setPlank(  m_settings->value(QString(ALPR) + "/planka2","0").toString(),
                    m_settings->value(QString(ALPR) + "/plankb2","0").toString(),
                    m_settings->value(QString(ALPR) + "/plankc2","0").toString());
@@ -99,18 +100,6 @@ void NewsagesAlprTask::guardarPlanK(){
     }
 }
 
-//cv::Mat NewsagesAlprTask::apply_prewarp(const cv::Mat &img){
-//    alpr::Config config("truck",m_config_file.toStdString());
-//    config.prewarp = m_prewarp.toStdString();
-//    config.setDebug(false);
-//    alpr::PreWarp prewarp(&config);
-//    cv::Mat imgprewarp=prewarp.warpImage(img.clone());
-//    prewarp.clear();
-//    return  imgprewarp;
-//}
-
-
-
 /** PROCESAR *******************************************************************************/
 void NewsagesAlprTask::procesar(){
     switch (getNType()) {
@@ -126,20 +115,18 @@ void NewsagesAlprTask::procesar(){
     /** BLANCAS **/
 void NewsagesAlprTask::procesarBlancas(){   
     Alpr *matricula;
-    matricula = new Alpr("truck", m_config_file.toStdString());
-    matricula->setDefaultRegion("truck");
+    matricula = new Alpr("truckB", m_config_file.toStdString());
+    matricula->setDefaultRegion("truckB");
     matricula->setTopN(1);
-    //matricula->setPrewarp(m_prewarp.toStdString());
-    //qDebug() << "Prewarp cargado blancas: " << m_prewarp  << "  Device: "  << m_nDevice;
     if (matricula->isLoaded() == false){
         qDebug() << "Error loading OpenALPR" << endl;
     }else{
-        //Algoritmo Plank Blancas
-        int c=0;
-        do{
-            int b=0;
-            do{
-                //CONVERSION de BLANCOS
+//        //Algoritmo Plank Blancas
+//        int c=0;
+//        do{
+//            int b=0;
+//            do{
+//                //CONVERSION de BLANCOS
                 calibrar();
                 // RECONOCER
                 std::vector<AlprRegionOfInterest> regionsOfInterest={};
@@ -168,12 +155,12 @@ void NewsagesAlprTask::procesarBlancas(){
                     }
                 }
                regionsOfInterest.clear();
-               m_plank.B=b;
-               b++;
-           }while( b<=m_retry_panks && m_matricularesult->getMatriculaDetectedA()!=true);
-           m_plank.C=c;
-           c++;
-       }while( c<=m_retry_panks &&  m_matricularesult->getMatriculaDetectedA()!=true);
+//               m_plank.B=b;
+//               b=b+64;
+//           }while( b<=m_retry_panks && m_matricularesult->getMatriculaDetectedA()!=true);
+//           m_plank.C=c;
+//           c=c+64;
+//       }while( c<=m_retry_panks &&  m_matricularesult->getMatriculaDetectedA()!=true);
     }
     delete matricula;
     //guardarPlanK();
@@ -184,20 +171,26 @@ void NewsagesAlprTask::procesarBlancas(){
     /** ROJAS **/
 void NewsagesAlprTask::procesarRojas(){
     Alpr *remolque;
-    remolque  = new Alpr("eur", m_config_file.toStdString());
+    remolque  = new Alpr("truckR", m_config_file.toStdString());
     remolque->setTopN(1);
-    remolque->setDefaultRegion("eur");
-    //remolque->setPrewarp(m_prewarp.toStdString());
-    //qDebug() << "Prewarp cargado rojas: " << m_prewarp  << "  Device: "  << m_nDevice;
+    remolque->setDefaultRegion("truckR");
     if (remolque->isLoaded() == false){
         qDebug() << "Error loading OpenALPR" << endl;
     }else{
         //Algoritmo Plank ROJAS
+        if (m_nDevice==0) m_retry_panks=0;
         int c=0;
+        int ccount=0;
         do{
             int b=0;
+            int bcount=0;
             do{
                 //CONVERSION de ROJA
+                if (bcount == m_retry_panks && ccount==m_retry_panks)
+                {
+                    setPlank("90","0","254");
+                }
+
                 calibrar();
                 // RECONOCER
                 std::vector<AlprRegionOfInterest> regionsOfInterest={};
@@ -228,11 +221,13 @@ void NewsagesAlprTask::procesarRojas(){
                 }
                 regionsOfInterest.clear();
                 m_plank.B=b;
-                b++;
-            }while( b<=m_retry_panks && m_matricularesult->getMatriculaDetectedB()!=true);
+                b=b+64;
+                bcount++;
+            }while( bcount<=m_retry_panks && m_matricularesult->getMatriculaDetectedB()!=true);
             m_plank.C=c;
-            c++;
-        }while( c<=m_retry_panks &&  m_matricularesult->getMatriculaDetectedB()!=true);
+            c=c+64;
+            ccount++;
+        }while( ccount<=m_retry_panks &&  m_matricularesult->getMatriculaDetectedB()!=true);
     }
     delete remolque;
     //guardarPlanK();
