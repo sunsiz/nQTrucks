@@ -62,20 +62,24 @@ namespace nQTrucks{
             const MatriculaResults& getMatriculaResults() const { return *this; }
 
             inline void setPlanckBlanco(const Planck &value){
-                cv::Mat channel[3];
-                cv::Mat _dest;
-                _dest = OrigenFotoPrewarp.clone();
-                cv::add(_dest,cv::Scalar(value.C,value.B,value.A), _dest);
-                cv::split(_dest, channel);
-                this->setOrigenFotoBlanca(channel[2] - channel[1] -   channel[2] + channel[0]); /** MEMORY LEAK **/
-                channel[0].release();
-                channel[1].release();
-                channel[2].release();
-                _dest.release();
+                //Usar LBP
+                //cv::Mat channel[3];
+                //cv::Mat _dest;
+                //_dest = OrigenFotoPrewarp.clone();
+                //cv::add(_dest,cv::Scalar(value.C,value.B,value.A), _dest);
+                //cv::split(_dest, channel);
+                //this->setOrigenFotoBlanca(channel[2] - channel[1] -   channel[2] + channel[0]); /** MEMORY LEAK **/
+                //channel[0].release();
+                //channel[1].release();
+                //channel[2].release();
+                //_dest.release();
                 //delete _dest;
+
+                this->setOrigenFotoBlanca(OrigenFotoPrewarp.clone()); /** MEMORY LEAK **/
             }
 
             inline void setPlanckRojo(  const Planck &value){
+                // USAR LBP
                 cv::Mat channel[3];
                 cv::Mat *_dest = new cv::Mat(OrigenFotoPrewarp.clone());
                 cv::add(*_dest,cv::Scalar(value.A,value.B,value.C),*_dest);
@@ -88,6 +92,7 @@ namespace nQTrucks{
                 channel[2].release();
                 _dest->release();
                 delete _dest;
+                //this->setOrigenFotoRoja(OrigenFotoPrewarp.clone()); /** MEMORY LEAK **/
             }
 
 

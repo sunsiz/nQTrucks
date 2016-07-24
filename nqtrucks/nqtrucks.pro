@@ -35,6 +35,11 @@ unix{
         $$PWD/Registros/Camara.h \
         $$PWD/Registros/MatriculaResults.h \
         $$PWD/Registros/RegistroMatriculas.h
+
+    EXTRA_MASCARAS += \
+        $$PWD/mascara1.jpg\
+        $$PWD/mascara2.jpg
+
     linux{
         QMAKE_POST_LINK += mkdir -p $$quote($${DEST_INCLUDE_DIR}) $$escape_expand(\\n\\t) # qmake need make mkdir -p on subdirs more than root
         for(FILE,EXTRA_FILES){
@@ -44,7 +49,9 @@ unix{
         for(FILE,EXTRA_FILES2){
             QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILE) $$quote($${DEST_INCLUDE_DIR}/Registros) $$escape_expand(\\n\\t) # copy includes for impl
         }
-
+        for(FILE,EXTRA_MASCARAS){
+            QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILE) $$quote($${DEST_BINS}) $$escape_expand(\\n\\t) # copy includes for impl
+        }
     }
 }
 
