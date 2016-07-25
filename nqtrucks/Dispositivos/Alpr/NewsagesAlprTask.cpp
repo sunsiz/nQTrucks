@@ -71,8 +71,8 @@ void NewsagesAlprTask::setFotoCalibrada(){
         m_prewarp = m_settings->value(QString(ALPR) + "/prewarp2","").toString();//default_prewarp).toString());
         break;
     }
-    qDebug() << "Prewarp/Device: " << m_prewarp  << "    /    "  << m_nDevice;
-    m_matricularesult->apply_prewarp(m_config_file,m_prewarp,m_nDevice);
+    //qDebug() << "Prewarp/Device: " << m_prewarp  << "    /    "  << m_nDevice;
+    //m_matricularesult->apply_prewarp(m_config_file,m_prewarp,m_nDevice);
     switch (getNType()) {
     case ALPR_PLANCK_BLANCO:
         m_matricularesult->setPlanckBlanco(getPlank());
@@ -148,7 +148,7 @@ void NewsagesAlprTask::procesarBlancas(){
                                                      plate.plate_points[2].x - plate.plate_points[0].x,
                                                      plate.plate_points[2].y - plate.plate_points[0].y);
                             cv::Mat _resize;
-                            cv::resize(cv::Mat(m_matricularesult->getOrigenFotoPrewarp(),rect),_resize,MatriculaSize);
+                            cv::resize(cv::Mat(m_matricularesult->getOrigenFoto(),rect),_resize,MatriculaSize);
                             m_matricularesult->setMatriculaFotoA(_resize);
                             _resize.release();
                         }
@@ -213,7 +213,7 @@ void NewsagesAlprTask::procesarRojas(){
                                                          plate.plate_points[2].x - plate.plate_points[0].x,
                                                          plate.plate_points[2].y - plate.plate_points[0].y);
                                 cv::Mat _resize;
-                                cv::resize(cv::Mat(m_matricularesult->getOrigenFotoPrewarp(),rect),_resize,MatriculaSize);
+                                cv::resize(cv::Mat(m_matricularesult->getOrigenFoto(),rect),_resize,MatriculaSize);
                                 m_matricularesult->setMatriculaFotoB(_resize);
                             }
                        }

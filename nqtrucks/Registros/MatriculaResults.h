@@ -75,13 +75,13 @@ namespace nQTrucks{
                 //_dest.release();
                 //delete _dest;
 
-                this->setOrigenFotoBlanca(OrigenFotoPrewarp.clone()); /** MEMORY LEAK **/
+                this->setOrigenFotoBlanca(OrigenFoto.clone()); /** MEMORY LEAK **/
             }
 
             inline void setPlanckRojo(  const Planck &value){
                 // USAR LBP
                 cv::Mat channel[3];
-                cv::Mat *_dest = new cv::Mat(OrigenFotoPrewarp.clone());
+                cv::Mat *_dest = new cv::Mat(OrigenFoto.clone());
                 cv::add(*_dest,cv::Scalar(value.A,value.B,value.C),*_dest);
                 cv::split(*_dest,channel);
                 cv::add(channel[0], channel[1], *_dest); /** MEMORY LEAK **/
