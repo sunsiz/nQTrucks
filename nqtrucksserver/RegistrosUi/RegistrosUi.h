@@ -50,6 +50,7 @@ class RegistrosUi : public QWidget
 
 public:
     explicit RegistrosUi(nQTrucksEngine *_engine=nullptr, QWidget *parent = 0);
+     QSqlDatabase m_db;
     ~RegistrosUi();
 
 private:
@@ -74,6 +75,7 @@ private slots:
     void on_selectProcesados_clicked(bool checked);
     void on_tableRegistrosView_clicked(const QModelIndex &index);
     void on_imprimirInforme_clicked();
+    void on_actualizarRegistros_clicked();
 };
 
 }

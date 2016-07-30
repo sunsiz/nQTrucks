@@ -190,3 +190,32 @@ void RegistrosUi::on_imprimirInforme_clicked(){
 
 }
 }
+
+void nQTrucks::RegistrosUi::on_actualizarRegistros_clicked()
+{
+    bool ret =true;
+    if ( !QSqlDatabase::contains("nqtrucks")) {
+        m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks"); /** MEMORY LEAK **/
+        m_db.setDatabaseName( "nqtrucks" );
+        m_db.setHostName(     "localhost" );
+        m_db.setUserName(     "nqtrucks" );
+        m_db.setPassword(     "nqtrucks" );
+        qDebug() << "conexion al crear es: " << m_db.connectionName();
+    } else {
+        m_db = QSqlDatabase::database("nqtrucks");
+        qDebug() << "conexion al volver a usar es: " << m_db.connectionName();
+    }
+    qDebug() << "conexion al verificar es: " << m_db.connectionName();
+    if ( !m_db.isOpen() ){
+        if(!m_db.open()){
+            ret = false;
+        }
+    }
+
+    if (ret){
+        QSqlQuery qryall("select * from registros_matriculas",m_db);
+        engine->RegistrosPesos->setQuery(qryall);
+
+    }
+
+}
