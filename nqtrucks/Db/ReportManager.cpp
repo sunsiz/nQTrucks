@@ -21,8 +21,8 @@ ReportManager::ReportManager(QObject *parent)
 
 }
 ReportManager::~ReportManager(){
-//    QSqlDatabase::removeDatabase("reports1");
-//    QSqlDatabase::removeDatabase("reports2");
+    QSqlDatabase::removeDatabase("reports1");
+    QSqlDatabase::removeDatabase("reports2");
 }
 
 void ReportManager::printRegistroMatricula(const QSqlDatabase &_db, const long long &_row1)

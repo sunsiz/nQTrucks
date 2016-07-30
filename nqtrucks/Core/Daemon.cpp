@@ -124,10 +124,25 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada){
 
 void Daemon::onBasculaChanged(const Bascula &_pesoRT){
     //int peso_minimo=m_bascula->reloadTolerancia_minima();
+//    if (!m_saliendo){
+//        if (!m_registrando){
+//            if (_pesoRT.getIBruto() > m_tolerancia_minima ){
+//                m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);
+//            }else{
+//                m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+//            }
+//        }
+//    }
+
+
+
+
     if (_pesoRT.getIBruto() > m_tolerancia_minima){
         if (!m_saliendo && !m_registrando){
             //TODO  no machakar el IO
             m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);
+        } else{
+            m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
         }
     }else{
         if (m_saliendo){
@@ -234,6 +249,7 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
     m_RegistroMatriculas->deleteLater();
     setRegistrando(false);
     setSaliendo(true);
+    emit rowsPesoChanged();
     //m_saliendo=true;
 
 }

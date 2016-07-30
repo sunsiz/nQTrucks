@@ -23,7 +23,7 @@ namespace nQTrucks{
     static const QString qry_buscarpareja =     " SELECT id,fecha,pesobruto,matriculaA1, matriculaB1 , matriculaA2, matriculaB2 FROM nqtrucks.registros_matriculas"
                                                 " WHERE  "                      // FILTROS ESTATICOS //
                                                 " !procesado "
-                                                " AND(fotocamara1 IS NULL  AND fotocamara2 IS NULL)"
+                                                //" AND(fotocamara1 IS NULL  AND fotocamara2 IS NULL)"
                                                 " AND ( "                       // FILTROS DINAMICOS //
                                                 " id != :id0 "
                                                 " AND "
@@ -75,7 +75,7 @@ namespace nQTrucks{
         void RegistroPeso::setTable(){
             beginResetModel();
             if(initDB()){
-                setFecha_min_max();
+                //setFecha_min_max();
                 if (setQuery(m_DefaultQuery)){
                     while(canFetchMore() ) {
                         fetchMore();
