@@ -16,7 +16,7 @@ Daemon::Daemon(Devices::nQSerialPortReader *_bascula, Devices::NewsagesIO *_news
     , m_maestros(_maestros)
     , m_init(false)
     , m_registrando(false)
-    , m_saliendo(false)
+    , m_DaemonStatus(DAEMON_ESPERANDO)
     , m_bfoto1(false)
     , m_bfoto2(false)
     , m_balpr1(false)
@@ -39,7 +39,7 @@ void Daemon::setInit(bool init){
 
 void Daemon::onStartStop(const bool &_init){
     setRegistrando(false);
-    m_saliendo=false;
+    setDaemonStatus(DAEMON_ESPERANDO);
     m_balpr1=false;
     m_balpr2=false;
     m_bfoto1=false;
@@ -54,26 +54,26 @@ void Daemon::onStartStop(const bool &_init){
 
 }
 
-bool Daemon::saliendo() const
-{
-    return m_saliendo;
-}
-
-void Daemon::setSaliendo(bool saliendo)
-{
-    m_saliendo = saliendo;
-    if (saliendo){
-        m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
-    }
-}
-
 bool Daemon::registrando() const {
     return m_registrando;
 }
 
 void Daemon::setRegistrando(bool registrando){
     m_registrando = registrando;
+    if (registrando){
+        setDaemonStatus(DAEMON_REGISTRANDO);
+    }else {
+        setDaemonStatus(DAEMON_SALIENDO);
+    }
     emit registrandoChanged(m_registrando);
+}
+
+int Daemon::DaemonStatus() const{
+    return m_DaemonStatus;
+}
+
+void Daemon::setDaemonStatus(int _status){
+    m_DaemonStatus=_status;
 }
 
 /** PESO *****************************/
@@ -81,10 +81,6 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada){
     if((m_init) && (!m_registrando)){
       // Bloqueo Registro
       setRegistrando(true);
-      setSaliendo(false);
-      //Activo Semaforo rojo
-      m_newsagesIO->setSemaforo(SEMAFORO_ROJO);
-
       m_RegistroMatriculas = new RegistroMatriculas;
       // Peso:
       m_RegistroMatriculas->m_bascula->setBascula(_nuevaPesada);
@@ -98,8 +94,6 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada){
           m_bfoto1=true;
           //Tengo las fotos semaforo GO! y Registro linea
           if(m_bfoto1 && m_bfoto2){
-              //m_saliendo=true;
-              //m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
               onGuardarRegistroSimple();
           }
       });
@@ -110,12 +104,11 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada){
           m_bfoto2=true;
           //Tengo las fotos semaforo GO! y Registro linea
           if(m_bfoto1 && m_bfoto2){
-              //m_saliendo=true;
-              //m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
               onGuardarRegistroSimple();
           }
       });
 
+      //Pido las dos fotos (TODO control en la clase CAMARA de los timeout si camara esta rota o desconectada)
       m_camara[0]->sendCamaraIPFotoRequest();
       m_camara[1]->sendCamaraIPFotoRequest();
   }
@@ -123,49 +116,54 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada){
 }
 
 void Daemon::onBasculaChanged(const Bascula &_pesoRT){
+    // Control de semaforo,
+    // si no estoy registrando y entra carga mayor de la tolerancia, activo amarillo
+    // si no se estabiliza y se pone a registrar, si baja de la tolerancia (objeto no para para su pesaje)
+    // devolvemos el semaforo a verde.
 
-    if (_pesoRT.getIBruto() > m_tolerancia_minima){
-        if (!m_saliendo && !m_registrando){
-            //TODO  no machakar el IO
-            m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);
-        } else{
-            //m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+    switch (m_DaemonStatus) {
+    case DAEMON_ESPERANDO:
+        m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+
+        if (_pesoRT.getIBruto() >m_tolerancia_minima){
+            setDaemonStatus(DAEMON_ENTRANDO);
+        }else{
+            setDaemonStatus(DAEMON_ESPERANDO);
         }
-    }else{
-        if (m_saliendo){
-            m_saliendo=false;
-            m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+        break;
+
+    case DAEMON_ENTRANDO:
+        m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);
+
+        if (_pesoRT.getIBruto() >m_tolerancia_minima){
+            setDaemonStatus(DAEMON_ENTRANDO);
+        }else{
+            setDaemonStatus(DAEMON_ESPERANDO);
         }
+
+        break;
+
+    case DAEMON_REGISTRANDO:
+        m_newsagesIO->setSemaforo(SEMAFORO_ROJO);
+
+        break;
+
+    case DAEMON_SALIENDO:
+        m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+
+        if (_pesoRT.getIBruto() >m_tolerancia_minima){
+            setDaemonStatus(DAEMON_SALIENDO);
+        }else{
+            setDaemonStatus(DAEMON_ESPERANDO);
+        }
+        break;
+
+    default:
+        m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+
+        setDaemonStatus(DAEMON_ESPERANDO);
+        break;
     }
-
-
-    //int peso_minimo=m_bascula->reloadTolerancia_minima();
-//    if (!m_saliendo){
-//        if (!m_registrando){
-//            if (_pesoRT.getIBruto() > m_tolerancia_minima ){
-//                m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);
-//            }else{
-//                m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
-//            }
-//        }
-//    }
-
-
-
-
-//    if (_pesoRT.getIBruto() > m_tolerancia_minima){
-//        if (!m_saliendo && !m_registrando){
-//            //TODO  no machakar el IO
-//            m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);
-//        } else{
-//            //m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
-//        }
-//    }else{
-//        if (m_saliendo){
-//            m_saliendo=false;
-//            m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
-//        }
-//    }
 }
 /** END PESO ******************************/
 
@@ -174,12 +172,14 @@ void Daemon::onBasculaChanged(const Bascula &_pesoRT){
 void Daemon::onGuardarRegistroSimple(){
     if (registrando()){
         //consigue matriculas
+        // Espero dos detectores
         m_balpr1=false;
         m_balpr2=false;
 
         alprconn1 = connect(m_alpr[0], &Devices::NewsagesAlpr::ReplyMatriculaResults, [=](const MatriculaResults &_registro){
             QObject::disconnect(alprconn1);            
             m_RegistroMatriculas->m_results0->setMatriculaResults(_registro);
+            // Espero dos detectores
             m_balpr1=true;
             if(m_balpr1 && m_balpr2){
                 onGuardarRegistroRegistroMatriculas();
@@ -189,88 +189,45 @@ void Daemon::onGuardarRegistroSimple(){
         alprconn2 = connect(m_alpr[1],&Devices::NewsagesAlpr::ReplyMatriculaResults, [=](const MatriculaResults  &_registro){
             QObject::disconnect(alprconn2);
             m_RegistroMatriculas->m_results1->setMatriculaResults(_registro);
+            // Espero dos detectores
             m_balpr2=true;
             if(m_balpr1 && m_balpr2){
                 onGuardarRegistroRegistroMatriculas();
             }
         });
-
+        //Peticion a los detectores
         m_alpr[0]->processFoto(*m_RegistroMatriculas->m_results0);
-        m_alpr[1]->processFoto(*m_RegistroMatriculas->m_results1);
-        m_bfoto1=false;
-        m_bfoto2=false;
-
+        m_alpr[1]->processFoto(*m_RegistroMatriculas->m_results1); 
     }   
 }
 
 
 void Daemon::onGuardarRegistroRegistroMatriculas(){
+    if(m_registrando){
+        // Ya puede irse el objeto de la bascula
+        //m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+        //setSaliendo(true);
+        // Informo con la señal de los resultados
+        emit RegistroChanged(m_RegistroMatriculas);
 
-    /* Crea un Hilo para la base de datos */
-    /* Ejecuta el registro Simple */
-    emit RegistroChanged(m_RegistroMatriculas);
+        /* Ejecuta el registro Simple */
+        /** MODO HILO PRINCIPAL: **/
+        tareaDb = new Db::DatabaseManager;
+        connect( tareaDb, &Db::DatabaseManager::rowsPesoChanged, this, &Daemon::rowsPesoChanged);
+        tareaDb->setMaestros(m_maestros);
+        tareaDb->setRegistroMatriculas(m_RegistroMatriculas);
+        tareaDb->guardarRegistroRegistroMatriculas();
+        tareaDb->deleteLater();
 
-    /** MULTI HILO TODO: **/
-
-    /*
-    hiloDb = new QThread;
-    tareaDb = new Db::DatabaseManager(this->m_maestros);
-    //m_report_manager = new Db::ReportManager;
-
-    tareaDb->setRegistroMatriculas(this->m_RegistroMatriculas);
-    tareaDb->moveToThread(hiloDb);
-    //m_maestros->moveToThread(hiloDb);
-    //m_report_manager->moveToThread(hiloDb);
-
-
-    //tareaDb->setMaestros(m_maestros);
-
-    //connect(tareaDb,&Db::DatabaseManager::printRegistroMatricula,m_report_manager,&Db::ReportManager::printRegistroMatricula);
-    //connect(tareaDb,&Db::DatabaseManager::printRegistroMatriculaProcesada,m_report_manager,&Db::ReportManager::printRegistroMatriculaProcesada);
-
-    connect( tareaDb, &Db::DatabaseManager::rowsPesoChanged, this, &Daemon::rowsPesoChanged);
-
-    connect( hiloDb,  &QThread::started                 , tareaDb, &Db::DatabaseManager::guardarRegistroRegistroMatriculas  );
-    connect( tareaDb, &Db::DatabaseManager::workFinished, hiloDb,  &QThread::quit );
-    connect( tareaDb, &Db::DatabaseManager::workFinished, tareaDb, &QObject::deleteLater );
-    connect( hiloDb,  &QThread::finished                , hiloDb,  &QObject::deleteLater );
-    */
-
-    /** CONTROL DELETE **/
-    /*
-    std::unique_ptr<QMetaObject::Connection> pconn1{new QMetaObject::Connection};
-    QMetaObject::Connection &conn1 = *pconn1;
-    conn1 = connect(tareaDb,  &Db::DatabaseManager::printFinished, [=](){
-        QObject::disconnect(conn1);
-        // INFORMAR DE CAMBIOS EN ROWS //
-        rowsPesoChanged();        
-        tareaDb->workFinished();
+        emit rowsPesoChanged();
+        /** CONTROL DELETE **/
         m_RegistroMatriculas->deleteLater();
         setRegistrando(false);
-        m_saliendo=true;
-    });
+        m_tolerancia_minima=m_bascula->reloadTolerancia_minima();
+    }
 
-    hiloDb->start();
-    */
 
-    /** MODO HILO PRINCIPAL: **/
-    tareaDb = new Db::DatabaseManager;
-    connect( tareaDb, &Db::DatabaseManager::rowsPesoChanged, this, &Daemon::rowsPesoChanged);
-    tareaDb->setMaestros(this->m_maestros);
-    tareaDb->setRegistroMatriculas(this->m_RegistroMatriculas);
-    tareaDb->guardarRegistroRegistroMatriculas();
-    tareaDb->deleteLater();
-
-    /** CONTROL DELETE **/
-    //rowsPesoChanged();
-    m_RegistroMatriculas->deleteLater();
-    setRegistrando(false);
-    setSaliendo(true);
-    emit rowsPesoChanged();
-    m_registrando=false;
-    setSaliendo(true);
-    //m_saliendo=true;
-
+    /** TODO MULTI HILO TODO: **/
 }
 
 /** END DB **/

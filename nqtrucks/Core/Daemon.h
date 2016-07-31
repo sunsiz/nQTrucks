@@ -44,8 +44,10 @@ public:
     bool registrando() const;
     void setRegistrando(bool registrando);
 
-    bool saliendo() const;
-    void setSaliendo(bool saliendo);
+    //bool saliendo() const;
+    //void setSaliendo(bool saliendo);
+    int DaemonStatus() const;
+    void setDaemonStatus(int _status);
 
 signals:
     void initChanged(const bool &_init);
@@ -55,7 +57,8 @@ private slots:
 private:
     bool m_init;
     bool m_registrando;
-    bool m_saliendo;
+    //bool m_saliendo;
+    int  m_DaemonStatus;
 
 /** REGRISTRO **/
 private:

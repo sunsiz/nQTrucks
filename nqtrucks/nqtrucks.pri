@@ -130,3 +130,6 @@ SOURCES += \
 HEADERS += \
     $$PWD/Dispositivos/Alpr/NewsagesAlpr.h
 
+DISTFILES += \
+    $$PWD/Dispositivos/Basculas/emulador_bascula_puerto_bypass/emulador_bascula_puerto_bypass.ino
+

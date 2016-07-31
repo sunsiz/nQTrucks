@@ -169,17 +169,19 @@ void nQSerialPortReader::ReadType0(){
 
 void nQSerialPortReader::MuestrearBascula(const Bascula &_bascula){
     if (m_inicio_peso){
-        if((_bascula.getBEstado()) & (_bascula.getIBruto() !=0)){
+        //if((_bascula.getBEstado()) & (_bascula.getIBruto() !=0)){
+        if((_bascula.getBEstado()) && (_bascula.getIBruto() >m_BasculaMuestras)){
             m_count_muestras++;
             if(m_count_muestras == getBasculaMuestras()*10){
                 m_inicio_peso=false;
                 m_bascula_estable->setBascula(_bascula);
                 emit BasculaPesoNuevo(*m_bascula_estable);
-                setBasculaMuestras(m_settings->value(   QString(BASCULA) + "/factor_estable","1"           ).toInt());
+                setBasculaMuestras(m_settings->value(   QString(BASCULA) + "/factor_estable","1" ).toInt());
+                m_count_muestras=0;
             }
         }
     }else{
-        if(_bascula.getIBruto()==0){
+        if(_bascula.getIBruto() <=m_BasculaMuestras){
             m_inicio_peso=true;
             m_count_muestras=0;
             m_bascula_estable->clear();

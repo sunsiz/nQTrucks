@@ -53,8 +53,18 @@ namespace nQTrucks
     #define SEMAFORO_AMARILLO 1
     #define SEMAFORO_ROJO 2
 
+    //DEBUG
+    //#define RELE_ON  true
+    //#define RELE_OFF false
+    //PRODUCCION
     #define RELE_ON  false
     #define RELE_OFF true
+
+    #define DAEMON_ESPERANDO 0
+    #define DAEMON_ENTRANDO  1
+    #define DAEMON_SALIENDO  2
+    #define DAEMON_REGISTRANDO 4
+
 
     #define NEWSAGESIO "NEWSAGESIO"
 

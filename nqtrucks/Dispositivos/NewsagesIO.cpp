@@ -175,24 +175,28 @@ void NewsagesIO::setSemaforoEstado(const int &_color)
         setValuePinVerde(RELE_ON);
         setValuePinAmarillo(RELE_OFF);
         setValuePinRojo(RELE_OFF);
+        qDebug() << "SEMAFORO VERDE";
         break;
     case SEMAFORO_AMARILLO:
         m_semaforo = SEMAFORO_AMARILLO;
         setValuePinVerde(RELE_OFF);
         setValuePinAmarillo(RELE_ON);
         setValuePinRojo(RELE_OFF);
+        qDebug() << "SEMAFORO AMARILLO";
         break;
     case SEMAFORO_ROJO:
         m_semaforo = SEMAFORO_ROJO;
         setValuePinVerde(RELE_OFF);
         setValuePinAmarillo(RELE_OFF);
         setValuePinRojo(RELE_ON);
+        qDebug() << "SEMAFORO ROJO";
         break;
     default:
         m_semaforo = SEMAFORO_VERDE;
         setValuePinVerde(RELE_ON);
         setValuePinAmarillo(RELE_OFF);
         setValuePinRojo(RELE_OFF);
+        qDebug() << "SEMAFORO VERDE";
         break;
     }
     emit SemaforoEstadoChanged(getSemaforo());

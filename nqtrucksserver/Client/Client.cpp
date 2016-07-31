@@ -65,19 +65,19 @@ Client::~Client(){
 void Client::on_SemaforoEstadoChanged(int _color){
     switch (_color) {
     case SEMAFORO_VERDE:
-        qDebug() << "SEMAFORO VERDE";
+        //qDebug() << "SEMAFORO VERDE";
         ui->semaforoVerde->setChecked(true);
         break;
     case SEMAFORO_AMARILLO:
-        qDebug() << "SEMAFORO AMARILLO";
+        //qDebug() << "SEMAFORO AMARILLO";
         ui->semaforoAmarillo->setChecked(true); /** MEMORY LEAK **/
         break;
     case SEMAFORO_ROJO:
-        qDebug() << "SEMAFORO ROJO";
+        //qDebug() << "SEMAFORO ROJO";
         ui->semaforoRojo->setChecked(true); /** MEMORY LEAK **/
         break;
     default:
-        qDebug() << "SEMAFORO VERDE INDETERMINADO";
+        //qDebug() << "SEMAFORO VERDE INDETERMINADO";
         ui->semaforoVerde->setChecked(true);
         break;
     }
@@ -137,7 +137,7 @@ void Client::onDaemonRegistroChanged(RegistroMatriculas *_result)
         ui->MatriculaPrecisionB->setText(                                            _result->m_results1->getMatriculaPrecisionBs()  );
     }
     m_tools->deleteLater();
-    engine->setSemaforoStatus(SEMAFORO_VERDE);
+    //engine->setSemaforoStatus(SEMAFORO_VERDE);
 
 }
 
