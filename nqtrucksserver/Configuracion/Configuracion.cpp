@@ -323,14 +323,20 @@ void Configuracion::on_calibracionSelect_currentIndexChanged(int index){
 void Configuracion::loadPlanks(const int &index){
     switch (index) {
     case 0:
-        ui->vPlankA->setValue(engine->appConfig()->value(QString(ALPR) + "/planka1","0").toInt());
-        ui->vPlankB->setValue(engine->appConfig()->value(QString(ALPR) + "/plankb1","0").toInt());
-        ui->vPlankC->setValue(engine->appConfig()->value(QString(ALPR) + "/plankc1","0").toInt());
+        ui->vPlankA->setValue(engine->appConfig()->value(QString(ALPR) + "/planka11","0").toInt());
+        ui->vPlankB->setValue(engine->appConfig()->value(QString(ALPR) + "/plankb11","0").toInt());
+        ui->vPlankC->setValue(engine->appConfig()->value(QString(ALPR) + "/plankc11","0").toInt());
+        ui->vPlankA2->setValue(engine->appConfig()->value(QString(ALPR) + "/planka12","0").toInt());
+        ui->vPlankB2->setValue(engine->appConfig()->value(QString(ALPR) + "/plankb12","0").toInt());
+        ui->vPlankC2->setValue(engine->appConfig()->value(QString(ALPR) + "/plankc12","0").toInt());
         break;
     case 1:
-        ui->vPlankA->setValue(engine->appConfig()->value(QString(ALPR) + "/planka2","0").toInt());
-        ui->vPlankB->setValue(engine->appConfig()->value(QString(ALPR) + "/plankb2","0").toInt());
-        ui->vPlankC->setValue(engine->appConfig()->value(QString(ALPR) + "/plankc2","0").toInt());
+        ui->vPlankA->setValue(engine->appConfig()->value(QString(ALPR) + "/planka21","0").toInt());
+        ui->vPlankB->setValue(engine->appConfig()->value(QString(ALPR) + "/plankb21","0").toInt());
+        ui->vPlankC->setValue(engine->appConfig()->value(QString(ALPR) + "/plankc21","0").toInt());
+        ui->vPlankA2->setValue(engine->appConfig()->value(QString(ALPR) + "/planka22","0").toInt());
+        ui->vPlankB2->setValue(engine->appConfig()->value(QString(ALPR) + "/plankb22","0").toInt());
+        ui->vPlankC2->setValue(engine->appConfig()->value(QString(ALPR) + "/plankc22","0").toInt());
         break;
     }
 }
@@ -417,18 +423,34 @@ void Configuracion::on_vPlankC_valueChanged(int value){
     ui->lvPlankC->setText(QString::number( value));
 }
 
+void Configuracion::on_vPlankA2_valueChanged(int value){
+    ui->lvPlankA2->setText(QString::number( value));
+}
+void Configuracion::on_vPlankB2_valueChanged(int value){
+    ui->lvPlankB2->setText(QString::number( value));
+}
+void Configuracion::on_vPlankC2_valueChanged(int value){
+    ui->lvPlankC2->setText(QString::number( value));
+}
+
 void Configuracion::on_guardarPlanK_clicked(){
     int index = getAlprIndex();
     switch (index) {
     case 0:
-        engine->appConfig()->setValue(QString(ALPR) + "/planka1",QString::number(ui->vPlankA->value()));
-        engine->appConfig()->setValue(QString(ALPR) + "/plankb1",QString::number(ui->vPlankB->value()));
-        engine->appConfig()->setValue(QString(ALPR) + "/plankc1",QString::number(ui->vPlankC->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/planka11",QString::number(ui->vPlankA->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankb11",QString::number(ui->vPlankB->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankc11",QString::number(ui->vPlankC->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/planka12",QString::number(ui->vPlankA2->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankb12",QString::number(ui->vPlankB2->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankc12",QString::number(ui->vPlankC2->value()));
         break;
     case 1:
-        engine->appConfig()->setValue(QString(ALPR) + "/planka2",QString::number(ui->vPlankA->value()));
-        engine->appConfig()->setValue(QString(ALPR) + "/plankb2",QString::number(ui->vPlankB->value()));
-        engine->appConfig()->setValue(QString(ALPR) + "/plankc2",QString::number(ui->vPlankC->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/planka21",QString::number(ui->vPlankA->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankb21",QString::number(ui->vPlankB->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankc21",QString::number(ui->vPlankC->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/planka22",QString::number(ui->vPlankA2->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankb22",QString::number(ui->vPlankB2->value()));
+        engine->appConfig()->setValue(QString(ALPR) + "/plankc22",QString::number(ui->vPlankC2->value()));
         break;
     }
     engine->calibrarFoto(index,m_matricularesults[index]->getMatriculaResults());

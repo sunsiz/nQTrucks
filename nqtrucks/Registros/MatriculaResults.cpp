@@ -12,8 +12,10 @@ namespace nQTrucks{
         MatriculaResults::~MatriculaResults(){
             OrigenFoto.release();
             OrigenFotoPrewarp.release();    // Imagen con calibracion prewarp
+            OrigenFotoBlancaPrewarp.release();    // Imagen con calibracion prewarp
+            OrigenFotoRojaPrewarp.release();    // Imagen con calibracion prewarp
             OrigenFotoBlanca.release();     //  Imagen con calibracion de Blancos
-            OrigenFotoRoja.release();       // Imagen con calibracion de Rojos
+            OrigenFotoRoja.release();       // Imagen con calibracion de Rojos            
             MatriculaFotoA.release();       // Imagen recortada de la Matricula
             MatriculaFotoB.release();       // Imagen recortada de la Matricula
             //camara->deleteLater();
@@ -29,6 +31,8 @@ namespace nQTrucks{
             setId(                    other.getId()              );    // id fuente de captura de foto
             setOrigenFoto(            other.OrigenFoto           );
             setOrigenFotoPrewarp(     other.OrigenFotoPrewarp    );
+            setOrigenFotoBlancaPrewarp(other.OrigenFotoBlancaPrewarp );
+            setOrigenFotoRojaPrewarp( other.OrigenFotoRojaPrewarp);
             setOrigenFotoBlanca(      other.OrigenFotoBlanca     );
             setOrigenFotoRoja(        other.OrigenFotoRoja       );
             setMatriculaFotoA(        other.MatriculaFotoA       );    // Imagen recortada de la Matricula
@@ -49,6 +53,14 @@ namespace nQTrucks{
         void MatriculaResults::setOrigenFotoPrewarp(const cv::Mat &value){
             OrigenFotoPrewarp.release();
             value.copyTo(OrigenFotoPrewarp);
+        }
+        void MatriculaResults::setOrigenFotoBlancaPrewarp(const cv::Mat &value){
+            OrigenFotoBlancaPrewarp.release();
+            value.copyTo(OrigenFotoBlancaPrewarp);
+        }
+        void MatriculaResults::setOrigenFotoRojaPrewarp(const cv::Mat &value){
+            OrigenFotoRojaPrewarp.release();
+            value.copyTo(OrigenFotoRojaPrewarp);
         }
         void MatriculaResults::setOrigenFotoBlanca(const cv::Mat &value){
             OrigenFotoBlanca.release();

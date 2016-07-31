@@ -48,7 +48,7 @@ RegistrosUi::RegistrosUi(nQTrucksEngine *_engine, QWidget *parent)
 
     /** FILTRO CALENDARIO **/
     flt_fecha = new QSortFilterProxyModel(this);
-    flt_fecha->setSourceModel(engine->RegistrosPesos);
+    flt_fecha->setSourceModel(engine->RegistrosPesosTable);
     flt_fecha->setFilterKeyColumn(REGISTROS_MATRICULAS_FECHA);
     flt_fecha->setDynamicSortFilter(false);
 
@@ -79,7 +79,7 @@ RegistrosUi::RegistrosUi(nQTrucksEngine *_engine, QWidget *parent)
     connect(engine,SIGNAL(rangoFechasChanged(QVector<QDate>)),this,SLOT(rangoFechasChanged(QVector<QDate>)));
 
 
-    for (int i = 0; i < engine->RegistrosPesos->columnCount(); i++){
+    for (int i = 0; i < engine->RegistrosPesosTable->columnCount(); i++){
         ui->tableRegistrosView->hideColumn(i);
     }
 
@@ -155,8 +155,6 @@ void RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &index){
     ui->labelDetalleHora->setText(hora.toString());
     ui->labelDetallePeso->setText(QString(QString::number(pesoneto) + QString(" Kg.")));
 
-
-
     qDebug() << "row:       "        << row;
     qDebug() << "hora:       "       << hora;
     qDebug() << "id:        "        << id;
@@ -164,10 +162,6 @@ void RegistrosUi::on_tableRegistrosView_clicked(const QModelIndex &index){
     qDebug() << "procesado: "        << procesado;
     qDebug() << "peso bruto:       " << pesobruto;
     qDebug() << "peso neto:       "  << pesoneto;
-
-
-
-
 
 }
 
@@ -191,31 +185,6 @@ void RegistrosUi::on_imprimirInforme_clicked(){
 }
 }
 
-void nQTrucks::RegistrosUi::on_actualizarRegistros_clicked()
-{
-    bool ret =true;
-    if ( !QSqlDatabase::contains("nqtrucks")) {
-        m_db = QSqlDatabase::addDatabase("QMYSQL","nqtrucks"); /** MEMORY LEAK **/
-        m_db.setDatabaseName( "nqtrucks" );
-        m_db.setHostName(     "localhost" );
-        m_db.setUserName(     "nqtrucks" );
-        m_db.setPassword(     "nqtrucks" );
-        qDebug() << "conexion al crear es: " << m_db.connectionName();
-    } else {
-        m_db = QSqlDatabase::database("nqtrucks");
-        qDebug() << "conexion al volver a usar es: " << m_db.connectionName();
-    }
-    qDebug() << "conexion al verificar es: " << m_db.connectionName();
-    if ( !m_db.isOpen() ){
-        if(!m_db.open()){
-            ret = false;
-        }
-    }
-
-    if (ret){
-        QSqlQuery qryall("select * from registros_matriculas",m_db);
-        engine->RegistrosPesos->setQuery(qryall);
-
-    }
-
+void nQTrucks::RegistrosUi::on_actualizarRegistros_clicked(){
+    engine->RegistrosPesosTable->select();
 }

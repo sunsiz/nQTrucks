@@ -21,6 +21,7 @@ namespace nQTrucks{
         void eliminarMaestros();
     public:
         RegistroPeso *m_RegistroPeso;
+        QSqlTableModel      *m_RegistroPesoTable;
         QSqlTableModel      *m_Empresa;
         QDataWidgetMapper   *m_Empresa_Mapper;
     signals:

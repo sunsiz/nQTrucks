@@ -76,6 +76,12 @@ private slots:
     /** END ALPR **/
 
     /** CONFIG **/
+    void on_semaforoVerde_clicked();
+
+    void on_semaforoAmarillo_clicked();
+
+    void on_semaforoRojo_clicked();
+
 private:
     void loadconfig();
     /** END CONFIG **/

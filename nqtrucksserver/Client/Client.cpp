@@ -30,6 +30,11 @@
 #include "Client.h"
 #include "ui_Client.h"
 
+#include <QDebug>
+#include <QDesktopWidget>
+
+#include <QDataWidgetMapper>
+#include <QByteArray>
 namespace nQTrucks {
 
 
@@ -49,6 +54,7 @@ Client::Client(nQTrucksEngine *_engine, QWidget *parent)
 
     /** DAEMON **/
     connect(engine,&nQTrucksEngine::daemonRegistroChanged,this,&Client::onDaemonRegistroChanged);
+    ui->BasculaLcd->display("-------");
 }
 
 Client::~Client(){
@@ -59,15 +65,19 @@ Client::~Client(){
 void Client::on_SemaforoEstadoChanged(int _color){
     switch (_color) {
     case SEMAFORO_VERDE:
+        qDebug() << "SEMAFORO VERDE";
         ui->semaforoVerde->setChecked(true);
         break;
     case SEMAFORO_AMARILLO:
+        qDebug() << "SEMAFORO AMARILLO";
         ui->semaforoAmarillo->setChecked(true); /** MEMORY LEAK **/
         break;
     case SEMAFORO_ROJO:
-        ui->semaforoRojo->setChecked(true);     /** MEMORY LEAK **/
+        qDebug() << "SEMAFORO ROJO";
+        ui->semaforoRojo->setChecked(true); /** MEMORY LEAK **/
         break;
     default:
+        qDebug() << "SEMAFORO VERDE INDETERMINADO";
         ui->semaforoVerde->setChecked(true);
         break;
     }
@@ -133,5 +143,22 @@ void Client::onDaemonRegistroChanged(RegistroMatriculas *_result)
 
 
 
+
+}
+
+void nQTrucks::Client::on_semaforoVerde_clicked()
+{
+   engine->setSemaforoStatus(SEMAFORO_VERDE);
+}
+
+void nQTrucks::Client::on_semaforoAmarillo_clicked()
+{
+    engine->setSemaforoStatus(SEMAFORO_AMARILLO);
+
+}
+
+void nQTrucks::Client::on_semaforoRojo_clicked()
+{
+    engine->setSemaforoStatus(SEMAFORO_ROJO);
 
 }

@@ -9,7 +9,11 @@ namespace nQTrucks{
     }
 
     void Maestros::crearMaestros(){
-        m_RegistroPeso  = new RegistroPeso(this);
+        m_RegistroPeso  = new RegistroPeso;
+
+        m_RegistroPesoTable = new QSqlTableModel(this,m_RegistroPeso->getCurrentDb());
+        m_RegistroPesoTable->setTable("registros_matriculas");
+        m_RegistroPesoTable->select();
 
         m_Empresa = new QSqlTableModel(this,m_RegistroPeso->getCurrentDb());
         m_Empresa->setTable("empresa");
@@ -25,6 +29,7 @@ namespace nQTrucks{
 
     void Maestros::eliminarMaestros(){
         m_RegistroPeso->deleteLater();
+        m_RegistroPesoTable->deleteLater();
         m_Empresa->deleteLater();
         m_Empresa_Mapper->deleteLater();
     }
@@ -32,6 +37,7 @@ namespace nQTrucks{
     void Maestros::sincronizar(){
         m_RegistroPeso->syncTable();
         m_Empresa->select();
+        m_RegistroPesoTable->select();
     }
 
     }

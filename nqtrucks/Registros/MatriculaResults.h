@@ -63,9 +63,22 @@ namespace nQTrucks{
 
             inline void setPlanckBlanco(const Planck &value){
                 //Usar LBP
+                //con Prewarp
+                cv::Mat channelPrewarp[3];
+                cv::Mat _destPrewarp;
+                _destPrewarp = OrigenFotoPrewarp.clone();
+                cv::add(_destPrewarp,cv::Scalar(value.C,value.B,value.A), _destPrewarp);
+                cv::split(_destPrewarp, channelPrewarp);
+                this->setOrigenFotoBlancaPrewarp(channelPrewarp[2] - channelPrewarp[1] -   channelPrewarp[2] + channelPrewarp[0]); /** MEMORY LEAK **/
+                channelPrewarp[0].release();
+                channelPrewarp[1].release();
+                channelPrewarp[2].release();
+                _destPrewarp.release();
+
+                //sin Prewarp
                 cv::Mat channel[3];
                 cv::Mat _dest;
-                _dest = OrigenFotoPrewarp.clone();
+                _dest = OrigenFoto.clone();
                 cv::add(_dest,cv::Scalar(value.C,value.B,value.A), _dest);
                 cv::split(_dest, channel);
                 this->setOrigenFotoBlanca(channel[2] - channel[1] -   channel[2] + channel[0]); /** MEMORY LEAK **/
@@ -73,6 +86,9 @@ namespace nQTrucks{
                 channel[1].release();
                 channel[2].release();
                 _dest.release();
+
+
+
                 //delete _dest;
 
                 //this->setOrigenFotoBlanca(OrigenFoto.clone()); /** MEMORY LEAK **/
@@ -80,8 +96,22 @@ namespace nQTrucks{
 
             inline void setPlanckRojo(  const Planck &value){
                 // USAR LBP
+                //con Prewarp
+                cv::Mat channelPrewarp[3];
+                cv::Mat *_destPrewarp = new cv::Mat(OrigenFotoPrewarp.clone());
+                cv::add(*_destPrewarp,cv::Scalar(value.A,value.B,value.C),*_destPrewarp);
+                cv::split(*_destPrewarp,channelPrewarp);
+                cv::add(channelPrewarp[0], channelPrewarp[1], *_destPrewarp); /** MEMORY LEAK **/
+                cv::subtract(channelPrewarp[2], channelPrewarp[1], *_destPrewarp);
+                this->setOrigenFotoRojaPrewarp(*_destPrewarp);
+                channelPrewarp[0].release();
+                channelPrewarp[1].release();
+                channelPrewarp[2].release();
+                _destPrewarp->release();
+                delete _destPrewarp;
+
                 cv::Mat channel[3];
-                cv::Mat *_dest = new cv::Mat(OrigenFotoPrewarp.clone());
+                cv::Mat *_dest = new cv::Mat(OrigenFoto.clone());
                 cv::add(*_dest,cv::Scalar(value.A,value.B,value.C),*_dest);
                 cv::split(*_dest,channel);
                 cv::add(channel[0], channel[1], *_dest); /** MEMORY LEAK **/
@@ -92,6 +122,10 @@ namespace nQTrucks{
                 channel[2].release();
                 _dest->release();
                 delete _dest;
+
+
+
+
                 //this->setOrigenFotoRoja(OrigenFotoPrewarp.clone()); /** MEMORY LEAK **/
             }
 
@@ -126,8 +160,10 @@ namespace nQTrucks{
             int        tipo                    =0;                                                     //0 para calibracion, 1 para procesado
             int        id                      =0;                                                     //id fuente de captura de foto
 
-            cv::Mat    OrigenFoto;
+            cv::Mat    OrigenFoto             ;// = cv::Mat::zeros(FotoSize, CV_8U );
             cv::Mat    OrigenFotoPrewarp      ;//= cv::Mat::zeros(FotoSize, CV_8U );                    // Imagen con calibracion prewarp
+            cv::Mat    OrigenFotoBlancaPrewarp;//= cv::Mat::zeros(FotoSize, CV_8U );                    //  Imagen con calibracion de Blancos
+            cv::Mat    OrigenFotoRojaPrewarp  ;//= cv::Mat::zeros(FotoSize, CV_8U );                    // Imagen con calibracion de Rojos
             cv::Mat    OrigenFotoBlanca       ;//= cv::Mat::zeros(FotoSize, CV_8U );                    //  Imagen con calibracion de Blancos
             cv::Mat    OrigenFotoRoja         ;//= cv::Mat::zeros(FotoSize, CV_8U );                    // Imagen con calibracion de Rojos
 
@@ -152,11 +188,15 @@ namespace nQTrucks{
 
             void setOrigenFoto(const cv::Mat &value);
             void setOrigenFotoPrewarp(const cv::Mat &value);
+            void setOrigenFotoBlancaPrewarp( const cv::Mat &value);
+            void setOrigenFotoRojaPrewarp(   const cv::Mat &value);
             void setOrigenFotoBlanca( const cv::Mat &value);
             void setOrigenFotoRoja(   const cv::Mat &value);
 
             cv::Mat getOrigenFoto() const{return OrigenFoto; }
             cv::Mat getOrigenFotoPrewarp() const{return OrigenFotoPrewarp; }
+            cv::Mat getOrigenFotoBlancaPrewarp()  const{return OrigenFotoBlancaPrewarp;}
+            cv::Mat getOrigenFotoRojaPrewarp()    const{return OrigenFotoRojaPrewarp;}
             cv::Mat getOrigenFotoBlanca()  const{return OrigenFotoBlanca;}
             cv::Mat getOrigenFotoRoja()    const{return OrigenFotoRoja;}
 

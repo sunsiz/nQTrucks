@@ -128,6 +128,9 @@ private slots:
     void on_vPlankA_valueChanged(int value);
     void on_vPlankB_valueChanged(int value);
     void on_vPlankC_valueChanged(int value);
+    void on_vPlankA2_valueChanged(int value);
+    void on_vPlankB2_valueChanged(int value);
+    void on_vPlankC2_valueChanged(int value);
     void on_guardarPlanK_clicked();
     /** END PLANKS **/
 

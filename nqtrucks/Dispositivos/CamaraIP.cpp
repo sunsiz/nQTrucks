@@ -48,6 +48,7 @@ CamaraIP::CamaraIP(int nDevice, QSettings *_appsettings, QObject *parent)
     QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
     /** CONECTIONS **/
     connect(m_netmanager, &QNetworkAccessManager::finished, this , &CamaraIP::camaraNetworkReplyFinished);
+    //connect(m_netmanager, &QNetworkAccessManager::, this , &CamaraIP::camaraNetworkReplyFinished);
 
     /** CONFIG **/
     loadconfig();
@@ -119,13 +120,15 @@ void CamaraIP::sendCamaraIPFotoRequest()
     //config.setProtocol(QSsl::TlsV1SslV3);
     //request.setSslConfiguration(config);
 
-    if (!m_isRunning){
+   // if (!m_isRunning){
         /**  Peticion ***/
-        m_isRunning=true;
+      //  m_isRunning=true;
         QUrl Servidor = setCamaraURL();
         QNetworkRequest request(Servidor);
         m_netmanager->get(request); /** MEMORY LEAK **/
-    }
+        qDebug() << "Atributo de la conexion: " << request.attribute(QNetworkRequest::HttpStatusCodeAttribute);
+        //TODO Controlar el timeout
+    //}
 }
 
 void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
@@ -160,17 +163,19 @@ void CamaraIP::camaraNetworkReplyFinished(QNetworkReply *reply){
         data.detach();
     }else{
         /** CAMARA ERROR CV::MAT **/
-        emit CamaraError(m_errorCamaraIP);
         MatriculaResults *m_MatriculaResults = new MatriculaResults(this);
-        //m_MatriculaResults->setOrigenFoto(_resize);
+        cv::Mat errorOrigen = cv::Mat::zeros(FotoSize,CV_8U);
+        cv::add(errorOrigen,cv::Scalar(255,255,0),errorOrigen);
+        m_MatriculaResults->setOrigenFoto(errorOrigen);
         emit ReplyCamaraIP(*m_MatriculaResults);
+        emit CamaraError(m_errorCamaraIP);
         m_MatriculaResults->deleteLater();
 
         temp.detach();
         data.clear();
         data.detach();
     }
-    m_isRunning=false;
+    //m_isRunning=false;
     reply->deleteLater();
 }
 

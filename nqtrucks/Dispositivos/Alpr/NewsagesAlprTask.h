@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "Registros/MatriculaResults.h"
+#include "alpr.h"
 
 namespace nQTrucks {
 namespace Devices {
@@ -30,9 +31,12 @@ private:
     int     getNType() const {return m_nType;}
 
 private:
-    Planck m_plank;
+    //Planck m_plank;
+    Planck m_plankB;
+    Planck m_plankR;
+
     void   setPlank(  const QString &_plankA, const QString &_plankB, const QString &_plankC);
-    Planck getPlank() const{return  m_plank;}
+    Planck getPlank() const;
 
     QString  m_prewarp;
 //    void    setPrewarp(  const QString &prewarp){m_prewarp=prewarp;}
@@ -46,7 +50,7 @@ private:
     //cv::Mat apply_prewarp(const cv::Mat &img);
     /** Algoritmo AUTOCALIBRACION **/
     int  m_retry_panks=2;
-    void guardarPlanK();
+    void guardarPlanK(int _device, int _type, const Planck &_planck);
     /** END ALGORITMO AUTOCALIBRACION**/
 
 public slots:
@@ -62,7 +66,12 @@ public slots:
 private:
    MatriculaResults *m_matricularesult;
    void procesarBlancas();
+   bool encontrarMatricula(alpr::Alpr * matricula, const cv::Mat &Foto, const cv::Mat &FototoCrop, const int alprType);
+   bool procesarBlancasPlanck(alpr::Alpr *matricula);
+   bool procesarBlancasPlanckPrewarp(alpr::Alpr *matricula);
+
    void procesarRojas();
+   void calibrarPlancks();
 signals:
    void ReplyMatriculaFoto();
     /** END PROCESAR **************************************************************/

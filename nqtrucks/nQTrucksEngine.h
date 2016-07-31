@@ -165,6 +165,7 @@ public slots:
     /** MAESTROS **/
 public:
     QSqlQueryModel    *RegistrosPesos;
+    QSqlTableModel    *RegistrosPesosTable;
     QSqlTableModel    *Empresa;
     QDataWidgetMapper *Empresa_Mapper;
 public slots:

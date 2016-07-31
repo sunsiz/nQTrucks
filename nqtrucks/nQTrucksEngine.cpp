@@ -391,7 +391,8 @@ QSqlDatabase nQTrucksEngine::getCurrentDatabase()
 
 void nQTrucksEngine::reloadMaestros(){
     Q_D(nQTrucksEngine);
-    RegistrosPesos  = d->m_maestros->m_RegistroPeso;
+    //RegistrosPesos  = d->m_maestros->m_RegistroPeso;
+    RegistrosPesosTable = d->m_maestros->m_RegistroPesoTable;
     Empresa         = d->m_maestros->m_Empresa;
     Empresa_Mapper  = d->m_maestros->m_Empresa_Mapper;
     //RegistrosPesos->query();

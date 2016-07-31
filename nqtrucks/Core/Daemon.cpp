@@ -123,6 +123,22 @@ void Daemon::onPesoNuevo(const Bascula &_nuevaPesada){
 }
 
 void Daemon::onBasculaChanged(const Bascula &_pesoRT){
+
+    if (_pesoRT.getIBruto() > m_tolerancia_minima){
+        if (!m_saliendo && !m_registrando){
+            //TODO  no machakar el IO
+            m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);
+        } else{
+            //m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+        }
+    }else{
+        if (m_saliendo){
+            m_saliendo=false;
+            m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+        }
+    }
+
+
     //int peso_minimo=m_bascula->reloadTolerancia_minima();
 //    if (!m_saliendo){
 //        if (!m_registrando){
@@ -137,19 +153,19 @@ void Daemon::onBasculaChanged(const Bascula &_pesoRT){
 
 
 
-    if (_pesoRT.getIBruto() > m_tolerancia_minima){
-        if (!m_saliendo && !m_registrando){
-            //TODO  no machakar el IO
-            m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);
-        } else{
-            m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
-        }
-    }else{
-        if (m_saliendo){
-            m_saliendo=false;
-            m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
-        }
-    }
+//    if (_pesoRT.getIBruto() > m_tolerancia_minima){
+//        if (!m_saliendo && !m_registrando){
+//            //TODO  no machakar el IO
+//            m_newsagesIO->setSemaforo(SEMAFORO_AMARILLO);
+//        } else{
+//            //m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+//        }
+//    }else{
+//        if (m_saliendo){
+//            m_saliendo=false;
+//            m_newsagesIO->setSemaforo(SEMAFORO_VERDE);
+//        }
+//    }
 }
 /** END PESO ******************************/
 
@@ -183,6 +199,7 @@ void Daemon::onGuardarRegistroSimple(){
         m_alpr[1]->processFoto(*m_RegistroMatriculas->m_results1);
         m_bfoto1=false;
         m_bfoto2=false;
+
     }   
 }
 
@@ -250,6 +267,8 @@ void Daemon::onGuardarRegistroRegistroMatriculas(){
     setRegistrando(false);
     setSaliendo(true);
     emit rowsPesoChanged();
+    m_registrando=false;
+    setSaliendo(true);
     //m_saliendo=true;
 
 }
