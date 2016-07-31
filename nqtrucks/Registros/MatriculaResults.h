@@ -32,11 +32,11 @@ namespace nQTrucks{
         QString type="planar";
         float w=FotoWidth;
         float h=FotoHeight;
-        float panX = 0;
-        float panY = 0;
         float rotationx = 0;
         float rotationy = 0;
         float rotationz = 0;
+        float panX = 0;
+        float panY = 0;
         float stretchX = 1.0;
         float dist = 1.0;
     }; typedef Prewarp t_Prewarp;
