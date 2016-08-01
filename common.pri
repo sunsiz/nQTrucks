@@ -3,14 +3,14 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     DEFINES+=HAVE_QT5
     QT+= printsupport widgets
     contains(QT,uitools){
-        message(uitools)
+        #message(uitools)
         DEFINES += HAVE_UI_LOADER
     }
 }
 
 lessThan(QT_MAJOR_VERSION, 5){
     CONFIG(uitools){
-        message(uitools)
+        #message(uitools)
         DEFINES += HAVE_UI_LOADER
     }
 }
@@ -28,15 +28,17 @@ DEFINES += NQTRUCKS_VERSION=$${NQTRUCKS_VERSION}
 
 #***  VARIABLES FOR MULTI_OS_ARCH ***#
 CONFIG(release, debug|release){
-    message(Release)
+    #message(Release)
     BUILD_TYPE = release
 }else{
-    message(Debug)
+    #message(Debug)
     BUILD_TYPE = debug
 }
 
-BUILD_DIR = $$PWD/../../../builds/$${QT_VERSION}
-SOURCE_GITS = $$PWD/../../../src
+BUILD_DIR   = $$PWD/../../build/$${QT_VERSION}
+SOURCE_GITS = $$PWD/../../deps
+message("Proyecto: "$$TARGET "/ Build Dir:" $$BUILD_DIR)
+
 #BUILD_DIR = $$PWD/build/$${QT_VERSION}
 
 
@@ -94,11 +96,3 @@ GLOBAL_LIBS      = $${BUILD_DIR}/$${ARCH_TYPE}/$${BUILD_TYPE}
 
 QMAKE_CXXFLAGS += -DOPENCV_MAJOR_VERSION=2
 #*** INCLUDE IMPL ***#
-
-
-#** ZINT **#
-CONFIG += zint
-ZINT_PATH = $$PWD/3rdparty/zint-2.4.4
-
-
-
